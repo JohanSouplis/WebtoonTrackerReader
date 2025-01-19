@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "WebtoonTracker",
+    "description": "Keep track of where you stop to read your manhwa, webtoon or manga and get notified when a new chapter is coming",
+    "version": "1.0.0",
+    "permissions": [
+        "history",
+        "notifications",
+        "unlimitedStorage",
+        "storage"
+    ],
+    "icons": {
+        "128": "icone.png"
+    },
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "action":{
+    "default_popup":"index.html"
+    }
+}
