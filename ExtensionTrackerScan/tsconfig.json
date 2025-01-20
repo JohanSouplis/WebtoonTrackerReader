@@ -16,12 +16,17 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["chrome", "jest", "mocha"]
   },
-  "include": ["src/**/*.ts"],
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
+  },
+  "include": ["src/**/*.ts", "src/app/core/src/recuperer_titre_et_chapitre.ts"],
   "exclude": ["node_modules"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

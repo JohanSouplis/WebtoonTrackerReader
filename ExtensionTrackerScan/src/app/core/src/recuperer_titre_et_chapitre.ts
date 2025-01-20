@@ -1,7 +1,7 @@
 import websiteJson from '../pattern/link-format-website-title.json';
 
-const titleIsHere = 't';
-const chapterNumberIsHere = 'c';
+const titleIsHere: string = 't';
+const chapterNumberIsHere: string = 'c';
 
 export function retrieveTitleAndChapter(
   titleWebpage: string,
@@ -14,8 +14,8 @@ export function retrieveTitleAndChapter(
   const parser = webtoonParser[0][0][1].formatparse;
 
   let titleSplitted: string[] = parser.split('§');
-  let title = '';
-  let chapter = '';
+  let title: string = '';
+  let chapter: string = '';
   console.log(titleSplitted);
   for (let i = 0; i < titleSplitted.length; i++) {
     if (titleSplitted[i] === titleIsHere) {
