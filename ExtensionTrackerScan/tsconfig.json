@@ -24,6 +24,7 @@
   },
   "tsc-alias": {
     "resolveFullPaths": true,
+    "resolveJsonModule": true,
     "verbose": false
   },
   "include": ["src/**/*.ts", "src/app/core/src/recuperer_titre_et_chapitre.ts"],

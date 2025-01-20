@@ -1,5 +1,3 @@
-import websiteJson from '../pattern/link-format-website-title.json';
-
 const titleIsHere: string = 't';
 const chapterNumberIsHere: string = 'c';
 
@@ -7,7 +5,7 @@ export function retrieveTitleAndChapter(
   titleWebpage: string,
   url: string
 ): string[] {
-  const webtoonParser = getParserForThisWebsite(url);
+  const webtoonParser: any = getParserForThisWebsite(url);
   if (webtoonParser.length === 0) {
     return [];
   }
@@ -31,9 +29,17 @@ export function retrieveTitleAndChapter(
 }
 
 function getParserForThisWebsite(url: string) {
-  return Object.entries(websiteJson)
-    .filter((website) => isMatchingWebsite(url, website))
-    .map((website) => Object.entries(website[1]));
+  fetch('../pattern/link-format-website-title.json')
+    .then((response) => response.json())
+    .then((websiteJson) => {
+      return Object.entries(websiteJson)
+        .filter((website) => isMatchingWebsite(url, website))
+        .map((website) =>
+          Object.entries(typeof website === 'object' && website != null)
+            ? website[1]
+            : ''
+        );
+    });
 }
 
 function isMatchingWebsite(url: string, website: any): boolean {
