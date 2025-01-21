@@ -25,8 +25,7 @@
               },
               "src/manifest.json",
               "src/content.js",
-              "src/background.js",
-              "src/app/core/pattern/link-format-website-title.json"
+              "src/background.js"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",

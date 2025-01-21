@@ -7,7 +7,8 @@ chrome.runtime.onMessage.addListener(
       message.url
     );
     chrome.storage.local.set({ ['scans']: title, chapter }, () => {
-      console.log('Save :', title, chapter);
+      console.log('Title :', title);
+      console.log('Chapter : ', chapter);
     });
   }
 );

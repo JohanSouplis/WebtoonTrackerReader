@@ -1,8 +1,8 @@
-import { Component, ViewChild, inject } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table'; // MatTableDataSource est une classe, pas un composant ou module
+import { Component, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { RouterOutlet } from '@angular/router'; // Importation de RouterOutlet si nécessaire
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ChromeStorageService } from './chrome-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +16,25 @@ import { RouterOutlet } from '@angular/router'; // Importation de RouterOutlet s
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'age'];
   dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
 
+  constructor(private chromeStorage: ChromeStorageService) {}
+
   // @ViewChild(MatPaginator) paginator!: MatPaginator;
   // @ViewChild(MatSort) sort!: MatSort;
+
+  ngOnInit(): void {
+    this.chromeStorage.getAllItems().then(
+      (data) => {
+        console.log('All storage data:', data);
+      },
+      (error) => {
+        console.error('Error retrieving all data:', error);
+      }
+    );
+  }
 
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;

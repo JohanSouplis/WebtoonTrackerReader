@@ -1,3 +1,4 @@
+import { websiteJson } from '../pattern/link-format-website-title';
 const titleIsHere: string = 't';
 const chapterNumberIsHere: string = 'c';
 
@@ -29,17 +30,9 @@ export function retrieveTitleAndChapter(
 }
 
 function getParserForThisWebsite(url: string) {
-  fetch('../pattern/link-format-website-title.json')
-    .then((response) => response.json())
-    .then((websiteJson) => {
-      return Object.entries(websiteJson)
-        .filter((website) => isMatchingWebsite(url, website))
-        .map((website) =>
-          Object.entries(typeof website === 'object' && website != null)
-            ? website[1]
-            : ''
-        );
-    });
+  return Object.entries(websiteJson)
+    .filter((website) => isMatchingWebsite(url, website))
+    .map((website) => Object.entries(website[1]));
 }
 
 function isMatchingWebsite(url: string, website: any): boolean {

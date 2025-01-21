@@ -20,7 +20,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["chrome", "jest", "mocha"]
+    "types": ["chrome", "node", "jest", "mocha"]
   },
   "tsc-alias": {
     "resolveFullPaths": true,
