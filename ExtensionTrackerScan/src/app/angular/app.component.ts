@@ -1,5 +1,10 @@
-import { DataSource } from '@angular/cdk/table';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -26,26 +31,22 @@ import {
     },
   ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['title', 'chapter', 'url'];
 
-  scans: Scan[] = [];
-  dataSource: DataSource<Scan> = new MatTableDataSource<Scan>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  scans: MatTableDataSource<Scan> = new MatTableDataSource<Scan>([]);
 
   constructor(
     @Inject(STORAGE_INTERFACE_TOKEN) private storage: StorageInterface
   ) {}
 
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // @ViewChild(MatSort) sort!: MatSort;
-
   ngOnInit(): void {
     this.storage.getScans().subscribe(
-      (data) => {
-        console.log('All storage data:', data);
-        this.scans = data;
-        this.dataSource = new MatTableDataSource<Scan>(this.scans);
-        console.log(this.scans);
+      (scans) => {
+        this.scans = new MatTableDataSource<Scan>(scans);
       },
       (error) => {
         console.error('Error retrieving all data:', error);
@@ -53,8 +54,8 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
+  ngAfterViewInit(): void {
+    this.scans.paginator = this.paginator;
+    this.scans.sort = this.sort;
   }
 }

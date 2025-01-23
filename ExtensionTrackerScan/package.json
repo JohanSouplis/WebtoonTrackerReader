@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npx tsc --project tsconfig.json && tsc-alias --project tsconfig.json",
+    "build": "ng build --configuration production && npx tsc --project tsconfig.json && tsc-alias --project tsconfig.json",
     "watch": "ng build --watch --configuration development",
     "test": "jest"
   },
