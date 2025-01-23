@@ -3,7 +3,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { environment } from '../../environments/environment';
 import { Scan } from '../core/src/domain/scan.type';
+import { ChromeStorageService } from '../gateway/chrome-storage.service';
 import { InMemoryStorageService } from '../gateway/in-memory-storage.service';
 import {
   STORAGE_INTERFACE_TOKEN,
@@ -18,10 +20,9 @@ import {
   providers: [
     {
       provide: STORAGE_INTERFACE_TOKEN,
-      useClass: InMemoryStorageService,
-      // useClass: environment.production
-      //   ? ChromeStorageService
-      //   : InMemoryStorageService,
+      useClass: environment.production
+        ? ChromeStorageService
+        : InMemoryStorageService,
     },
   ],
 })
