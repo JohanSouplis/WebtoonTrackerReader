@@ -1,4 +1,4 @@
-import { websiteJson } from '../pattern/link-format-website-title';
+import { websiteJson } from '../../pattern/link-format-website-title';
 const titleIsHere: string = 't';
 const chapterNumberIsHere: string = 'c';
 
@@ -15,7 +15,7 @@ export function retrieveTitleAndChapter(
   let titleSplitted: string[] = parser.split('§');
   let title: string = '';
   let chapter: string = '';
-  console.log(titleSplitted);
+  // console.log(titleSplitted);
   for (let i = 0; i < titleSplitted.length; i++) {
     if (titleSplitted[i] === titleIsHere) {
       title = titleWebpage.split(titleSplitted[i + 1])[i];

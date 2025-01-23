@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { CallToWebsite } from '../call_to_website.interface';
+import { CallToWebsite } from '../domain/ports/call_to_website.interface';
 
 export class RestTemplate implements CallToWebsite {
   recupererInformationsWebtoon = async function (url: string): Promise<string> {

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { StorageInterface } from '../angular/port/storage.interface';
+import { Scan } from '../core/src/domain/scan.type';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChromeStorageService {
+export class ChromeStorageService implements StorageInterface {
   constructor() {}
 
   //   setItem(key: string, value: any): void {
@@ -24,13 +27,14 @@ export class ChromeStorageService {
   //     });
   //   }
 
-  getAllItems(): Promise<{ [key: string]: any }> {
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.get(null, (result) => {
+  getScans(): Observable<Scan[]> {
+    return new Observable((subscriber) => {
+      chrome.storage.local.get('scans', (result) => {
         if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+          subscriber.error(chrome.runtime.lastError);
         } else {
-          resolve(result);
+          subscriber.next(result['scans']);
+          subscriber.complete();
         }
       });
     });

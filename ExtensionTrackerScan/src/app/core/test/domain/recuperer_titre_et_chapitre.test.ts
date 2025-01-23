@@ -1,4 +1,4 @@
-import { retrieveTitleAndChapter } from './recuperer_titre_et_chapitre';
+import { retrieveTitleAndChapter } from '../../src/domain/recuperer_titre_et_chapitre';
 
 it.each<[string, string, [string, string]]>([
   [
