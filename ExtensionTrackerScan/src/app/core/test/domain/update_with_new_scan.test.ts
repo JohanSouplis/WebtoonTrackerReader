@@ -1,8 +1,8 @@
 import { Scan } from '../../src/domain/scan.type';
-import { updateWithNewScan } from '../../src/domain/update_with_new_scan';
+import { updateScansWithThisScan } from '../../src/domain/update_with_new_scan';
 describe('When updating the list of scans stored', () => {
   it('if there is no scans stored, one scan is added', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [],
       createScan('Title', '8', 'url.com')
     );
@@ -13,7 +13,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if its a new scan, one new scan is added to the list', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('OldScanTitle', '8', 'url.com')],
       createScan('Title', '13', 'url.com')
     );
@@ -24,7 +24,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if its a scan of an existing scan with a different chapter, the chapter is updated', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('Title', '1', 'url.com')],
       createScan('Title', '2', 'url.com')
     );
@@ -35,7 +35,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if its a scan of an existing scan with a empty chapter, the chapter is not updated', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('Title', '1', 'url.com')],
       createScan('Title', '', 'url.com')
     );
@@ -46,7 +46,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if the title is empty, return the list of scans without changes', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('Title', '1', 'url.com')],
       createScan('', '3', 'url.com')
     );
@@ -57,7 +57,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if the title is empty and the chapter as well, return the list of scans without changes', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('Title', '1', 'url.com')],
       createScan('', '', 'url.com')
     );
@@ -68,7 +68,7 @@ describe('When updating the list of scans stored', () => {
   });
 
   it('if a scan with same title exist but is missing url, update it with new url', () => {
-    const scansResult: Scan[] = updateWithNewScan(
+    const scansResult: Scan[] = updateScansWithThisScan(
       [createScan('Title', '1', '')],
       createScan('Title', '1', 'url.com')
     );

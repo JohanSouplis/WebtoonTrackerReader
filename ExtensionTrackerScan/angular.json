@@ -23,6 +23,8 @@
                 "glob": "**/*",
                 "input": "public"
               },
+              "src/app/angular",
+              "src/assets",
               "src/manifest.json",
               "src/content.js",
               "src/background.js"
@@ -87,6 +89,7 @@
                 "glob": "**/*",
                 "input": "public"
               },
+              "src/assets",
               "src/manifest.json",
               "src/content.js",
               "src/background.js"

@@ -2,7 +2,7 @@ export type Scan = {
   title: string;
   chapter: string;
   url: string;
-  whenWasItReaded: Date;
+  whenWasItReaded: string;
   isFavorite: boolean;
-  rating: number;
+  rating?: number;
 };

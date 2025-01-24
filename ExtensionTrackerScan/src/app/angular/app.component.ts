@@ -21,7 +21,6 @@ import {
   STORAGE_INTERFACE_TOKEN,
   StorageInterface,
 } from './port/storage.interface';
-import { updateWithNewScan } from '../core/src/domain/update_with_new_scan';
 
 @Component({
   selector: 'app-root',
@@ -90,25 +89,32 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.scans.paginator = this.paginator;
-    this.sort.active = 'wasReaded';
-    this.sort.direction = 'desc';
-    this.scans.sort = this.sort;
+    setTimeout(() => {
+      this.scans.paginator = this.paginator;
+      this.sort.active = 'wasReaded';
+      this.sort.direction = 'desc';
+      this.scans.sort = this.sort;
+    });
   }
 
   openInNewTab(url: string): void {
     window.open(url, '_blank');
   }
 
-  formatDate(date: string | undefined): string {
-    if (!date) {
-      return '';
-    }
-    const parsedDate = new Date(date);
-    return this.datePipe.transform(parsedDate, 'dd/MM/yyyy') || '';
+  toggleFavorite(scan: Scan): void {
+    scan.isFavorite = !scan.isFavorite;
+    this.storeScanUpdated(scan);
+  }
+
+  formatDate(date: string): string {
+    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
   }
 
   onRatingChange(event: MatSelectChange, scan: Scan) {
+    this.storeScanUpdated(scan);
+  }
+
+  private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
   }
 }

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --live-reload",
+    "start": "ng serve --hmr --poll=5000 --verbose",
     "build": "ng build --configuration production && npx tsc --project tsconfig.json && tsc-alias --project tsconfig.json",
     "watch": "ng build --watch --configuration development",
     "test": "jest"
@@ -47,6 +47,7 @@
     "tsc-alias": "^1.8.10",
     "typescript": "~5.7.2",
     "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
   }
 }

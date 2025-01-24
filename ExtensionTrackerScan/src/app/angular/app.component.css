@@ -23,17 +23,25 @@ table {
 }
 
 .title-column {
-  flex: 6;
+  flex: 5.5;
 }
 
 .chapter-column {
-  flex: 1.5;
+  flex: 1;
 }
 
 .rating-column {
+  width: 30px;
+  height: 50px;
   flex: 1;
 }
 
 .wasReaded-column {
-  flex: 1;
+  flex: 2;
+}
+
+.favorite-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }

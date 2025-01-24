@@ -1,6 +1,10 @@
 import { Scan } from './scan.type';
 
-export function updateWithNewScan(scansList: Scan[], newScan: Scan): Scan[] {
+export function updateScansWithThisScan(
+  scansList: Scan[],
+  newScan: Scan
+): Scan[] {
+  console.log(newScan);
   if (!newScan.chapter || !newScan.title) {
     return scansList;
   }
@@ -15,5 +19,7 @@ export function updateWithNewScan(scansList: Scan[], newScan: Scan): Scan[] {
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
   existingScan['whenWasItReaded'] = newScan.whenWasItReaded;
+  existingScan['isFavorite'] = newScan.isFavorite;
+  existingScan['rating'] = newScan?.rating;
   return scansList;
 }

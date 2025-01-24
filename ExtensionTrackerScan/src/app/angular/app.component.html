@@ -6,11 +6,18 @@
         mat-sort-header
         start="desc"
         class="favorite-column"
-        >Favorite</mat-header-cell
-      >
-      <mat-cell *matCellDef="let scan" class="favorite-column">{{
-        scan.isFavorite
-      }}</mat-cell>
+        >Favorite
+      </mat-header-cell>
+      <mat-cell *matCellDef="let scan">
+        <img
+          [src]="
+            scan.isFavorite ? 'assets/fav_star.png' : 'assets/not_fav_star.png'
+          "
+          [alt]="scan.isFavorite ? 'Favorited' : 'Not Favorited'"
+          class="favorite-icon"
+          (click)="toggleFavorite(scan)"
+        />
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="title">
@@ -59,7 +66,10 @@
 
       <mat-cell *matCellDef="let scan" class="rating-column">
         <mat-form-field>
-          <mat-select [(value)]="scan.rating" (selectionChange)="onRatingChange($event, scan)">
+          <mat-select
+            [(value)]="scan.rating"
+            (selectionChange)="onRatingChange($event, scan)"
+          >
             <mat-option *ngFor="let rate of ratingOptions" [value]="rate">
               {{ rate }}
             </mat-option>
