@@ -14,6 +14,6 @@ export function updateWithNewScan(scansList: Scan[], newScan: Scan): Scan[] {
   }
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
-
+  existingScan['whenWasItReaded'] = newScan.whenWasItReaded;
   return scansList;
 }

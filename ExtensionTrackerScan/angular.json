@@ -60,6 +60,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "liveReload": true,
+            "watch": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "ExtensionTrackerScan:build:production"

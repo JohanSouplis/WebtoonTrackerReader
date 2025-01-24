@@ -1,0 +1,39 @@
+table {
+  width: 100%;
+}
+
+.mat-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-header-row,
+.mat-row {
+  display: flex;
+}
+
+.mat-header-cell,
+.mat-cell {
+  flex: 1;
+  text-align: left;
+}
+
+.favorite-column {
+  flex: 0.5;
+}
+
+.title-column {
+  flex: 6;
+}
+
+.chapter-column {
+  flex: 1.5;
+}
+
+.rating-column {
+  flex: 1;
+}
+
+.wasReaded-column {
+  flex: 1;
+}

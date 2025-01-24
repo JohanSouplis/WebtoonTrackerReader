@@ -13,13 +13,11 @@ chrome.runtime.onMessage.addListener(
         title: title,
         chapter: chapter,
         url: message.url,
+        whenWasItReaded: new Date(),
+        isFavorite: false,
       } as Scan);
 
       chrome.storage.local.set({ scans: scansList }, function () {});
     });
   }
 );
-
-chrome.storage.local.get(null, (result) => {
-  console.log(result);
-});

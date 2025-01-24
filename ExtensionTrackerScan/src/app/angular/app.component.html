@@ -1,20 +1,71 @@
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="scans" matSort>
+    <ng-container matColumnDef="isFavorite">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        class="favorite-column"
+        >Favorite</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="favorite-column">{{
+        scan.isFavorite
+      }}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-      <mat-cell *matCellDef="let scan">{{ scan.title }}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column"
+        >Title</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="title-column"
+        ><a (click)="openInNewTab(scan.url)">{{ scan.title }}</a></mat-cell
+      >
     </ng-container>
 
     <ng-container matColumnDef="chapter">
-      <mat-header-cell *matHeaderCellDef mat-sort-header
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        class="chapter-column"
         >Chapter</mat-header-cell
       >
-      <mat-cell *matCellDef="let scan">{{ scan.chapter }}</mat-cell>
+      <mat-cell *matCellDef="let scan" class="chapter-column">{{
+        scan.chapter
+      }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="url">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Url</mat-header-cell>
-      <mat-cell *matCellDef="let scan">{{ scan.url }}</mat-cell>
+    <ng-container matColumnDef="wasReaded">
+      <mat-header-cell
+        start="desc"
+        *matHeaderCellDef
+        mat-sort-header
+        class="wasReaded-column"
+        >Was readed</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="wasReaded-column">{{
+        formatDate(scan.whenWasItReaded)
+      }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rating">
+      <mat-header-cell
+        start="desc"
+        *matHeaderCellDef
+        mat-sort-header
+        class="rating-column"
+        >Rating</mat-header-cell
+      >
+
+      <mat-cell *matCellDef="let scan" class="rating-column">
+        <mat-form-field>
+          <mat-select [(value)]="scan.rating" (selectionChange)="onRatingChange($event, scan)">
+            <mat-option *ngFor="let rate of ratingOptions" [value]="rate">
+              {{ rate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
