@@ -18,9 +18,15 @@ import { Scan } from '../core/src/domain/scan.type';
 import { ChromeStorageService } from '../gateway/chrome-storage.service';
 import { InMemoryStorageService } from '../gateway/in-memory-storage.service';
 import {
-  STORAGE_INTERFACE_TOKEN,
-  StorageInterface,
+  STORAGE_TOKEN,
+  StorageInterface as Storage,
 } from './port/storage.interface';
+import {
+  NAVIGATOR_HANDLER_TOKEN,
+  NavigatorHandler,
+} from './port/openFullPageInterface';
+import { ChromeHandler } from '../gateway/chrome-handler.service';
+import { AngularHandler } from '../gateway/angular-handler.service';
 
 @Component({
   selector: 'app-root',
@@ -39,10 +45,14 @@ import {
   providers: [
     DatePipe,
     {
-      provide: STORAGE_INTERFACE_TOKEN,
+      provide: STORAGE_TOKEN,
       useClass: environment.production
         ? ChromeStorageService
         : InMemoryStorageService,
+    },
+    {
+      provide: NAVIGATOR_HANDLER_TOKEN,
+      useClass: environment.production ? ChromeHandler : AngularHandler,
     },
   ],
 })
@@ -63,7 +73,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   ratingOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
   constructor(
-    @Inject(STORAGE_INTERFACE_TOKEN) private storage: StorageInterface,
+    @Inject(STORAGE_TOKEN) private storage: Storage,
+    @Inject(NAVIGATOR_HANDLER_TOKEN) private navigatorHandler: NavigatorHandler,
     private datePipe: DatePipe
   ) {}
 
@@ -116,5 +127,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
+  }
+
+  openFullPage() {
+    this.navigatorHandler.openFullPage();
   }
 }

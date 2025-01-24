@@ -26,6 +26,7 @@
               "src/app/angular",
               "src/assets",
               "src/manifest.json",
+              "src/full_page.html",
               "src/content.js",
               "src/background.js"
             ],

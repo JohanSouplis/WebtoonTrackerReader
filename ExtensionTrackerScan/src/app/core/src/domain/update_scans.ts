@@ -1,10 +1,9 @@
 import { Scan } from './scan.type';
 
-export function updateScansWithThisScan(
+export function updateScansWithNewVisitedScan(
   scansList: Scan[],
   newScan: Scan
 ): Scan[] {
-  console.log(newScan);
   if (!newScan.chapter || !newScan.title) {
     return scansList;
   }
@@ -19,7 +18,21 @@ export function updateScansWithThisScan(
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
   existingScan['whenWasItRead'] = newScan.whenWasItRead;
-  existingScan['isFavorite'] = newScan.isFavorite;
-  existingScan['rating'] = newScan?.rating;
+  return scansList;
+}
+
+export function updateScansModifiedByUser(
+  scansList: Scan[],
+  scanToUpdate: Scan
+): Scan[] {
+  let existingScan: Scan | undefined = scansList.find(
+    (scan) => scan['title'] === scanToUpdate.title
+  );
+  if (!existingScan) {
+    console.log('Error, scan not found !');
+    return scansList;
+  }
+  existingScan['isFavorite'] = scanToUpdate.isFavorite;
+  existingScan['rating'] = scanToUpdate?.rating;
   return scansList;
 }

@@ -1,6 +1,6 @@
 import { retrieveTitleAndChapter } from './app/core/src/domain/recuperer_titre_et_chapitre';
 import { Scan } from './app/core/src/domain/scan.type';
-import { updateScansWithThisScan } from './app/core/src/domain/update_with_new_scan';
+import { updateScansWithNewVisitedScan } from './app/core/src/domain/update_scans';
 
 chrome.runtime.onMessage.addListener(
   (message: { content: string; url: string }) => {
@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(
       message.url
     );
     chrome.storage.local.get({ scans: [] }, function (result) {
-      var scansList: Scan[] = updateScansWithThisScan(result['scans'], {
+      var scansList: Scan[] = updateScansWithNewVisitedScan(result['scans'], {
         title: title,
         chapter: chapter,
         url: message.url,

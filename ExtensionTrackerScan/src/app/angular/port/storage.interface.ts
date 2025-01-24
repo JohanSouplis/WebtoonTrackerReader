@@ -7,6 +7,6 @@ export interface StorageInterface {
   getScans(): Observable<Scan[]>;
 }
 
-export const STORAGE_INTERFACE_TOKEN = new InjectionToken<StorageInterface>(
+export const STORAGE_TOKEN = new InjectionToken<StorageInterface>(
   'StorageInterface'
 );
