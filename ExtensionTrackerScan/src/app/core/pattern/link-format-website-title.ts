@@ -1,4 +1,105 @@
 export const websiteJson = {
+  'toonily.com': {
+    '1': {
+      parse: 'title',
+      format:
+        'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
+      formatparse: 't§ - Chapter §c§ - ',
+    },
+  },
+  'asuracomic.net': {
+    '1': {
+      parse: 'title',
+      format: 'Title Chapter X - Asura Scans',
+      formatparse: 't§ Chapter §c§ - Asura Scans',
+    },
+  },
+  'manhuatop.org': {
+    '1': {
+      parse: 'title',
+      format: 'Title Manhwa  -  Chapter X - Top Manhwa',
+      formatparse: 't§ Manhwa  -  Chapter §c§ - Top Manhua',
+    },
+  },
+  'arvencomics.com': {
+    '1': {
+      parse: 'title',
+      format: 'Title Chapter X',
+      formatparse: 't§ Chapter §c§',
+    },
+  },
+  'vortexscans.org': {
+    '1': {
+      parse: 'title',
+      format: 'Title Chapter X - Vortex Scans',
+      formatparse: 't§ Chapter §c§ - Vortex Scans',
+    },
+  },
+  'manhuaus.com': {
+    '1': {
+      parse: 'title',
+      format: 'Title - Chapter X - MANHUAUS.COM',
+      formatparse: 't§ - Chapter §c§ - MANHUAUS.COM',
+    },
+  },
+  'manhuafast.net': {
+    '1': {
+      parse: 'title',
+      format: 'Title - Chapter X - MANHUAFAST.NET',
+      formatparse: 't§ - Chapter §c§ - MANHUAFAST.NET',
+    },
+  },
+  'comick.io': {
+    '1': {
+      parse: 'title',
+      format: 'Chapter X (English) - Title | ComicK',
+      formatparse: 'Chapter §c§ (English) - §t§ | ComicK',
+    },
+  },
+  'reaper-scan.net': {
+    '1': {
+      parse: 'title',
+      format: 'Read Title Chapter X ⚡ Reaper-scan | Read Manga Everyday',
+      formatparse: 'Read §t§ Chapter §c§ ⚡ Reaper-scan | Read Manga Everyday',
+    },
+  },
+  'en-thunderscans.com': {
+    '1': {
+      parse: 'title',
+      format: 'Title Chapter X – Thunderscans EN',
+      formatparse: 't§ Chapter §c§ – Thunderscans EN',
+    },
+  },
+  'dragontea.ink': {
+    '1': {
+      parse: 'title',
+      format: 'Title - chapter X - Dragon Tea',
+      formatparse: 't§ - chapter §c§ - Dragon Tea',
+    },
+  },
+  'toongod.org': {
+    '1': {
+      parse: 'title',
+      format: 'Read Title Chapter X Online - ToonGod',
+      formatparse: 'Read §t§ Chapter §c§ Online - ToonGod',
+    },
+  },
+  'mangadex.org': {
+    '1': {
+      parse: 'title',
+      format: '1 | Chapter X - Title - MangaDex',
+      formatparse: 'Chapter §c§ - §t§ - MangaDex',
+    },
+  },
+
+  'chapmanganato.to': {
+    '1': {
+      parse: 'title',
+      format: 'Title Chapter 266 - Manganato',
+      formatparse: 't§ Chapter §c§ - Manganato',
+    },
+  },
+
   'mangatx.com': {
     '1': {
       parse: 'title',
@@ -45,21 +146,6 @@ export const websiteJson = {
       formatparse: '§µt§ - Chapter µc§ - manhuadexµ',
     },
   },
-  'toonily.com': {
-    '1': {
-      parse: 'title',
-      format:
-        'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
-      formatparse: 't§ - Chapter §c§ - ',
-    },
-  },
-  'asuracomic.net': {
-    '1': {
-      parse: 'title',
-      format: 'Title Chapter X - Asura Scans',
-      formatparse: 't§ Chapter §c§ - Asura Scans',
-    },
-  },
   'scantrad-union.com': {
     '1': {
       parse: 'title',
@@ -74,32 +160,12 @@ export const websiteJson = {
       formatparse: '§Scan Chapitre µc§ de µt§ - Scantrad Franceµ',
     },
   },
-  'mangadex.org': {
-    '1': {
-      parse: 'title',
-      format: 'Y | Chapter X - Title - Mangadex',
-      formatparse: '§ | Chapter µc§ - µt§ - Mangadexµ',
-    },
-  },
-  'manhuaus.com': {
-    '1': {
-      parse: 'title',
-      format: 'Title – Manhuaus Hot - chapter X - Manhuaus.com',
-      formatparse: '§µt§ -µ§chapter µc§ - Manhuaus.comµ',
-    },
-  },
+
   'w12.mangafreak.net': {
     '1': {
       parse: 'title',
       format: 'Read Title Chapter X - MangaFreak',
       formatparse: '§Read µt§ Chapter µc§ - MangaFreakµ',
-    },
-  },
-  'mangakakalot.com': {
-    '1': {
-      parse: 'title',
-      format: 'Title Chapter X - Mangakakalot.com',
-      formatparse: '§µt§ Chapter µc§ - Mangakakalot.comµ',
     },
   },
   'gardenmanage.com': {

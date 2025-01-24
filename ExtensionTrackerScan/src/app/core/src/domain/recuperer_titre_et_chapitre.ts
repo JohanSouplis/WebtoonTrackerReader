@@ -18,7 +18,14 @@ export function retrieveTitleAndChapter(
   // console.log(titleSplitted);
   for (let i = 0; i < titleSplitted.length; i++) {
     if (titleSplitted[i] === titleIsHere) {
-      title = titleWebpage.split(titleSplitted[i + 1])[i];
+      if (i === 0) {
+        title = titleWebpage.split(titleSplitted[i + 1])[i];
+      } else {
+        let stringFinishingWithTitle = titleWebpage.split(
+          titleSplitted[i - 1]
+        )[1];
+        title = stringFinishingWithTitle.split(titleSplitted[i + 1])[0];
+      }
     } else if (titleSplitted[i] === chapterNumberIsHere) {
       let stringFinishingWithChapter = titleWebpage.split(
         titleSplitted[i - 1]
