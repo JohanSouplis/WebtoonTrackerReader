@@ -6,7 +6,8 @@
         mat-sort-header
         start="desc"
         class="favorite-column"
-        >Favorite
+      >
+        Fav
       </mat-header-cell>
       <mat-cell *matCellDef="let scan">
         <img
@@ -21,7 +22,10 @@
     </ng-container>
 
     <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column"
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="title-column title-header"
         >Title</mat-header-cell
       >
       <mat-cell *matCellDef="let scan" class="title-column"
@@ -34,7 +38,7 @@
         *matHeaderCellDef
         mat-sort-header
         start="desc"
-        class="chapter-column"
+        class="chapter-column chapter-header"
         >Chapter</mat-header-cell
       >
       <mat-cell *matCellDef="let scan" class="chapter-column">{{
@@ -42,16 +46,16 @@
       }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="wasReaded">
+    <ng-container matColumnDef="wasRead">
       <mat-header-cell
         start="desc"
         *matHeaderCellDef
         mat-sort-header
-        class="wasReaded-column"
-        >Was readed</mat-header-cell
+        class="wasRead-column wasRead-header"
+        >Was read</mat-header-cell
       >
-      <mat-cell *matCellDef="let scan" class="wasReaded-column">{{
-        formatDate(scan.whenWasItReaded)
+      <mat-cell *matCellDef="let scan" class="wasRead-column">{{
+        formatDate(scan.whenWasItRead)
       }}</mat-cell>
     </ng-container>
 
@@ -60,7 +64,7 @@
         start="desc"
         *matHeaderCellDef
         mat-sort-header
-        class="rating-column"
+        class="rating-column rating-header"
         >Rating</mat-header-cell
       >
 

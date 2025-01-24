@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(
         title: title,
         chapter: chapter,
         url: message.url,
-        whenWasItReaded: new Date().toString(),
+        whenWasItRead: new Date().toString(),
         isFavorite: false,
       } as Scan);
 

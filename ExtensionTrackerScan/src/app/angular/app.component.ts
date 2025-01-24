@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     'isFavorite',
     'title',
     'chapter',
-    'wasReaded',
+    'wasRead',
     'rating',
   ];
 
@@ -72,8 +72,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       (scans) => {
         this.scans = new MatTableDataSource<Scan>(scans);
         this.scans.sortingDataAccessor = (item, property) => {
-          if (property === 'wasReaded') {
-            return new Date(item.whenWasItReaded).getTime();
+          if (property === 'wasRead') {
+            return new Date(item.whenWasItRead).getTime();
           }
           if (property === 'chapter') {
             return +item.chapter;
@@ -91,7 +91,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.scans.paginator = this.paginator;
-      this.sort.active = 'wasReaded';
+      this.sort.active = 'wasRead';
       this.sort.direction = 'desc';
       this.scans.sort = this.sort;
     });

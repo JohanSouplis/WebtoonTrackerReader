@@ -18,7 +18,7 @@ export function updateScansWithThisScan(
   }
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
-  existingScan['whenWasItReaded'] = newScan.whenWasItReaded;
+  existingScan['whenWasItRead'] = newScan.whenWasItRead;
   existingScan['isFavorite'] = newScan.isFavorite;
   existingScan['rating'] = newScan?.rating;
   return scansList;

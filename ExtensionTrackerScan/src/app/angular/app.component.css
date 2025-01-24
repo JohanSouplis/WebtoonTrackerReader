@@ -23,21 +23,40 @@ table {
 }
 
 .title-column {
-  flex: 5.5;
+  flex: 5;
+}
+
+.title-header {
+  display: flex;
+  justify-content: center;
 }
 
 .chapter-column {
   flex: 1;
 }
 
-.rating-column {
-  width: 30px;
-  height: 50px;
-  flex: 1;
+.chapter-header {
+  display: flex;
+  justify-content: center;
 }
 
-.wasReaded-column {
+.rating-column {
+  width: 30px;
+  flex: 1.5;
+}
+
+.rating-header {
+  display: flex;
+  justify-content: center;
+}
+
+.wasRead-column {
   flex: 2;
+}
+
+.wasRead-header {
+  display: flex;
+  justify-content: center;
 }
 
 .favorite-icon {
