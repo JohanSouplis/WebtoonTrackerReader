@@ -128,8 +128,18 @@ export const websiteJson = {
     },
     '2': {
       parse: 'title',
+      format: 'Chapter X | Title',
+      formatparse: 'Chapter §c§ | §t',
+    },
+    '3': {
+      parse: 'title',
       format: 'Ep. X - {nameChapter} | Title or Ep. X | Title',
       formatparse: 'Ep. §c§ | §t',
+    },
+    '4': {
+      parse: 'title',
+      format: 'Chapter X - {nameChapter} | Title or Ep. X | Title',
+      formatparse: 'Chapter §c§ | §t',
     },
   },
   'tappytoon.com': {
@@ -175,15 +185,20 @@ export const websiteJson = {
     },
     '2': {
       parse: 'title',
-      format: 'Title- Chapter X : S3 Finale',
+      format: 'Title - Chapter X : S3 Finale',
       formatparse: 't§ - Chapter §c§',
     },
   },
-  'mangapark.org': {
+  mangapark: {
     '1': {
       parse: 'title',
       format: 'Title - Chapter X - Share Any Manga on MangaPark',
       formatparse: 't§ - Chapter §c§ - Share Any Manga on MangaPark',
+    },
+    '2': {
+      parse: 'title',
+      format: 'Title - Ch.X - Share Any Manga on MangaPark',
+      formatparse: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
     },
   },
 
@@ -199,23 +214,6 @@ export const websiteJson = {
       parse: 'title',
       format: '[#X] Title | manga plus',
       formatparse: '§[#µc§] µt§ | manga plusµ',
-    },
-  },
-
-  'mangapark.net': {
-    '1': {
-      parse: 'title',
-      format: 'title - Ch.x',
-      formatparse: '§µt§ - Ch.µc§µ',
-    },
-  },
-  'mangatyrant.com': {
-    '1': {
-      parse: 'both',
-      format: 'Title - manga tyrant',
-      formatparse: '§µt§ - manga tyrantµ',
-      formatUrl: 'https://mangatyrant.com/manga/990k-ex-life-hunter/chapter-X/',
-      formatparseUrl: '§/chapter-µc§/µ',
     },
   },
 };

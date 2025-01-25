@@ -1,9 +1,12 @@
-const title = document.querySelector("title");
+setTimeout(() => {
+  const title = document.querySelector("title");
 
-if (title) {
-  chrome.runtime.sendMessage({
-    tag: "title",
-    content: title.textContent,
-    url: window.location.href,
-  });
-}
+  if (title) {
+    chrome.runtime.sendMessage({
+      title: title.textContent,
+      url: window.location.href,
+    });
+  } else {
+    console.error("Title not found!");
+  }
+}, 5000);

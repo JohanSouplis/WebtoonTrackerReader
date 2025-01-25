@@ -38,6 +38,6 @@
 //   });
 // });
 
-// it('test', () => {
-//   console.log('deactivate to avoid spamming');
-// });
+it('test', () => {
+  console.log('deactivate to avoid spamming');
+});

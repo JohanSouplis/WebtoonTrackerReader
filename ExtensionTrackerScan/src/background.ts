@@ -3,11 +3,16 @@ import { Scan } from './app/core/src/domain/scan.type';
 import { updateScansWithNewVisitedScan } from './app/core/src/domain/update_scans';
 
 chrome.runtime.onMessage.addListener(
-  (message: { content: string; url: string }) => {
+  (message: { title: string; url: string }) => {
+    console.log(message.title);
+    if (!message.title) {
+      return;
+    }
     let titleAndChapter: string[] = retrieveTitleAndChapter(
-      message.content,
+      message.title,
       message.url
     );
+    console.log(titleAndChapter);
     if (titleAndChapter.length === 0) {
       return;
     }

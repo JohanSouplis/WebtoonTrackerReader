@@ -51,6 +51,9 @@ function getTitle(
     title = titleWebpage.split(titleSplitted[i + 1])[i];
   } else {
     let stringFinishingWithTitle = titleWebpage.split(titleSplitted[i - 1])[1];
+    if (!stringFinishingWithTitle) {
+      return '';
+    }
     title = stringFinishingWithTitle.split(titleSplitted[i + 1])[0];
   }
   return title;

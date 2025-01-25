@@ -120,9 +120,14 @@ it.each<[string, string, [string, string]]>([
     ['Surviving the Game as a Barbarian', '57'],
   ],
   [
-    '(S2) Ep. 57 | Surviving the Game as a Barbarian',
-    'https://www.webtoons.com/en/fantasy/surviving-the-game-as-a-barbarian/s2-ep-57-first-request/viewer?title_no=5515&episode_no=57',
+    '(S2) Ep. 57 - First Request | Surviving the Game as a Barbarian',
+    'https://www.webtoons.com/en/fantasy/a-spell-for-a-smith/chapter-46/viewer?title_no=6078&episode_no=46',
     ['Surviving the Game as a Barbarian', '57'],
+  ],
+  [
+    'Chapter 46 | A Spell for a Smith',
+    'https://www.webtoons.com/en/fantasy/surviving-the-game-as-a-barbarian/s2-ep-57-first-request/viewer?title_no=5515&episode_no=57',
+    ['A Spell for a Smith', '46'],
   ],
   [
     'Read Episode 2 -  I Have Been Trapped In This Day for Three Thousand Years  | Tappytoon',
@@ -182,10 +187,29 @@ it.each<[string, string, [string, string]]>([
     'https://mangapark.org/title/103422-en-the-max-level-hero-has-returned/9038456-chapter-179',
     ['The Max Level Hero Has Returned!', '179'],
   ],
+  [
+    'Love is an Illusion! - Superstar [Official] - Chapter 10 - Share Any Manga on MangaPark',
+    'https://mangapark.net/title/419532-en-love-is-an-illusion-superstar/9395342-chapter-10',
+    ['Love is an Illusion! - Superstar [Official]', '10'],
+  ],
+  [
+    'Chronicles Of The Demon Faction - Ch.102 - Share Any Manga on MangaPark',
+    'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
+    ['Chronicles Of The Demon Faction', '102'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter(title, url)).toEqual(result);
 });
 
 it('when parser is not known, should return empty', () => {
   expect(retrieveTitleAndChapter('', '')).toEqual([]);
+});
+
+it('when in a website of scan but there is no scan, should return empty', () => {
+  expect(
+    retrieveTitleAndChapter(
+      'Stories that change your world, Tappytoon Comics & Novels | Official English',
+      'https://www.tappytoon.com/en/comics/home'
+    )
+  ).toEqual([]);
 });
