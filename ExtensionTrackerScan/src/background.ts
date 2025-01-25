@@ -1,4 +1,5 @@
-import { retrieveTitleAndChapter } from './app/core/src/domain/recuperer_titre_et_chapitre';
+import { container } from './app/core/container';
+import { RetrieveTitleAndChapter } from './app/core/src/domain/retrieve_title_and_chapter';
 import { Scan } from './app/core/src/domain/scan.type';
 import { updateScansWithNewVisitedScan } from './app/core/src/domain/update_scans';
 
@@ -8,7 +9,11 @@ chrome.runtime.onMessage.addListener(
     if (!message.title) {
       return;
     }
-    let titleAndChapter: string[] = retrieveTitleAndChapter(
+
+    const retrieveTitleAndChapter = container.get<RetrieveTitleAndChapter>(
+      'RetrieveTitleAndChapter'
+    );
+    let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
       message.title,
       message.url
     );

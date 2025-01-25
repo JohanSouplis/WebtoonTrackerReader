@@ -20,7 +20,12 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["chrome", "node", "jest", "mocha"]
+    "types": ["chrome", "node", "jest", "mocha", "inversify"],
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
   "tsc-alias": {
     "resolveFullPaths": true,

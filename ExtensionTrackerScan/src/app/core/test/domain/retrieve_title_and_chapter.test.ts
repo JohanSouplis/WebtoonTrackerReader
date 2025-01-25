@@ -1,9 +1,15 @@
-import { retrieveTitleAndChapter } from '../../src/domain/recuperer_titre_et_chapitre';
+import { CrashReport } from '../../src/domain/ports/crash_report.interface';
+import { RetrieveTitleAndChapter } from '../../src/domain/retrieve_title_and_chapter';
 
-jest.mock('../../src/domain/recuperer_titre_et_chapitre', () => ({
-  ...jest.requireActual('../../src/domain/recuperer_titre_et_chapitre'),
-  sendToDiscordCrashReport: jest.fn().mockResolvedValue(undefined),
-}));
+class MockCrashReport implements CrashReport {
+  execute = jest.fn((url: string, error?: string) => {
+    console.log(`Message send mocked : ${url}`);
+  });
+}
+
+const mockCrashReport = new MockCrashReport();
+const retrieveTitleAndChapter = new RetrieveTitleAndChapter(mockCrashReport);
+
 it.each<[string, string, [string, string]]>([
   [
     'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
@@ -201,26 +207,32 @@ it.each<[string, string, [string, string]]>([
     'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
     ['Chronicles Of The Demon Faction', '102'],
   ],
-  [
-    'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
-    'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
-    ['Chronicles Of The Demon Faction', '102'],
-  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
-  expect(retrieveTitleAndChapter(title, url)).toEqual(result);
+  expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
 });
 
 it('when parser is not known, should return empty', () => {
-  expect(retrieveTitleAndChapter('', '')).toEqual([]);
+  expect(retrieveTitleAndChapter.execute('', '')).toEqual([]);
 });
 
-describe()
-it('when in a website of scan but there is no scan, should return empty', () => {
-  expect(
-    retrieveTitleAndChapter(
-      'Stories that change your world, Tappytoon Comics & Novels | Official English',
-      'https://www.tappytoon.com/en/comics/home'
-    )
-  ).toEqual([]);
-  expect(jest.fn().mock.calls.length).toBeGreaterThan(0);
+describe('when in a website of scan, should return empty and throw webhook discord', () => {
+  it('if in a website but not in a scan', () => {
+    expect(
+      retrieveTitleAndChapter.execute(
+        'Stories that change your world, Tappytoon Comics & Novels | Official English',
+        'https://www.tappytoon.com/en/comics/home'
+      )
+    ).toEqual([]);
+    expect(mockCrashReport.execute).toHaveBeenCalled();
+  });
+
+  it('If the pattern is not respected', () => {
+    expect(
+      retrieveTitleAndChapter.execute(
+        'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
+        'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102'
+      )
+    ).toEqual([]);
+    expect(mockCrashReport.execute).toHaveBeenCalled();
+  });
 });
