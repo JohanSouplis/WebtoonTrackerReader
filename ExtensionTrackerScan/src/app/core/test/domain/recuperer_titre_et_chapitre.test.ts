@@ -124,6 +124,64 @@ it.each<[string, string, [string, string]]>([
     'https://www.webtoons.com/en/fantasy/surviving-the-game-as-a-barbarian/s2-ep-57-first-request/viewer?title_no=5515&episode_no=57',
     ['Surviving the Game as a Barbarian', '57'],
   ],
+  [
+    'Read Episode 2 -  I Have Been Trapped In This Day for Three Thousand Years  | Tappytoon',
+    'https://www.tappytoon.com/en/chapters/463602739?',
+    ['I Have Been Trapped In This Day for Three Thousand Years', '2'],
+  ],
+  [
+    'Read Evolution Begins With A Big Tree Chapter 323 online free - MangaPanda.in',
+    'https://www.mangapanda.in/evolution-begins-with-a-big-tree-chapter-323#1',
+    ['Evolution Begins With A Big Tree', '323'],
+  ],
+  [
+    'High School Devil EP 1 - Toomics',
+    'https://toomics.com/en/webtoon/detail/code/38718/ep/1/toon/1695',
+    ['High School Devil', '1'],
+  ],
+  [
+    'Chapter 1 • Frenzy Leveling Up System',
+    'https://comics.inkr.com/title/4014-frenzy-leveling-up-system/chapter/176053-chapter-1?progress=2.506',
+    ['Frenzy Leveling Up System', '1'],
+  ],
+  [
+    "Surviving as a Tyrant's Daughter | Episode 3 | POCKET COMICS",
+    'https://www.pocketcomics.com/comic/8199/chapter/3/product',
+    ["Surviving as a Tyrant's Daughter", '3'],
+  ],
+  [
+    "The Player Who Can't Level Up [Official] - Chapter 170 : S3 Finale",
+    'https://bato.to/chapter/3186773',
+    ["The Player Who Can't Level Up", '170'],
+  ],
+  [
+    'I Have Never Abandoned the Tyrant - Chapter 45',
+    'https://bato.to/chapter/3156483',
+    ['I Have Never Abandoned the Tyrant', '45'],
+  ],
+  // [
+  //   'Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90  - Read Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90 Online - Page 1',
+  //   'https://fanfox.net/manga/rettou_hito_no_maken_tsukai_sukiruboudo_o_kushi_shite_saikyou_ni_itaru/c090/1.html',
+  //   [
+  //     'Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru',
+  //     '90',
+  //   ],
+  // ],
+  // [
+  //   'Star Martial God Technique 771  - Read Star Martial God Technique 771 Online - Page 1',
+  //   'https://fanfox.net/manga/star_martial_god_technique/c771/1.html#ipg2',
+  //   ['Star Martial God Technique', '771'],
+  // ],
+  [
+    'Overgeared (Team Argo) - Chapter 263 - Share Any Manga on MangaPark',
+    'https://mangapark.org/title/115720-en-overgeared-team-argo/9365944-chapter-263',
+    ['Overgeared (Team Argo)', '263'],
+  ],
+  [
+    'The Max Level Hero Has Returned! - Chapter 179 - Share Any Manga on MangaPark',
+    'https://mangapark.org/title/103422-en-the-max-level-hero-has-returned/9038456-chapter-179',
+    ['The Max Level Hero Has Returned!', '179'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter(title, url)).toEqual(result);
 });

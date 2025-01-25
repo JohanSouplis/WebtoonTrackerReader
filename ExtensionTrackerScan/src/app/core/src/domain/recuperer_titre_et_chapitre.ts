@@ -12,28 +12,33 @@ export function retrieveTitleAndChapter(
   if (webtoonParser.length === 0) {
     return [];
   }
-
-  const parser = webtoonParser[0][0][1].formatparse;
-
-  let titleSplitted: string[] = parser.split('§');
-  let title: string = '';
-  let chapter: string = '';
+  const parserList = webtoonParser[0];
 
   try {
-
-    for (let i = 0; i < titleSplitted.length; i++) {
-      if (titleSplitted[i] === titleIsHere) {
-        title = getTitle(i, title, titleWebpage, titleSplitted);
-      } else if (titleSplitted[i] === chapterNumberIsHere) {
-        chapter = getChapter(titleWebpage, titleSplitted, i, chapter);
+    for (let j = 0; j < parserList.length; j++) {
+      const parser = parserList[j][1].formatparse;
+      let titleSplitted: string[] = parser.split('§');
+      let title: string = '';
+      let chapter: string = '';
+      for (let i = 0; i < titleSplitted.length; i++) {
+        if (titleSplitted[i] === titleIsHere) {
+          title = getTitle(i, title, titleWebpage, titleSplitted);
+        } else if (titleSplitted[i] === chapterNumberIsHere) {
+          chapter = getChapter(titleWebpage, titleSplitted, i, chapter);
+        }
+      }
+      if (title && title[0] === ' ') {
+        title = title.substring(1);
+      }
+      if (title && chapter) {
+        return [title, chapter];
       }
     }
-    return [title, chapter];
-
   } catch (error) {
     console.log(error);
     return [];
   }
+  return [];
 }
 
 function getTitle(
@@ -58,6 +63,9 @@ function getChapter(
   chapter: string
 ) {
   let stringFinishingWithChapter = titleWebpage.split(titleSplitted[i - 1])[1];
+  if (!stringFinishingWithChapter) {
+    return '';
+  }
   chapter = stringFinishingWithChapter.split(' ')[0];
   chapter = chapter.replace(':', '');
   return chapter;

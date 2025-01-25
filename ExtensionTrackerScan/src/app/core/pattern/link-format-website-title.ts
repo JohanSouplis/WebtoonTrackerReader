@@ -128,77 +128,65 @@ export const websiteJson = {
     },
     '2': {
       parse: 'title',
-      format: 'Ep. X - {nameChapter} | Title',
+      format: 'Ep. X - {nameChapter} | Title or Ep. X | Title',
       formatparse: 'Ep. §c§ | §t',
     },
-    // '3': {
-    //   parse: 'title',
-    //   format: 'Ep. X | Title',
-    //   formatparse: 'Ep. §c§ | §t',
-    // },
   },
-
-  'webtoonxxxxx.com': {
+  'tappytoon.com': {
     '1': {
       parse: 'title',
-      format: 'Ep.X - {n°page} | Title',
-      formatparse: '§Ep.µc§ - µ§ | µt§µ',
-    },
-    '2': {
-      parse: 'title',
-      format: 'Ep. X | Title',
-      formatparse: '§Ep. µc§ | µt§µ',
-    },
-    '3': {
-      parse: 'title',
-      format: 'episode X | Title',
-      formatparse: '§episode µc§ | µt§µ',
-    },
-  },
-
-  'w12.mangafreak.net': {
-    '1': {
-      parse: 'title',
-      format: 'Read Title Chapter X - MangaFreak',
-      formatparse: '§Read µt§ Chapter µc§ - MangaFreakµ',
-    },
-  },
-  'gardenmanage.com': {
-    '1': {
-      parse: 'title',
-      format: 'Title Ch.X',
-      formatparse: '§µt§ Ch.µc§µ',
-    },
-  },
-  'manhuas.net': {
-    '1': {
-      parse: 'title',
-      format: 'Title manhua - Title chapter X - Read Manhua Online',
-      formatparse: '§manhua - µt§ chapter µc§ - Read Manhua Onlineµ',
-    },
-  },
-  'mangastream.mobi': {
-    '1': {
-      parse: 'title',
-      format: 'Read Title Chapter X manga online free at MangaStream.mobi',
-      formatparse:
-        '§Read µt§ Chapter µc§ manga online free at MangaStream.mobiµ',
+      format: 'Read Episode X - Title  | Tappytoon',
+      formatparse: 'Read Episode §c§ - §t§  | Tappytoon',
     },
   },
   'mangapanda.in': {
     '1': {
       parse: 'title',
-      format: 'Title manhua - Title chapter X online free - mangapanda.in',
-      formatparse: '§read µt§ chapter µc§ online free - mangapanda.inµ',
+      format: 'Read Title Chapter X online free - MangaPanda.in',
+      formatparse: 'Read §t§ Chapter §c§ online free - MangaPanda.in',
     },
   },
-  'fanfox.net': {
+  'toomics.com': {
     '1': {
       parse: 'title',
-      format: 'Title X  - Read Title X Online - Page 1',
-      formatparse: '§µtc§ - Readµ',
+      format: 'Title EP X - Toomics',
+      formatparse: 't§ EP §c§ - Toomics',
     },
   },
+  'comics.inkr.com': {
+    '1': {
+      parse: 'title',
+      format: 'Chapter X • Frenzy Leveling Up System',
+      formatparse: 'Chapter §c§ • §t',
+    },
+  },
+  'pocketcomics.com': {
+    '1': {
+      parse: 'title',
+      format: 'Title | Episode X | POCKET COMICS',
+      formatparse: 't§ | Episode §c§ | POCKET COMICS',
+    },
+  },
+  'bato.to': {
+    '1': {
+      parse: 'title',
+      format: 'Title [Official] - Chapter X : S3 Finale',
+      formatparse: 't§ [Official] - Chapter §c§',
+    },
+    '2': {
+      parse: 'title',
+      format: 'Title- Chapter X : S3 Finale',
+      formatparse: 't§ - Chapter §c§',
+    },
+  },
+  'mangapark.org': {
+    '1': {
+      parse: 'title',
+      format: 'Title - Chapter X - Share Any Manga on MangaPark',
+      formatparse: 't§ - Chapter §c§ - Share Any Manga on MangaPark',
+    },
+  },
+
   'mangainn.net': {
     '1': {
       parse: 'title',
