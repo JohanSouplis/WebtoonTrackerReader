@@ -64,12 +64,65 @@ it.each<[string, string, [string, string]]>([
   [
     '1 | Chapter 104 - Tensei Kizoku, Kantei Skill de Nariagaru ~Jakushou Ryouchi o Uketsuida node, Yuushuu na Jinzai o Fuyashiteitara, Saikyou Ryouchi ni Natteta~ - MangaDex',
     'https://mangadex.org/chapter/323ab3fd-9f26-4429-b5e9-40c0ed6e1a0e',
-    ['Tensei Kizoku, Kantei Skill de Nariagaru ~Jakushou Ryouchi o Uketsuida node, Yuushuu na Jinzai o Fuyashiteitara, Saikyou Ryouchi ni Natteta~', '104'],
+    [
+      'Tensei Kizoku, Kantei Skill de Nariagaru ~Jakushou Ryouchi o Uketsuida node, Yuushuu na Jinzai o Fuyashiteitara, Saikyou Ryouchi ni Natteta~',
+      '104',
+    ],
   ],
   [
     'Overgeared Chapter 266 - Manganato',
     'https://chapmanganato.to/manga-hi985065/chapter-266',
     ['Overgeared', '266'],
+  ],
+  [
+    "Mix Chapter 129: Because He's Tachibana Souichirou - Manganelo",
+    'https://chapmanganelo.com/manga-yr91037/chapter-129',
+    ['Mix', '129'],
+  ],
+  [
+    'I Thought I Tamed The Villain Chapter 51 - Manganelo',
+    'https://chapmanganelo.com/manga-vb136495/chapter-51',
+    ['I Thought I Tamed The Villain', '51'],
+  ],
+  [
+    'Record Of Ragnarok: The Apocalypse Of The Gods Chapter 6: The God Who Rebelled Against The Gods - Manganelo',
+    'https://chapmanganelo.com/manga-zj139777/chapter-6',
+    ['Record Of Ragnarok: The Apocalypse Of The Gods', '6'],
+  ],
+  [
+    ' \nStar Martial God Technique - 4 | Scantrad Union',
+    'https://scantrad-union.com/read/star-martial-god-technique/chapter-244.00/page-1/',
+    ['Star Martial God Technique', '4'],
+  ],
+  [
+    'Read S1 Episode 2 - Solo Leveling | Manta',
+    'https://manta.net/en/series/solo-leveling/episodes/s1-episode-2?episodeId=119148',
+    ['Solo Leveling', '2'],
+  ],
+  [
+    'Read Episode 3 - The Hidden Muse | Manta',
+    'https://manta.net/en/series/the-hidden-muse/episodes/episode-3?episodeId=117732',
+    ['The Hidden Muse', '3'],
+  ],
+  [
+    "Episode 70 | The Academy's Genius Swordsman",
+    'https://www.webtoons.com/en/fantasy/the-academys-genius-swordsman/episode-70/viewer?title_no=5752&episode_no=70',
+    ["The Academy's Genius Swordsman", '70'],
+  ],
+  [
+    "Episode 70 | The Academy's Genius Swordsman",
+    'https://www.webtoons.com/en/fantasy/the-academys-genius-swordsman/episode-70/viewer?title_no=5752&episode_no=70',
+    ["The Academy's Genius Swordsman", '70'],
+  ],
+  [
+    '(S2) Ep. 57 - First Request | Surviving the Game as a Barbarian',
+    'https://www.webtoons.com/en/fantasy/surviving-the-game-as-a-barbarian/s2-ep-57-first-request/viewer?title_no=5515&episode_no=57',
+    ['Surviving the Game as a Barbarian', '57'],
+  ],
+  [
+    '(S2) Ep. 57 | Surviving the Game as a Barbarian',
+    'https://www.webtoons.com/en/fantasy/surviving-the-game-as-a-barbarian/s2-ep-57-first-request/viewer?title_no=5515&episode_no=57',
+    ['Surviving the Game as a Barbarian', '57'],
   ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter(title, url)).toEqual(result);

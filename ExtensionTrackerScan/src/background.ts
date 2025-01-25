@@ -4,10 +4,14 @@ import { updateScansWithNewVisitedScan } from './app/core/src/domain/update_scan
 
 chrome.runtime.onMessage.addListener(
   (message: { content: string; url: string }) => {
-    const [title, chapter] = retrieveTitleAndChapter(
+    let titleAndChapter: string[] = retrieveTitleAndChapter(
       message.content,
       message.url
     );
+    if (titleAndChapter.length === 0) {
+      return;
+    }
+    let [title, chapter] = titleAndChapter;
     chrome.storage.local.get({ scans: [] }, function (result) {
       var scansList: Scan[] = updateScansWithNewVisitedScan(result['scans'], {
         title: title,

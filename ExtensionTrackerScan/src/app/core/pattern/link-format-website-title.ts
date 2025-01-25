@@ -91,7 +91,6 @@ export const websiteJson = {
       formatparse: 'Chapter §c§ - §t§ - MangaDex',
     },
   },
-
   'chapmanganato.to': {
     '1': {
       parse: 'title',
@@ -99,65 +98,61 @@ export const websiteJson = {
       formatparse: 't§ Chapter §c§ - Manganato',
     },
   },
-
-  'mangatx.com': {
+  'chapmanganelo.com': {
     '1': {
       parse: 'title',
-      format: 'title - Chapter x - MangaTx',
-      replace: {
-        make: 'chapter ',
-        where: 'ch.',
-      },
-      formatparse: '§µt§ - Chapter µc§ - MangaTxµ',
-    },
-  },
-  '365manga.com': {
-    '1': {
-      parse: 'title',
-      format: 'title - Chapter x - 365manga',
-      formatparse: '§µt§ - Chapter µc§ - 365mangaµ',
-    },
-  },
-  'mixedmanga.com': {
-    '1': {
-      parse: 'title',
-      format: 'title - Chapter x - mixed manga',
-      formatparse: '§µt§ - Chapter µc§ - mixed mangaµ',
-    },
-  },
-  'toonily.net': {
-    '1': {
-      parse: 'title',
-      format: 'title - Chapter x - toonily',
-      formatparse: 't§ - Chapter §c§ - toonily',
-    },
-  },
-  'mangakik.com': {
-    '1': {
-      parse: 'title',
-      format: 'title - Chapter x',
-      formatparse: '§µt§ - Chapter µc§µ',
-    },
-  },
-  'manhuadex.com': {
-    '1': {
-      parse: 'title',
-      format: 'title - Chapter x - manhuadex',
-      formatparse: '§µt§ - Chapter µc§ - manhuadexµ',
+      format:
+        'Title Chapter X: NameOfEpisode - Manganelo or Title Chapter X - Manganelo',
+      formatparse: 't§ Chapter §c§ - Manganelo',
     },
   },
   'scantrad-union.com': {
     '1': {
       parse: 'title',
       format: 'Title - X | Scantrad Union',
-      formatparse: '§µt§ - µc§ | Scantrad Unionµ',
+      formatparse: 't§ - §c§ | Scantrad Union',
     },
   },
-  'scantrad.net': {
+  'manta.net': {
     '1': {
       parse: 'title',
-      format: 'Scan Chapitre X de Title - Scantrad France',
-      formatparse: '§Scan Chapitre µc§ de µt§ - Scantrad Franceµ',
+      format: 'Read SY Episode X - Title | Manta',
+      formatparse: 'Episode §c§ - §t§ | Manta',
+    },
+  },
+  'webtoons.com': {
+    '1': {
+      parse: 'title',
+      format: 'Episode X | Title',
+      formatparse: 'Episode §c§ | §t',
+    },
+    '2': {
+      parse: 'title',
+      format: 'Ep. X - {nameChapter} | Title',
+      formatparse: 'Ep. §c§ | §t',
+    },
+    // '3': {
+    //   parse: 'title',
+    //   format: 'Ep. X | Title',
+    //   formatparse: 'Ep. §c§ | §t',
+    // },
+  },
+
+  'webtoonxxxxx.com': {
+    '1': {
+      parse: 'title',
+      format: 'Ep.X - {n°page} | Title',
+      formatparse: '§Ep.µc§ - µ§ | µt§µ',
+    },
+    '2': {
+      parse: 'title',
+      format: 'Ep. X | Title',
+      formatparse: '§Ep. µc§ | µt§µ',
+    },
+    '3': {
+      parse: 'title',
+      format: 'episode X | Title',
+      formatparse: '§episode µc§ | µt§µ',
     },
   },
 
@@ -216,23 +211,6 @@ export const websiteJson = {
       parse: 'title',
       format: '[#X] Title | manga plus',
       formatparse: '§[#µc§] µt§ | manga plusµ',
-    },
-  },
-  'webtoons.com': {
-    '1': {
-      parse: 'title',
-      format: 'Ep.X - {n°page} | Title',
-      formatparse: '§Ep.µc§ - µ§ | µt§µ',
-    },
-    '2': {
-      parse: 'title',
-      format: 'Ep. X | Title',
-      formatparse: '§Ep. µc§ | µt§µ',
-    },
-    '3': {
-      parse: 'title',
-      format: 'episode X | Title',
-      formatparse: '§episode µc§ | µt§µ',
     },
   },
 
