@@ -18,11 +18,11 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content-script.js"]
     }
   ],
   "icons": {
-    "128": "icone.png"
+    "128": "assets/icone.png"
   },
   "host_permissions": ["*://*/*"],
   "action": {

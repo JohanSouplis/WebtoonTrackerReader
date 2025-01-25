@@ -1,5 +1,5 @@
 setTimeout(() => {
-  const title = document.querySelector("title");
+  const title = document.querySelector('title');
 
   if (title) {
     chrome.runtime.sendMessage({
@@ -7,6 +7,6 @@ setTimeout(() => {
       url: window.location.href,
     });
   } else {
-    console.error("Title not found!");
+    console.error('Title not found!');
   }
 }, 5000);

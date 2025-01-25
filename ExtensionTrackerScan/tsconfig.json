@@ -21,18 +21,14 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["chrome", "node", "jest", "mocha", "inversify"],
-    "emitDecoratorMetadata": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "emitDecoratorMetadata": true
   },
   "tsc-alias": {
     "resolveFullPaths": true,
     "resolveJsonModule": true,
     "verbose": false
   },
-  "include": ["src/**/*.ts", "src/app/core/src/recuperer_titre_et_chapitre.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/main.ts"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
