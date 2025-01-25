@@ -13,7 +13,6 @@ export function retrieveTitleAndChapter(
     return [];
   }
   const parserList = webtoonParser[0];
-
   try {
     for (let j = 0; j < parserList.length; j++) {
       const parser = parserList[j][1].formatparse;
@@ -36,8 +35,10 @@ export function retrieveTitleAndChapter(
     }
   } catch (error) {
     console.log(error);
+    sendCrashReport(url, error);
     return [];
   }
+  sendCrashReport(url);
   return [];
 }
 
@@ -90,4 +91,38 @@ function getParserForThisWebsite(url: string) {
 
 function isMatchingWebsite(url: string, website: any): boolean {
   return url.includes(website[0]);
+}
+
+async function sendCrashReport(url: string, error?: any) {
+  await sendToDiscordCrashReport(url, error);
+}
+
+export async function sendToDiscordCrashReport(url: string, error?: any) {
+  const payload = {
+    content: `📢 **New scans known but not parsed correctly :**\n\`\`\`${
+      url + '\n' + error
+    }\`\`\``,
+  };
+
+  try {
+    const response = await fetch(
+      'https://discord.com/api/webhooks/1332722641228009536/vdece0juuv7E_IViAKNytG0Vw2-A5KKXxvYu0uRBu99gXeW6B6cOFpv6hdel9PEnZkAR',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      console.error('Error when sending to discord', response.statusText);
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    console.log('Report successfuly send to Discord !');
+  } catch (error) {
+    console.error('Error while sending to discord :', error);
+  }
 }

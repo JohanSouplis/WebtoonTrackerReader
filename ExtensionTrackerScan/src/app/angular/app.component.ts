@@ -128,8 +128,4 @@ export class AppComponent implements OnInit, AfterViewInit {
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
   }
-
-  openFullPage() {
-    this.navigatorHandler.openFullPage();
-  }
 }

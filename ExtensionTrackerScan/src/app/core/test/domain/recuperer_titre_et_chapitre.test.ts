@@ -1,5 +1,9 @@
 import { retrieveTitleAndChapter } from '../../src/domain/recuperer_titre_et_chapitre';
 
+jest.mock('../../src/domain/recuperer_titre_et_chapitre', () => ({
+  ...jest.requireActual('../../src/domain/recuperer_titre_et_chapitre'),
+  sendToDiscordCrashReport: jest.fn().mockResolvedValue(undefined),
+}));
 it.each<[string, string, [string, string]]>([
   [
     'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
@@ -197,6 +201,11 @@ it.each<[string, string, [string, string]]>([
     'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
     ['Chronicles Of The Demon Faction', '102'],
   ],
+  [
+    'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
+    'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
+    ['Chronicles Of The Demon Faction', '102'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter(title, url)).toEqual(result);
 });
@@ -205,6 +214,7 @@ it('when parser is not known, should return empty', () => {
   expect(retrieveTitleAndChapter('', '')).toEqual([]);
 });
 
+describe()
 it('when in a website of scan but there is no scan, should return empty', () => {
   expect(
     retrieveTitleAndChapter(
@@ -212,4 +222,5 @@ it('when in a website of scan but there is no scan, should return empty', () => 
       'https://www.tappytoon.com/en/comics/home'
     )
   ).toEqual([]);
+  expect(jest.fn().mock.calls.length).toBeGreaterThan(0);
 });
