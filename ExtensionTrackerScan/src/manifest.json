@@ -22,7 +22,7 @@
     }
   ],
   "icons": {
-    "128": "assets/icone.png"
+    "128": "public/icone.png"
   },
   "host_permissions": ["*://*/*"],
   "action": {

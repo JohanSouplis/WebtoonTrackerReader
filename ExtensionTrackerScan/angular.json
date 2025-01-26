@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": ["inversify"],
             "outputPath": "dist/extension-tracker-scan",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -38,6 +39,7 @@
           },
           "configurations": {
             "production": {
+              "aot": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
