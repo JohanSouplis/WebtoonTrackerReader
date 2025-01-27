@@ -14,6 +14,9 @@ module.exports = {
     clean: true,
   },
   resolve: {
+    fallback: {
+      vm: false,
+    },
     extensions: [".ts", ".js"],
     alias: {
       "@": path.resolve(__dirname, "src"),

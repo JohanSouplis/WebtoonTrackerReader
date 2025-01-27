@@ -9,7 +9,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -25,7 +25,7 @@ import { AngularHandler } from '../gateway/angular-handler.service';
 @Component({
   selector: 'app-root',
   imports: [
-    MatPaginator,
+    MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
     MatTableModule,

@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "rootDir": "./src",
     "outDir": "./dist/extension-tracker-scan/browser",
     "strict": true,
@@ -12,7 +13,7 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -20,8 +21,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["chrome", "node", "jest", "mocha", "inversify"],
-    "emitDecoratorMetadata": true
+    "types": ["chrome", "node", "jest", "mocha", "inversify"]
   },
   "tsc-alias": {
     "resolveFullPaths": true,
@@ -31,6 +31,7 @@
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/main.ts"],
   "angularCompilerOptions": {
+    "compilationMode": "partial",
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

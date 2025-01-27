@@ -27,5 +27,8 @@
   "host_permissions": ["*://*/*"],
   "action": {
     "default_popup": "index.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
   }
 }

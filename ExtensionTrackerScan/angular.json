@@ -13,7 +13,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "allowedCommonJsDependencies": ["inversify"],
+            "allowedCommonJsDependencies": [
+              "inversify",
+              "PlatformNavigation",
+              "axios",
+              "cheerio",
+              "reflect-metadata",
+              "babel"
+            ],
             "outputPath": "dist/extension-tracker-scan",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -27,7 +34,6 @@
               "src/app/angular",
               "src/assets",
               "src/manifest.json",
-              "src/full_page.html",
               "src/content.js",
               "src/background.js"
             ],
@@ -39,7 +45,7 @@
           },
           "configurations": {
             "production": {
-              "aot": true,
+              "aot": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
