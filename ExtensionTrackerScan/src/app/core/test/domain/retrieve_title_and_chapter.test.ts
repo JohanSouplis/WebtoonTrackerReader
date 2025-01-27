@@ -223,19 +223,19 @@ it.each<[string, string, [string, string]]>([
     ['Chronicles Of The Demon Faction', '102'],
   ],
 ])('Should retrieve title and chapter', (title, url, result) => {
-  expect(retrieveTitleAndChapter.get(title, url)).toEqual(result);
+  expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
 });
 
 it('when parser is not known, should return empty', () => {
-  expect(retrieveTitleAndChapter.get('', '')).toEqual([]);
+  expect(retrieveTitleAndChapter.execute('', '')).toEqual([]);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
 });
 
 describe('when in a website of scan, should return empty and throw webhook discord', () => {
   it('if in a website but not in a scan', () => {
     expect(
-      retrieveTitleAndChapter.get(
+      retrieveTitleAndChapter.execute(
         'Stories that change your world, Tappytoon Comics & Novels | Official English',
         'https://www.tappytoon.com/en/comics/home'
       )
@@ -245,7 +245,7 @@ describe('when in a website of scan, should return empty and throw webhook disco
 
   it('If the pattern is not respected', () => {
     expect(
-      retrieveTitleAndChapter.get(
+      retrieveTitleAndChapter.execute(
         'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
         'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102'
       )
@@ -257,7 +257,7 @@ describe('when in a website of scan, should return empty and throw webhook disco
 describe('when in a website of scan, but not really :), dont call crashReport', () => {
   it('If its a redirect', () => {
     expect(
-      retrieveTitleAndChapter.get(
+      retrieveTitleAndChapter.execute(
         'Disqus Comments',
         'https://disqus.com/embed/comments/?base=default&f=asura-scans-13&t_i=chapter-135-85&t_u=https%3A%2F%2Fasuracomic.net%2Fseries%2Facademys-genius-swordmaster-73f07cea%2Fchapter%2F85&t_e=Academy%27s%20Genius%20Swordmaster&t_d=Academy%27s%20Genius%20Swordmaster%20Chapter%2085%20-%20Asura%20Scans&t_t=Academy%27s%20Genius%20Swordmaster&s_o=default#version=2f54d43b17c298fa4a839abab8ed97ea'
       )
@@ -266,10 +266,7 @@ describe('when in a website of scan, but not really :), dont call crashReport', 
   });
   it('If its the website first page without scan', () => {
     expect(
-      retrieveTitleAndChapter.get(
-        'Asura Scans',
-        'https://asuracomic.net/'
-      )
+      retrieveTitleAndChapter.execute('Asura Scans', 'https://asuracomic.net/')
     ).toEqual([]);
     expect(mockCrashReport.execute).not.toHaveBeenCalled();
   });
