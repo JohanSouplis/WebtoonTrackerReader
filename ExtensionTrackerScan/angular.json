@@ -31,6 +31,7 @@
                 "glob": "**/*",
                 "input": "public"
               },
+              "src/assets",
               "src/manifest.json"
             ],
             "styles": [

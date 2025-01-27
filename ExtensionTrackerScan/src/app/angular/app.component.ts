@@ -126,6 +126,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   //   this.storage.delete(scan);
   // }
 
+  openTab() {
+    this.navigatorHandler.openFullPage();
+  }
+
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
   }

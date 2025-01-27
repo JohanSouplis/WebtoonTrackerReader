@@ -7,6 +7,6 @@ import { NavigatorHandler } from '../angular/port/openFullPageInterface';
 export class ChromeHandler implements NavigatorHandler {
   constructor() {}
   openFullPage(): void {
-    chrome.tabs.create({ url: chrome.runtime.getURL('index.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('public/news.html') });
   }
 }

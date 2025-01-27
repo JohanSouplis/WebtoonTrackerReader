@@ -1,5 +1,23 @@
+<div
+  style="
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  "
+  (click)="openTab()"
+>
+  <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click here
+  to learn more!
+</div>
+
 <!-- <img
-  src="public/icone.png"
+  src="assets/icone.png"
   alt="openfullpage"
   class="fullpagebutton"
   (click)="openFullPage()"
@@ -18,7 +36,7 @@
       <mat-cell *matCellDef="let scan">
         <img
           [src]="
-            scan.isFavorite ? 'public/fav_star.png' : 'public/not_fav_star.png'
+            scan.isFavorite ? 'assets/fav_star.png' : 'assets/not_fav_star.png'
           "
           [alt]="scan.isFavorite ? 'Favorited' : 'Not Favorited'"
           class="favorite-icon"
