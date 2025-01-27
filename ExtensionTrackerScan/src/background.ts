@@ -12,12 +12,10 @@ chrome.runtime.onMessage.addListener(
     if (!message.title) {
       return;
     }
-
     let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
       message.title,
       message.url
     );
-    console.log(titleAndChapter);
     if (titleAndChapter.length === 0) {
       return;
     }
@@ -36,49 +34,57 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-chrome.storage.local.get(['dateLastSearch'], function (dateLastSearch) {
-  let searchStartTime = 0;
-  if (dateLastSearch['dateLastSearch']) {
-    searchStartTime = dateLastSearch['dateLastSearch'];
-  }
-  chrome.history.search(
-    {
-      text: '',
-      maxResults: 100000,
-      startTime: searchStartTime,
-    },
-    function (results) {
-      let scans: Scan[] = [];
-      results.forEach((page) => {
-        if (page.title && page.url) {
-          let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
-            page.title,
-            page.url
-          );
-          if (titleAndChapter.length === 0) {
-            return;
-          }
-          let scan: Scan = {
-            title: titleAndChapter[0],
-            chapter: titleAndChapter[1],
-            url: page.url,
-            whenWasItRead: page.lastVisitTime
-              ? new Date(page.lastVisitTime).toString()
-              : '',
-            isFavorite: false,
-          };
-          scans.push(scan);
-        }
-      });
-      chrome.storage.local.get({ scans: [] }, function (result) {
-        let scanList: Scan[] = result['scans'];
-        scans.forEach((scan) => {
-          scanList = updateScansWithNewVisitedScan(scanList, scan);
-        });
+getScansFromHistory();
+setInterval(getScansFromHistory, 3600000);
 
-        chrome.storage.local.set({ scans: scanList }, function () {});
-      });
-      chrome.storage.local.set({ dateLastSearch: Date.now() }, function () {});
+function getScansFromHistory() {
+  chrome.storage.local.get(['dateLastSearch'], function (dateLastSearch) {
+    let searchStartTime = 0;
+    if (dateLastSearch['dateLastSearch']) {
+      searchStartTime = dateLastSearch['dateLastSearch'];
     }
-  );
-});
+    chrome.history.search(
+      {
+        text: '',
+        maxResults: 100000,
+        startTime: searchStartTime,
+      },
+      function (results) {
+        let scans: Scan[] = [];
+        results.forEach((page) => {
+          if (page.title && page.url) {
+            let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
+              page.title,
+              page.url
+            );
+            if (titleAndChapter.length === 0) {
+              return;
+            }
+            let scan: Scan = {
+              title: titleAndChapter[0],
+              chapter: titleAndChapter[1],
+              url: page.url,
+              whenWasItRead: page.lastVisitTime
+                ? new Date(page.lastVisitTime).toString()
+                : '',
+              isFavorite: false,
+            };
+            scans.push(scan);
+          }
+        });
+        chrome.storage.local.get({ scans: [] }, function (result) {
+          let scanList: Scan[] = result['scans'];
+          scans.forEach((scan) => {
+            scanList = updateScansWithNewVisitedScan(scanList, scan);
+          });
+
+          chrome.storage.local.set({ scans: scanList }, function () {});
+        });
+        chrome.storage.local.set(
+          { dateLastSearch: Date.now() },
+          function () {}
+        );
+      }
+    );
+  });
+}

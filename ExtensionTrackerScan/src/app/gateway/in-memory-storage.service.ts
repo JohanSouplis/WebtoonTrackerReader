@@ -3,6 +3,9 @@ import { StorageInterface } from '../angular/port/storage.interface';
 import { Scan } from '../core/src/domain/scan.type';
 
 export class InMemoryStorageService implements StorageInterface {
+  delete(scan: Scan): void {
+    console.log('scan is deleted');
+  }
   updateScan(scan: Scan): void {
     console.log('scan is updated');
   }

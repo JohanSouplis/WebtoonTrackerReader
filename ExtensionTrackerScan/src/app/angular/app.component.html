@@ -88,6 +88,25 @@
       </mat-cell>
     </ng-container>
 
+    <!-- <ng-container matColumnDef="delete">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        class="favorite-column"
+      >
+        Fav
+      </mat-header-cell>
+      <mat-cell *matCellDef="let scan">
+        <img
+          src="public/delete.png"
+          alt="public/delete.png"
+          class="favorite-icon"
+          (click)="delete(scan)"
+        />
+      </mat-cell>
+    </ng-container> -->
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>

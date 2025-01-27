@@ -57,6 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     'chapter',
     'wasRead',
     'rating',
+    // 'delete',
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -120,6 +121,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   onRatingChange(event: MatSelectChange, scan: Scan) {
     this.storeScanUpdated(scan);
   }
+
+  // deleteScan(event: MatSelectChange, scan: Scan) {
+  //   this.storage.delete(scan);
+  // }
 
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);

@@ -155,6 +155,11 @@ it.each<[string, string, [string, string]]>([
     ['I Have Been Trapped In This Day for Three Thousand Years', '2'],
   ],
   [
+    'Read Episode 1 - Solo Leveling  | Tappytoon',
+    'https://www.tappytoon.com/en/chapters/623723039?',
+    ['Solo Leveling', '1'],
+  ],
+  [
     'Read Evolution Begins With A Big Tree Chapter 323 online free - MangaPanda.in',
     'https://www.mangapanda.in/evolution-begins-with-a-big-tree-chapter-323#1',
     ['Evolution Begins With A Big Tree', '323'],
