@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --hmr --poll=5000",
-    "publish": "ng build --configuration production && webpack --config webpack.prod.js",
-    "build": "ng build --configuration production && webpack --config webpack.dev.js",
+    "publish": "ng build --configuration production && webpack --config webpack.common.js",
+    "build": "ng build --configuration production && webpack --config webpack.common.js",
     "watch": "ng build --watch --configuration development",
     "test": "jest"
   },

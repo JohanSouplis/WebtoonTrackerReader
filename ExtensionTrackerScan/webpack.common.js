@@ -5,22 +5,25 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: {
     background: "./src/background.ts",
-    "content-script": "./src/content.ts",
-    popup: "./src/main.ts",
+    "content-script": "./src/content-script.ts",
   },
-  output: {
-    path: path.resolve(__dirname, "dist/extension-tracker-scan"),
-    filename: "[name].js",
-    clean: true,
+  devtool: false,
+  optimization: {
+    minimize: true,
   },
+  // output: {
+  //   path: path.resolve(__dirname, "dist/extension-tracker-scan"),
+  //   filename: "[name].js",
+  //   clean: true,
+  // },
   resolve: {
-    fallback: {
-      vm: false,
-    },
+    // fallback: {
+    //   vm: false,
+    // },
     extensions: [".ts", ".js"],
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
+    // alias: {
+    //   "@": path.resolve(__dirname, "src"),
+    // },
   },
   module: {
     rules: [
@@ -33,15 +36,13 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        { from: "src/manifest.json", to: "manifest.json" },
-        { from: "public", to: "public" },
-      ],
-    }),
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      filename: "index.html",
-      chunks: ["popup"],
+      patterns: [{ from: "public", to: "public" }],
     }),
   ],
+  //   new HtmlWebpackPlugin({
+  //     template: "./src/index.html",
+  //     filename: "index.html",
+  //     chunks: ["popup"],
+  //   }),
+  // ],
 };
