@@ -96,7 +96,13 @@ export class RetrieveTitleAndChapter {
   }
 
   private isMatchingWebsite(url: string, website: any): boolean {
-    return url.includes(website[0]);
+    let numberToAddInCase = 5;
+    return (
+      url.includes(website[0]) &&
+      url
+        .substring(0, 'https://'.length + numberToAddInCase + website[0].length)
+        .includes(website[0])
+    );
   }
 
   private async sendCrashReport(url: string, error?: any) {

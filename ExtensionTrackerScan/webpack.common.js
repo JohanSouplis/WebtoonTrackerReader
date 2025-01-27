@@ -1,6 +1,5 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -11,19 +10,12 @@ module.exports = {
   optimization: {
     minimize: true,
   },
-  // output: {
-  //   path: path.resolve(__dirname, "dist/extension-tracker-scan"),
-  //   filename: "[name].js",
-  //   clean: true,
-  // },
+  output: {
+    path: path.resolve(__dirname, "dist/extension-tracker-scan/browser"),
+    filename: "[name].js",
+  },
   resolve: {
-    // fallback: {
-    //   vm: false,
-    // },
     extensions: [".ts", ".js"],
-    // alias: {
-    //   "@": path.resolve(__dirname, "src"),
-    // },
   },
   module: {
     rules: [
@@ -39,10 +31,4 @@ module.exports = {
       patterns: [{ from: "public", to: "public" }],
     }),
   ],
-  //   new HtmlWebpackPlugin({
-  //     template: "./src/index.html",
-  //     filename: "index.html",
-  //     chunks: ["popup"],
-  //   }),
-  // ],
 };

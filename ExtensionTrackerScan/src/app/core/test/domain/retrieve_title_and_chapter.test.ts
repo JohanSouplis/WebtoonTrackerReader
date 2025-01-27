@@ -7,8 +7,18 @@ class MockCrashReport implements CrashReport {
   });
 }
 
-const mockCrashReport = new MockCrashReport();
-const retrieveTitleAndChapter = new RetrieveTitleAndChapter(mockCrashReport);
+let mockCrashReport: MockCrashReport;
+let retrieveTitleAndChapter: RetrieveTitleAndChapter;
+
+beforeEach(() => {
+  mockCrashReport = new MockCrashReport();
+  retrieveTitleAndChapter = new RetrieveTitleAndChapter(mockCrashReport);
+  mockCrashReport.execute.mockClear();
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 it.each<[string, string, [string, string]]>([
   [
@@ -209,10 +219,12 @@ it.each<[string, string, [string, string]]>([
   ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
+  expect(mockCrashReport.execute).not.toHaveBeenCalled();
 });
 
 it('when parser is not known, should return empty', () => {
   expect(retrieveTitleAndChapter.execute('', '')).toEqual([]);
+  expect(mockCrashReport.execute).not.toHaveBeenCalled();
 });
 
 describe('when in a website of scan, should return empty and throw webhook discord', () => {
@@ -234,5 +246,17 @@ describe('when in a website of scan, should return empty and throw webhook disco
       )
     ).toEqual([]);
     expect(mockCrashReport.execute).toHaveBeenCalled();
+  });
+});
+
+describe('when in a website of scan, but not really :), dont call crashReport', () => {
+  it('If its a redirect', () => {
+    expect(
+      retrieveTitleAndChapter.execute(
+        'Disqus Comments',
+        'https://disqus.com/embed/comments/?base=default&f=asura-scans-13&t_i=chapter-135-85&t_u=https%3A%2F%2Fasuracomic.net%2Fseries%2Facademys-genius-swordmaster-73f07cea%2Fchapter%2F85&t_e=Academy%27s%20Genius%20Swordmaster&t_d=Academy%27s%20Genius%20Swordmaster%20Chapter%2085%20-%20Asura%20Scans&t_t=Academy%27s%20Genius%20Swordmaster&s_o=default#version=2f54d43b17c298fa4a839abab8ed97ea'
+      )
+    ).toEqual([]);
+    expect(mockCrashReport.execute).not.toHaveBeenCalled();
   });
 });
