@@ -3,6 +3,7 @@ import { websiteJson } from '../../pattern/link-format-website-title';
 import type { CrashReport } from './ports/crash_report.interface';
 const titleIsHere: string = 't';
 const chapterNumberIsHere: string = 'c';
+const HTTPS = 'https://';
 
 export class RetrieveTitleAndChapter {
   constructor(@inject('CrashReport') private crashReport: CrashReport) {}
@@ -99,10 +100,28 @@ export class RetrieveTitleAndChapter {
     let numberToAddInCase = 5;
     return (
       url.includes(website[0]) &&
-      url
-        .substring(0, 'https://'.length + numberToAddInCase + website[0].length)
-        .includes(website[0])
+      this.isNotARedirection(url, numberToAddInCase, website) &&
+      this.isNotFirstWebpageWithoutScan(url, website, numberToAddInCase)
     );
+  }
+
+  private isNotFirstWebpageWithoutScan(
+    url: string,
+    website: any,
+    numberToAddInCase: number
+  ): boolean {
+    return url.length > HTTPS.length + website[0].length + numberToAddInCase;
+  }
+
+  //Check that the url of website is at the beginning
+  private isNotARedirection(
+    url: string,
+    numberToAddInCase: number,
+    website: any
+  ): boolean {
+    return url
+      .substring(0, HTTPS.length + numberToAddInCase + website[0].length)
+      .includes(website[0]);
   }
 
   private async sendCrashReport(url: string, error?: any) {

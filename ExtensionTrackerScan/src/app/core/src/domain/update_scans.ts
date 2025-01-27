@@ -15,6 +15,9 @@ export function updateScansWithNewVisitedScan(
     scansList.push(newScan);
     return scansList;
   }
+  if (new Date(existingScan.whenWasItRead) > new Date(newScan.whenWasItRead)) {
+    return scansList;
+  }
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
   existingScan['whenWasItRead'] = newScan.whenWasItRead;

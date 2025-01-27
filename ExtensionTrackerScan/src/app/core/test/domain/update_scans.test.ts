@@ -37,7 +37,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
         'Title',
         '13',
         'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
       )
     );
     expect(scansResult.length).toEqual(2);
@@ -45,11 +45,37 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
     expect(scansResult[1].chapter).toEqual('13');
     expect(scansResult[1].url).toEqual('url.com');
     expect(scansResult[1].whenWasItRead).toEqual(
-      'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+      'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
     );
   });
 
   it('When its a scan of an existing scan with a different chapter, the chapter is updated', () => {
+    const scansResult: Scan[] = updateScansWithNewVisitedScan(
+      [
+        createScanVisited(
+          'Title',
+          '1',
+          'url.com',
+          'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+        ),
+      ],
+      createScanVisited(
+        'Title',
+        '2',
+        'url.com',
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+      )
+    );
+    expect(scansResult.length).toEqual(1);
+    expect(scansResult[0].title).toEqual('Title');
+    expect(scansResult[0].chapter).toEqual('2');
+    expect(scansResult[0].url).toEqual('url.com');
+    expect(scansResult[0].whenWasItRead).toEqual(
+      'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+    );
+  });
+
+  it('When its a scan of an existing scan with a different chapter but it was seen before the one already known, then its not updated', () => {
     const scansResult: Scan[] = updateScansWithNewVisitedScan(
       [
         createScanVisited(
@@ -68,10 +94,10 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
     );
     expect(scansResult.length).toEqual(1);
     expect(scansResult[0].title).toEqual('Title');
-    expect(scansResult[0].chapter).toEqual('2');
+    expect(scansResult[0].chapter).toEqual('1');
     expect(scansResult[0].url).toEqual('url.com');
     expect(scansResult[0].whenWasItRead).toEqual(
-      'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+      'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
     );
   });
 
@@ -89,7 +115,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
         'Title',
         '',
         'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
       )
     );
     expect(scansResult.length).toEqual(1);
@@ -115,7 +141,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
         '',
         '3',
         'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
       )
     );
     expect(scansResult.length).toEqual(1);
@@ -141,7 +167,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
         '',
         '',
         'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
       )
     );
     expect(scansResult.length).toEqual(1);
@@ -167,7 +193,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
         'Title',
         '1',
         'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
       )
     );
     expect(scansResult.length).toEqual(1);
@@ -175,7 +201,7 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
     expect(scansResult[0].chapter).toEqual('1');
     expect(scansResult[0].url).toEqual('url.com');
     expect(scansResult[0].whenWasItRead).toEqual(
-      'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+      'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
     );
   });
 

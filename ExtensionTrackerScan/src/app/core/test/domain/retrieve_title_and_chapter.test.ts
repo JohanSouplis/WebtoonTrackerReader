@@ -259,4 +259,10 @@ describe('when in a website of scan, but not really :), dont call crashReport', 
     ).toEqual([]);
     expect(mockCrashReport.execute).not.toHaveBeenCalled();
   });
+  it('If its the website first page without scan', () => {
+    expect(
+      retrieveTitleAndChapter.execute('Asura Scans', 'https://asuracomic.net/')
+    ).toEqual([]);
+    expect(mockCrashReport.execute).not.toHaveBeenCalled();
+  });
 });
