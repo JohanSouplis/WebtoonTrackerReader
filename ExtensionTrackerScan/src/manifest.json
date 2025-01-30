@@ -1,16 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "WebtoonTracker",
-  "description": "Keep track of where you stop to read your manhwa, webtoon or manga and get notified when a new chapter is coming",
-  "version": "1.0.0",
-  "permissions": [
-    "history",
-    "notifications",
-    "unlimitedStorage",
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
+  "name": "Tracker Reader Manga Webtoon Manhwa",
+  "description": "Keep track of where you stop to read your manhwa, webtoon or manga",
+  "version": "1.0.1",
+  "permissions": ["history", "unlimitedStorage", "storage"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
