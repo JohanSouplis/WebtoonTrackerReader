@@ -49,82 +49,112 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
     );
   });
 
-  it('When its a scan of an existing scan with a different chapter, the chapter is updated', () => {
-    const scansResult: Scan[] = updateScansWithNewVisitedScan(
-      [
+  describe('When its a scan of an existing scan ', () => {
+    it('with a different chapter, the chapter is updated', () => {
+      const scansResult: Scan[] = updateScansWithNewVisitedScan(
+        [
+          createScanVisited(
+            'Title',
+            '1',
+            'url.com',
+            'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+          ),
+        ],
         createScanVisited(
           'Title',
-          '1',
+          '2',
           'url.com',
-          'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-        ),
-      ],
-      createScanVisited(
-        'Title',
-        '2',
-        'url.com',
+          'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+        )
+      );
+      expect(scansResult.length).toEqual(1);
+      expect(scansResult[0].title).toEqual('Title');
+      expect(scansResult[0].chapter).toEqual('2');
+      expect(scansResult[0].url).toEqual('url.com');
+      expect(scansResult[0].whenWasItRead).toEqual(
         'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
-      )
-    );
-    expect(scansResult.length).toEqual(1);
-    expect(scansResult[0].title).toEqual('Title');
-    expect(scansResult[0].chapter).toEqual('2');
-    expect(scansResult[0].url).toEqual('url.com');
-    expect(scansResult[0].whenWasItRead).toEqual(
-      'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
-    );
-  });
+      );
+    });
 
-  it('When its a scan of an existing scan with a different chapter but it was seen before the one already known, then its not updated', () => {
-    const scansResult: Scan[] = updateScansWithNewVisitedScan(
-      [
+    it('with a different chapter but it was seen before the one already known, then its not updated', () => {
+      const scansResult: Scan[] = updateScansWithNewVisitedScan(
+        [
+          createScanVisited(
+            'Title',
+            '1',
+            'url.com',
+            'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+          ),
+        ],
         createScanVisited(
           'Title',
-          '1',
+          '2',
           'url.com',
-          'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-        ),
-      ],
-      createScanVisited(
-        'Title',
-        '2',
-        'url.com',
-        'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
-      )
-    );
-    expect(scansResult.length).toEqual(1);
-    expect(scansResult[0].title).toEqual('Title');
-    expect(scansResult[0].chapter).toEqual('1');
-    expect(scansResult[0].url).toEqual('url.com');
-    expect(scansResult[0].whenWasItRead).toEqual(
-      'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-    );
-  });
+          'Sat Jan 01 2022 10:00:10 GMT+0100 (Central European Standard Time)'
+        )
+      );
+      expect(scansResult.length).toEqual(1);
+      expect(scansResult[0].title).toEqual('Title');
+      expect(scansResult[0].chapter).toEqual('1');
+      expect(scansResult[0].url).toEqual('url.com');
+      expect(scansResult[0].whenWasItRead).toEqual(
+        'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+      );
+    });
 
-  it('When its a scan of an existing scan with an empty chapter, the chapter is not updated', () => {
-    const scansResult: Scan[] = updateScansWithNewVisitedScan(
-      [
+    it('with an empty chapter, the chapter is not updated', () => {
+      const scansResult: Scan[] = updateScansWithNewVisitedScan(
+        [
+          createScanVisited(
+            'Title',
+            '1',
+            'url.com',
+            'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+          ),
+        ],
         createScanVisited(
           'Title',
-          '1',
+          '',
           'url.com',
-          'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-        ),
-      ],
-      createScanVisited(
-        'Title',
-        '',
-        'url.com',
+          'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+        )
+      );
+      expect(scansResult.length).toEqual(1);
+      expect(scansResult[0].title).toEqual('Title');
+      expect(scansResult[0].chapter).toEqual('1');
+      expect(scansResult[0].url).toEqual('url.com');
+      expect(scansResult[0].whenWasItRead).toEqual(
+        'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+      );
+    });
+
+    it('with a title close to be the same and a different chapter, the chapter and the titleis updated', () => {
+      const scansResult: Scan[] = updateScansWithNewVisitedScan(
+        [
+          createScanVisited(
+            "Mount Hua Sect's Genius Phantom Swordsman",
+            '1',
+            'url.com',
+            'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+          ),
+        ],
+        createScanVisited(
+          'Mount Hua Sect’s Genius Phantom Swordsman',
+          '2',
+          'url.com',
+          'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+        )
+      );
+      expect(scansResult.length).toEqual(1);
+      expect(scansResult[0].title).toEqual(
+        "Mount Hua Sect's Genius Phantom Swordsman"
+      );
+      expect(scansResult[0].chapter).toEqual('2');
+      expect(scansResult[0].url).toEqual('url.com');
+      expect(scansResult[0].whenWasItRead).toEqual(
         'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
-      )
-    );
-    expect(scansResult.length).toEqual(1);
-    expect(scansResult[0].title).toEqual('Title');
-    expect(scansResult[0].chapter).toEqual('1');
-    expect(scansResult[0].url).toEqual('url.com');
-    expect(scansResult[0].whenWasItRead).toEqual(
-      'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-    );
+      );
+    });
   });
 
   it('When the title is empty, return the list of scans without changes', () => {

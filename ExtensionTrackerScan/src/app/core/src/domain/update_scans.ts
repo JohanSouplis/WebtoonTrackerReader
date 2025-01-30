@@ -8,6 +8,8 @@ export function updateScansWithNewVisitedScan(
     return scansList;
   }
 
+  newScan.title = newScan.title.replace('’', "'");
+
   let existingScan: Scan | undefined = scansList.find(
     (scan) => scan['title'] === newScan.title
   );
