@@ -173,6 +173,11 @@ it.each<[string, string, [string, string]]>([
     ['Boundless Ascension', '5'],
   ],
   [
+    'Ep.09 - Permintaan Si Ketua Kelas - 9 | Silver Lining',
+    'https://www.webtoons.com/id/romance/silver-lining/ep09-permintaan-si-ketua-kelas/viewer?title_no=6175&episode_no=9',
+    ['Silver Lining', '9'],
+  ],
+  [
     'Read Episode 2 -  I Have Been Trapped In This Day for Three Thousand Years  | Tappytoon',
     'https://www.tappytoon.com/en/chapters/463602739?',
     ['I Have Been Trapped In This Day for Three Thousand Years', '2'],
@@ -250,6 +255,19 @@ it.each<[string, string, [string, string]]>([
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
 });
 
+it.each<[string, string, [string, string]]>([
+  [
+    'Ep.09 - Permintaan Si Ketua Kelas - 9 | Silver Lining',
+    'https://www.webtoons.com/id/romance/silver-lining/ep09-permintaan-si-ketua-kelas/viewer?title_no=6175&episode_no=9',
+    ['Silver Lining', '9'],
+  ],
+])(
+  'Should retrieve title and chapter for test purpose',
+  (title, url, result) => {
+    expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
+    expect(mockCrashReport.execute).not.toHaveBeenCalled();
+  }
+);
 it('when parser is not known, should return empty', () => {
   expect(retrieveTitleAndChapter.execute('', '')).toEqual([]);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();

@@ -150,6 +150,11 @@ export const websiteJson = {
     },
     '5': {
       parse: 'title',
+      format: 'Ep.X - {nameChapter} - X | Title',
+      formatparse: 'Ep.§c§ | §t',
+    },
+    '6': {
+      parse: 'title',
       format: 'Ep.X - X | Title',
       formatparse: 'Ep.§c§ - §c§ | §t',
     },

@@ -89,7 +89,12 @@ export class RetrieveTitleAndChapter {
     }
     chapter = stringFinishingWithChapter.split(' ')[0];
     chapter = chapter.replace(':', '');
-    return chapter;
+
+    const chapterNumber = parseInt(chapter);
+    if (Number.isNaN(chapterNumber)) {
+      return '';
+    }
+    return chapterNumber.toString();
   }
 
   private removeBackSlashAndSpaceAtBeginning(titleWebpage: string) {
@@ -134,7 +139,11 @@ export class RetrieveTitleAndChapter {
       .includes(website[0]);
   }
 
-  private async sendCrashReport(url: string, titleWebpage: string, error?: any) {
+  private async sendCrashReport(
+    url: string,
+    titleWebpage: string,
+    error?: any
+  ) {
     this.crashReport.execute(url, titleWebpage, error);
   }
 }
