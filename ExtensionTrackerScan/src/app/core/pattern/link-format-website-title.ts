@@ -148,6 +148,11 @@ export const websiteJson = {
       format: 'Chapter X - {nameChapter} | Title or Ep. X | Title',
       formatparse: 'Chapter §c§ | §t',
     },
+    '5': {
+      parse: 'title',
+      format: 'Ep.X - X | Title',
+      formatparse: 'Ep.§c§ - §c§ | §t',
+    },
   },
   'tappytoon.com': {
     '1': {

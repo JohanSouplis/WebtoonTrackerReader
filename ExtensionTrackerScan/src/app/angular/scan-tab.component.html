@@ -1,0 +1,126 @@
+<div
+  style="
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  "
+  (click)="openTab()"
+>
+  <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click here
+  to learn more!
+</div>
+
+<div class="mat-elevation-z8">
+  <mat-table [dataSource]="scans" matSort>
+    <!-- <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef class="delete-column delete-header">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let scan" class="delete-column">
+        <img
+          src="assets/delete.png"
+          alt="assets/delete.png"
+          class="favorite-icon"
+          (click)="delete(scan)"
+        />
+      </mat-cell>
+    </ng-container> -->
+
+    <ng-container matColumnDef="isFavorite">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        class="favorite-column"
+      >
+        Fav
+      </mat-header-cell>
+      <mat-cell *matCellDef="let scan">
+        <img
+          [src]="
+            scan.isFavorite ? 'assets/fav_star.png' : 'assets/not_fav_star.png'
+          "
+          [alt]="scan.isFavorite ? 'Favorited' : 'Not Favorited'"
+          class="favorite-icon"
+          (click)="toggleFavorite(scan)"
+        />
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="title">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="title-column title-header"
+        >Title</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="title-column"
+        ><a (click)="openInNewTab(scan.url)">{{ scan.title }}</a></mat-cell
+      >
+    </ng-container>
+
+    <ng-container matColumnDef="chapter">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        class="chapter-column chapter-header"
+        >Chapter</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="chapter-column">{{
+        scan.chapter
+      }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="wasRead">
+      <mat-header-cell
+        start="desc"
+        *matHeaderCellDef
+        mat-sort-header
+        class="wasRead-column wasRead-header"
+        >Was read</mat-header-cell
+      >
+      <mat-cell *matCellDef="let scan" class="wasRead-column">{{
+        formatDate(scan.whenWasItRead)
+      }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rating">
+      <mat-header-cell
+        start="desc"
+        *matHeaderCellDef
+        mat-sort-header
+        class="rating-column rating-header"
+        >Rating</mat-header-cell
+      >
+
+      <mat-cell *matCellDef="let scan" class="rating-column">
+        <mat-form-field>
+          <mat-select
+            [(value)]="scan.rating"
+            (selectionChange)="onRatingChange($event, scan)"
+          >
+            <mat-option *ngFor="let rate of ratingOptions" [value]="rate">
+              {{ rate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <!-- Pagination -->
+  <mat-paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>

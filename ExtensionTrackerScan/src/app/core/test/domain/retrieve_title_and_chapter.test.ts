@@ -168,6 +168,11 @@ it.each<[string, string, [string, string]]>([
     ['A Spell for a Smith', '46'],
   ],
   [
+    'Ep.5 - 5 | Boundless Ascension',
+    'https://www.webtoons.com/fr/action/boundless-ascension/ep5/viewer?title_no=5328&episode_no=5',
+    ['Boundless Ascension', '5'],
+  ],
+  [
     'Read Episode 2 -  I Have Been Trapped In This Day for Three Thousand Years  | Tappytoon',
     'https://www.tappytoon.com/en/chapters/463602739?',
     ['I Have Been Trapped In This Day for Three Thousand Years', '2'],
