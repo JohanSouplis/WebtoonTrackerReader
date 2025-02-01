@@ -3,6 +3,7 @@ import {
   updateScansModifiedByUser,
   updateScansWithNewVisitedScan,
 } from '../../src/domain/update_scans';
+import { createScan, createScanVisited } from './create_scan_visited_builder_test';
 describe('When visiting a scan website, update the list of scans stored : ', () => {
   it('When there is no scans stored, one scan is added', () => {
     const scansResult: Scan[] = updateScansWithNewVisitedScan(
@@ -357,35 +358,3 @@ describe('User change an information of a scan : ', () => {
     expect(scansResult[0].rating).toEqual(8);
   });
 });
-
-function createScanVisited(
-  title: string,
-  chapter: string,
-  url: string,
-  whenWasItRead: string
-): Scan {
-  return {
-    title: title,
-    chapter: chapter,
-    url: url,
-    isFavorite: false,
-    whenWasItRead: whenWasItRead,
-  } as Scan;
-}
-function createScan(
-  title: string,
-  chapter: string,
-  url: string,
-  favorite: boolean,
-  dateReading: string,
-  rating?: number
-): Scan {
-  return {
-    title: title,
-    chapter: chapter,
-    url: url,
-    isFavorite: favorite,
-    whenWasItRead: dateReading,
-    rating: rating,
-  } as Scan;
-}

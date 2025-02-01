@@ -18,6 +18,11 @@ table {
   text-align: left;
 }
 
+.favorite-header {
+  display: flex;
+  justify-content: center;
+}
+
 .favorite-column {
   flex: 0.5;
 }
@@ -48,6 +53,15 @@ table {
 .rating-header {
   display: flex;
   justify-content: center;
+}
+
+.delete-header {
+  display: flex;
+  justify-content: center;
+}
+
+.delete-column {
+  flex: 0.1;
 }
 
 .wasRead-column {

@@ -20,6 +20,11 @@ export const websiteJson = {
       format: 'Title Manhwa  -  Chapter X - Top Manhwa',
       formatparse: 't§ Manhwa  -  Chapter §c§ - Top Manhua',
     },
+    '2': {
+      parse: 'title',
+      format: 'Title Manhwa - Chapter X - Top Manhwa',
+      formatparse: 't§ Manhwa - Chapter §c§ - Top Manhua',
+    },
   },
   'arvencomics.com': {
     '1': {
@@ -87,6 +92,8 @@ export const websiteJson = {
   'mangadex.org': {
     '1': {
       parse: 'title',
+      excludePatternUrl: 'title',
+      excludePatternTitle: 'Oneshot',
       format: '1 | Chapter X - Title - MangaDex',
       formatparse: 'Chapter §c§ - §t§ - MangaDex',
     },
@@ -202,18 +209,18 @@ export const websiteJson = {
     },
   },
 
-  'mangainn.net': {
-    '1': {
-      parse: 'title',
-      format: 'Title - read Title chapter X',
-      formatparse: '§µt§ - µ§ chapter µ§µ',
-    },
-  },
-  'mangaplus.shueisha.co.jp': {
-    '1': {
-      parse: 'title',
-      format: '[#X] Title | manga plus',
-      formatparse: '§[#µc§] µt§ | manga plusµ',
-    },
-  },
+  // 'mangainn.net': {
+  //   '1': {
+  //     parse: 'title',
+  //     format: 'Title - read Title chapter X',
+  //     formatparse: '§µt§ - µ§ chapter µ§µ',
+  //   },
+  // },
+  // 'mangaplus.shueisha.co.jp': {
+  //   '1': {
+  //     parse: 'title',
+  //     format: '[#X] Title | manga plus',
+  //     formatparse: '§[#µc§] µt§ | manga plusµ',
+  //   },
+  // },
 };

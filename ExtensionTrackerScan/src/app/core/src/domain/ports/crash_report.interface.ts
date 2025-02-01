@@ -1,3 +1,3 @@
 export interface CrashReport {
-  execute(url: string, error?: string): void;
+  execute(informations: string, titleWepPage: string, error?: string): void;
 }

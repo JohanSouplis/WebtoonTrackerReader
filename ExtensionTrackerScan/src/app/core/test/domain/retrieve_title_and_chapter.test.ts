@@ -37,6 +37,16 @@ it.each<[string, string, [string, string]]>([
     ['The Zenith', '17'],
   ],
   [
+    'To Hell With Being A Saint I’m A Doctor Manhwa - Chapter 38 - Top Manhua',
+    'https://manhuatop.org/manhua/to-hell-with-being-a-saint-im-a-doctor/chapter-38/',
+    ['To Hell With Being A Saint I’m A Doctor', '38'],
+  ],
+  [
+    'Solo Farming In The Tower Manhwa  -  Chapter 67 - Top Manhua',
+    'https://manhuatop.org/manhua/solo-farming-in-the-tower/chapter-67/',
+    ['Solo Farming In The Tower', '67'],
+  ],
+  [
     'Legendary hearts Transplant Reincarnation Chapter 1',
     'https://arvencomics.com/chapter/62c3ebda7bd-62c3ee090c2/',
     ['Legendary hearts Transplant Reincarnation', '1'],
@@ -87,6 +97,14 @@ it.each<[string, string, [string, string]]>([
     [
       'Tensei Kizoku, Kantei Skill de Nariagaru ~Jakushou Ryouchi o Uketsuida node, Yuushuu na Jinzai o Fuyashiteitara, Saikyou Ryouchi ni Natteta~',
       '104',
+    ],
+  ],
+  [
+    '20 | Chapter 65 - The 100 Girlfriends Who Really, Really, Really, Really, Really Love You - MangaDex',
+    'https://mangadex.org/chapter/c6a226c7-4bed-4ff6-8413-7510785ab363/20',
+    [
+      'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You',
+      '65',
     ],
   ],
   [
@@ -267,6 +285,25 @@ describe('when in a website of scan, but not really :), dont call crashReport', 
   it('If its the website first page without scan', () => {
     expect(
       retrieveTitleAndChapter.execute('Asura Scans', 'https://asuracomic.net/')
+    ).toEqual([]);
+    expect(mockCrashReport.execute).not.toHaveBeenCalled();
+  });
+
+  it('If its the page with information on all scans', () => {
+    expect(
+      retrieveTitleAndChapter.execute(
+        'Izure Saikyou no Renkinjutsushi? - MangaDex',
+        'https://mangadex.org/title/17b4a134-65a5-4ba9-851e-9cc824755bf5/izure-saikyou-no-renkinjutsushi?tab=chapters'
+      )
+    ).toEqual([]);
+    expect(mockCrashReport.execute).not.toHaveBeenCalled();
+  });
+  it('If its a oneshot', () => {
+    expect(
+      retrieveTitleAndChapter.execute(
+        '23 | Oneshot - Jujutsu Kaisen - Hibernation (Doujinshi) - MangaDex',
+        'https://mangadex.org/chapter/de33d854-073d-41af-a707-58da728855d1/23'
+      )
     ).toEqual([]);
     expect(mockCrashReport.execute).not.toHaveBeenCalled();
   });

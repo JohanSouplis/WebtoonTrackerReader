@@ -19,6 +19,12 @@ export class RetrieveTitleAndChapter {
     try {
       for (let j = 0; j < parserList.length; j++) {
         const parser = parserList[j][1].formatparse;
+        if (url.includes(parserList[j][1].excludePatternUrl)) {
+          return [];
+        }
+        if (titleWebpage.includes(parserList[j][1].excludePatternTitle)) {
+          return [];
+        }
         let titleSplitted: string[] = parser.split('§');
         let title: string = '';
         let chapter: string = '';
@@ -38,10 +44,10 @@ export class RetrieveTitleAndChapter {
       }
     } catch (error) {
       console.log(error);
-      this.sendCrashReport(url, error);
+      this.sendCrashReport(url, titleWebpage, error);
       return [];
     }
-    this.sendCrashReport(url);
+    this.sendCrashReport(url, titleWebpage);
     return [];
   }
 
@@ -60,7 +66,11 @@ export class RetrieveTitleAndChapter {
       if (!stringFinishingWithTitle) {
         return '';
       }
-      title = stringFinishingWithTitle.split(titleSplitted[i + 1])[0];
+      if (stringFinishingWithTitle.includes(titleSplitted[i + 1])) {
+        title = stringFinishingWithTitle.split(titleSplitted[i + 1])[0];
+      } else {
+        title = stringFinishingWithTitle;
+      }
     }
     return title;
   }
@@ -124,7 +134,7 @@ export class RetrieveTitleAndChapter {
       .includes(website[0]);
   }
 
-  private async sendCrashReport(url: string, error?: any) {
-    this.crashReport.execute(url, error);
+  private async sendCrashReport(url: string, titleWebpage: string, error?: any) {
+    this.crashReport.execute(url, titleWebpage, error);
   }
 }

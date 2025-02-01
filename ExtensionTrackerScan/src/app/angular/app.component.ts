@@ -52,12 +52,12 @@ import { AngularHandler } from '../gateway/angular-handler.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
+    'delete',
     'isFavorite',
     'title',
     'chapter',
     'wasRead',
     'rating',
-    // 'delete',
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -122,9 +122,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.storeScanUpdated(scan);
   }
 
-  // deleteScan(event: MatSelectChange, scan: Scan) {
-  //   this.storage.delete(scan);
-  // }
+  delete(scan: Scan) {
+    this.storage.delete(scan);
+  }
 
   openTab() {
     this.navigatorHandler.openFullPage();
