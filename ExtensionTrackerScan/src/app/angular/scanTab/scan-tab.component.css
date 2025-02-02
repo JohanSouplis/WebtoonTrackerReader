@@ -78,12 +78,3 @@ table {
   height: 20px;
   cursor: pointer;
 }
-
-.fullpagebutton {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  position: relative;
-  top: 10px;
-  left: 730px;
-}

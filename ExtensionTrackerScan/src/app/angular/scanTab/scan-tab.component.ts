@@ -13,15 +13,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { environment } from '../../environments/environment';
-import { Scan } from '../core/src/domain/scan.type';
-import { AngularHandler } from '../gateway/angular-handler.service';
-import { ChromeHandler } from '../gateway/chrome-handler.service';
-import { ChromeStorageService } from '../gateway/chrome-storage.service';
-import { InMemoryStorageService } from '../gateway/in-memory-storage.service';
-import * as openFullPageInterface from './port/openFullPageInterface';
-import * as storageInterface from './port/storage.interface';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { Scan } from '../../core/src/domain/scan.type';
+import { ChromeStorageService } from '../../gateway/chrome-storage.service';
+import { InMemoryStorageService } from '../../gateway/in-memory-storage.service';
+
+import * as storageInterface from '../port/storage.interface';
 
 @Component({
   selector: 'scan-tab',
@@ -46,10 +44,6 @@ import { RouterModule } from '@angular/router';
         ? ChromeStorageService
         : InMemoryStorageService,
     },
-    {
-      provide: openFullPageInterface.NAVIGATOR_HANDLER_TOKEN,
-      useClass: environment.production ? ChromeHandler : AngularHandler,
-    },
   ],
 })
 export class ScanTabComponent implements OnInit, AfterViewInit {
@@ -72,8 +66,6 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(storageInterface.STORAGE_TOKEN)
     private storage: storageInterface.StorageInterface,
-    @Inject(openFullPageInterface.NAVIGATOR_HANDLER_TOKEN)
-    private navigatorHandler: openFullPageInterface.NavigatorHandler,
     private datePipe: DatePipe
   ) {}
 
@@ -127,10 +119,6 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   // delete(scan: Scan) {
   //   this.storage.delete(scan);
   // }
-
-  openTab() {
-    this.navigatorHandler.openFullPage();
-  }
 
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
