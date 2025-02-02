@@ -1,10 +1,14 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import * as openFullPageInterface from './port/openFullPageInterface';
 import { environment } from '../../environments/environment';
 import { ChromeHandler } from '../gateway/chrome-handler.service';
-import { AngularHandler } from '../gateway/angular-handler.service';
+import { AngularHandler } from '../gateway/dev/angular-handler.service';
+import {
+  NAVIGATOR_HANDLER_TOKEN,
+  NavigatorHandler,
+} from './port/openFullPageInterface';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +22,23 @@ import { AngularHandler } from '../gateway/angular-handler.service';
     },
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  isAddWebsitePatternComponent: boolean = false;
+
   public constructor(
-    @Inject(openFullPageInterface.NAVIGATOR_HANDLER_TOKEN)
-    private navigatorHandler: openFullPageInterface.NavigatorHandler,
+    @Inject(NAVIGATOR_HANDLER_TOKEN)
+    private navigatorHandler: NavigatorHandler,
     private router: Router
   ) {}
+  ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isAddWebsitePatternComponent = event.url.includes(
+          'add_website_pattern'
+        );
+      }
+    });
+  }
 
   openTab() {
     this.navigatorHandler.openFullPage();
@@ -31,5 +46,9 @@ export class AppComponent {
 
   openAddPattern() {
     this.router.navigate(['add_website_pattern']);
+  }
+
+  goToScanTab() {
+    this.router.navigate(['']);
   }
 }

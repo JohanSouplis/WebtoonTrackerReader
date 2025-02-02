@@ -250,6 +250,26 @@ it.each<[string, string, [string, string]]>([
     'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
     ['Chronicles Of The Demon Faction', '102'],
   ],
+  [
+    'Tales Of Demons And Gods - Chapter 489.1 - ManhuaPlus',
+    'https://manhuaplus.com/manga/tales-of-demons-and-gods01/chapter-489-1/',
+    ['Tales Of Demons And Gods', '489.1'],
+  ],
+  [
+    'Martial Peak - Chapter 3820 - ManhuaPlus',
+    'https://manhuaplus.com/manga/martial-peak/chapter-3820/',
+    ['Martial Peak', '3820'],
+  ],
+  [
+    'The Extra’s Academy Survival Guide - Chapitre 0 - Raijin Scan',
+    'https://raijinscan.fr/manga/the-extras-academy-survival-guide/chapitre-0/',
+    ['The Extra’s Academy Survival Guide', '0'],
+  ],
+  [
+    'The Last Adventurer - Chapter 55 - Raijin Scan',
+    'https://raijinscan.fr/manga/the-last-adventurer-36489/chapter-55/',
+    ['The Last Adventurer', '55'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
@@ -257,9 +277,9 @@ it.each<[string, string, [string, string]]>([
 
 it.each<[string, string, [string, string]]>([
   [
-    'Ep.09 - Permintaan Si Ketua Kelas - 9 | Silver Lining',
-    'https://www.webtoons.com/id/romance/silver-lining/ep09-permintaan-si-ketua-kelas/viewer?title_no=6175&episode_no=9',
-    ['Silver Lining', '9'],
+    'Tales Of Demons And Gods - Chapter 489.1 - ManhuaPlus',
+    'https://manhuaplus.com/manga/tales-of-demons-and-gods01/chapter-489-1/',
+    ['Tales Of Demons And Gods', '489.1'],
   ],
 ])(
   'Should retrieve title and chapter for test purpose',
@@ -268,6 +288,7 @@ it.each<[string, string, [string, string]]>([
     expect(mockCrashReport.execute).not.toHaveBeenCalled();
   }
 );
+
 it('when parser is not known, should return empty', () => {
   expect(retrieveTitleAndChapter.execute('', '')).toEqual([]);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();

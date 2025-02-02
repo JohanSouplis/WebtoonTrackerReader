@@ -1,30 +1,76 @@
-form {
+.new-website {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.new-website h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.new-website form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 300px;
+  gap: 15px;
+  align-items: center; /* Center align items */
 }
 
-input {
-  padding: 8px;
-  border: 1px solid #ccc;
+.new-website input {
+  padding: 15px;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
-button {
+.new-website input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+.new-website button {
   background-color: #007bff;
   color: white;
-  padding: 10px;
+  padding: 15px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure button width matches input width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
-button:hover {
+.new-website button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-div {
-  color: red;
-  font-size: 12px;
+.new-website button:active {
+  background-color: #004085;
+  transform: translateY(0);
+}
+
+.new-website button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.success-message {
+  color: green;
+  margin-top: 20px;
+  font-size: 16px;
 }

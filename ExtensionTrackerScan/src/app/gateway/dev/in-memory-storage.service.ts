@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
-import { StorageInterface } from '../angular/port/storage.interface';
-import { Scan } from '../core/src/domain/scan.type';
+import { StorageInterface } from '../../angular/port/storage.interface';
+import { Scan } from '../../core/src/domain/scan.type';
 
 export class InMemoryStorageService implements StorageInterface {
   delete(scan: Scan): void {

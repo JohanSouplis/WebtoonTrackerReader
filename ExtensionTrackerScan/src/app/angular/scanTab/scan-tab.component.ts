@@ -17,9 +17,9 @@ import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { Scan } from '../../core/src/domain/scan.type';
 import { ChromeStorageService } from '../../gateway/chrome-storage.service';
-import { InMemoryStorageService } from '../../gateway/in-memory-storage.service';
+import { InMemoryStorageService } from '../../gateway/dev/in-memory-storage.service';
+import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
 
-import * as storageInterface from '../port/storage.interface';
 
 @Component({
   selector: 'scan-tab',
@@ -39,7 +39,7 @@ import * as storageInterface from '../port/storage.interface';
   providers: [
     DatePipe,
     {
-      provide: storageInterface.STORAGE_TOKEN,
+      provide: STORAGE_TOKEN,
       useClass: environment.production
         ? ChromeStorageService
         : InMemoryStorageService,
@@ -64,8 +64,8 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   ratingOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
   constructor(
-    @Inject(storageInterface.STORAGE_TOKEN)
-    private storage: storageInterface.StorageInterface,
+    @Inject(STORAGE_TOKEN)
+    private storage: StorageInterface,
     private datePipe: DatePipe
   ) {}
 

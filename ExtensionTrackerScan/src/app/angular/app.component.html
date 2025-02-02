@@ -18,18 +18,34 @@
     <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click
     here to learn more!
   </span>
-  <!-- <div
+  <div
+    *ngIf="!isAddWebsitePatternComponent"
     (click)="openAddPattern()"
     style="
       flex: 1;
       text-align: center;
-      background-color: #f1b0b7;
+      background-color: #007bff;
+      color: white;
       padding: 10px;
       border-radius: 5px;
     "
   >
-    Add website
-  </div> -->
+    Add Website
+  </div>
+  <div
+    *ngIf="isAddWebsitePatternComponent"
+    (click)="goToScanTab()"
+    style="
+      flex: 1;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    "
+  >
+    Go Back
+  </div>
 </div>
 
 <router-outlet></router-outlet>

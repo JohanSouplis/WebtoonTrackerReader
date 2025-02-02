@@ -88,9 +88,13 @@ export class RetrieveTitleAndChapter {
       return '';
     }
     chapter = stringFinishingWithChapter.split(' ')[0];
-    chapter = chapter.replace(':', '');
+    chapter = chapter
+      .replace(':', '')
+      .replace(',', '.')
+      .replace('-', '.')
+      .replace('_', '.');
 
-    const chapterNumber = parseInt(chapter);
+    const chapterNumber = parseFloat(chapter);
     if (Number.isNaN(chapterNumber)) {
       return '';
     }

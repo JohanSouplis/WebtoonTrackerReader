@@ -1,43 +1,19 @@
-<form [formGroup]="websiteForm" (ngSubmit)="onSubmit()">
-  <label for="website">Website:</label>
-  <input
-    id="website"
-    formControlName="website"
-    type="text"
-    placeholder="Enter website name"
-  />
-  <div
-    *ngIf="
-      websiteForm.controls.website.invalid &&
-      websiteForm.controls.website.touched
-    "
-  >
-    Website is required.
+<div class="container">
+  <div class="new-website">
+    <h1>Propose a new website for the next update</h1>
+    <form [formGroup]="websiteForm" (ngSubmit)="proposeNewWebsite()">
+      <input
+        id="website"
+        formControlName="website"
+        type="text"
+        placeholder="Enter website name"
+      />
+      <button type="submit" [disabled]="successMessage || websiteForm.invalid">
+        Ask
+      </button>
+    </form>
+    <div *ngIf="successMessage" class="success-message">
+      The website has been proposed successfully
+    </div>
   </div>
-
-  <label for="url">URL:</label>
-  <input id="url" formControlName="url" type="text" placeholder="Enter URL" />
-  <div
-    *ngIf="websiteForm.controls.url.invalid && websiteForm.controls.url.touched"
-  >
-    Enter a valid URL (http or https).
-  </div>
-
-  <label for="pattern">Pattern:</label>
-  <input
-    id="pattern"
-    formControlName="pattern"
-    type="text"
-    placeholder="Enter pattern"
-  />
-  <div
-    *ngIf="
-      websiteForm.controls.pattern.invalid &&
-      websiteForm.controls.pattern.touched
-    "
-  >
-    Pattern is required.
-  </div>
-
-  <button type="submit">Try</button>
-</form>
+</div>

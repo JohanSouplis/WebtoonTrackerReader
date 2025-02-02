@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NavigatorHandler } from '../angular/port/openFullPageInterface';
+import { NavigatorHandler } from '../../angular/port/openFullPageInterface';
 
 @Injectable({
   providedIn: 'root',

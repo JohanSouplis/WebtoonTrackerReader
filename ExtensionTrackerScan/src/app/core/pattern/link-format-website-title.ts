@@ -218,6 +218,25 @@ export const websiteJson = {
       formatparse: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
     },
   },
+  manhuaplus: {
+    '1': {
+      parse: 'title',
+      format: 'Title - Chapter X - ManhuaPlus',
+      formatparse: 't§ - Chapter §c§ - ManhuaPlus',
+    },
+  },
+  raijinscan: {
+    '1': {
+      parse: 'title',
+      format: 'Title - Chapter X - Raijin Scan',
+      formatparse: 't§ - Chapter §c§ - Raijin Scan',
+    },
+    '2': {
+      parse: 'title',
+      format: 'Title - Chapitre X - Raijin Scan',
+      formatparse: 't§ - Chapitre §c§ - Raijin Scan',
+    },
+  },
 
   // 'mangainn.net': {
   //   '1': {
