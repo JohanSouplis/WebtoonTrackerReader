@@ -14,15 +14,16 @@
   "
   (click)="openTab()"
 >
-  <span style="flex: 9">
+  <span style="flex: 1; margin-right: 10px">
     <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click
     here to learn more!
   </span>
+</div>
+<div style="display: flex; justify-content: flex-end; gap: 10px">
   <div
     *ngIf="!isAddWebsitePatternComponent"
     (click)="openAddPattern()"
     style="
-      flex: 1;
       text-align: center;
       background-color: #007bff;
       color: white;
@@ -36,7 +37,6 @@
     *ngIf="isAddWebsitePatternComponent"
     (click)="goToScanTab()"
     style="
-      flex: 1;
       text-align: center;
       background-color: #007bff;
       color: white;
@@ -47,5 +47,4 @@
     Go Back
   </div>
 </div>
-
 <router-outlet></router-outlet>

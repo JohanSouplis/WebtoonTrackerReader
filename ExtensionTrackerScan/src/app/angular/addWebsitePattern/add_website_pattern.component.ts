@@ -48,8 +48,9 @@ export class AddWebsitePatternComponent implements OnInit {
   proposeNewWebsite() {
     if (this.websiteForm.valid) {
       this.successMessage = true;
-      this.websiteForm.reset();
       this.notification.notify(this.websiteForm.value.website);
+      this.websiteForm.reset();
+  
       setTimeout(() => {
         this.successMessage = false;
       }, 3000);

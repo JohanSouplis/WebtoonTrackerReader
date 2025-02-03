@@ -6,8 +6,7 @@ import { NotificationInterface } from '../angular/port/notification.interface';
 })
 export class DiscordNotification implements NotificationInterface {
   constructor() {}
-  notify(website: string): void {
-
+  async notify(website: string): Promise<void> {
     const payload = {
       content: `📢 **New website proposed :**\n\`\`\`${website}\`\`\``,
     };
@@ -31,7 +30,5 @@ export class DiscordNotification implements NotificationInterface {
     } catch (error) {
       console.error('Error while sending to discord :', error);
     }
-  }
-
   }
 }
