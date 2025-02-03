@@ -1,6 +1,6 @@
 <div class="mat-elevation-z8">
-  <mat-table [dataSource]="scans" matSort>
-    <!-- <ng-container matColumnDef="delete">
+  <mat-table [dataSource]="scansTab" matSort>
+    <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef class="delete-column delete-header">
       </mat-header-cell>
       <mat-cell *matCellDef="let scan" class="delete-column">
@@ -11,7 +11,7 @@
           (click)="delete(scan)"
         />
       </mat-cell>
-    </ng-container> -->
+    </ng-container>
 
     <ng-container matColumnDef="isFavorite">
       <mat-header-cell

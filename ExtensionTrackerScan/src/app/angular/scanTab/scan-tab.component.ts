@@ -20,7 +20,6 @@ import { ChromeStorageService } from '../../gateway/chrome-storage.service';
 import { InMemoryStorageService } from '../../gateway/dev/in-memory-storage.service';
 import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
 
-
 @Component({
   selector: 'scan-tab',
   imports: [
@@ -48,7 +47,7 @@ import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
 })
 export class ScanTabComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
-    // 'delete',
+    'delete',
     'isFavorite',
     'title',
     'chapter',
@@ -59,9 +58,10 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  scans: MatTableDataSource<Scan> = new MatTableDataSource<Scan>([]);
+  scansTab: MatTableDataSource<Scan> = new MatTableDataSource<Scan>([]);
 
   ratingOptions = Array.from({ length: 10 }, (_, i) => i + 1);
+  scans: Scan[] = [];
 
   constructor(
     @Inject(STORAGE_TOKEN)
@@ -71,18 +71,9 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.storage.getScans().subscribe(
-      (scans) => {
-        this.scans = new MatTableDataSource<Scan>(scans);
-        this.scans.sortingDataAccessor = (item, property) => {
-          if (property === 'wasRead') {
-            return new Date(item.whenWasItRead).getTime();
-          }
-          if (property === 'chapter') {
-            return +item.chapter;
-          }
-
-          return (item as any)[property];
-        };
+      (scanListGet) => {
+        this.scans = scanListGet;
+        this.setTableScan();
       },
       (error) => {
         console.error('Error retrieving all data:', error);
@@ -91,11 +82,29 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.setFilters();
+  }
+
+  private setTableScan() {
+    this.scansTab = new MatTableDataSource<Scan>(this.scans);
+    this.scansTab.sortingDataAccessor = (item, property) => {
+      if (property === 'wasRead') {
+        return new Date(item.whenWasItRead).getTime();
+      }
+      if (property === 'chapter') {
+        return +item.chapter;
+      }
+
+      return (item as any)[property];
+    };
+  }
+
+  private setFilters() {
     setTimeout(() => {
-      this.scans.paginator = this.paginator;
+      this.scansTab.paginator = this.paginator;
       this.sort.active = 'wasRead';
       this.sort.direction = 'desc';
-      this.scans.sort = this.sort;
+      this.scansTab.sort = this.sort;
     });
   }
 
@@ -116,9 +125,15 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
     this.storeScanUpdated(scan);
   }
 
-  // delete(scan: Scan) {
-  //   this.storage.delete(scan);
-  // }
+  delete(scanToDelete: Scan) {
+    this.storage.delete(scanToDelete);
+    this.scans = this.scans.filter((scan) => scanToDelete.title !== scan.title);
+
+    this.scansTab.data = [];
+    this.scansTab = new MatTableDataSource<Scan>(this.scans);
+    this.setTableScan();
+    this.setFilters();
+  }
 
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
