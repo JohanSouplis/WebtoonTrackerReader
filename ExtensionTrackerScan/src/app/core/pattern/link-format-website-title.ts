@@ -237,19 +237,21 @@ export const websiteJson = {
       formatparse: 't§ - Chapitre §c§ - Raijin Scan',
     },
   },
+  'mangaplus.shueisha.co.jp': {
+    '1': {
+      parse: 'title',
+      format: '[#X] Title | MANGA Plus',
+      formatparse: '[#§c§] §t§ | MANGA Plus',
+    },
+  },
 
-  // 'mangainn.net': {
-  //   '1': {
-  //     parse: 'title',
-  //     format: 'Title - read Title chapter X',
-  //     formatparse: '§µt§ - µ§ chapter µ§µ',
-  //   },
-  // },
-  // 'mangaplus.shueisha.co.jp': {
-  //   '1': {
-  //     parse: 'title',
-  //     format: '[#X] Title | manga plus',
-  //     formatparse: '§[#µc§] µt§ | manga plusµ',
-  //   },
-  // },
+  'mangainn.org': {
+    '1': {
+      parse: 'title',
+      format:
+        'Read Title Comic Online - Volume Y Chapter X - Get the Latest Updates on Inn 🐠 Manga',
+      formatparse:
+        'Read §t§ Comic Online § - §Chapter §c§ - Get the Latest Updates',
+    },
+  },
 };

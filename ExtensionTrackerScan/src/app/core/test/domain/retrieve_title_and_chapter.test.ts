@@ -270,6 +270,26 @@ it.each<[string, string, [string, string]]>([
     'https://raijinscan.fr/manga/the-last-adventurer-36489/chapter-55/',
     ['The Last Adventurer', '55'],
   ],
+  [
+    '[#001] Blue Exorcist | MANGA Plus',
+    'https://mangaplus.shueisha.co.jp/viewer/1000227',
+    ['Blue Exorcist', '1'],
+  ],
+  [
+    '[#143] Seraph of the End: Vampire Reign | MANGA Plus',
+    'https://mangaplus.shueisha.co.jp/viewer/1023147',
+    ['Seraph of the End: Vampire Reign', '143'],
+  ],
+  [
+    'Read XINK3R Comic Online - Chapter 14 - Get the Latest Updates on Inn 🐠 Manga',
+    'https://mangainn.org/kaka/read.xink3r/ch.997805-ch-14.html',
+    ['XINK3R', '14'],
+  ],
+  [
+    'Read Magi Comic Online - Volume 2 Chapter 12 - Get the Latest Updates on Inn 🐠 Manga',
+    'https://mangainn.org/kaka/read.magi/ch.688814-vol-2-ch-12.html',
+    ['Magi', '12'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
@@ -277,9 +297,9 @@ it.each<[string, string, [string, string]]>([
 
 it.each<[string, string, [string, string]]>([
   [
-    'Tales Of Demons And Gods - Chapter 489.1 - ManhuaPlus',
-    'https://manhuaplus.com/manga/tales-of-demons-and-gods01/chapter-489-1/',
-    ['Tales Of Demons And Gods', '489.1'],
+    'Read Magi Comic Online - Volume 2 Chapter 12 - Get the Latest Updates on Inn 🐠 Manga',
+    'https://mangainn.org/kaka/read.magi/ch.688814-vol-2-ch-12.html',
+    ['Magi', '12'],
   ],
 ])(
   'Should retrieve title and chapter for test purpose',
