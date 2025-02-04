@@ -1,8 +1,15 @@
 <div class="mat-elevation-z8">
   <mat-form-field class="mat-form-field">
     <mat-label>Filter by title</mat-label>
-    <input matInput (keyup)="applyFilter($any($event.target).value)" />
+    <input matInput (keyup)="applyFilter($event)" />
   </mat-form-field>
+  <mat-checkbox (change)="toggleFavoriteFilter($event)">
+    Favorites Only
+  </mat-checkbox>
+  <mat-checkbox (change)="toggleRatingFilter($event)">
+    Rating Only
+  </mat-checkbox>
+
   <mat-table [dataSource]="scansTab" matSort>
     <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef class="delete-column delete-header">

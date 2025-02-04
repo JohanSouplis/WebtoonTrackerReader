@@ -7,6 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  MatCheckboxModule,
+  MatCheckboxChange,
+} from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -29,6 +33,7 @@ import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
     MatSelectModule,
     MatTableModule,
     MatInputModule,
+    MatCheckboxModule,
     FormsModule,
     MatSortModule,
     CommonModule,
@@ -62,6 +67,9 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
 
   ratingOptions = Array.from({ length: 10 }, (_, i) => i + 1);
   scans: Scan[] = [];
+
+  checkedFavorite: boolean = false;
+  checkedRating: boolean = false;
 
   constructor(
     @Inject(STORAGE_TOKEN)
@@ -139,7 +147,31 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
     this.storage.updateScan(scan);
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
     this.scansTab.filter = filterValue.trim().toLowerCase();
+  }
+
+  toggleFavoriteFilter(event: MatCheckboxChange) {
+    this.checkedFavorite = event.checked;
+    this.applyCheckboxFilter();
+  }
+
+  toggleRatingFilter(event: MatCheckboxChange) {
+    this.checkedRating = event.checked;
+    this.applyCheckboxFilter();
+  }
+
+  private applyCheckboxFilter() {
+    let scansListFiltered = this.scans;
+    if (this.checkedRating) {
+      scansListFiltered = scansListFiltered.filter(
+        (scan) => scan.rating !== undefined
+      );
+    }
+    if (this.checkedFavorite) {
+      scansListFiltered = scansListFiltered.filter((scan) => scan.isFavorite);
+    }
+    this.scansTab.data = scansListFiltered;
   }
 }
