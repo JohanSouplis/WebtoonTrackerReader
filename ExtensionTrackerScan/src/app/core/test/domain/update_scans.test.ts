@@ -3,7 +3,10 @@ import {
   updateScansModifiedByUser,
   updateScansWithNewVisitedScan,
 } from '../../src/domain/update_scans';
-import { createScan, createScanVisited } from './create_scan_visited_builder_test';
+import {
+  createScan,
+  createScanVisited,
+} from './create_scan_visited_builder_test';
 describe('When visiting a scan website, update the list of scans stored : ', () => {
   it('When there is no scans stored, one scan is added', () => {
     const scansResult: Scan[] = updateScansWithNewVisitedScan(
@@ -129,32 +132,59 @@ describe('When visiting a scan website, update the list of scans stored : ', () 
       );
     });
 
-    it('with a title close to be the same and a different chapter, the chapter and the titleis updated', () => {
-      const scansResult: Scan[] = updateScansWithNewVisitedScan(
-        [
+    describe('with a title close to be the same', () => {
+      it('with only an apostroph of difference, the chapter and the title is updated', () => {
+        const scansResult: Scan[] = updateScansWithNewVisitedScan(
+          [
+            createScanVisited(
+              "Mount Hua Sect's Genius Phantom Swordsman",
+              '1',
+              'url.com',
+              'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+            ),
+          ],
           createScanVisited(
-            "Mount Hua Sect's Genius Phantom Swordsman",
-            '1',
+            'Mount Hua Sect’s Genius Phantom Swordsman',
+            '2',
             'url.com',
-            'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
-          ),
-        ],
-        createScanVisited(
-          'Mount Hua Sect’s Genius Phantom Swordsman',
-          '2',
-          'url.com',
+            'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+          )
+        );
+        expect(scansResult.length).toEqual(1);
+        expect(scansResult[0].title).toEqual(
+          "Mount Hua Sect's Genius Phantom Swordsman"
+        );
+        expect(scansResult[0].chapter).toEqual('2');
+        expect(scansResult[0].url).toEqual('url.com');
+        expect(scansResult[0].whenWasItRead).toEqual(
           'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
-        )
-      );
-      expect(scansResult.length).toEqual(1);
-      expect(scansResult[0].title).toEqual(
-        "Mount Hua Sect's Genius Phantom Swordsman"
-      );
-      expect(scansResult[0].chapter).toEqual('2');
-      expect(scansResult[0].url).toEqual('url.com');
-      expect(scansResult[0].whenWasItRead).toEqual(
-        'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
-      );
+        );
+      });
+      it('with capitalize letter at some part and not other, the chapter and the title is updated', () => {
+        const scansResult: Scan[] = updateScansWithNewVisitedScan(
+          [
+            createScanVisited(
+              'Mount Hua sect Genius',
+              '1',
+              'url.com',
+              'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)'
+            ),
+          ],
+          createScanVisited(
+            'Mount hua Sect genius',
+            '2',
+            'url.com',
+            'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+          )
+        );
+        expect(scansResult.length).toEqual(1);
+        expect(scansResult[0].title).toEqual('Mount hua Sect genius');
+        expect(scansResult[0].chapter).toEqual('2');
+        expect(scansResult[0].url).toEqual('url.com');
+        expect(scansResult[0].whenWasItRead).toEqual(
+          'Sat Jan 01 2025 10:00:10 GMT+0100 (Central European Standard Time)'
+        );
+      });
     });
   });
 

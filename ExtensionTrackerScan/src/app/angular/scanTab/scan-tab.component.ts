@@ -138,4 +138,8 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   private storeScanUpdated(scan: Scan) {
     this.storage.updateScan(scan);
   }
+
+  applyFilter(filterValue: string) {
+    this.scansTab.filter = filterValue.trim().toLowerCase();
+  }
 }

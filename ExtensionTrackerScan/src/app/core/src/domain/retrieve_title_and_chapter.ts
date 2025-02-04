@@ -38,6 +38,7 @@ export class RetrieveTitleAndChapter {
         if (title && title[0] === ' ') {
           title = title.substring(1);
         }
+        title = title.replace(' [Official]', '');
         if (title && chapter) {
           return [title, chapter];
         }

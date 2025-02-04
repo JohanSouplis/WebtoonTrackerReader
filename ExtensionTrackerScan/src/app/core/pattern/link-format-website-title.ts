@@ -198,12 +198,12 @@ export const websiteJson = {
     '1': {
       parse: 'title',
       format: 'Title [Official] - Chapter X : S3 Finale',
-      formatparse: 't§ [Official] - Chapter §c§',
+      formatparse: 't§ - Chapter §c',
     },
     '2': {
       parse: 'title',
-      format: 'Title - Chapter X : S3 Finale',
-      formatparse: 't§ - Chapter §c§',
+      format: 'Two Heretical Heroes [Official] - Episode 1',
+      formatparse: 't§ - Episode §c',
     },
   },
   mangapark: {

@@ -1,50 +1,25 @@
-<div
-  style="
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 15px;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    cursor: pointer;
-  "
-  (click)="openTab()"
->
-  <span style="flex: 1; margin-right: 10px">
-    <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click
-    here to learn more!
-  </span>
-</div>
-<div style="display: flex; justify-content: flex-end; gap: 10px">
-  <div
-    *ngIf="!isAddWebsitePatternComponent"
-    (click)="openAddPattern()"
-    style="
-      text-align: center;
-      background-color: #007bff;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-    "
-  >
-    Add Website
+<div class="news-banner-container">
+  <div class="news-banner" (click)="openTab()">
+    <span>
+      <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click
+      here to learn more!
+    </span>
   </div>
-  <div
-    *ngIf="isAddWebsitePatternComponent"
-    (click)="goToScanTab()"
-    style="
-      text-align: center;
-      background-color: #007bff;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-    "
-  >
-    Go Back
+  <div class="button-container">
+    <div
+      *ngIf="!isAddWebsitePatternComponent"
+      (click)="openAddPattern()"
+      class="button"
+    >
+      Add Website
+    </div>
+    <div
+      *ngIf="isAddWebsitePatternComponent"
+      (click)="goToScanTab()"
+      class="button"
+    >
+      Go Back
+    </div>
   </div>
 </div>
 <router-outlet></router-outlet>

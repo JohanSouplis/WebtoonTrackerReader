@@ -11,7 +11,7 @@ export function updateScansWithNewVisitedScan(
   newScan.title = newScan.title.replace('’', "'");
 
   let existingScan: Scan | undefined = scansList.find(
-    (scan) => scan['title'] === newScan.title
+    (scan) => scan['title'].toLowerCase() === newScan.title.toLowerCase()
   );
   if (!existingScan) {
     scansList.push(newScan);
@@ -20,6 +20,7 @@ export function updateScansWithNewVisitedScan(
   if (new Date(existingScan.whenWasItRead) > new Date(newScan.whenWasItRead)) {
     return scansList;
   }
+  existingScan['title'] = newScan.title;
   existingScan['chapter'] = newScan.chapter;
   existingScan['url'] = newScan.url;
   existingScan['whenWasItRead'] = newScan.whenWasItRead;

@@ -217,6 +217,11 @@ it.each<[string, string, [string, string]]>([
     'https://bato.to/chapter/3156483',
     ['I Have Never Abandoned the Tyrant', '45'],
   ],
+  [
+    'Two Heretical Heroes [Official] - Episode 1',
+    'https://bato.to/chapter/3200294',
+    ['Two Heretical Heroes', '1'],
+  ],
   // [
   //   'Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90  - Read Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90 Online - Page 1',
   //   'https://fanfox.net/manga/rettou_hito_no_maken_tsukai_sukiruboudo_o_kushi_shite_saikyou_ni_itaru/c090/1.html',
@@ -243,7 +248,7 @@ it.each<[string, string, [string, string]]>([
   [
     'Love is an Illusion! - Superstar [Official] - Chapter 10 - Share Any Manga on MangaPark',
     'https://mangapark.net/title/419532-en-love-is-an-illusion-superstar/9395342-chapter-10',
-    ['Love is an Illusion! - Superstar [Official]', '10'],
+    ['Love is an Illusion! - Superstar', '10'],
   ],
   [
     'Chronicles Of The Demon Faction - Ch.102 - Share Any Manga on MangaPark',

@@ -78,3 +78,9 @@ table {
   height: 20px;
   cursor: pointer;
 }
+
+.mat-form-field {
+  width: 300px;
+  margin-left: 20px;
+  margin-top: 20px;
+}

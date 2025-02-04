@@ -10,8 +10,7 @@ export class DiscordCrashReport implements CrashReport {
 
     try {
       const response = await fetch(
-        // 'https://discord.com/api/webhooks/1332722641228009536/vdece0juuv7E_IViAKNytG0Vw2-A5KKXxvYu0uRBu99gXeW6B6cOFpv6hdel9PEnZkAR',
-        'https://discord.com/api/webhooks/1335210113300041820/b974_u606xNxM_Nlpj6VfqzrjACIvUIeCBfDeqTdZAodYmlSbJ1aYv0SzXk1izNelIiJ',
+        'https://discord.com/api/webhooks/1336426162653757450/wYGF0H04jEF0Z55H7xLhYV7dKrPLlDhXIMCwj0q21vx1Vhj2o8qUBHSt9DbyrsIMQ_ZH',
         {
           method: 'POST',
           headers: {
