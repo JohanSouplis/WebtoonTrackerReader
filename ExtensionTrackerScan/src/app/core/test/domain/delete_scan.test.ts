@@ -1,6 +1,6 @@
 import { deleteScan } from '../../src/domain/delete_scan';
 import { Scan } from '../../src/domain/scan.type';
-import { createScanVisited } from './create_scan_visited_builder_test';
+import { createScanVisited } from './create_scan_visited.test';
 
 it('when removing a scan, if a scan have the same title, the scan is removed from the list of scans', () => {
   const scansResult: Scan[] = deleteScan(
