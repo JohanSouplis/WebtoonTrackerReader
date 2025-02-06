@@ -18,23 +18,30 @@ export class RetrieveTitleAndChapter {
     const parserList = webtoonParser[0];
     try {
       for (let j = 0; j < parserList.length; j++) {
-        const parser = parserList[j][1].formatparse;
         if (url.includes(parserList[j][1].excludePatternUrl)) {
           return [];
         }
         if (titleWebpage.includes(parserList[j][1].excludePatternTitle)) {
           return [];
         }
-        let titleSplitted: string[] = parser.split('§');
+
         let title: string = '';
         let chapter: string = '';
-        for (let i = 0; i < titleSplitted.length; i++) {
-          if (titleSplitted[i] === titleIsHere) {
-            title = this.getTitle(i, title, titleWebpage, titleSplitted);
-          } else if (titleSplitted[i] === chapterNumberIsHere) {
-            chapter = this.getChapter(titleWebpage, titleSplitted, i, chapter);
-          }
+        ({ title, chapter } = this.getParsedInformation(
+          parserList[j][1].formatParseTitle,
+          title,
+          titleWebpage,
+          chapter
+        ));
+        if (parserList[j][1].formatParseUrl) {
+          ({ title, chapter } = this.getParsedInformation(
+            parserList[j][1].formatParseUrl,
+            title,
+            url,
+            chapter
+          ));
         }
+
         if (title && title[0] === ' ') {
           title = title.substring(1);
         }
@@ -52,23 +59,51 @@ export class RetrieveTitleAndChapter {
     return [];
   }
 
+  private getParsedInformation(
+    parser: any,
+    title: string,
+    informationFromWebsite: string,
+    chapter: string
+  ) {
+    let titleSplitted: string[] = parser.split('§');
+    for (let i = 0; i < titleSplitted.length; i++) {
+      if (titleSplitted[i] === titleIsHere) {
+        title = this.getTitle(i, title, informationFromWebsite, titleSplitted);
+      } else if (titleSplitted[i] === chapterNumberIsHere) {
+        chapter = this.getChapter(
+          informationFromWebsite,
+          titleSplitted,
+          i,
+          chapter
+        );
+      }
+    }
+    return { title, chapter };
+  }
+
   private getTitle(
     i: number,
     title: string,
-    titleWebpage: string,
-    titleSplitted: string[]
+    informationFromWebsite: string,
+    informationFromWebsiteSplitted: string[]
   ) {
     if (i === 0) {
-      title = titleWebpage.split(titleSplitted[i + 1])[i];
+      title = informationFromWebsite.split(
+        informationFromWebsiteSplitted[i + 1]
+      )[i];
     } else {
-      let stringFinishingWithTitle = titleWebpage.split(
-        titleSplitted[i - 1]
+      let stringFinishingWithTitle = informationFromWebsite.split(
+        informationFromWebsiteSplitted[i - 1]
       )[1];
       if (!stringFinishingWithTitle) {
         return '';
       }
-      if (stringFinishingWithTitle.includes(titleSplitted[i + 1])) {
-        title = stringFinishingWithTitle.split(titleSplitted[i + 1])[0];
+      if (
+        stringFinishingWithTitle.includes(informationFromWebsiteSplitted[i + 1])
+      ) {
+        title = stringFinishingWithTitle.split(
+          informationFromWebsiteSplitted[i + 1]
+        )[0];
       } else {
         title = stringFinishingWithTitle;
       }
@@ -77,13 +112,13 @@ export class RetrieveTitleAndChapter {
   }
 
   private getChapter(
-    titleWebpage: string,
-    titleSplitted: string[],
+    informationFromWebsite: string,
+    informationFromWebsiteSplitted: string[],
     i: number,
     chapter: string
   ) {
-    let stringFinishingWithChapter = titleWebpage.split(
-      titleSplitted[i - 1]
+    let stringFinishingWithChapter = informationFromWebsite.split(
+      informationFromWebsiteSplitted[i - 1]
     )[1];
     if (!stringFinishingWithChapter) {
       return '';

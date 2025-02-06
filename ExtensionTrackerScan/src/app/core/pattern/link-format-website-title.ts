@@ -1,257 +1,230 @@
 export const websiteJson = {
   'toonily.com': {
     '1': {
-      parse: 'title',
-      format:
+      formatExampleTitle:
         'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
-      formatparse: 't§ - Chapter §c§ - ',
+      formatParseTitle: 't§ - Chapter §c§ - ',
     },
   },
   'asuracomic.net': {
     '1': {
-      parse: 'title',
-      format: 'Title Chapter X - Asura Scans',
-      formatparse: 't§ Chapter §c§ - Asura Scans',
+      formatExampleTitle: 'Title Chapter X - Asura Scans',
+      formatParseTitle: 't§ Chapter §c§ - Asura Scans',
     },
   },
   'manhuatop.org': {
     '1': {
-      parse: 'title',
-      format: 'Title Manhwa  -  Chapter X - Top Manhwa',
-      formatparse: 't§ Manhwa  -  Chapter §c§ - Top Manhua',
+      formatExampleTitle: 'Title Manhwa  -  Chapter X - Top Manhwa',
+      formatParseTitle: 't§ Manhwa  -  Chapter §c§ - Top Manhua',
     },
     '2': {
-      parse: 'title',
-      format: 'Title Manhwa - Chapter X - Top Manhwa',
-      formatparse: 't§ Manhwa - Chapter §c§ - Top Manhua',
+      formatExampleTitle: 'Title Manhwa - Chapter X - Top Manhwa',
+      formatParseTitle: 't§ Manhwa - Chapter §c§ - Top Manhua',
     },
   },
   'arvencomics.com': {
     '1': {
-      parse: 'title',
-      format: 'Title Chapter X',
-      formatparse: 't§ Chapter §c§',
+      formatExampleTitle: 'Title Chapter X',
+      formatParseTitle: 't§ Chapter §c§',
     },
   },
   'vortexscans.org': {
     '1': {
-      parse: 'title',
-      format: 'Title Chapter X - Vortex Scans',
-      formatparse: 't§ Chapter §c§ - Vortex Scans',
+      formatExampleTitle: 'Title Chapter X - Vortex Scans',
+      formatParseTitle: 't§ Chapter §c§ - Vortex Scans',
     },
   },
   'manhuaus.com': {
     '1': {
-      parse: 'title',
-      format: 'Title - Chapter X - MANHUAUS.COM',
-      formatparse: 't§ - Chapter §c§ - MANHUAUS.COM',
+      formatExampleTitle: 'Title - Chapter X - MANHUAUS.COM',
+      formatParseTitle: 't§ - Chapter §c§ - MANHUAUS.COM',
     },
   },
   'manhuafast.net': {
     '1': {
-      parse: 'title',
-      format: 'Title - Chapter X - MANHUAFAST.NET',
-      formatparse: 't§ - Chapter §c§ - MANHUAFAST.NET',
+      formatExampleTitle: 'Title - Chapter X - MANHUAFAST.NET',
+      formatParseTitle: 't§ - Chapter §c§ - MANHUAFAST.NET',
     },
   },
   'comick.io': {
     '1': {
-      parse: 'title',
-      format: 'Chapter X (English) - Title | ComicK',
-      formatparse: 'Chapter §c§ (English) - §t§ | ComicK',
+      formatExampleTitle: 'Chapter X (English) - Title | ComicK',
+      formatParseTitle: 'Chapter §c§ (English) - §t§ | ComicK',
     },
   },
   'reaper-scan.net': {
     '1': {
-      parse: 'title',
-      format: 'Read Title Chapter X ⚡ Reaper-scan | Read Manga Everyday',
-      formatparse: 'Read §t§ Chapter §c§ ⚡ Reaper-scan | Read Manga Everyday',
+      formatExampleTitle:
+        'Read Title Chapter X ⚡ Reaper-scan | Read Manga Everyday',
+      formatParseTitle:
+        'Read §t§ Chapter §c§ ⚡ Reaper-scan | Read Manga Everyday',
     },
   },
   'en-thunderscans.com': {
     '1': {
-      parse: 'title',
-      format: 'Title Chapter X – Thunderscans EN',
-      formatparse: 't§ Chapter §c§ – Thunderscans EN',
+      formatExampleTitle: 'Title Chapter X – Thunderscans EN',
+      formatParseTitle: 't§ Chapter §c§ – Thunderscans EN',
     },
   },
   'dragontea.ink': {
     '1': {
-      parse: 'title',
-      format: 'Title - chapter X - Dragon Tea',
-      formatparse: 't§ - chapter §c§ - Dragon Tea',
+      formatExampleTitle: 'Title - chapter X - Dragon Tea',
+      formatParseTitle: 't§ - chapter §c§ - Dragon Tea',
     },
   },
   'toongod.org': {
     '1': {
-      parse: 'title',
-      format: 'Read Title Chapter X Online - ToonGod',
-      formatparse: 'Read §t§ Chapter §c§ Online - ToonGod',
+      formatExampleTitle: 'Read Title Chapter X Online - ToonGod',
+      formatParseTitle: 'Read §t§ Chapter §c§ Online - ToonGod',
     },
   },
   'mangadex.org': {
     '1': {
-      parse: 'title',
       excludePatternUrl: 'title',
       excludePatternTitle: 'Oneshot',
-      format: '1 | Chapter X - Title - MangaDex',
-      formatparse: 'Chapter §c§ - §t§ - MangaDex',
+      formatExampleTitle: '1 | Chapter X - Title - MangaDex',
+      formatParseTitle: 'Chapter §c§ - §t§ - MangaDex',
     },
   },
   'chapmanganato.to': {
     '1': {
-      parse: 'title',
-      format: 'Title Chapter 266 - Manganato',
-      formatparse: 't§ Chapter §c§ - Manganato',
+      formatExampleTitle: 'Title Chapter 266 - Manganato',
+      formatParseTitle: 't§ Chapter §c§ - Manganato',
     },
   },
   'chapmanganelo.com': {
     '1': {
-      parse: 'title',
-      format:
+      formatExampleTitle:
         'Title Chapter X: NameOfEpisode - Manganelo or Title Chapter X - Manganelo',
-      formatparse: 't§ Chapter §c§ - Manganelo',
+      formatParseTitle: 't§ Chapter §c§ - Manganelo',
     },
   },
   'scantrad-union.com': {
     '1': {
-      parse: 'title',
-      format: 'Title - X | Scantrad Union',
-      formatparse: 't§ - §c§ | Scantrad Union',
+      formatExampleTitle: 'Title - X | Scantrad Union',
+      formatParseTitle: 't§ - §c§ | Scantrad Union',
     },
   },
   'manta.net': {
     '1': {
-      parse: 'title',
-      format: 'Read SY Episode X - Title | Manta',
-      formatparse: 'Episode §c§ - §t§ | Manta',
+      formatExampleTitle: 'Read SY Episode X - Title | Manta',
+      formatParseTitle: 'Episode §c§ - §t§ | Manta',
     },
   },
   'webtoons.com': {
     '1': {
-      parse: 'title',
-      format: 'Episode X | Title',
-      formatparse: 'Episode §c§ | §t',
+      formatExampleTitle: 'Episode X | Title',
+      formatParseTitle: 'Episode §c§ | §t',
     },
     '2': {
-      parse: 'title',
-      format: 'Chapter X | Title',
-      formatparse: 'Chapter §c§ | §t',
+      formatExampleTitle: 'Chapter X | Title',
+      formatParseTitle: 'Chapter §c§ | §t',
     },
     '3': {
-      parse: 'title',
-      format: 'Ep. X - {nameChapter} | Title or Ep. X | Title',
-      formatparse: 'Ep. §c§ | §t',
+      formatExampleTitle: 'Ep. X - {nameChapter} | Title or Ep. X | Title',
+      formatParseTitle: 'Ep. §c§ | §t',
     },
     '4': {
-      parse: 'title',
-      format: 'Chapter X - {nameChapter} | Title or Ep. X | Title',
-      formatparse: 'Chapter §c§ | §t',
+      formatExampleTitle: 'Chapter X - {nameChapter} | Title or Ep. X | Title',
+      formatParseTitle: 'Chapter §c§ | §t',
     },
     '5': {
-      parse: 'title',
-      format: 'Ep.X - {nameChapter} - X | Title',
-      formatparse: 'Ep.§c§ | §t',
+      formatExampleTitle: 'Ep.X - {nameChapter} - X | Title',
+      formatParseTitle: 'Ep.§c§ | §t',
     },
     '6': {
-      parse: 'title',
-      format: 'Ep.X - X | Title',
-      formatparse: 'Ep.§c§ - §c§ | §t',
+      formatExampleTitle: 'Ep.X - X | Title',
+      formatParseTitle: 'Ep.§c§ - §c§ | §t',
     },
   },
   'tappytoon.com': {
     '1': {
-      parse: 'title',
-      format: 'Read Episode X - Title  | Tappytoon',
-      formatparse: 'Read Episode §c§ - §t§  | Tappytoon',
+      formatExampleTitle: 'Read Episode X - Title  | Tappytoon',
+      formatParseTitle: 'Read Episode §c§ - §t§  | Tappytoon',
     },
   },
   'mangapanda.in': {
     '1': {
-      parse: 'title',
-      format: 'Read Title Chapter X online free - MangaPanda.in',
-      formatparse: 'Read §t§ Chapter §c§ online free - MangaPanda.in',
+      formatExampleTitle: 'Read Title Chapter X online free - MangaPanda.in',
+      formatParseTitle: 'Read §t§ Chapter §c§ online free - MangaPanda.in',
     },
   },
   'toomics.com': {
     '1': {
-      parse: 'title',
-      format: 'Title EP X - Toomics',
-      formatparse: 't§ EP §c§ - Toomics',
+      formatExampleTitle: 'Title EP X - Toomics',
+      formatParseTitle: 't§ EP §c§ - Toomics',
     },
   },
   'comics.inkr.com': {
     '1': {
-      parse: 'title',
-      format: 'Chapter X • Frenzy Leveling Up System',
-      formatparse: 'Chapter §c§ • §t',
+      formatExampleTitle: 'Chapter X • Frenzy Leveling Up System',
+      formatParseTitle: 'Chapter §c§ • §t',
     },
   },
   'pocketcomics.com': {
     '1': {
-      parse: 'title',
-      format: 'Title | Episode X | POCKET COMICS',
-      formatparse: 't§ | Episode §c§ | POCKET COMICS',
+      formatExampleTitle: 'Title | Episode X | POCKET COMICS',
+      formatParseTitle: 't§ | Episode §c§ | POCKET COMICS',
     },
   },
   'bato.to': {
     '1': {
-      parse: 'title',
-      format: 'Title [Official] - Chapter X : S3 Finale',
-      formatparse: 't§ - Chapter §c',
+      formatExampleTitle: 'Title [Official] - Chapter X : S3 Finale',
+      formatParseTitle: 't§ - Chapter §c',
     },
     '2': {
-      parse: 'title',
-      format: 'Two Heretical Heroes [Official] - Episode 1',
-      formatparse: 't§ - Episode §c',
+      formatExampleTitle: 'Two Heretical Heroes [Official] - Episode 1',
+      formatParseTitle: 't§ - Episode §c',
     },
   },
   mangapark: {
     '1': {
-      parse: 'title',
-      format: 'Title - Chapter X - Share Any Manga on MangaPark',
-      formatparse: 't§ - Chapter §c§ - Share Any Manga on MangaPark',
+      formatExampleTitle: 'Title - Chapter X - Share Any Manga on MangaPark',
+      formatParseTitle: 't§ - Chapter §c§ - Share Any Manga on MangaPark',
     },
     '2': {
-      parse: 'title',
-      format: 'Title - Ch.X - Share Any Manga on MangaPark',
-      formatparse: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
+      formatExampleTitle: 'Title - Ch.X - Share Any Manga on MangaPark',
+      formatParseTitle: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
     },
   },
   manhuaplus: {
     '1': {
-      parse: 'title',
-      format: 'Title - Chapter X - ManhuaPlus',
-      formatparse: 't§ - Chapter §c§ - ManhuaPlus',
+      formatExampleTitle: 'Title - Chapter X - ManhuaPlus',
+      formatParseTitle: 't§ - Chapter §c§ - ManhuaPlus',
     },
   },
   raijinscan: {
     '1': {
-      parse: 'title',
-      format: 'Title - Chapter X - Raijin Scan',
-      formatparse: 't§ - Chapter §c§ - Raijin Scan',
+      formatExampleTitle: 'Title - Chapter X - Raijin Scan',
+      formatParseTitle: 't§ - Chapter §c§ - Raijin Scan',
     },
     '2': {
-      parse: 'title',
-      format: 'Title - Chapitre X - Raijin Scan',
-      formatparse: 't§ - Chapitre §c§ - Raijin Scan',
+      formatExampleTitle: 'Title - Chapitre X - Raijin Scan',
+      formatParseTitle: 't§ - Chapitre §c§ - Raijin Scan',
     },
   },
   'mangaplus.shueisha.co.jp': {
     '1': {
-      parse: 'title',
-      format: '[#X] Title | MANGA Plus',
-      formatparse: '[#§c§] §t§ | MANGA Plus',
+      formatExampleTitle: '[#X] Title | MANGA Plus',
+      formatParseTitle: '[#§c§] §t§ | MANGA Plus',
     },
   },
 
   'mangainn.org': {
     '1': {
-      parse: 'title',
-      format:
+      formatExampleTitle:
         'Read Title Comic Online - Volume Y Chapter X - Get the Latest Updates on Inn 🐠 Manga',
-      formatparse:
+      formatParseTitle:
         'Read §t§ Comic Online § - §Chapter §c§ - Get the Latest Updates',
+    },
+  },
+
+  mangadistrict: {
+    '1': {
+      formatExampleTitle: 'Title | MANGA DISTRICT - Read Scan - Manhwa',
+      formatParseTitle: 't§ | MANGA DISTRICT',
+      formatExampleUrl: 'https://mangadistrict.com/read-scan/title/chapter-X/',
+      formatParseUrl: 'chapter-§c§/',
     },
   },
 };

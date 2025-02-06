@@ -3,7 +3,10 @@ import {
   updateScansModifiedByUser,
   updateScansWithNewVisitedScan,
 } from '../../src/domain/update_scans';
-import { createScan, createScanVisited } from './create_scan_visited.test';
+import {
+  createScan,
+  createScanVisited,
+} from './create_scan_visited.testhelper';
 describe('When visiting a scan website, update the list of scans stored : ', () => {
   it('When there is no scans stored, one scan is added', () => {
     const scansResult: Scan[] = updateScansWithNewVisitedScan(

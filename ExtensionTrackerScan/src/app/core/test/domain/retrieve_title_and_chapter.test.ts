@@ -295,6 +295,16 @@ it.each<[string, string, [string, string]]>([
     'https://mangainn.org/kaka/read.magi/ch.688814-vol-2-ch-12.html',
     ['Magi', '12'],
   ],
+  [
+    'Lout of Count’s Family | MANGA DISTRICT - Read Scan - Manhwa',
+    'https://mangadistrict.com/read-scan/lout-of-counts-family/chapter-139/',
+    ['Lout of Count’s Family', '139'],
+  ],
+  [
+    'Solo Spell Caster | MANGA DISTRICT - Read Scan - Manhwa',
+    'https://mangadistrict.com/read-scan/solo-spell-caster/chapter-171/',
+    ['Solo Spell Caster', '171'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
@@ -302,9 +312,9 @@ it.each<[string, string, [string, string]]>([
 
 it.each<[string, string, [string, string]]>([
   [
-    'Read Magi Comic Online - Volume 2 Chapter 12 - Get the Latest Updates on Inn 🐠 Manga',
-    'https://mangainn.org/kaka/read.magi/ch.688814-vol-2-ch-12.html',
-    ['Magi', '12'],
+    'Solo Spell Caster | MANGA DISTRICT - Read Scan - Manhwa',
+    'https://mangadistrict.com/read-scan/solo-spell-caster/chapter-171/',
+    ['Solo Spell Caster', '171'],
   ],
 ])(
   'Should retrieve title and chapter for test purpose',
