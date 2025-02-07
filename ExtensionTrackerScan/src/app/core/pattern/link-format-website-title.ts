@@ -234,4 +234,11 @@ export const websiteJson = {
       formatParseUrl: 'chapter-§c§/',
     },
   },
+
+  manhwahub: {
+    '1': {
+      formatExampleTitle: 'Title Chapter X - ManhwaHub',
+      formatParseTitle: 't§ Chapter §c§ - ManhwaHub',
+    },
+  },
 };

@@ -315,6 +315,16 @@ it.each<[string, string, [string, string]]>([
     'https://mangadistrict.com/read-scan/solo-spell-caster/chapter-171/',
     ['Solo Spell Caster', '171'],
   ],
+  [
+    'Deviance Diary Shorts Raw Chapter 11 - ManhwaHub',
+    'https://manhwahub.net/webtoon/deviance-diary-shorts-raw/chapter-11',
+    ['Deviance Diary Shorts Raw', '11'],
+  ],
+  [
+    'Archmage Transcending Through Regression Chapter 9 - ManhwaHub',
+    'https://manhwahub.net/webtoon/archmage-transcending-through-regression/chapter-9',
+    ['Archmage Transcending Through Regression', '9'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
