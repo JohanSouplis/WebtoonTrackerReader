@@ -266,6 +266,16 @@ it.each<[string, string, [string, string]]>([
     ['Martial Peak', '3820'],
   ],
   [
+    'Read Necromancer Academy and the Genius Summoner Chapter 91 [Read new chapter at ManhuaPlus]',
+    'https://manhuaplus.org/manga/necromancer-academy-and-the-genius-summoner/chapter-91',
+    ['Necromancer Academy and the Genius Summoner', '91'],
+  ],
+  [
+    'Read The Greatest Estate Developer Chapter 178 [Read new chapter at ManhuaPlus]',
+    'https://manhuaplus.org/manga/the-greatest-estate-developer/chapter-178',
+    ['The Greatest Estate Developer', '178'],
+  ],
+  [
     'The Extra’s Academy Survival Guide - Chapitre 0 - Raijin Scan',
     'https://raijinscan.fr/manga/the-extras-academy-survival-guide/chapitre-0/',
     ['The Extra’s Academy Survival Guide', '0'],

@@ -187,10 +187,17 @@ export const websiteJson = {
       formatParseTitle: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
     },
   },
-  manhuaplus: {
+  'manhuaplus.com': {
     '1': {
       formatExampleTitle: 'Title - Chapter X - ManhuaPlus',
       formatParseTitle: 't§ - Chapter §c§ - ManhuaPlus',
+    },
+  },
+  'manhuaplus.org': {
+    '1': {
+      formatExampleTitle:
+        'Read Title Chapter X [Read new chapter at ManhuaPlus]',
+      formatParseTitle: 'Read §t§ Chapter §c§ [Read new chapter at ManhuaPlus]',
     },
   },
   raijinscan: {
