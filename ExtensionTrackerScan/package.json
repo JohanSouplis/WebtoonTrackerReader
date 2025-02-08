@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --hmr --poll=5000",
-    "publish": "ng build --configuration production && webpack --config webpack.common.js",
     "build": "ng build --configuration production && webpack --config webpack.common.js",
+    "publish": "node scripts/zip-extension.js",
     "watch": "ng build --watch --configuration development",
     "test": "jest"
   },
@@ -38,6 +38,7 @@
     "@types/jasmine": "~5.1.0",
     "@types/jest": "^29.5.14",
     "@types/mocha": "^10.0.10",
+    "adm-zip": "^0.5.16",
     "copy-webpack-plugin": "^12.0.2",
     "esbuild": "^0.24.2",
     "html-webpack-plugin": "^5.6.3",
