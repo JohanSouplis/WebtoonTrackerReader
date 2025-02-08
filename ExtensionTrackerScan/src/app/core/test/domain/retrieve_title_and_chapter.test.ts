@@ -222,6 +222,21 @@ it.each<[string, string, [string, string]]>([
     'https://bato.to/chapter/3200294',
     ['Two Heretical Heroes', '1'],
   ],
+  [
+    'Crows - Volume 7 Chapter 23',
+    'https://bato.to/chapter/230684',
+    ['Crows', '23'],
+  ],
+  [
+    'Manga: The God of War is Leveling Up Chapter - 10-eng-li',
+    'https://www.mgeko.cc/reader/en/the-god-of-war-is-leveling-up-chapter-10-eng-li/',
+    ['The God of War is Leveling Up', '10'],
+  ],
+  [
+    "Manga: A Spy's Survival in the Demonic Cult Chapter - 4-eng-li",
+    'https://www.mgeko.cc/reader/en/a-spys-survival-in-the-demonic-cult-chapter-4-eng-li/',
+    ["A Spy's Survival in the Demonic Cult", '4'],
+  ],
   // [
   //   'Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90  - Read Rettou Hito no Maken Tsukai Sukiruboudo o Kushi Shite Saikyou ni Itaru 90 Online - Page 1',
   //   'https://fanfox.net/manga/rettou_hito_no_maken_tsukai_sukiruboudo_o_kushi_shite_saikyou_ni_itaru/c090/1.html',

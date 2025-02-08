@@ -173,8 +173,12 @@ export const websiteJson = {
       formatParseTitle: 't§ - Chapter §c',
     },
     '2': {
-      formatExampleTitle: 'Two Heretical Heroes [Official] - Episode 1',
+      formatExampleTitle: 'Title [Official] - Episode 1',
       formatParseTitle: 't§ - Episode §c',
+    },
+    '3': {
+      formatExampleTitle: 'Title - Volume 7 Chapter X',
+      formatParseTitle: 't§ - Volume§ Y §Chapter §c',
     },
   },
   mangapark: {
@@ -239,6 +243,13 @@ export const websiteJson = {
     '1': {
       formatExampleTitle: 'Title Chapter X - ManhwaHub',
       formatParseTitle: 't§ Chapter §c§ - ManhwaHub',
+    },
+  },
+
+  'mgeko.cc': {
+    '1': {
+      formatExampleTitle: 'Manga: Title Chapter - 10-eng-li',
+      formatParseTitle: 'Manga: §t§ Chapter - §c§-',
     },
   },
 };
