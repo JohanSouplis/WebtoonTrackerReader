@@ -340,6 +340,16 @@ it.each<[string, string, [string, string]]>([
     'https://manhwahub.net/webtoon/archmage-transcending-through-regression/chapter-9',
     ['Archmage Transcending Through Regression', '9'],
   ],
+  [
+    'Bullshit - Chapter 21 - Temple Scan',
+    'https://templetoons.com/comic/bullshit/chapter-21',
+    ['Bullshit', '21'],
+  ],
+  [
+    'Elegant Desire - Chapter 76 - Temple Scan',
+    'https://templetoons.com/comic/elegant-desire/chapter-76',
+    ['Elegant Desire', '76'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();

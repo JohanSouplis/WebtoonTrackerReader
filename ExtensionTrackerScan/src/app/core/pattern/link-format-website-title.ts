@@ -252,4 +252,11 @@ export const websiteJson = {
       formatParseTitle: 'Manga: §t§ Chapter - §c§-',
     },
   },
+
+  templetoons: {
+    '1': {
+      formatExampleTitle: 'Title - Chapter X - Temple Scan',
+      formatParseTitle: 't§ - Chapter §c§ - Temple Scan',
+    },
+  },
 };
