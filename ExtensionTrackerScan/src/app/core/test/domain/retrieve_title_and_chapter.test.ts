@@ -350,6 +350,16 @@ it.each<[string, string, [string, string]]>([
     'https://templetoons.com/comic/elegant-desire/chapter-76',
     ['Elegant Desire', '76'],
   ],
+  [
+    'Honey, Why Can’t We Get a Divorce? - Chapter 34 - 1ST KISS MANGA',
+    'http://1st-kissmanga.net/manga/honey-why-cant-we-get-a-divorce/chapter-34/',
+    ['Honey, Why Can’t We Get a Divorce?', '34'],
+  ],
+  [
+    'Emperor of Steel - Chapter 27 - 1ST KISS MANGA',
+    'https://1st-kissmanga.net/manga/emperor-of-steel/chapter-27/',
+    ['Emperor of Steel', '27'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();

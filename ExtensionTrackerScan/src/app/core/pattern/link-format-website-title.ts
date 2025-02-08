@@ -259,4 +259,11 @@ export const websiteJson = {
       formatParseTitle: 't§ - Chapter §c§ - Temple Scan',
     },
   },
+
+  '1st-kissmanga': {
+    '1': {
+      formatExampleTitle: 'Title - Chapter X - 1ST KISS MANGA',
+      formatParseTitle: 't§ - Chapter §c§ - 1ST KISS MANGA',
+    },
+  },
 };
