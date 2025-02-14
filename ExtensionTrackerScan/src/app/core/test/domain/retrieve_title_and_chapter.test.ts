@@ -360,6 +360,21 @@ it.each<[string, string, [string, string]]>([
     'https://1st-kissmanga.net/manga/emperor-of-steel/chapter-27/',
     ['Emperor of Steel', '27'],
   ],
+  [
+    'Emperor of Steel - Chapter 27 - 1ST KISS MANGA',
+    'https://1st-kissmanga.net/manga/emperor-of-steel/chapter-27/',
+    ['Emperor of Steel', '27'],
+  ],
+  [
+    'Nabe ni Dangan wo Uke Nagara chapter 22.5 - Read Online on MangaFire',
+    'https://mangafire.to/read/nabe-ni-dangan-wo-uke-nagaraa.xv8kv/en/chapter-22.5',
+    ['Nabe ni Dangan wo Uke Nagara', '22.5'],
+  ],
+  [
+    "Mount Hua Sect's Genius Phantom Swordsman chapter 16 - Read Online on MangaFire",
+    'https://mangafire.to/read/mount-hua-sects-genius-phantom-swordsman.lxp4m/en/chapter-16',
+    ["Mount Hua Sect's Genius Phantom Swordsman", '16'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();

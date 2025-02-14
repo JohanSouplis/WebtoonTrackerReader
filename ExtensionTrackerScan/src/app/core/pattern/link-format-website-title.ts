@@ -266,4 +266,11 @@ export const websiteJson = {
       formatParseTitle: 't§ - Chapter §c§ - 1ST KISS MANGA',
     },
   },
+
+  'mangafire.to': {
+    '1': {
+      formatExampleTitle: 'Title chapter X - Read Online on MangaFire',
+      formatParseTitle: 't§ chapter §c§ - Read Online on MangaFire',
+    },
+  },
 };
