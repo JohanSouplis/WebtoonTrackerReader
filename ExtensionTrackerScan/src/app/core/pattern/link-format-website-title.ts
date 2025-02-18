@@ -2,8 +2,13 @@ export const websiteJson = {
   'toonily.com': {
     '1': {
       formatExampleTitle:
-        'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
-      formatParseTitle: 't§ - Chapter §c§ - ',
+        'Title Manga - Chapter 202 - {name of chapter} - Toonily',
+      formatParseTitle: 't§ Manga - Chapter §c§ - ',
+    },
+    '2': {
+      formatExampleTitle:
+        'Title Manga - Chapitre 202 - {name of chapter} - Toonily',
+      formatParseTitle: 't§ Manga - Chapitre §c§ - ',
     },
   },
   'asuracomic.net': {
@@ -84,6 +89,12 @@ export const websiteJson = {
       excludePatternTitle: 'Oneshot',
       formatExampleTitle: '1 | Chapter X - Title - MangaDex',
       formatParseTitle: 'Chapter §c§ - §t§ - MangaDex',
+    },
+    '2': {
+      excludePatternUrl: 'title',
+      excludePatternTitle: 'Oneshot',
+      formatExampleTitle: '1 | Capítulo X - Title - MangaDex',
+      formatParseTitle: 'Capítulo §c§ - §t§ - MangaDex',
     },
   },
   'chapmanganato.to': {
@@ -179,6 +190,10 @@ export const websiteJson = {
     '3': {
       formatExampleTitle: 'Title - Volume 7 Chapter X',
       formatParseTitle: 't§ - Volume§ Y §Chapter §c',
+    },
+    '4': {
+      formatExampleTitle: 'Title (Ch X)',
+      formatParseTitle: 't§ (Ch §c§',
     },
   },
   mangapark: {

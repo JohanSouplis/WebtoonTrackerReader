@@ -24,7 +24,12 @@ it.each<[string, string, [string, string]]>([
   [
     'The Beginning After the End Manga - Chapter 202 - Return to Ashber - Toonily',
     'https://toonily.com/webtoon/beginning-after-end/chapter-202/',
-    ['The Beginning After the End Manga', '202'],
+    ['The Beginning After the End', '202'],
+  ],
+  [
+    'Réglez-le ! Manga - Chapitre 31 - Toonily',
+    'https://toonily.com/webtoon/set-it/chapter-31/',
+    ['Réglez-le !', '31'],
   ],
   [
     'Life of a Magic Academy Mage Chapter 111 - Asura Scans',
@@ -106,6 +111,11 @@ it.each<[string, string, [string, string]]>([
       'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You',
       '65',
     ],
+  ],
+  [
+    '3 | Capítulo 61 - Dungeon Meshi - MangaDex',
+    'https://mangadex.org/chapter/467b4040-dd55-49c6-a5c1-999e275225af/3',
+    ['Dungeon Meshi', '61'],
   ],
   [
     'Overgeared Chapter 266 - Manganato',
@@ -226,6 +236,11 @@ it.each<[string, string, [string, string]]>([
     'Crows - Volume 7 Chapter 23',
     'https://bato.to/chapter/230684',
     ['Crows', '23'],
+  ],
+  [
+    "The Tyrant's Comfort Doll (Side Story) - Side Story 1. 🔞 (Ch 83)",
+    'https://bato.to/chapter/2681677',
+    ["The Tyrant's Comfort Doll (Side Story) - Side Story 1. 🔞", '83'],
   ],
   [
     'Manga: The God of War is Leveling Up Chapter - 10-eng-li',
