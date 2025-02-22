@@ -89,10 +89,11 @@ export class AddWebsitePatternComponent implements OnInit, AfterViewInit {
     '1st-kissmanga',
     'templetoons.com',
     'mangafire.to',
+    'kunmanga.com',
   ];
   displayedColumns: string[] = ['website'];
   dataSource = new MatTableDataSource<string>(this.availableWebsites);
-  pageSize: number = 5;
+  pageSize: number = 10;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
