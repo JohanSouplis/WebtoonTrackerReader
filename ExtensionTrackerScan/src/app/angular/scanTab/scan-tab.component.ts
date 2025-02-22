@@ -17,6 +17,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { Scan } from '../../core/src/domain/scan.type';
@@ -37,6 +38,7 @@ import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
     FormsModule,
     MatSortModule,
     CommonModule,
+    MatTooltipModule,
   ],
   templateUrl: './scan-tab.component.html',
   styleUrls: ['./scan-tab.component.css'],
@@ -173,5 +175,13 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
       scansListFiltered = scansListFiltered.filter((scan) => scan.isFavorite);
     }
     this.scansTab.data = scansListFiltered;
+  }
+
+  truncateTitle(title: string): { truncated: string; isTruncated: boolean } {
+    const isTruncated = title.length > 100;
+    return {
+      truncated: isTruncated ? title.substring(0, 100) + '...' : title,
+      isTruncated: isTruncated,
+    };
   }
 }

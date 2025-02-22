@@ -23,7 +23,6 @@
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "inversify": "^6.2.1",
-    "ngx-pagination": "^6.0.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

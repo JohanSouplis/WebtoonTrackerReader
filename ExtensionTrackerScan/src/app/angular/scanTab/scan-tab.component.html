@@ -52,9 +52,14 @@
         class="title-column title-header"
         >Title</mat-header-cell
       >
-      <mat-cell *matCellDef="let scan" class="title-column"
-        ><a (click)="openInNewTab(scan.url)">{{ scan.title }}</a></mat-cell
-      >
+      <mat-cell *matCellDef="let scan" class="title-column">
+        <a
+          (click)="openInNewTab(scan.url)"
+          [matTooltip]="truncateTitle(scan.title).isTruncated ? scan.title : ''"
+        >
+          {{ truncateTitle(scan.title).truncated }}
+        </a>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="chapter">
