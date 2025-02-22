@@ -1,25 +1,20 @@
-<div class="news-banner-container">
-  <div class="news-banner" (click)="openTab()">
-    <span>
-      <strong>📢 News:</strong> Webtoon Tracker is starting back to zero. Click
-      here to learn more!
-    </span>
-  </div>
-  <div class="button-container">
+<div class="navbar-container">
+  <nav class="button-container">
     <div
-      *ngIf="!isAddWebsitePatternComponent"
-      (click)="openAddPattern()"
+      (click)="selectButton('home')"
+      [class.selected]="selectedButton === 'home'"
+      class="button"
+    >
+      Scan list
+    </div>
+    <div
+      (click)="selectButton('addWebsite')"
+      [class.selected]="selectedButton === 'addWebsite'"
       class="button"
     >
       Add Website
     </div>
-    <div
-      *ngIf="isAddWebsitePatternComponent"
-      (click)="goToScanTab()"
-      class="button"
-    >
-      Go Back
-    </div>
-  </div>
+    <div (click)="openTab()" class="button informations">Informations</div>
+  </nav>
 </div>
 <router-outlet></router-outlet>

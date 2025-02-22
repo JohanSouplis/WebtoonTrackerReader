@@ -288,4 +288,11 @@ export const websiteJson = {
       formatParseTitle: 't§ chapter §c§ - Read Online on MangaFire',
     },
   },
+
+  kunmanga: {
+    '1': {
+      formatExampleTitle: 'Title - Chapter X - Kun Manga',
+      formatParseTitle: 't§ - Chapter §c§ - Kun Manga',
+    },
+  },
 };

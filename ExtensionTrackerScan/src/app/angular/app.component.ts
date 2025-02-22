@@ -25,6 +25,7 @@ import {
 })
 export class AppComponent implements OnInit {
   isAddWebsitePatternComponent: boolean = false;
+  selectedButton: string = 'home';
 
   public constructor(
     @Inject(NAVIGATOR_HANDLER_TOKEN)
@@ -51,5 +52,14 @@ export class AppComponent implements OnInit {
 
   goToScanTab() {
     this.router.navigate(['']);
+  }
+
+  selectButton(button: string) {
+    this.selectedButton = button;
+    if (button === 'home') {
+      this.goToScanTab();
+    } else if (button === 'addWebsite') {
+      this.openAddPattern();
+    }
   }
 }

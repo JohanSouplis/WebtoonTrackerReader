@@ -390,6 +390,16 @@ it.each<[string, string, [string, string]]>([
     'https://mangafire.to/read/mount-hua-sects-genius-phantom-swordsman.lxp4m/en/chapter-16',
     ["Mount Hua Sect's Genius Phantom Swordsman", '16'],
   ],
+  [
+    'Mount Hua Sect’s Genius Phantom Swordsman - Chapter 18 - Kun Manga',
+    'https://kunmanga.com/manga/mount-hua-sects-genius-phantom-swordsman/chapter-18/',
+    ['Mount Hua Sect’s Genius Phantom Swordsman', '18'],
+  ],
+  [
+    'Maxed Strength Necromancer - Chapter 89 - Kun Manga',
+    'https://kunmanga.com/manga/maxed-strength-necromancer/chapter-89/',
+    ['Maxed Strength Necromancer', '89'],
+  ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);
   expect(mockCrashReport.execute).not.toHaveBeenCalled();
