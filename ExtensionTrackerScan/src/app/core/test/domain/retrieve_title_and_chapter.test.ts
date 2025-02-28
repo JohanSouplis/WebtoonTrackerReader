@@ -243,6 +243,11 @@ it.each<[string, string, [string, string]]>([
     ["The Tyrant's Comfort Doll (Side Story) - Side Story 1. 🔞", '83'],
   ],
   [
+    'I Want to Eat You (Cat x Kiran) - episode 3 - Read Free Manga Online at Bato.To',
+    'https://bato.to/title/175722-i-want-to-eat-you-cat-x-kiran/3148092-ch_3',
+    ['I Want to Eat You (Cat x Kiran)', '3'],
+  ],
+  [
     'Manga: The God of War is Leveling Up Chapter - 10-eng-li',
     'https://www.mgeko.cc/reader/en/the-god-of-war-is-leveling-up-chapter-10-eng-li/',
     ['The God of War is Leveling Up', '10'],
@@ -284,6 +289,11 @@ it.each<[string, string, [string, string]]>([
     'Chronicles Of The Demon Faction - Ch.102 - Share Any Manga on MangaPark',
     'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
     ['Chronicles Of The Demon Faction', '102'],
+  ],
+  [
+    'Lightning Degree - Vol.4 Ch.197 - Share Any Manga on MangaPark',
+    'https://mangapark.net/title/98755-en-lightning-degree/9488169-vol-4-ch-197',
+    ['Lightning Degree', '197'],
   ],
   [
     'Tales Of Demons And Gods - Chapter 489.1 - ManhuaPlus',
@@ -399,6 +409,26 @@ it.each<[string, string, [string, string]]>([
     'Maxed Strength Necromancer - Chapter 89 - Kun Manga',
     'https://kunmanga.com/manga/maxed-strength-necromancer/chapter-89/',
     ['Maxed Strength Necromancer', '89'],
+  ],
+  [
+    'Bokura no Kiseki - Volume 16 Chapter 58',
+    'https://battwo.com/chapter/1194780',
+    ['Bokura no Kiseki', '58'],
+  ],
+  [
+    "The Person I Loved Asked Me to Die in My Younger Sister's Place - Volume 3 Chapter 11",
+    'https://battwo.com/chapter/2869191',
+    ["The Person I Loved Asked Me to Die in My Younger Sister's Place", '11'],
+  ],
+  [
+    'Return of the Frozen Player - chapter 8 - HARIMANGA',
+    'https://harimanga.me/manga/return-of-the-frozen-player/chapter-8/',
+    ['Return of the Frozen Player', '8'],
+  ],
+  [
+    'I Saw the Future With the Killer Grand Duke - Chapter 5 - HARIMANGA',
+    'https://harimanga.me/manga/i-saw-the-future-with-the-killer-grand-duke/chapter-5/',
+    ['I Saw the Future With the Killer Grand Duke', '5'],
   ],
 ])('Should retrieve title and chapter', (title, url, result) => {
   expect(retrieveTitleAndChapter.execute(title, url)).toEqual(result);

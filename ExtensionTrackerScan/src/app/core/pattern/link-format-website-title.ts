@@ -195,6 +195,11 @@ export const websiteJson = {
       formatExampleTitle: 'Title (Ch X)',
       formatParseTitle: 't§ (Ch §c§',
     },
+    '5': {
+      formatExampleTitle:
+        'Title - episode X - Read Free Manga Online at Bato.To',
+      formatParseTitle: 't§ - episode §c§ - Read Free Manga Online at Bato.To',
+    },
   },
   mangapark: {
     '1': {
@@ -204,6 +209,10 @@ export const websiteJson = {
     '2': {
       formatExampleTitle: 'Title - Ch.X - Share Any Manga on MangaPark',
       formatParseTitle: 't§ - Ch.§c§ - Share Any Manga on MangaPark',
+    },
+    '3': {
+      formatExampleTitle: 'Title - Vol.Y Ch.X - Share Any Manga on MangaPark',
+      formatParseTitle: 't§ - Vol.§ §Ch.§c§ - Share Any Manga on MangaPark',
     },
   },
   'manhuaplus.com': {
@@ -293,6 +302,24 @@ export const websiteJson = {
     '1': {
       formatExampleTitle: 'Title - Chapter X - Kun Manga',
       formatParseTitle: 't§ - Chapter §c§ - Kun Manga',
+    },
+  },
+
+  'battwo.com': {
+    '1': {
+      formatExampleTitle: 'Title - Volume Y Chapter X',
+      formatParseTitle: 't§ - Volume§ §Chapter §c',
+    },
+  },
+
+  'harimanga.me': {
+    '1': {
+      formatExampleTitle: 'Title - Chapter X - HARIMANGA',
+      formatParseTitle: 't§ - Chapter §c§ - HARIMANGA',
+    },
+    '2': {
+      formatExampleTitle: 'Title - chapter X - HARIMANGA',
+      formatParseTitle: 't§ - chapter §c§ - HARIMANGA',
     },
   },
 };
