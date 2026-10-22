@@ -1,0 +1,228 @@
+- navigation: Scan list Add Website Informations
+- text: Filter by title
+- textbox "Filter by title"
+- checkbox "Favorites Only"
+- text: Favorites Only
+- checkbox "Rating Only"
+- text: Rating Only
+- table:
+  - row "Fav Title Chapter Was read Rating":
+    - columnheader
+    - columnheader "Fav":
+      - button "Fav"
+    - columnheader "Title":
+      - button "Title"
+    - columnheader "Chapter":
+      - button "Chapter"
+    - columnheader "Was read":
+      - button "Was read"
+    - columnheader "Rating":
+      - button "Rating"
+  - row "assets/delete.png Favorited Local 9999 24/01/2025":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Local"
+    - cell "9999"
+    - cell "24/01/2025"
+    - cell:
+      - combobox
+  - 'row "assets/delete.png Favorited Solo Leveling: Ragnarok 38 13/07/2024"':
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - 'cell "Solo Leveling: Ragnarok"'
+    - cell "38"
+    - cell "13/07/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Favorited The Reincarnated Assassin is a Genius Swordsman 50 18/06/2024 8":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Reincarnated Assassin is a Genius Swordsman"
+    - cell "50"
+    - cell "18/06/2024"
+    - cell "8":
+      - combobox "8"
+  - row "assets/delete.png Favorited The Executioner 46 22/11/2024 7":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Executioner"
+    - cell "46"
+    - cell "22/11/2024"
+    - cell "7":
+      - combobox "7"
+  - row "assets/delete.png Favorited Trash of the Count’s Family 136 17/03/2024":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Trash of the Count’s Family"
+    - cell "136"
+    - cell "17/03/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Favorited Pick Me Up, Infinite Gacha 132 02/04/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Pick Me Up, Infinite Gacha"
+    - cell "132"
+    - cell "02/04/2024"
+    - cell "10":
+      - combobox "10"
+  - row "assets/delete.png Favorited Duke Pendragon 120 19/07/2024":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Duke Pendragon"
+    - cell "120"
+    - cell "19/07/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Favorited Dungeon Odyssey 118 03/09/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Dungeon Odyssey"
+    - cell "118"
+    - cell "03/09/2024"
+    - cell "10":
+      - combobox "10"
+  - row "assets/delete.png Favorited I Obtained a Mythic Item 115 10/10/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "I Obtained a Mythic Item"
+    - cell "115"
+    - cell "10/10/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Favorited The Heavenly Demon Wants a Quiet Life 16 12/03/2024 8":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Heavenly Demon Wants a Quiet Life"
+    - cell "16"
+    - cell "12/03/2024"
+    - cell "8":
+      - combobox "8"
+  - row "assets/delete.png Favorited Omniscient Reader’s Viewpoint 246 01/12/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Omniscient Reader’s Viewpoint"
+    - cell "246"
+    - cell "01/12/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Not Favorited The Heavenly Demon Can't Live a Normal Life 142 21/01/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "The Heavenly Demon Can't Live a Normal Life"
+    - cell "142"
+    - cell "21/01/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Not Favorited SSS-Class Suicide Hunter 124 29/01/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "SSS-Class Suicide Hunter"
+    - cell "124"
+    - cell "29/01/2024"
+    - cell "10":
+      - combobox "10"
+  - row "assets/delete.png Not Favorited Worthless Regression 68 05/08/2024 6":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Worthless Regression"
+    - cell "68"
+    - cell "05/08/2024"
+    - cell "6":
+      - combobox "6"
+  - row "assets/delete.png Not Favorited Return of the SSS-Class Ranker 141 09/05/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Return of the SSS-Class Ranker"
+    - cell "141"
+    - cell "09/05/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Not Favorited Return of the Disaster-Class Hero 110 20/02/2024":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Return of the Disaster-Class Hero"
+    - cell "110"
+    - cell "20/02/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Not Favorited The Priest of Corruption 72 25/06/2024 6":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "The Priest of Corruption"
+    - cell "72"
+    - cell "25/06/2024"
+    - cell "6":
+      - combobox "6"
+  - row "assets/delete.png Not Favorited A Dragonslayer's Peerless Regression 23 14/08/2024 5":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "A Dragonslayer's Peerless Regression"
+    - cell "23"
+    - cell "14/08/2024"
+    - cell "5":
+      - combobox "5"
+  - row "assets/delete.png Not Favorited Absolute Sword Sense 117 04/11/2024 7":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Absolute Sword Sense"
+    - cell "117"
+    - cell "04/11/2024"
+    - cell "7":
+      - combobox "7"
+  - row "assets/delete.png Not Favorited My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per... 96 01/06/2024 6":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per..."
+    - cell "96"
+    - cell "01/06/2024"
+    - cell "6":
+      - combobox "6"
+- group:
+  - text: "Items per page:"
+  - combobox "50 Items per page:": "50"
+  - text: 1 – 20 of 20
+  - button "First page" [disabled]
+  - button "Previous page" [disabled]
+  - button "Next page" [disabled]
+  - button "Last page" [disabled]

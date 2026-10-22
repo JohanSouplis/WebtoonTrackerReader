@@ -1,0 +1,2 @@
+console.log: Angular is running in development mode.
+popup: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37

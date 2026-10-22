@@ -1,0 +1,16 @@
+- navigation: Scan list Add Website Informations
+- heading "Propose a new website for the next update" [level=1]
+- textbox "Enter website name"
+- button "Ask" [disabled]
+- heading "Available websites for now" [level=2]
+- text: Filter by website
+- textbox "Filter by website": nothing-here
+- table:
+  - rowgroup
+- group:
+  - text: "Items per page: 10 0 of 0"
+  - button "First page" [disabled]
+  - button "Previous page" [disabled]
+  - button "Next page" [disabled]
+  - button "Last page" [disabled]
+- paragraph: The website url is the one where you read a story and not the one where you can see the list of different stories. Sometimes its different, some websites use redirection for url.

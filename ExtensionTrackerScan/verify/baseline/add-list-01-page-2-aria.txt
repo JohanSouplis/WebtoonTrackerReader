@@ -1,0 +1,36 @@
+- navigation: Scan list Add Website Informations
+- heading "Propose a new website for the next update" [level=1]
+- textbox "Enter website name"
+- button "Ask" [disabled]
+- heading "Available websites for now" [level=2]
+- text: Filter by website
+- textbox "Filter by website"
+- table:
+  - rowgroup:
+    - row "dragontea.ink":
+      - cell "dragontea.ink"
+    - row "toongod.org":
+      - cell "toongod.org"
+    - row "mangadex.org":
+      - cell "mangadex.org"
+    - row "chapmanganato.to":
+      - cell "chapmanganato.to"
+    - row "chapmanganelo.com":
+      - cell "chapmanganelo.com"
+    - row "scantrad-union.com":
+      - cell "scantrad-union.com"
+    - row "manta.net":
+      - cell "manta.net"
+    - row "webtoons.com":
+      - cell "webtoons.com"
+    - row "tappytoon.com":
+      - cell "tappytoon.com"
+    - row "mangapanda.in":
+      - cell "mangapanda.in"
+- group:
+  - text: "Items per page: 10 11 – 20 of 36"
+  - button "First page"
+  - button "Previous page"
+  - button "Next page"
+  - button "Last page"
+- paragraph: The website url is the one where you read a story and not the one where you can see the list of different stories. Sometimes its different, some websites use redirection for url.

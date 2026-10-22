@@ -1,0 +1,2 @@
+console.log: Angular is running in development mode.
+console.log: Notify Mocked

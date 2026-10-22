@@ -1,0 +1,128 @@
+- navigation: Scan list Add Website Informations
+- text: Filter by title
+- textbox "Filter by title"
+- checkbox "Favorites Only"
+- text: Favorites Only
+- checkbox "Rating Only"
+- text: Rating Only
+- table:
+  - row "Fav Title Chapter Was read Rating":
+    - columnheader
+    - columnheader "Fav":
+      - button "Fav"
+    - columnheader "Title":
+      - button "Title"
+    - columnheader "Chapter":
+      - button "Chapter"
+    - columnheader "Was read":
+      - button "Was read"
+    - columnheader "Rating":
+      - button "Rating"
+  - row "assets/delete.png Not Favorited The Priest of Corruption 72 25/06/2024 6":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "The Priest of Corruption"
+    - cell "72"
+    - cell "25/06/2024"
+    - cell "6":
+      - combobox "6"
+  - row "assets/delete.png Favorited The Reincarnated Assassin is a Genius Swordsman 50 18/06/2024 8":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Reincarnated Assassin is a Genius Swordsman"
+    - cell "50"
+    - cell "18/06/2024"
+    - cell "8":
+      - combobox "8"
+  - row "assets/delete.png Not Favorited My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per... 96 01/06/2024 6":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per..."
+    - cell "96"
+    - cell "01/06/2024"
+    - cell "6":
+      - combobox "6"
+  - row "assets/delete.png Not Favorited Return of the SSS-Class Ranker 141 09/05/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Return of the SSS-Class Ranker"
+    - cell "141"
+    - cell "09/05/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Favorited Pick Me Up, Infinite Gacha 132 02/04/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Pick Me Up, Infinite Gacha"
+    - cell "132"
+    - cell "02/04/2024"
+    - cell "10":
+      - combobox "10"
+  - row "assets/delete.png Favorited Trash of the Count’s Family 136 17/03/2024":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Trash of the Count’s Family"
+    - cell "136"
+    - cell "17/03/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Favorited The Heavenly Demon Wants a Quiet Life 16 12/03/2024 8":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Heavenly Demon Wants a Quiet Life"
+    - cell "16"
+    - cell "12/03/2024"
+    - cell "8":
+      - combobox "8"
+  - row "assets/delete.png Not Favorited Return of the Disaster-Class Hero 110 20/02/2024":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Return of the Disaster-Class Hero"
+    - cell "110"
+    - cell "20/02/2024"
+    - cell:
+      - combobox
+  - row "assets/delete.png Not Favorited SSS-Class Suicide Hunter 124 29/01/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "SSS-Class Suicide Hunter"
+    - cell "124"
+    - cell "29/01/2024"
+    - cell "10":
+      - combobox "10"
+  - row "assets/delete.png Not Favorited The Heavenly Demon Can't Live a Normal Life 142 21/01/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "The Heavenly Demon Can't Live a Normal Life"
+    - cell "142"
+    - cell "21/01/2024"
+    - cell "9":
+      - combobox "9"
+- group:
+  - text: "Items per page:"
+  - combobox "10 Items per page:": "10"
+  - text: 11 – 20 of 20
+  - button "First page"
+  - button "Previous page"
+  - button "Next page" [disabled]
+  - button "Last page" [disabled]

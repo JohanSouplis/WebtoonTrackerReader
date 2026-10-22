@@ -1,0 +1,48 @@
+- navigation: Scan list Add Website Informations
+- text: Filter by title
+- textbox "Filter by title": sss
+- checkbox "Favorites Only"
+- text: Favorites Only
+- checkbox "Rating Only"
+- text: Rating Only
+- table:
+  - row "Fav Title Chapter Was read Rating":
+    - columnheader
+    - columnheader "Fav":
+      - button "Fav"
+    - columnheader "Title":
+      - button "Title"
+    - columnheader "Chapter":
+      - button "Chapter"
+    - columnheader "Was read":
+      - button "Was read"
+    - columnheader "Rating":
+      - button "Rating"
+  - row "assets/delete.png Not Favorited Return of the SSS-Class Ranker 141 09/05/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Return of the SSS-Class Ranker"
+    - cell "141"
+    - cell "09/05/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Not Favorited SSS-Class Suicide Hunter 124 29/01/2024 10":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "SSS-Class Suicide Hunter"
+    - cell "124"
+    - cell "29/01/2024"
+    - cell "10":
+      - combobox "10"
+- group:
+  - text: "Items per page:"
+  - combobox "10 Items per page:": "10"
+  - text: 1 – 2 of 2
+  - button "First page" [disabled]
+  - button "Previous page" [disabled]
+  - button "Next page" [disabled]
+  - button "Last page" [disabled]

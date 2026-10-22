@@ -1,0 +1,78 @@
+- navigation: Scan list Add Website Informations
+- text: Filter by title
+- textbox "Filter by title"
+- checkbox "Favorites Only"
+- text: Favorites Only
+- checkbox "Rating Only"
+- text: Rating Only
+- table:
+  - row "Fav Title Chapter Was read Rating":
+    - columnheader
+    - columnheader "Fav":
+      - button "Fav"
+    - columnheader "Title":
+      - button "Title"
+    - columnheader "Chapter":
+      - button "Chapter"
+    - columnheader "Was read":
+      - button "Was read"
+    - columnheader "Rating":
+      - button "Rating"
+  - row "assets/delete.png Favorited Local 9999 24/01/2025":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Local"
+    - cell "9999"
+    - cell "24/01/2025"
+    - cell:
+      - combobox
+  - row "assets/delete.png Favorited Omniscient Reader’s Viewpoint 246 01/12/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "Omniscient Reader’s Viewpoint"
+    - cell "246"
+    - cell "01/12/2024"
+    - cell "9":
+      - combobox "9"
+  - row "assets/delete.png Favorited The Executioner 46 22/11/2024 7":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "The Executioner"
+    - cell "46"
+    - cell "22/11/2024"
+    - cell "7":
+      - combobox "7"
+  - row "assets/delete.png Not Favorited Absolute Sword Sense 117 04/11/2024 7":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Not Favorited":
+      - img "Not Favorited"
+    - cell "Absolute Sword Sense"
+    - cell "117"
+    - cell "04/11/2024"
+    - cell "7":
+      - combobox "7"
+  - row "assets/delete.png Favorited I Obtained a Mythic Item 115 10/10/2024 9":
+    - cell "assets/delete.png":
+      - img "assets/delete.png"
+    - cell "Favorited":
+      - img "Favorited"
+    - cell "I Obtained a Mythic Item"
+    - cell "115"
+    - cell "10/10/2024"
+    - cell "9":
+      - combobox "9"
+- group:
+  - text: "Items per page:"
+  - combobox "5 Items per page:": "5"
+  - text: 1 – 5 of 20
+  - button "First page" [disabled]
+  - button "Previous page" [disabled]
+  - button "Next page"
+  - button "Last page"
