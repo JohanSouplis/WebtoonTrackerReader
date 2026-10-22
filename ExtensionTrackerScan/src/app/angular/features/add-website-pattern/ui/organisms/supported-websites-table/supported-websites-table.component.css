@@ -49,3 +49,12 @@ ds-search-field {
 .available-websites tr:hover {
   background-color: #ddd;
 }
+
+.filter-info {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+  text-align: left;
+  margin-left: 20px;
+  margin-right: 20px;
+}

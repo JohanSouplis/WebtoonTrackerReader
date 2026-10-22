@@ -1,14 +1,8 @@
 <div class="new-website">
-  <h1>Propose a new website for the next update</h1>
   <app-website-proposal-form
     [form]="form"
     [isProposalSent]="isProposalSent()"
     (proposed)="propose($event)"
   />
   <app-supported-websites-table [websites]="supportedWebsites" />
-  <p class="filter-info">
-    The website url is the one where you read a story and not the one where you
-    can see the list of different stories. Sometimes its different, some
-    websites use redirection for url.
-  </p>
 </div>

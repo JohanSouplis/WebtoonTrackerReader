@@ -5,6 +5,16 @@ import { WebsiteProposalFormComponent } from './website-proposal-form.component'
 import { WebsiteProposalForm } from './website-proposal-form.types';
 
 describe('WebsiteProposalFormComponent', () => {
+  it('should title the form as a proposal for the next update', async () => {
+    await renderForm({ isProposalSent: false });
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Propose a new website for the next update',
+      }),
+    ).toBeInTheDocument();
+  });
+
   it('should keep Ask disabled when no website is typed', async () => {
     await renderForm({ isProposalSent: false });
 
