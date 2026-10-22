@@ -115,6 +115,21 @@ describe('ScanListStore', () => {
     expect(store.count()).toBe(0);
   });
 
+  it('should keep the typed title when Favorites only is pressed', () => {
+    const store = new ScanListStore();
+    store.showLibrary(TWELVE_SCANS);
+    store.filter({ title: 'zzzz' });
+
+    store.filter({ favoritesOnly: true });
+
+    expect(store.filters()).toEqual({
+      title: 'zzzz',
+      favoritesOnly: true,
+      ratedOnly: false,
+    });
+    expect(store.view()).toEqual({ kind: 'no-match', searchedTitle: 'zzzz' });
+  });
+
   it('should show the whole library again when the filters are cleared', () => {
     const store = new ScanListStore();
     store.showLibrary(TWELVE_SCANS);

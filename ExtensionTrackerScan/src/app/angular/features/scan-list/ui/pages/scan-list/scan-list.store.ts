@@ -62,8 +62,8 @@ export class ScanListStore {
     this.library.set(snapshots.map(toScanRow));
   }
 
-  filter(filters: ScanFilters): void {
-    this.shownFilters.set(filters);
+  filter(change: Partial<ScanFilters>): void {
+    this.shownFilters.update((filters) => ({ ...filters, ...change }));
     this.backToFirstPage();
   }
 
