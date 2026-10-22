@@ -1,0 +1,89 @@
+# UI et atomic design
+
+Source canonique pour : les 5 niveaux de composants, leur critère de classement, leur emplacement, l'usage
+d'Angular Material, les règles de composant.
+
+## Les 5 niveaux
+
+Le niveau ne se décide pas à la taille ni à la complexité visuelle. Il se décide sur des critères
+structurels qu'un relecteur vérifie dans le fichier.
+
+| Niveau | Critère décidable | Emplacement |
+|---|---|---|
+| **atom** | Feuille : aucun composant du projet dans son template. Aucune injection. Porte une logique propre (état, formatage, émission). | `angular/design-system/atoms/` |
+| **molecule** | Assemble un petit groupe de contrôles qui vont ensemble (un libellé et son champ). **Zéro code métier** : aucun type du core, aucune règle, aucun ViewModel. Aucune injection. | `angular/design-system/molecules/` |
+| **organism** | Compose molecules, atoms et Material. **Connaît le ViewModel.** **N'injecte rien** : tout entre par `input()`, tout sort par `output()`. | `features/<f>/ui/organisms/` |
+| **template** | Définit la disposition d'un écran (zones, `ng-content`). Zéro donnée, zéro logique : se rend à vide sans erreur. | `features/<f>/ui/templates/` |
+| **page** | **Seule routée**, seule à **injecter** store, use-case ou port. Aucun markup métier : elle branche le template et les organisms. | `features/<f>/ui/pages/` |
+
+Trois questions suffisent à classer : *as-tu un composant enfant du projet ?* *importes-tu un type du core
+ou un ViewModel ?* *injectes-tu quelque chose ?*
+
+Exemples tirés de l'extension :
+
+| Composant | Niveau | Raison |
+|---|---|---|
+| `star-toggle` | atom | Une image cliquable `aria-pressed`, `input()` `checked`, `output()` `toggled`. Ne sait pas ce qu'est un favori. |
+| `truncated-text` | atom | Coupe un texte au-delà d'une longueur et pose `matTooltip` avec le texte entier. |
+| `search-field` | molecule | `mat-form-field`, `mat-label` et `input` assemblés. Émet le texte saisi, nettoyé. Sert aux deux onglets. |
+| `scan-table` | organism | Affiche des `ScanRow`, émet suppression, favori, note. |
+| `scan-filters` | organism | Champ de recherche et cases « Favorites Only », « Rating Only ». Émet un `ScanFilters`. |
+| `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
+
+## Atoms et molecules sont le design-system, et rien d'autre
+
+- Tous les atoms et toutes les molecules vivent dans `angular/design-system/`. Ils ne contiennent aucun code
+  métier, et `design-system/` n'importe rien de `features/`, de `shell/`, ni du core.
+- Un composant qui connaît un ViewModel, une règle ou un type du core n'est pas une molecule. C'est un
+  organism, il vit dans `features/<f>/ui/organisms/`.
+- **Tout atom et toute molecule a une spec de comportement** ([`testing.md`](testing.md)).
+- Un organism ou un template utilisé par 2 features ou plus remonte dans `shared/ui/`, jamais dans
+  `design-system/`.
+
+## Angular Material s'appelle directement
+
+Une page, un organism ou une molecule appelle directement `mat-table`, `mat-paginator`, `mat-select`,
+`mat-checkbox`, `matTooltip`, comme une balise HTML. **Le design-system ne réenveloppe pas Material.**
+
+Un composant du design-system ne se crée que s'il ajoute quelque chose : un assemblage réutilisé, une règle
+d'accessibilité, une logique d'affichage. Un fichier qui ne fait que retransmettre les inputs d'un composant
+Material est du bruit : supprime-le.
+
+```ts
+// ❌ atom qui ne fait que réexposer mat-checkbox
+@Component({ selector: "ds-checkbox", imports: [MatCheckboxModule] }) // <mat-checkbox [checked]="checked()" />
+// ✅ appel direct dans l'organism
+imports: [MatCheckboxModule]; //                                         <mat-checkbox (change)="...">Favorites Only</mat-checkbox>
+// ✅ molecule qui apporte l'assemblage libellé + champ + nettoyage de la saisie
+imports: [SearchFieldComponent]; //                                      <ds-search-field label="Filter by title" (searched)="..." />
+```
+
+**Du HTML natif mis en forme n'est pas un composant.** Un titre, un paragraphe d'aide, un message de succès
+s'écrivent en balises dans le composant qui les affiche.
+
+- Un composant du design-system couvre le besoin courant, et rien de plus : aucun input ajouté « au cas où ».
+- Un composant du design-system qui couvre presque le besoin s'étend, il ne se duplique pas.
+- Le jugement « ce composant ajoute-t-il autre chose que l'enveloppe ? » se tient en revue.
+
+## Règles de composant
+
+- **Le template ne contient pas de logique.** Pas d'appel de méthode dans une interpolation ni dans un
+  binding. Ce qui se calcule est un `computed` ou un champ du ViewModel. Un pipe Angular (`date`) est admis.
+
+```html
+<!-- ❌ méthode appelée deux fois par cycle de détection -->
+<a [matTooltip]="truncateTitle(scan.title).isTruncated ? scan.title : ''">
+  {{ truncateTitle(scan.title).truncated }}
+</a>
+<!-- ✅ l'atom porte la troncature, la date est formatée par un pipe -->
+<ds-truncated-text [text]="row.title" [maxLength]="100" />
+{{ row.readAt | date: "dd/MM/yyyy" }}
+```
+
+- Un élément cliquable est un `<button>` ou un `<a href>`. ❌ `<img (click)="delete(scan)">`,
+  ❌ `<div (click)="selectButton('home')">`.
+- Un organism, une molecule et un atom n'accèdent ni au routeur, ni à `window`, ni à un use-case. Ils
+  émettent un `output()`, la page décide. ❌ `window.open(url, '_blank')` dans le composant du tableau.
+  ✅ `<a [href]="row.url" target="_blank">`, qui ne demande aucun code.
+- Pas d'`input()` optionnel qui change le comportement d'un composant. Deux comportements font deux
+  composants, ou un slot.

@@ -1,0 +1,103 @@
+# Tests du core
+
+Source canonique pour : les tests de use-case, le type de double par port, les tests de gateway, la
+disposition des specs. Les tests Angular : [`../front/testing.md`](../front/testing.md).
+
+## Principe
+
+Chaque comportement se teste à la couche qui le porte, avec le double adapté à cette couche. Avant d'écrire
+un test, nomme la ligne de production qui le fait passer du rouge au vert. Si un test existant la couvre
+déjà, complète-le au lieu d'en écrire un second.
+
+| Couche | Type de test | Double |
+|---|---|---|
+| Use-case | Jest pur, par `execute()`, traverse l'agrégat et les Value Objects | gateway in-memory selon la nature du port |
+| Gateway Chrome | Jest contre un faux `chrome.storage.local` en mémoire | aucun sous le gateway |
+| Gateway Discord | Jest, `fetch` remplacé par un enregistreur | aucun |
+| Domaine (agrégat, Value Object, parser) | par le use-case qui l'utilise | aucun |
+
+## Tests de use-case
+
+- **Chaque règle métier a un test qui part de `execute()`**, avec le cas qui passe et le cas qui échoue.
+- Le test construit le use-case avec `new` et ses gateways in-memory. Aucun `container.get`, aucun
+  `TestBed`, aucun `jest.mock` de module.
+- Il assert sur ce que l'appelant observe : la valeur retournée, l'état relu par `scanRepository.load()`,
+  les appels reçus par un port de commande.
+- Le **type de double suit la nature du port** :
+  - port de **lecture** (`ScanRepository`, `BrowserHistoryPort`, `ClockPort`) : le gateway in-memory, on
+    assert sur l'état obtenu ;
+  - port de **commande** (`CrashReporterPort`, `WebsiteProposalPort`) : le gateway in-memory qui enregistre
+    les appels, on assert sur la liste enregistrée. L'interaction est le contrat observable.
+- Le gateway in-memory reste fidèle au contrat du gateway réel : unicité par titre, rejet en cas d'erreur.
+- L'heure vient de `FixedClock`. Un test ne dépend jamais de l'heure réelle.
+- Couvre les cas limites et les échecs métier, pas seulement le cas nominal.
+
+```ts
+// ❌ mock ad hoc, et un assert qui ne lit que le mock
+class MockCrashReport implements CrashReport {
+  execute = jest.fn((url: string, error?: string) => { console.log(`Message send mocked : ${url}`); });
+}
+
+// ✅ gateway in-memory, assert sur l'effet observable
+it("should report the page when its title matches no pattern of a supported website", async () => {
+  const crashReporter = new InMemoryCrashReporter();
+  const recordVisitedPage = new RecordVisitedPageUseCase(
+    new InMemoryScanRepository(),
+    crashReporter,
+    new FixedClock(),
+  );
+  const page = {
+    pageTitle: "Unexpected title",
+    url: "https://toonily.com/webtoon/x/chapter-1/",
+  };
+
+  await recordVisitedPage.execute(page);
+
+  expect(crashReporter.reportedPages).toEqual([page]);
+});
+```
+
+## Le catalogue des sites se teste par un tableau de cas
+
+La spec de `RecordVisitedPageUseCase` porte un `it.each` : un titre de page réel, son URL, le titre et le
+chapitre attendus. Chaque site du catalogue y a au moins une ligne. Ajouter un site ajoute une ligne. Le
+tableau actuel de `retrieve_title_and_chapter.test.ts` en est la base.
+
+## Ce qu'on ne teste pas seul
+
+- L'agrégat, les Value Objects et `PageTitleParser` se testent par les use-cases qui les appellent. Une
+  méthode qu'aucun use-case n'atteint n'a pas lieu d'exister.
+- Exception : un Value Object construit à la frontière (par un point d'entrée ou un gateway) a une spec de
+  construction. Elle teste la valeur limite acceptée et la première refusée.
+- Les getters, les types, les mécaniques d'inversify.
+
+## Tests de gateway
+
+- Le gateway Chrome se teste contre un faux `chrome.storage.local` en mémoire, posé sur `globalThis.chrome`.
+  On assert l'aller-retour (`save` puis `load`) et la relecture du format stocké par la version publiée.
+- Le gateway Discord se teste en remplaçant `fetch` par un enregistreur : on assert l'URL et le corps envoyé,
+  et la traduction d'une réponse en erreur.
+- Aucun test n'appelle le vrai Discord ni un vrai site. ❌ `rest.recupererInformationsWebtoon('https://...')`.
+
+## Disposition et nommage
+
+- Fichier : `<fichier-testé>.spec.ts`, à côté du fichier testé.
+- **Un use-case, une spec, un seul `describe` plat.** Pas de `describe` imbriqué.
+- Tous les `it` d'abord, les fonctions de construction après eux. Une donnée partagée par plusieurs specs
+  vit dans un `*.fixture.ts` à côté d'elles.
+- Libellé : `should <comportement observable> when <condition>`, en anglais. Il nomme une règle métier,
+  jamais une méthode ni une exception générique.
+
+```ts
+// ✅ it("should keep the latest chapter when an older reading of the same scan arrives")
+// ❌ it("with a different chapter, the chapter is updated")
+// ❌ it("test")
+```
+
+## Exécuter
+
+```bash
+cd ExtensionTrackerScan
+npx jest
+npx jest src/app/core/use-cases/record-visited-page.use-case.spec.ts
+```
