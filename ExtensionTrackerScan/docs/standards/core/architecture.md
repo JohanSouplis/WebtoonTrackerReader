@@ -6,8 +6,8 @@ racine de composition. Le pattern use-case : [`use-case.md`](use-case.md). Le mo
 ## Contexte
 
 Le core (`src/app/core/`) est le métier de l'extension, en TypeScript sans framework, en architecture
-hexagonale. Trois points d'entrée le consomment : `background.ts`, `content-script.ts` et l'application
-Angular. Dans cette extension, `background.ts` joue le rôle du back : il écrit la bibliothèque de scans à
+hexagonale. Quatre points d'entrée le consomment : `background.ts`, `content-script.ts`, `offscreen.ts` et
+l'application Angular. Dans cette extension, `background.ts` joue le rôle du back : il écrit la bibliothèque de scans à
 chaque page lue et à chaque import de l'historique.
 
 ## Les couches
@@ -50,23 +50,32 @@ export class RecordVisitedPageUseCase {
 src/
   background.ts            point d'entrée : écoute les événements Chrome, appelle les use-cases
   content-script.ts        point d'entrée : envoie les PageSignals de la page au service worker
+  offscreen.ts             point d'entrée : récupère une page et rend ses PageSignals au service worker
+  page-signals-reader.ts   lit les PageSignals d'un Document, pour le content script et le document offscreen
   page-signals-message.ts  frontière : réduit le message du content script en PageSignals
+  cover-backfill-message.ts frontière : la demande de la popup « cherche les couvertures de ces scans »
   app/core/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · series-key.ts · chapter.ts · rating.ts
                            reading.ts · parsed-page.ts · page-title-parser.ts · website-patterns.ts
                            unsupported-website-page-parser.ts · page-lexicon.ts
+                           cover.ts · cover-search.ts · series-page.ts · site.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · toggle-favorite.use-case.ts · rate-scan.use-case.ts
-                           propose-website.use-case.ts         (chacun avec son .spec.ts à côté)
+                           propose-website.use-case.ts · record-cover.use-case.ts
+                           backfill-covers.use-case.ts          (chacun avec son .spec.ts à côté)
     ports/                 scan-repository.port.ts · browser-history.port.ts · clock.port.ts
                            crash-reporter.port.ts · website-proposal.port.ts
+                           cover-repository.port.ts · cover-image.port.ts · page-reader.port.ts
     gateways/              chrome-storage-scan-repository.gateway.ts · chrome-browser-history.gateway.ts
                            system-clock.gateway.ts · discord-crash-reporter.gateway.ts
-                           discord-website-proposal.gateway.ts
+                           discord-website-proposal.gateway.ts · chrome-storage-cover-repository.gateway.ts
+                           chrome-cover-image.gateway.ts · chrome-offscreen-page-reader.gateway.ts
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
                            fixed-clock.gateway.ts · in-memory-crash-reporter.gateway.ts
                            in-memory-website-proposal.gateway.ts · dev-scans.ts
+                           in-memory-cover-repository.gateway.ts · dev-covers.ts
+                           in-memory-web.gateway.ts            (pages et images, pour les deux ports)
 ```
 
 Un dossier n'existe que s'il a du contenu. Le sous-dossier `src/` actuel (`core/src/domain`) disparaît avec la
@@ -104,12 +113,24 @@ chapitre qu'après le chargement. Enregistrer deux fois la même lecture ne chan
 `background.ts` réduit le message (`unknown`) en `PageSignals` dans `page-signals-message.ts`, y compris le
 décodage des entités HTML que certains sites laissent dans leur JSON-LD (`I&#8217;ll`).
 
+Le content script et `offscreen.ts` lisent une page par la même fonction, `readPageSignals(document, url)` de
+`page-signals-reader.ts` : la page lue en direct et la page récupérée par le service worker donnent les mêmes
+signaux. Le service worker n'a pas de DOM. Pour lire une page qu'il récupère (la page d'une série), il passe par
+le document offscreen (`chrome.offscreen`, raison `DOM_PARSER`), via le gateway
+`chrome-offscreen-page-reader.gateway.ts`.
+
+La popup ne télécharge aucune image. Elle demande au service worker de chercher les couvertures des lignes
+affichées sans couverture (`cover-backfill-message.ts`), puis relit les couvertures. Le service worker est le seul
+à écrire les couvertures.
+
 ## Gateways
 
 - Un gateway implémente un port et ne connaît que deux mondes : la technologie et le domaine.
 - **L'anti-corruption est dans le gateway.** Le gateway Chrome relit le format déjà stocké chez les
   utilisateurs : clé `scans`, dates au format `Date.toString()`, `rating` absent. Il le traduit en objets
   du domaine. Le domaine ne se défend jamais contre une donnée sale.
+- **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey>`, hors de la clé `scans` : un
+  enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
 - **Le format stocké dans `chrome.storage.local` est un contrat public.** Les utilisateurs de la version
   publiée doivent relire leurs données après une mise à jour. Un changement de format ajoute la lecture de
   l'ancien format dans le gateway, il ne casse jamais les données existantes.

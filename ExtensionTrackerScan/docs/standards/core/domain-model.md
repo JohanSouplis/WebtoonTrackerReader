@@ -32,6 +32,9 @@ comparaison) est un Value Object.
   ignorée) ;
 - une lecture plus ancienne que la lecture enregistrée ne remplace pas celle-ci ;
 - une note est un entier de 1 à 10 ;
+- un scan garde l'adresse de la page de sa série (`seriesUrl`) que la lecture la plus récente a lue ; une
+  lecture sans cette adresse (l'import de l'historique) garde l'adresse connue si elle vient du même site,
+  l'oublie sinon ;
 - noter, mettre en favori ou supprimer un scan absent échoue par une erreur du domaine.
 
 Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enregistre par `snapshot()`.
@@ -61,6 +64,42 @@ séries.**
   n'écrase rien. Un alias d'une autre langue (`Jeonjijeok Dokja Sijeom`) ou une reformulation
   (`Return of the Blossoming Blade`) demande une source d'alias, pas une règle sur le titre.
 - Toute modification de cette règle se mesure avec `npm run eval:identity` ([`testing.md`](testing.md)).
+
+## La page d'une série
+
+`seriesPageUrlOf(page, title)` (`series-page.ts`) trouve sur une page de chapitre le lien vers la page de sa série,
+dans l'ordre : un élément du fil d'Ariane JSON-LD (`ListItem`), un lien du fil d'Ariane, un lien de la page. Le
+texte du lien doit désigner la même série (`SeriesKey.match()` rend `same`), et le lien reste sur le même site,
+sans être la page elle-même ni l'accueil. Sinon la page n'a pas de lien de série : on ne devine jamais
+l'adresse depuis le chemin de l'URL.
+
+## La couverture d'une série
+
+Une couverture remplace le monogramme à gauche du titre. Une image fausse (une page du chapitre, un logo, une
+bannière) coûte plus cher que pas d'image : **dans le doute, le monogramme reste.**
+
+- `Cover` (`cover.ts`) est l'état connu de la couverture d'une série : `found` (une `Thumbnail` WebP en data URL,
+  sa source `page` ou `series-page`, sa date) ou `missing` (la date de l'essai). Une série sans état n'a jamais
+  été cherchée.
+- Une série se cherche si elle n'a pas d'état, ou si son dernier essai manqué date de 7 jours ou plus
+  (`isCoverDue`). Une couverture trouvée ne se cherche plus.
+- `CoverSearch` (`cover-search.ts`) est la machine à états d'une recherche. Elle dit l'étape suivante
+  (télécharger une image, lire une page, terminé) et le use-case exécute l'étape par un port. Les règles
+  vivent dans la machine, les ports restent visibles dans `execute()`.
+- **Les candidates d'une page**, dans l'ordre : `og:image`, `twitter:image`, `link[rel=image_src]`, l'image
+  JSON-LD d'un nœud `ComicSeries`, `ComicStory` ou `Book`, puis une `<img>` dont le texte alternatif désigne la
+  série. Sur une page de chapitre, ce texte est exactement le titre (`SeriesKey.equals()`) : les pages du
+  chapitre ont un texte comme `Titre Chapter 248 Page 1`. Sur la page de la série, le texte peut contenir le
+  titre, sans numéro ni mot de page ou de chapitre autour.
+- **Une image est acceptée** si elle est en portrait (largeur sur hauteur entre 0,5 et 0,9) et large d'au moins
+  100 px. La première acceptée gagne.
+- Si aucune candidate de la page lue n'est acceptée, la recherche lit une fois la page de la série et applique
+  les mêmes règles. Une image déjà essayée ne se télécharge pas deux fois.
+- L'image se télécharge avec la page où elle a été trouvée en `Referer`, sauf vers un hôte qui sert un leurre à
+  un `Referer` étranger (`uploads.mangadex.org` hors de `mangadex.org`) : aucun `Referer` alors.
+- `BackfillCoversUseCase` cherche au plus 10 séries par ouverture de la popup, parmi les lignes affichées sans
+  couverture, une requête à la fois par site. Il part de la page de la série si le scan la connaît, sinon de la
+  dernière page lue.
 
 ## Tell-Don't-Ask
 

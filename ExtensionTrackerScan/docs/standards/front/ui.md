@@ -26,6 +26,7 @@ Exemples tirés de l'extension :
 | `star-toggle` | atom | Un `<button>` `aria-pressed` avec une étoile, `input()` `checked` et `label`, `output()` `toggled`. Ne sait pas ce qu'est un favori. |
 | `truncated-text` | atom | Coupe un texte au-delà d'une longueur et pose `matTooltip` avec le texte entier. |
 | `monogram` | atom | Tire d'un texte ses initiales et une teinte stable. Décoratif, `aria-hidden`. |
+| `cover` | atom | La vignette d'une couverture à la taille du monogramme, qui apparaît en fondu. Décorative, `alt` vide : le titre est à côté. |
 | `relative-date` | atom | Affiche « 3 mo ago » depuis une date et `now`, et pose `matTooltip` avec la date exacte. |
 | `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
 | `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), émet suppression, favori, note, page. |

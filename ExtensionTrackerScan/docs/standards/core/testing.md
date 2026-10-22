@@ -84,6 +84,13 @@ par `SeriesKey.match()`, le chapitre par sa valeur. Une lecture fausse (mauvaise
 le pire résultat, avant la lecture manquée. Les pages de roman et les épisodes sans numéro doivent rester
 ignorés.
 
+## La couverture d'une série se teste sur des pages réelles
+
+La spec de `BackfillCoversUseCase` rejoue `cover-pages.fixture.json` : des pages de chapitre réelles et la page de
+leur série, avec les images candidates, leur taille mesurée et l'image attendue, étiquetée à la main sur une
+planche contact. Une image fausse (une page du chapitre, un logo, une bannière) est le pire résultat, avant la
+couverture manquée : la spec garde zéro image fausse. Une nouvelle règle de sélection s'y mesure.
+
 ## L'identité d'une série se mesure sur un corpus
 
 `npm run eval:identity` rejoue un corpus étiqueté de paires de titres (`eval/identity/`) : un scan suivi, puis

@@ -20,15 +20,16 @@ Ces standards s'appliquent au code neuf. On ne migre pas l'existant sans demande
 « tant qu'on y est » dans une PR fonctionnelle. Aucune feature n'est encore conforme. Appuie-toi sur ces docs,
 pas sur une feature voisine.
 
-## Les trois contextes d'exécution
+## Les contextes d'exécution
 
-L'extension tourne dans trois contextes qui partagent un seul métier, le **core** (`src/app/core/`).
+L'extension tourne dans quatre contextes qui partagent un seul métier, le **core** (`src/app/core/`).
 
 | Contexte | Point d'entrée | Rôle |
 |---|---|---|
 | Service worker | `src/background.ts` | Rôle « back » : reçoit les pages visitées, importe l'historique, appelle les use-cases |
 | Page web lue | `src/content-script.ts` | Envoie les signaux de la page (titre, URL, `og:title`, `h1`, JSON-LD...) au service worker |
 | Popup et page complète | `src/main.ts` (Angular 19) | Affiche la liste des scans, propose un site |
+| Document offscreen | `src/offscreen.ts` | Lit une page récupérée par le service worker, qui n'a pas de DOM, et lui rend ses `PageSignals` |
 
 Le core se lit avec les docs `core/`. Angular se lit avec les docs `front/`.
 

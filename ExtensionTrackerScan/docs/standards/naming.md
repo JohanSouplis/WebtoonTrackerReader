@@ -27,13 +27,18 @@ pas un synonyme.
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
-| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée | `pageData`, `metadata`, `message` |
+| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée, images et liens | `pageData`, `metadata`, `message` |
 | `WebsitePattern` | Le format de titre d'un site, qui permet d'en extraire scan et chapitre | `parser`, `websiteJson` |
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
 | `VerifiedWebsite` | Un site dont `npm run eval:parser` lit exactement une vraie page de chapitre capturée, ou un site vivant du catalogue | `supportedWebsites` pour ce sens |
 | `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |
 | `ChapterMention` | Le numéro de chapitre qu'un texte de la page annonce, avec le texte qui l'entoure | `marker`, `match` |
 | `WebsiteProposal` | Un site que le lecteur propose d'ajouter | `notification` pour ce sens |
+| `seriesUrl` | L'adresse de la page d'une série, qui liste ses chapitres | `seriesLink`, `mangaUrl` |
+| `Cover` | L'état connu de la couverture d'une série : `found` ou `missing` | `image`, `poster`, `thumbnail` pour ce sens |
+| `Thumbnail` | La vignette WebP d'une couverture, en data URL, stockée par l'extension | `coverUrl`, `imageData` |
+| `CoverCandidate` | Une image d'une page qui pourrait être la couverture, avec le `Referer` à envoyer | `imageCandidate`, `pic` |
+| `CoverSearch` | La recherche de la couverture d'une série, étape par étape | `coverFinder`, `coverLookup` |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.
 

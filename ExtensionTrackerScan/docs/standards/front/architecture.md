@@ -34,7 +34,7 @@ complète dans un onglet. Toute écriture métier est un use-case du core
 ```
 src/app/angular/
   app.config.ts · app.routes.ts
-  injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, FULL_PAGE_NAVIGATOR)
+  injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
     shell.providers.ts
     service/   full-page-navigator.port.ts
@@ -42,12 +42,14 @@ src/app/angular/
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
-    atoms/      star-toggle/ · truncated-text/ · monogram/ · relative-date/
+    atoms/      star-toggle/ · truncated-text/ · monogram/ · cover/ · relative-date/
     molecules/  search-field/
   features/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
       service/  scan-row.vm.ts · scan-list-view.vm.ts · scan-filters.rules.ts · scan-sort.rules.ts
+                cover-backfill.port.ts
+      gateways/ chrome-runtime-cover-backfill.gateway.ts · in-memory-cover-backfill.gateway.ts
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
         organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/
