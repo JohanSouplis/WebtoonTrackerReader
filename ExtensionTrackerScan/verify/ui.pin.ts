@@ -82,9 +82,9 @@ async function showAllRows(page: Page) {
 }
 
 async function searchTitle(page: Page, text: string) {
-  await page
-    .getByRole('searchbox', { name: 'Filter by title' })
-    .pressSequentially(text);
+  const field = page.getByRole('searchbox', { name: 'Filter by title' });
+  await field.pressSequentially(text);
+  await expect(field).toHaveValue(text);
 }
 
 function toggle(page: Page, name: string): Locator {
@@ -219,6 +219,9 @@ test.describe('scan list', () => {
       page.getByRole('heading', { name: 'No reads match' }),
     ).toBeVisible();
     await expect(page.getByText('0 series')).toBeVisible();
+    await expect(
+      page.getByText('Nothing in your library for “zzzz”.'),
+    ).toBeVisible();
     await pin(page, 'scan-empty-01-no-match');
     await page.getByRole('button', { name: 'Clear filters' }).click();
     await expect(library(page).getByRole('listitem')).toHaveCount(10);
