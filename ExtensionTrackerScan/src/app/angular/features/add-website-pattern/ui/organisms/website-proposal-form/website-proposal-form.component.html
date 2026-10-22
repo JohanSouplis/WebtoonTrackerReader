@@ -1,0 +1,14 @@
+<form [formGroup]="form()" (ngSubmit)="propose()">
+  <input
+    id="website"
+    formControlName="website"
+    type="text"
+    placeholder="Enter website name"
+  />
+  <button type="submit" [disabled]="isProposalSent() || form().invalid">
+    Ask
+  </button>
+</form>
+@if (isProposalSent()) {
+  <div class="success-message">The website has been proposed successfully</div>
+}
