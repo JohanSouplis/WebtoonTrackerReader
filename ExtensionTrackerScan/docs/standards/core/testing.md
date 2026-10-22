@@ -75,6 +75,14 @@ lectures exactes, fausses, manquées et les faux positifs. Lance-le avant et apr
 l'analyse générique et cite les deux résultats dans la PR. Une page ajoutée au corpus après une modification
 sert de contrôle : ne règle pas l'analyse sur elle dans la même PR.
 
+Le même script rejoue aussi des pages de chapitre réelles, capturées avec Chromium
+(`eval/parser/captures/*.json`) : titre stabilisé, URL finale, `og:title`, `h1`, fil d'Ariane, JSON-LD,
+option de chapitre sélectionnée, et la série et le chapitre lus sur la page. Chaque page passe deux fois :
+titre et URL seuls (l'import de l'historique), puis tous les signaux (le content script). Le titre se compare
+par `SeriesKey.match()`, le chapitre par sa valeur. Une lecture fausse (mauvaise série ou mauvais chapitre) est
+le pire résultat, avant la lecture manquée. Les pages de roman et les épisodes sans numéro doivent rester
+ignorés.
+
 ## L'identité d'une série se mesure sur un corpus
 
 `npm run eval:identity` rejoue un corpus étiqueté de paires de titres (`eval/identity/`) : un scan suivi, puis

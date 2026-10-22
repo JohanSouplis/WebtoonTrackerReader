@@ -2,6 +2,7 @@ import { parsePage } from '../../src/app/core/domain/page-title-parser';
 import { VisitedPage } from '../../src/app/core/domain/parsed-page';
 import { parseUnsupportedWebsitePage } from '../../src/app/core/domain/unsupported-website-page-parser';
 import { Reading } from '../../src/app/core/domain/reading';
+import { ScanTitle } from '../../src/app/core/domain/scan-title';
 import { WEBSITE_PATTERNS } from '../../src/app/core/domain/website-patterns';
 import { SUPPORTED_WEBSITE_PAGES } from '../../src/app/core/use-cases/supported-website-pages.fixture';
 import {
@@ -14,6 +15,7 @@ import {
   TUNING_OTHER_PAGES,
   OTHER_PAGES,
 } from './unsupported-website-pages';
+import { CAPTURED_PAGES, CapturedPage, Expected } from './captured-pages';
 
 type Recorded = { readonly title: string; readonly chapter: number };
 
@@ -179,3 +181,121 @@ const chapterPageCount = slices.reduce(
 console.log(
   `\n## overall\nrecall ${percent(totals.exact, chapterPageCount)} exact of ${chapterPageCount} chapter pages, precision ${percent(totals.exact, totals.recorded)} of ${totals.recorded} recorded`,
 );
+
+type InputMode = {
+  readonly name: string;
+  readonly record: (page: CapturedPage) => Recorded | undefined;
+};
+
+type CapturedOutcome =
+  | 'exact'
+  | 'missed'
+  | 'wrong'
+  | 'ignored'
+  | 'false-positive';
+
+const isSameSeries = (recorded: string, expected: string): boolean => {
+  const title = ScanTitle.parse(recorded);
+  return (
+    title !== undefined &&
+    title.seriesKey.match(ScanTitle.of(expected).seriesKey) === 'same'
+  );
+};
+
+const capturedOutcomeOf = (
+  expected: Expected,
+  recorded?: Recorded,
+): CapturedOutcome => {
+  if (expected.kind === 'other') {
+    return recorded ? 'false-positive' : 'ignored';
+  }
+  if (!recorded) {
+    return 'missed';
+  }
+  return expected.titles.some((title) => isSameSeries(recorded.title, title)) &&
+    expected.chapters.includes(recorded.chapter)
+    ? 'exact'
+    : 'wrong';
+};
+
+const visitedPageOf = ({ capture }: CapturedPage): VisitedPage => ({
+  pageTitle: capture.titleSettled ?? '',
+  url: capture.finalUrl,
+});
+
+const INPUT_MODES: readonly InputMode[] = [
+  {
+    name: 'history import (title and url)',
+    record: (page) => recordedBy(visitedPageOf(page)),
+  },
+  {
+    name: 'content script (page signals)',
+    record: (page) => recordedBy(visitedPageOf(page)),
+  },
+];
+
+const expectedText = (expected: Expected): string =>
+  expected.kind === 'reading'
+    ? `"${expected.titles[0]}" #${expected.chapters.join('|')}`
+    : expected.reason;
+
+const reportCaptured = (
+  name: string,
+  pages: readonly CapturedPage[],
+  listsPages: boolean,
+): void => {
+  console.log(`\n### ${name}`);
+  for (const mode of INPUT_MODES) {
+    const outcomes = pages.map((page) => {
+      const recorded = mode.record(page);
+      return {
+        page,
+        recorded,
+        outcome: capturedOutcomeOf(page.expected, recorded),
+      };
+    });
+    const count = (outcome: CapturedOutcome): number =>
+      outcomes.filter((entry) => entry.outcome === outcome).length;
+    const chapterPageCount = pages.filter(
+      ({ expected }) => expected.kind === 'reading',
+    ).length;
+    console.log(
+      `${mode.name}: chapter pages ${chapterPageCount}: exact ${count('exact')} (${percent(count('exact'), chapterPageCount)}), wrong ${count('wrong')}, missed ${count('missed')}; other pages ${pages.length - chapterPageCount}: recorded ${count('false-positive')}`,
+    );
+    if (!listsPages) {
+      continue;
+    }
+    for (const { page, recorded, outcome } of outcomes) {
+      if (outcome === 'wrong' || outcome === 'false-positive') {
+        console.log(
+          `  ${outcome === 'wrong' ? 'WRONG ' : 'FALSE+'} ${recorded ? describe(recorded) : ''} expected ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
+        );
+      }
+    }
+    for (const { page, outcome } of outcomes) {
+      if (outcome === 'missed') {
+        console.log(
+          `  MISSED ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
+        );
+      }
+    }
+  }
+};
+
+const groupedBy = (
+  key: (page: CapturedPage) => string,
+): Map<string, CapturedPage[]> =>
+  CAPTURED_PAGES.reduce((groups, page) => {
+    groups.set(key(page), [...(groups.get(key(page)) ?? []), page]);
+    return groups;
+  }, new Map<string, CapturedPage[]>());
+
+console.log('\n## real chapter pages captured with Chromium, per partition');
+for (const [partition, pages] of groupedBy(({ partition }) => partition)) {
+  reportCaptured(partition, pages, true);
+}
+console.log('\n## real chapter pages captured with Chromium, per language');
+for (const [language, pages] of groupedBy(({ language }) => language)) {
+  reportCaptured(language, pages, false);
+}
+reportCaptured('all real pages', CAPTURED_PAGES, false);
