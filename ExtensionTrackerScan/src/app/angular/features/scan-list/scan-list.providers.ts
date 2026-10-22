@@ -2,13 +2,14 @@ import { inject, Provider } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ChromeStorageScanRepository } from '../../../core/gateways/chrome-storage-scan-repository.gateway';
 import { ConsoleScanRepository } from '../../../core/gateways/console-scan-repository.gateway';
+import { SystemClock } from '../../../core/gateways/system-clock.gateway';
 import { DEV_SCANS } from '../../../core/gateways/in-memory/dev-scans';
 import { InMemoryScanRepository } from '../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { ScanRepository } from '../../../core/ports/scan-repository.port';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
-import { SCAN_REPOSITORY } from '../../injection-tokens';
+import { CLOCK, SCAN_REPOSITORY } from '../../injection-tokens';
 
 const announcingSaves = (
   scanRepository: ScanRepository,
@@ -19,6 +20,7 @@ const announcingSaves = (
     : new ConsoleScanRepository(scanRepository, savedMessage);
 
 export const SCAN_LIST_PROVIDERS: Provider[] = [
+  { provide: CLOCK, useFactory: () => new SystemClock() },
   {
     provide: SCAN_REPOSITORY,
     useFactory: () =>

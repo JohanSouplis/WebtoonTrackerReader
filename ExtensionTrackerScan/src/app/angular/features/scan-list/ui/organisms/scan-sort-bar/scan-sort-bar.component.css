@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 2px 8px;
+}
+
+.count {
+  color: var(--app-faint);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sorts {
+  display: flex;
+  gap: 2px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--app-faint);
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+button:hover {
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+
+button[aria-pressed="true"] {
+  color: var(--app-accent);
+  background: var(--app-accent-soft);
+}
+
+mat-icon.mat-icon {
+  font-size: 15px;
+}

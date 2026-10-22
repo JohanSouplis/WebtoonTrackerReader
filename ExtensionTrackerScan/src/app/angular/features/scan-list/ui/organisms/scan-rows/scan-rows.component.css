@@ -1,0 +1,269 @@
+:host {
+  display: block;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 62px;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--app-surface);
+  border: 1px solid transparent;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  animation: rise 0.28s var(--app-ease-out) both;
+  animation-delay: calc(var(--index) * 18ms);
+}
+
+li:hover {
+  background: var(--app-surface-2);
+  border-color: var(--app-line);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: block;
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 14.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.title:hover {
+  color: var(--app-accent);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--app-muted);
+}
+
+.dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--app-faint);
+}
+
+.chapter {
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--app-surface-3);
+  color: var(--app-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.website {
+  color: var(--app-faint);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding-left: 8px;
+  border-radius: 9px;
+  background: var(--app-surface-3);
+  transition: box-shadow 0.15s;
+}
+
+.rating:hover {
+  box-shadow: 0 0 0 1px var(--app-line-strong);
+}
+
+.rating:focus-within {
+  box-shadow: 0 0 0 2px var(--app-accent);
+}
+
+.rating mat-icon.mat-icon {
+  font-size: 16px;
+  color: var(--app-faint);
+}
+
+.rating.is-rated mat-icon.mat-icon {
+  color: var(--app-star);
+}
+
+mat-select {
+  width: 38px;
+  padding: 0 8px 0 4px;
+  text-align: center;
+  --mat-select-trigger-text-weight: 700;
+  --mat-select-trigger-text-size: 14px;
+  --mat-select-trigger-text-font: inherit;
+  --mat-select-enabled-trigger-text-color: var(--app-text);
+  --mat-select-placeholder-text-color: var(--app-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+mat-select:focus {
+  outline: none;
+}
+
+:host ::ng-deep .mat-mdc-select-arrow-wrapper {
+  display: none;
+}
+
+.delete {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--app-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    opacity 0.15s;
+}
+
+li:hover .delete,
+li:focus-within .delete {
+  opacity: 1;
+}
+
+.delete:hover {
+  color: var(--app-danger);
+  background: var(--app-danger-soft);
+}
+
+mat-paginator {
+  margin-top: 12px;
+  background: transparent;
+  --mat-paginator-container-background-color: transparent;
+  --mat-paginator-container-text-color: var(--app-muted);
+  --mat-paginator-container-text-size: 12.5px;
+  --mat-paginator-container-text-font: inherit;
+  --mat-paginator-container-size: 44px;
+  --mat-paginator-select-trigger-text-size: 13px;
+  --mat-paginator-form-field-container-height: 30px;
+  --mat-paginator-touch-target-display: none;
+  --mat-paginator-form-field-container-vertical-padding: 4px;
+  --mdc-outlined-text-field-container-shape: 8px;
+  --mdc-outlined-text-field-outline-color: var(--app-line-strong);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-muted);
+  --mat-paginator-enabled-icon-color: var(--app-text);
+  --mat-paginator-disabled-icon-color: var(--app-faint);
+}
+
+:host ::ng-deep .mat-mdc-paginator-container {
+  justify-content: space-between;
+  padding: 0;
+}
+
+:host ::ng-deep .mat-mdc-paginator-range-label {
+  margin: 0 16px 0 0;
+  color: var(--app-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+:host ::ng-deep .mat-mdc-paginator-page-size {
+  gap: 8px;
+  margin: 0;
+}
+
+:host ::ng-deep .mat-mdc-paginator-page-size-label {
+  margin: 0;
+}
+
+:host ::ng-deep .mat-mdc-paginator-page-size-select {
+  width: 64px;
+  margin: 0;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 64px 0;
+  border: 1px dashed var(--app-line);
+  border-radius: 16px;
+  color: var(--app-muted);
+  text-align: center;
+  animation: rise 0.28s var(--app-ease-out) both;
+}
+
+.empty mat-icon.mat-icon {
+  margin-bottom: 4px;
+  font-size: 40px;
+  color: var(--app-accent);
+}
+
+.empty h2 {
+  color: var(--app-text);
+  font-size: 16px;
+}
+
+.clear {
+  height: 36px;
+  margin-top: 8px;
+  padding: 0 18px;
+  border: 1px solid var(--app-accent-line);
+  border-radius: 12px;
+  background: none;
+  color: var(--app-accent);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.clear:hover {
+  background: var(--app-accent-soft);
+}
+
+.clear:active {
+  transform: scale(0.98);
+}

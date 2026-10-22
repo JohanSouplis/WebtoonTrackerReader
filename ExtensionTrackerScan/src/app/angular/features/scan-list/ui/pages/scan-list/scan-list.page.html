@@ -1,16 +1,18 @@
-<div class="mat-elevation-z8">
-  <app-scan-filters
-    [filters]="store.filters()"
-    [title]="store.titleFilter()"
-    (filtersChanged)="store.applyFilters($event)"
-    (searched)="store.searchTitle($event)"
-  />
-  <app-scan-table
-    [scans]="store.scans()"
-    [titleFilter]="store.titleFilter()"
-    (deleted)="delete($event)"
-    (favoriteToggled)="toggleFavorite($event)"
-    (rated)="rate($event)"
-    (opened)="open($event)"
-  />
-</div>
+<app-scan-filters
+  [filters]="store.filters()"
+  (filtersChanged)="store.filter($event)"
+/>
+<app-scan-sort-bar
+  [sort]="store.sort()"
+  [count]="store.count()"
+  (sorted)="store.sortBy($event)"
+/>
+<app-scan-rows
+  [view]="store.view()"
+  [now]="now"
+  (deleted)="delete($event)"
+  (favoriteToggled)="toggleFavorite($event)"
+  (rated)="rate($event)"
+  (pageTurned)="store.turnPage($event)"
+  (filtersCleared)="store.clearFilters()"
+/>

@@ -1,0 +1,16 @@
+<span class="count">{{ count() }} series</span>
+<div class="sorts" role="group" aria-label="Sort by">
+  @for (option of options(); track option.key) {
+    <button
+      type="button"
+      [attr.aria-pressed]="option.isActive"
+      (click)="sorted.emit(option.key)"
+    >
+      {{ option.label }}
+      @if (option.isActive) {
+        <mat-icon>{{ option.arrow }}</mat-icon>
+        <span class="visually-hidden">{{ option.name }}</span>
+      }
+    </button>
+  }
+</div>

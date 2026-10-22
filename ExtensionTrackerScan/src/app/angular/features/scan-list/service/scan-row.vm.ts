@@ -4,10 +4,21 @@ export type ScanRow = {
   readonly title: string;
   readonly chapter: number;
   readonly url: string;
+  readonly website: string;
   readonly readAt: Date;
-  isFavorite: boolean;
-  rating?: number;
+  readonly isFavorite: boolean;
+  readonly rating?: number;
 };
 
-export const toScanRow = ({ rating, ...scan }: ScanSnapshot): ScanRow =>
-  rating === undefined ? scan : { ...scan, rating };
+const websiteOf = (url: string): string => {
+  try {
+    return new URL(url.includes('://') ? url : `http://${url}`).host;
+  } catch {
+    return url;
+  }
+};
+
+export const toScanRow = ({ rating, ...scan }: ScanSnapshot): ScanRow => {
+  const row = { ...scan, website: websiteOf(scan.url) };
+  return rating === undefined ? row : { ...row, rating };
+};

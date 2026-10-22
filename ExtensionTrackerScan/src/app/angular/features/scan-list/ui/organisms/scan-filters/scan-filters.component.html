@@ -1,17 +1,19 @@
 <ds-search-field
   label="Filter by title"
-  [value]="title()"
-  (searched)="searched.emit($event)"
+  [value]="filters().title"
+  (searched)="change({ title: $event })"
 />
-<mat-checkbox
+<mat-button-toggle
   [checked]="filters().favoritesOnly"
-  (change)="showFavoritesOnly($event.checked)"
+  (change)="change({ favoritesOnly: $event.source.checked })"
 >
-  Favorites Only
-</mat-checkbox>
-<mat-checkbox
+  <mat-icon [class.is-filled]="filters().favoritesOnly">star</mat-icon>
+  Favorites only
+</mat-button-toggle>
+<mat-button-toggle
   [checked]="filters().ratedOnly"
-  (change)="showRatedOnly($event.checked)"
+  (change)="change({ ratedOnly: $event.source.checked })"
 >
-  Rating Only
-</mat-checkbox>
+  <mat-icon>grade</mat-icon>
+  Rated only
+</mat-button-toggle>

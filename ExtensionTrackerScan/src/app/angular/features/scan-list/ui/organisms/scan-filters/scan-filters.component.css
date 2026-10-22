@@ -1,5 +1,48 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 ds-search-field {
-  width: 300px;
-  margin-left: 20px;
-  margin-top: 20px;
+  flex: 1;
+  margin-right: 2px;
+}
+
+mat-button-toggle {
+  --mat-standard-button-toggle-shape: 12px;
+  --mat-standard-button-toggle-height: 40px;
+  --mat-standard-button-toggle-divider-color: var(--app-line);
+  --mat-standard-button-toggle-background-color: var(--app-surface);
+  --mat-standard-button-toggle-text-color: var(--app-muted);
+  --mat-standard-button-toggle-selected-state-background-color: var(
+    --app-accent-soft
+  );
+  --mat-standard-button-toggle-selected-state-text-color: #d6d0ff;
+  --mat-standard-button-toggle-label-text-weight: 600;
+  --mat-standard-button-toggle-label-text-size: 13px;
+  --mat-standard-button-toggle-label-text-font: inherit;
+  --mat-standard-button-toggle-hover-state-layer-opacity: 0;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+mat-button-toggle:hover {
+  color: var(--app-text);
+  border-color: var(--app-line-strong);
+}
+
+mat-button-toggle.mat-button-toggle-checked {
+  border-color: var(--app-accent-line);
+}
+
+mat-button-toggle mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+mat-button-toggle.mat-button-toggle-checked mat-icon {
+  color: var(--app-star);
 }

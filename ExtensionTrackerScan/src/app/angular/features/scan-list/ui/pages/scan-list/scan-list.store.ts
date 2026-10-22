@@ -1,43 +1,86 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import {
   filterScans,
   NO_FILTERS,
   ScanFilters,
 } from '../../../service/scan-filters.rules';
+import { ScanListView, ScanPage } from '../../../service/scan-list-view.vm';
 import { ScanRow, toScanRow } from '../../../service/scan-row.vm';
+import {
+  LATEST_READ_FIRST,
+  ScanSort,
+  ScanSortKey,
+  sortBy,
+  sortScans,
+} from '../../../service/scan-sort.rules';
+
+const FIRST_PAGE: ScanPage = { index: 0, size: 10 };
 
 @Injectable()
 export class ScanListStore {
-  private readonly library = signal<ScanRow[]>([]);
-  private readonly shownScans = signal<ScanRow[]>([]);
-  private readonly checkedFilters = signal<ScanFilters>(NO_FILTERS);
-  private readonly searchedTitle = signal('');
-  readonly scans = this.shownScans.asReadonly();
-  readonly filters = this.checkedFilters.asReadonly();
-  readonly titleFilter = this.searchedTitle.asReadonly();
+  private readonly library = signal<readonly ScanRow[] | undefined>(undefined);
+  private readonly shownFilters = signal<ScanFilters>(NO_FILTERS);
+  private readonly shownSort = signal<ScanSort>(LATEST_READ_FIRST);
+  private readonly shownPage = signal<ScanPage>(FIRST_PAGE);
+  private readonly matchingScans = computed(() =>
+    sortScans(
+      filterScans(this.library() ?? [], this.shownFilters()),
+      this.shownSort(),
+    ),
+  );
+  readonly filters = this.shownFilters.asReadonly();
+  readonly sort = this.shownSort.asReadonly();
+  readonly count = computed(() => this.matchingScans().length);
+  readonly view = computed((): ScanListView => {
+    const library = this.library();
+    if (library === undefined) {
+      return { kind: 'loading' };
+    }
+    if (library.length === 0) {
+      return { kind: 'empty-library' };
+    }
+    const scans = this.matchingScans();
+    if (scans.length === 0) {
+      return {
+        kind: 'no-match',
+        searchedTitle: this.shownFilters().title.trim(),
+      };
+    }
+    const { size } = this.shownPage();
+    const lastIndex = Math.ceil(scans.length / size) - 1;
+    const index = Math.min(this.shownPage().index, lastIndex);
+    return {
+      kind: 'scans',
+      rows: scans.slice(index * size, (index + 1) * size),
+      page: { index, size },
+      length: scans.length,
+    };
+  });
 
-  showLibrary(snapshots: ScanSnapshot[]): void {
-    const scans = snapshots.map(toScanRow);
-    this.library.set(scans);
-    this.shownScans.set(scans);
-    this.searchedTitle.set('');
+  showLibrary(snapshots: readonly ScanSnapshot[]): void {
+    this.library.set(snapshots.map(toScanRow));
   }
 
-  applyFilters(filters: ScanFilters): void {
-    this.checkedFilters.set(filters);
-    this.shownScans.set(filterScans(this.library(), filters));
+  filter(filters: ScanFilters): void {
+    this.shownFilters.set(filters);
+    this.backToFirstPage();
   }
 
-  searchTitle(title: string): void {
-    this.searchedTitle.set(title);
+  clearFilters(): void {
+    this.filter(NO_FILTERS);
   }
 
-  toggleFavorite(scan: ScanRow): void {
-    scan.isFavorite = !scan.isFavorite;
+  sortBy(key: ScanSortKey): void {
+    this.shownSort.update((sort) => sortBy(sort, key));
+    this.backToFirstPage();
   }
 
-  rate(scan: ScanRow, rating: number): void {
-    scan.rating = rating;
+  turnPage(page: ScanPage): void {
+    this.shownPage.set(page);
+  }
+
+  private backToFirstPage(): void {
+    this.shownPage.update(({ size }) => ({ index: 0, size }));
   }
 }

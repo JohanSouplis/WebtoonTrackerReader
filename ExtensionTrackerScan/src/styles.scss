@@ -124,6 +124,15 @@ p {
   margin: 0;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 :focus-visible {
   outline: 2px solid var(--app-accent);
   outline-offset: 2px;
@@ -154,6 +163,19 @@ p {
 
 .mat-icon.is-filled {
   font-variation-settings: "FILL" 1;
+}
+
+.rating-panel {
+  min-width: 64px;
+  --mat-option-label-text-weight: 700;
+  --mat-option-label-text-size: 14px;
+  --mat-option-selected-state-label-text-color: var(--app-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.rating-panel .mat-mdc-option {
+  min-height: 34px;
+  justify-content: center;
 }
 
 .mat-mdc-snack-bar-container.is-success {

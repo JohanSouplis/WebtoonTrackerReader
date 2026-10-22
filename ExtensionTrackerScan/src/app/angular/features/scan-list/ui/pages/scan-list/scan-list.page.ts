@@ -4,21 +4,27 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Rating } from '../../../../../../core/domain/rating';
+import {
+  ScanNotFound,
+  ScanSnapshot,
+} from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
-import { SCAN_REPOSITORY } from '../../../../../injection-tokens';
+import { CLOCK, SCAN_REPOSITORY } from '../../../../../injection-tokens';
 import { ScanRow } from '../../../service/scan-row.vm';
 import { ScanFiltersComponent } from '../../organisms/scan-filters/scan-filters.component';
-import { ScanTableComponent } from '../../organisms/scan-table/scan-table.component';
-import { ScanRating } from '../../organisms/scan-table/scan-table.types';
+import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component';
+import { ScanRating } from '../../organisms/scan-rows/scan-rows.types';
+import { ScanSortBarComponent } from '../../organisms/scan-sort-bar/scan-sort-bar.component';
 import { ScanListStore } from './scan-list.store';
 
 @Component({
   selector: 'app-scan-list',
-  imports: [ScanFiltersComponent, ScanTableComponent],
+  imports: [ScanFiltersComponent, ScanSortBarComponent, ScanRowsComponent],
   templateUrl: './scan-list.page.html',
   providers: [ScanListStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,32 +34,49 @@ export class ScanListPage implements OnInit {
   private readonly deleteScan = inject(DeleteScanUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
+  private readonly snackBar = inject(MatSnackBar);
   protected readonly store = inject(ScanListStore);
+  protected readonly now = inject(CLOCK).now();
 
   ngOnInit(): void {
-    this.scanRepository.load().then(
-      (library) => this.store.showLibrary(library.snapshot()),
-      (error: unknown) => console.error('Error retrieving all data:', error),
+    this.showLibrary().catch((error: unknown) =>
+      console.error('Error retrieving all data:', error),
     );
   }
 
-  protected async delete(scan: ScanRow): Promise<void> {
-    this.store.showLibrary(
-      await this.deleteScan.execute(ScanTitle.of(scan.title)),
+  protected delete(scan: ScanRow): Promise<void> {
+    return this.update(() => this.deleteScan.execute(ScanTitle.of(scan.title)));
+  }
+
+  protected toggleFavorite(scan: ScanRow): Promise<void> {
+    return this.update(() =>
+      this.toggleFavoriteScan.execute(ScanTitle.of(scan.title)),
     );
   }
 
-  protected toggleFavorite(scan: ScanRow): void {
-    this.store.toggleFavorite(scan);
-    void this.toggleFavoriteScan.execute(ScanTitle.of(scan.title));
+  protected rate({ scan, rating }: ScanRating): Promise<void> {
+    return this.update(() =>
+      this.rateScan.execute(ScanTitle.of(scan.title), Rating.of(rating)),
+    );
   }
 
-  protected rate({ scan, rating }: ScanRating): void {
-    this.store.rate(scan, rating);
-    void this.rateScan.execute(ScanTitle.of(scan.title), Rating.of(rating));
+  private async update(command: () => Promise<ScanSnapshot[]>): Promise<void> {
+    try {
+      this.store.showLibrary(await command());
+    } catch (error: unknown) {
+      if (!(error instanceof ScanNotFound)) {
+        throw error;
+      }
+      this.snackBar.open(
+        'This scan is no longer in your library. The list is up to date.',
+        'Dismiss',
+        { duration: 5000 },
+      );
+      await this.showLibrary();
+    }
   }
 
-  protected open(url: string): void {
-    window.open(url, '_blank');
+  private async showLibrary(): Promise<void> {
+    this.store.showLibrary((await this.scanRepository.load()).snapshot());
   }
 }
