@@ -13,17 +13,15 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 36" [level=2]
+  - heading "Supported websites 14" [level=2]
   - searchbox "Filter by website"
   - list "Supported websites":
-    - listitem: manhuaplus.org
-    - listitem: manhwahub.net
-    - listitem: 1st-kissmanga
-    - listitem: templetoons.com
-    - listitem: mangafire.to
-    - listitem: kunmanga.com
+    - listitem: bato.to
+    - listitem: mangaplus.shueisha.co.jp
+    - listitem: mangadistrict
+    - listitem: battwo.com
   - group:
-    - text: 31–36 of 36
+    - text: 11–14 of 14
     - button "First page"
     - button "Previous page"
     - button "Next page" [disabled]

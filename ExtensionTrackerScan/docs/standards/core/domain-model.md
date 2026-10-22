@@ -15,7 +15,7 @@ une projection de lecture.
 | Value Object | `ScanTitle`, `SeriesKey`, `Chapter`, `Rating`, `Reading` | Immuable, égalité par valeur, valide dès la construction |
 | Projection de lecture | `ScanSnapshot` | Donnée en lecture seule, sans identité ni mutateur. Lue par Angular et par le gateway. |
 | Service du domaine | `PageTitleParser` | Transforme une page visitée en `ParsedPage`, à l'aide du catalogue |
-| Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue, à partir du seul titre et de l'URL |
+| Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue quand les signaux de la page s'accordent |
 | Catalogue | `WEBSITE_PATTERNS` | Les sites supportés et le format de titre de chacun |
 
 Préfère un Value Object à un champ primitif. Une notion qui porte une règle (normalisation, intervalle,
@@ -126,6 +126,11 @@ déjà décidé.
   confiée à l'analyse générique.
 - Ajouter un site, c'est ajouter une entrée au catalogue et une ligne au tableau de cas de la spec
   ([`testing.md`](testing.md)).
+- Un site n'entre ou ne reste au catalogue que si ses formats battent l'analyse générique sur
+  `npm run eval:parser` (section « catalog against the generic parser »). Un site que l'analyse générique lit
+  aussi bien quitte le catalogue : il ne reçoit plus de format à maintenir quand il change de titre ou de
+  domaine. Un domaine mort ou repris par un autre site quitte le catalogue dès que l'analyse générique couvre
+  ses pages.
 
 ```ts
 // ❌ copie à la main, qui a déjà divergé : battwo.com et harimanga.me sont analysés mais absents de la page
@@ -137,22 +142,38 @@ export const SUPPORTED_WEBSITES = WEBSITE_PATTERNS.map((pattern) => pattern.host
 
 ## Les sites hors catalogue
 
-Une page d'un `UnsupportedWebsite` devient une lecture seulement si tous les indices concordent. Une entrée
-fausse dans la bibliothèque coûte plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans
-signalement.
+Une page d'un `UnsupportedWebsite` devient une lecture seulement si deux signaux indépendants de la page
+s'accordent sur le chapitre, et si le titre du scan est confirmé. Une entrée fausse dans la bibliothèque coûte
+plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans signalement.
 
-- Le titre de la page porte une `ChapterMention` (`Chapter 12`, `Chapitre 12,5`, `Ep. 12`, `第12話`), suivie
-  d'un séparateur ou d'un qualificatif (`Online`, `VF`), jamais d'un mot de phrase (`Chapter 11 bankruptcy`).
-- L'URL confirme le même numéro (`/chapter-12`, `/c12`, `?ep=12`, `/12/`). Un identifiant
-  (`/chapter/3186773`) ne confirme rien.
-- La page parle de lecture (`manga`, `manhwa`, `webtoon`, `scan`...) et d'aucun autre média (`anime`,
-  `novel`, `wiki`, `podcast`...). Les deux lexiques sont des tableaux du domaine.
-- Un mot de lecture compte s'il est un mot entier du titre ou de l'URL, pluriel compris, ou s'il figure dans
-  le nom d'hôte (`asuratoon`, `reaperscans`) : `scandal` ne parle pas de scan. Un mot d'un autre média compte
-  partout, même au milieu d'un mot (`kimcartoon`) : dans le doute, la page est ignorée.
-- Aucun segment du chemin de l'URL ne désigne autre chose qu'une lecture (`/course/`). Ces segments forment
-  un troisième tableau, distinct des lexiques : ils se comparent segment par segment, pas mot par mot.
-- Le titre du scan précède la mention. S'il la suit (`Chapter 12 - Titre | Site`), l'URL doit le contenir.
+- **La page parle de lecture.** Un mot de lecture (`manga`, `manhwa`, `webtoon`, `scan`, `komik`...) est un mot
+  entier du titre, de l'URL ou d'un signal de la page, pluriel compris, ou il figure dans le nom d'hôte
+  (`asuratoon`, `reaperscans`) : `scandal` ne parle pas de scan. Une marque d'une écriture sans espaces
+  (`漫画`, `만화`, `манга`, `مانجا`) compte partout, comme un type JSON-LD de bande dessinée (`ComicSeries`).
+- **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
+  compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée. Aucun
+  segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se comparent segment par
+  segment.
+- **Le chapitre est celui que la page affiche.** Il vient d'une `ChapterMention` du titre de l'onglet, de
+  `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
+  `Глава 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`. Après un mot de chapitre vient un séparateur, un
+  qualificatif (`VF`, `Online`, `Next`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
+  (`Chapter 11 bankruptcy`). Le numéro de l'URL n'est jamais lu comme chapitre : c'est souvent un index
+  (`episode_no=653` pour l'épisode 235) ou un identifiant collé (`chapter-58.826511`).
+- **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un
+  numéro affiché. Pour un texte d'en-tête (titre de l'onglet, `og:title` s'il diffère du titre, `h1`), un autre
+  élément de la page confirme aussi : `h1`, fil d'Ariane, JSON-LD, option sélectionnée. Un numéro affiché par le
+  seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si l'onglet annonce un autre chapitre que
+  la page, le chapitre confirmé gagne.
+- **Le titre est confirmé.** Dans l'ordre : le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le
+  texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`
+  ou un mot de liaison), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
+  dans un autre signal (URL, `h1`, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet, confirmé de même, quand
+  le chapitre est affiché ailleurs. À défaut, un texte d'en-tête d'un seul tenant qui précède la mention
+  (`Titre Chapter 12 - Site`) est le titre.
 
-Le contenu de la page (`og:title`, JSON-LD) n'entre pas en jeu : l'import de l'historique ne connaît que le
-titre et l'URL, et les deux chemins appliquent la même règle.
+L'import de l'historique ne connaît que le titre et l'URL : la même règle s'applique, avec l'URL pour seul second
+signal. Le content script envoie en plus les `PageSignals`, qui confirment les pages à l'URL opaque
+(`/chapter/8160d350-...`). Les mots, marques, qualificatifs, mots de liaison et bruits sont des tableaux du
+domaine (`page-lexicon.ts`) : un nouveau cas s'y ajoute comme une entrée, pas comme une branche. Toute
+modification se mesure avec `npm run eval:parser`.

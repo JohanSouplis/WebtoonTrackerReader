@@ -13,22 +13,16 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 36" [level=2]
+  - heading "Supported websites 14" [level=2]
   - searchbox "Filter by website"
   - list "Supported websites":
-    - listitem: dragontea.ink
-    - listitem: toongod.org
-    - listitem: mangadex.org
-    - listitem: chapmanganato.to
-    - listitem: chapmanganelo.com
-    - listitem: scantrad-union.com
-    - listitem: manta.net
-    - listitem: webtoons.com
-    - listitem: tappytoon.com
-    - listitem: mangapanda.in
+    - listitem: bato.to
+    - listitem: mangaplus.shueisha.co.jp
+    - listitem: mangadistrict
+    - listitem: battwo.com
   - group:
-    - text: 11–20 of 36
+    - text: 11–14 of 14
     - button "First page"
     - button "Previous page"
-    - button "Next page"
-    - button "Last page"
+    - button "Next page" [disabled]
+    - button "Last page" [disabled]

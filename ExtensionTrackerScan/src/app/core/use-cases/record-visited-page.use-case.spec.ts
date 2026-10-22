@@ -1,3 +1,4 @@
+import { parsePageSignals } from '../../../page-signals-message';
 import { ScanSnapshot } from '../domain/scan-library';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
@@ -36,8 +37,12 @@ describe('RecordVisitedPageUseCase', () => {
       'https://www.tappytoon.com/en/comics/home',
     ],
     [
-      'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
-      'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
+      'Lore Olympus | WEBTOON',
+      'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
+    ],
+    [
+      'รีวิว - 153 | เอาชีวิตรอดในเกมฉบับคนเถื่อน',
+      'https://www.webtoons.com/th/fantasy/surviving-the-game-as-a-barbarian/%E0%B8%A3%E0%B8%A7%E0%B8%A7/viewer?title_no=5530&episode_no=153',
     ],
   ])(
     'should report the page when its title "%s" matches no format of its supported website',
@@ -59,6 +64,11 @@ describe('RecordVisitedPageUseCase', () => {
     ],
     ['the home page of the website', 'Asura Scans', 'https://asuracomic.net/'],
     [
+      'a chapter page whose title still shows only the website name',
+      'MangaDex',
+      'https://mangadex.org/chapter/8160d350-19a9-499c-88a8-c20a1cd7fe8b',
+    ],
+    [
       'the page listing the chapters of a scan',
       'Izure Saikyou no Renkinjutsushi? - MangaDex',
       'https://mangadex.org/title/17b4a134-65a5-4ba9-851e-9cc824755bf5/izure-saikyou-no-renkinjutsushi?tab=chapters',
@@ -70,8 +80,8 @@ describe('RecordVisitedPageUseCase', () => {
     ],
     [
       'a page whose url contains "undefined"',
-      'Solo Leveling Chapter 3 - Asura Scans',
-      'https://asuracomic.net/series/undefined/chapter/3',
+      'Solo Leveling - Chapter 3 - MANGA DISTRICT - Read Scan - Manhwa',
+      'https://mangadistrict.com/series/undefined/chapter-3/',
     ],
   ])(
     'should ignore the page without reporting it when it is %s',
@@ -138,15 +148,116 @@ describe('RecordVisitedPageUseCase', () => {
     },
   );
 
+  // prettier-ignore
+  it.each<[string, object, string, number]>([
+    ['its url is an opaque id and its structured data names the series', { pageTitle: "Omniscient Reader's Viewpoint - Prologue - Chapter 0 - Flame Comics", url: 'https://flamecomics.xyz/series/2/0c9db8012fbd1257', ogTitle: "Omniscient Reader's Viewpoint - Prologue - Chapter 0 - Flame Comics", structuredData: [{ type: 'Organization', name: 'Flame Comics' }, { type: 'Chapter', name: "Omniscient Reader's Viewpoint - Prologue - Chapter 0", headline: 'Prologue' }, { type: 'CreativeWorkSeries', name: "Omniscient Reader's Viewpoint" }] }, "Omniscient Reader's Viewpoint", 0],
+    ['its tab title is one chapter ahead of its heading, selected chapter and url', { pageTitle: 'Chapter 3 - Rakuen wo Mezashite - ManhwaClan', url: 'https://www.manhwafan.com/manga/rakuen-wo-mezashite/chapter-2', ogTitle: 'Chapter 3 - Rakuen wo Mezashite - ManhwaClan', heading: 'Rakuen wo Mezashite - Chapter 2: Depression and Mania', breadcrumb: 'Home Rakuen wo Mezashite Chapter 2: Depression and Mania', selectedOptions: ['Chapter 2'] }, 'Rakuen wo Mezashite', 2],
+    ['its structured data names the series with HTML entities', { pageTitle: 'I’ll Retire After Saving the World Chapter 107 – Akaza Scans', url: 'https://akazascans.org/ill-retire-after-saving-the-world-chapter-107/', structuredData: [{ type: 'ListItem', name: 'I&#8217;ll Retire After Saving the World Chapter 107' }, { type: 'ComicSeries', name: 'I&#8217;ll Retire After Saving the World' }] }, "I'll Retire After Saving the World", 107],
+    ['its chapters are numbered again in each volume', { pageTitle: 'Читать Том 8. Глава 1 манги Гон бесплатно — InkStory', url: 'https://inkstory.net/content/gon/881370cc-55e6-443e-946a-03277876ad42', ogTitle: 'Читать Том 8. Глава 1 манги Гон бесплатно', structuredData: [{ type: 'ListItem', name: 'Гон', position: 3 }, { type: 'Chapter', name: 'Том 8. Глава 1' }] }, 'Гон', 1],
+    ['its tab title names the series after the chapter and a connector word', { pageTitle: 'Lire le chapitre 144 de Kindergarten Wars — Manga Nova', url: 'https://www.manga-nova.com/lecture-en-ligne/kindergarten-wars/chapitre/144' }, 'Kindergarten Wars', 144],
+    ['its tab title announces the next chapter', { pageTitle: 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de Chap 3: Creativity Wall and Memories Next Chap 4', url: 'https://www.zinmanga.net/manga/otto-no-yuigon-ga-doujinshi-kake-datta-mono-de/chapter-3' }, 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de', 3],
+    ['its url glues a post id to the chapter number', { pageTitle: "Baca I Became a Human's Daughter Chapter 58 Bahasa Indonesia - Kiryuu ID", url: 'https://v7.kiryuu.to/manga/i-became-a-humans-daughter/chapter-58.826511/' }, "I Became a Human's Daughter", 58],
+    ['its tab title has no chapter but its breadcrumb and selected chapter have', { pageTitle: 'Lire Mariage Toxine Scan FR - Mangas Origines', url: 'https://mangas-origines.fr/oeuvre/marriage-toxin/chapitre-183/', ogTitle: 'Mariage Toxine Scan FR - Lire le manga sur Mangas Origines', breadcrumb: 'Accueil Catalogue Mariage Toxine Chapitre 183', selectedOptions: ['Chapitre 183', '1/18'] }, 'Mariage Toxine', 183],
+  ])(
+    'should record the reading its page signals agree on when %s',
+    async (_, message, title, chapter) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const page = signalsOf(contentScriptMessage(message));
+
+      await recordVisitedPage.execute(page);
+
+      expect(await scans()).toEqual([
+        aScan({ title, chapter, url: page.url, readAt: NOW }),
+      ]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
+  // prettier-ignore
+  it.each<[string, object]>([
+    ['a novel chapter of a scan website', { pageTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition] | DivaScans', url: 'https://divascans.org/series/novel/crazy-doctor-19-uncensored-edition/chapter/19', ogTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition]', structuredData: [{ type: 'ListItem', name: 'Crazy Doctor [19+ Uncensored Edition]' }, { type: 'ListItem', name: 'Chapter 19' }] }],
+    ['a chapter whose tab title is the tagline of the website', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', ogTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', heading: 'Capítulo 95' }],
+    ['a chapter whose series is named only in its url', { pageTitle: '99 | Team-X', url: 'https://olympustaff.com/series/the-academys-sashimi-sword-master/99', heading: '99', selectedOptions: ['فصل رقم : 99'] }],
+    ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
+  ])(
+    'should ignore the page of a website outside the catalog without reporting it when it is %s',
+    async (_, message) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+
+      await recordVisitedPage.execute(signalsOf(contentScriptMessage(message)));
+
+      expect(await scans()).toEqual([]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
+  it('should keep the reading when the tab title falls back to the website name after the chapter was recorded', async () => {
+    const { recordVisitedPage, scans } = setUp();
+    const url = 'https://arvenscans.net/series/secret-family/chapter-80';
+
+    await recordVisitedPage.execute(
+      signalsOf(
+        contentScriptMessage({
+          pageTitle: 'Secret Family — Chapter 80 | ARVENSCANS',
+          url,
+        }),
+      ),
+    );
+    await recordVisitedPage.execute(
+      signalsOf(
+        contentScriptMessage({
+          pageTitle: 'ARVENSCANS',
+          url,
+          ogTitle: 'ARVENSCANS',
+          heading: 'Chapter reader',
+        }),
+      ),
+    );
+
+    expect(await scans()).toEqual([
+      aScan({ title: 'Secret Family', chapter: 80, url, readAt: NOW }),
+    ]);
+  });
+
+  it('should leave the library unchanged when the content script sends the same page again', async () => {
+    const { recordVisitedPage, scans } = setUp();
+    const message = {
+      pageTitle: 'Nano Machine - Chapter 190 - Flame Comics',
+      url: 'https://flamecomics.xyz/nano-machine-chapter-190/',
+      ogTitle: 'Nano Machine - Chapter 190 - Flame Comics',
+      structuredData: [],
+      selectedOptions: [],
+    };
+    await recordVisitedPage.execute(signalsOf(message));
+    const recordedOnce = await scans();
+
+    await recordVisitedPage.execute(signalsOf(message));
+
+    expect(await scans()).toEqual(recordedOnce);
+    expect(recordedOnce).toEqual([
+      aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        url: message.url,
+        readAt: NOW,
+      }),
+    ]);
+  });
+
   it('should add the scan after the scans already followed when its title is new', async () => {
     const followed = aScan({ title: 'OldScanTitle', chapter: 8 });
     const { recordVisitedPage, scans } = setUp([followed]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '13'));
+    await recordVisitedPage.execute(catalogPage('Title', '13'));
 
     expect(await scans()).toEqual([
       followed,
-      aScan({ title: 'Title', chapter: 13, url: asuraUrl('13'), readAt: NOW }),
+      aScan({
+        title: 'Title',
+        chapter: 13,
+        url: catalogUrl('13'),
+        readAt: NOW,
+      }),
     ]);
   });
 
@@ -155,10 +266,10 @@ describe('RecordVisitedPageUseCase', () => {
       aScan({ title: 'Title', chapter: 1 }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '2'));
+    await recordVisitedPage.execute(catalogPage('Title', '2'));
 
     expect(await scans()).toEqual([
-      aScan({ title: 'Title', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      aScan({ title: 'Title', chapter: 2, url: catalogUrl('2'), readAt: NOW }),
     ]);
   });
 
@@ -170,22 +281,22 @@ describe('RecordVisitedPageUseCase', () => {
     });
     const { recordVisitedPage, scans } = setUp([followed]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '2'));
+    await recordVisitedPage.execute(catalogPage('Title', '2'));
 
     expect(await scans()).toEqual([followed]);
   });
 
   it.each([
-    ['the chapter is not a number', 'Title Chapter abc - Asura Scans'],
-    ['the title is empty', '  Chapter 3 - Asura Scans'],
-    ['the title and the chapter are empty', '  Chapter x - Asura Scans'],
+    ['the chapter is not a number', 'Episode abc | Title'],
+    ['the title is empty', 'Episode 3 | '],
+    ['the title and the chapter are empty', 'Episode x | '],
   ])(
     'should leave the followed scans unchanged when %s',
     async (_, pageTitle) => {
       const followed = aScan({ title: 'Title', chapter: 1 });
       const { recordVisitedPage, scans } = setUp([followed]);
 
-      await recordVisitedPage.execute({ pageTitle, url: asuraUrl('3') });
+      await recordVisitedPage.execute({ pageTitle, url: catalogUrl('3') });
 
       expect(await scans()).toEqual([followed]);
     },
@@ -233,10 +344,10 @@ describe('RecordVisitedPageUseCase', () => {
         aScan({ title: followedTitle, chapter: 1 }),
       ]);
 
-      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+      await recordVisitedPage.execute(catalogPage(readTitle, '2'));
 
       expect(await scans()).toEqual([
-        aScan({ title: followedTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+        aScan({ title: followedTitle, chapter: 2, url: catalogUrl('2'), readAt: NOW }),
       ]);
     },
   );
@@ -258,11 +369,11 @@ describe('RecordVisitedPageUseCase', () => {
       const followed = aScan({ title: followedTitle, chapter: 1 });
       const { recordVisitedPage, scans } = setUp([followed]);
 
-      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+      await recordVisitedPage.execute(catalogPage(readTitle, '2'));
 
       expect(await scans()).toEqual([
         followed,
-        aScan({ title: readTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+        aScan({ title: readTitle, chapter: 2, url: catalogUrl('2'), readAt: NOW }),
       ]);
     },
   );
@@ -287,12 +398,17 @@ describe('RecordVisitedPageUseCase', () => {
       latest,
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
     expect(await scans()).toEqual([
       { ...latest, isFavorite: true },
       other,
-      aScan({ title: 'Eleceed', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      aScan({
+        title: 'Eleceed',
+        chapter: 2,
+        url: catalogUrl('2'),
+        readAt: NOW,
+      }),
     ]);
   });
 
@@ -319,14 +435,14 @@ describe('RecordVisitedPageUseCase', () => {
         }),
       ]);
 
-      await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+      await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
       expect(await scans()).toEqual([
         { ...latest, rating: mergedRating },
         aScan({
           title: 'Eleceed',
           chapter: 2,
-          url: asuraUrl('2'),
+          url: catalogUrl('2'),
           readAt: NOW,
         }),
       ]);
@@ -342,7 +458,7 @@ describe('RecordVisitedPageUseCase', () => {
     const eleceed = aScan({
       title: 'Eleceed',
       chapter: 2,
-      url: asuraUrl('2'),
+      url: catalogUrl('2'),
       readAt: NOW,
     });
     const { recordVisitedPage, scans } = setUp([
@@ -354,8 +470,8 @@ describe('RecordVisitedPageUseCase', () => {
       latest,
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
     expect(await scans()).toEqual([latest, eleceed]);
   });
@@ -365,14 +481,14 @@ describe('RecordVisitedPageUseCase', () => {
     const joined = aScan({ title: 'Nanomachine', chapter: 1 });
     const { recordVisitedPage, scans } = setUp([spaced, joined]);
 
-    await recordVisitedPage.execute(asuraPage('Nanomachine', '2'));
+    await recordVisitedPage.execute(catalogPage('Nanomachine', '2'));
 
     expect(await scans()).toEqual([
       spaced,
       aScan({
         title: 'Nanomachine',
         chapter: 2,
-        url: asuraUrl('2'),
+        url: catalogUrl('2'),
         readAt: NOW,
       }),
     ]);
@@ -383,10 +499,10 @@ describe('RecordVisitedPageUseCase', () => {
       aScan({ title: 'Title', chapter: 1, url: '' }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '1'));
+    await recordVisitedPage.execute(catalogPage('Title', '1'));
 
     expect(await scans()).toEqual([
-      aScan({ title: 'Title', chapter: 1, url: asuraUrl('1'), readAt: NOW }),
+      aScan({ title: 'Title', chapter: 1, url: catalogUrl('1'), readAt: NOW }),
     ]);
   });
 
@@ -402,13 +518,13 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '1'));
+    await recordVisitedPage.execute(catalogPage('Title', '1'));
 
     expect(await scans()).toEqual([
       aScan({
         title: 'Title',
         chapter: 1,
-        url: asuraUrl('1'),
+        url: catalogUrl('1'),
         readAt: NOW,
         isFavorite: true,
         rating: 9,
@@ -419,13 +535,27 @@ describe('RecordVisitedPageUseCase', () => {
 
 const NOW = new Date('2025-01-01T09:00:10Z');
 
-const asuraUrl = (chapter: string): string =>
-  `https://asuracomic.net/series/title/chapter/${chapter}`;
+const catalogUrl = (chapter: string): string =>
+  `https://www.webtoons.com/en/fantasy/title/episode-${chapter}/viewer?title_no=1&episode_no=${chapter}`;
 
-const asuraPage = (title: string, chapter: string) => ({
-  pageTitle: `${title} Chapter ${chapter} - Asura Scans`,
-  url: asuraUrl(chapter),
+const catalogPage = (title: string, chapter: string) => ({
+  pageTitle: `Episode ${chapter} | ${title}`,
+  url: catalogUrl(chapter),
 });
+
+const contentScriptMessage = (signals: object) => ({
+  structuredData: [],
+  selectedOptions: [],
+  ...signals,
+});
+
+const signalsOf = (message: unknown) => {
+  const signals = parsePageSignals(message);
+  if (!signals) {
+    throw new Error('The content script message does not parse');
+  }
+  return signals;
+};
 
 const setUp = (followed: ScanSnapshot[] = []) => {
   const scanRepository = new InMemoryScanRepository(followed);

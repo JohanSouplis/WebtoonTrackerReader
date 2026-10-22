@@ -1,5 +1,5 @@
 import { Chapter } from './chapter';
-import { ParsedPage, VisitedPage } from './parsed-page';
+import { PageSignals, ParsedPage, VisitedPage } from './parsed-page';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 import { parseUnsupportedWebsitePage } from './unsupported-website-page-parser';
@@ -18,9 +18,16 @@ const servesScans = (url: string, host: string): boolean =>
   url.substring(0, HOST_PREFIX_LENGTH + host.length).includes(host) &&
   url.length > HOST_PREFIX_LENGTH + host.length;
 
+const lettersOf = (text: string): string =>
+  text.toLowerCase().replace(/[^a-z\d]/g, '');
+
+const isWebsiteNameOnly = (pageTitle: string, host: string): boolean =>
+  lettersOf(pageTitle) === lettersOf(host.replace(/\.[a-z]+$/, ''));
+
 const isExcluded = (page: VisitedPage, pattern: WebsitePattern): boolean =>
   page.url.includes(String(pattern.excludedUrlPart)) ||
-  page.pageTitle.includes(String(pattern.excludedTitlePart));
+  page.pageTitle.includes(String(pattern.excludedTitlePart)) ||
+  isWebsiteNameOnly(page.pageTitle, pattern.host);
 
 const titleAt = (text: string, segments: string[], index: number): string => {
   if (index === 0) {
@@ -67,15 +74,13 @@ const readingFrom = (
   const { title, chapter } = format.url
     ? extract(format.url, page.url, fromPageTitle)
     : fromPageTitle;
-  const scanTitle = ScanTitle.parse(
-    withoutLeadingSpace(title).replace(' [Official]', ''),
-  );
+  const scanTitle = ScanTitle.parse(title.replace(' [Official]', '').trim());
   return scanTitle && chapter
     ? { title: scanTitle, chapter, url: page.url, readAt }
     : undefined;
 };
 
-export const parsePage = (page: VisitedPage, readAt: Date): ParsedPage => {
+export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
   const cleanedPage: VisitedPage = {
     pageTitle: withoutLeadingSpace(page.pageTitle.replace('\n', '')),
     url: page.url,
@@ -84,7 +89,10 @@ export const parsePage = (page: VisitedPage, readAt: Date): ParsedPage => {
     servesScans(page.url, host),
   );
   if (!pattern) {
-    const reading = parseUnsupportedWebsitePage(cleanedPage, readAt);
+    const reading = parseUnsupportedWebsitePage(
+      { ...page, pageTitle: cleanedPage.pageTitle },
+      readAt,
+    );
     return reading ? { kind: 'reading', reading } : { kind: 'not-a-scan' };
   }
   if (isExcluded(cleanedPage, pattern)) {

@@ -27,10 +27,11 @@ pas un synonyme.
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
+| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée | `pageData`, `metadata`, `message` |
 | `WebsitePattern` | Le format de titre d'un site, qui permet d'en extraire scan et chapitre | `parser`, `websiteJson` |
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
 | `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |
-| `ChapterMention` | Le numéro de chapitre que le titre d'une page annonce, avec le texte qui l'entoure | `marker`, `match` |
+| `ChapterMention` | Le numéro de chapitre qu'un texte de la page annonce, avec le texte qui l'entoure | `marker`, `match` |
 | `WebsiteProposal` | Un site que le lecteur propose d'ajouter | `notification` pour ce sens |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.

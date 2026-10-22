@@ -1,5 +1,5 @@
 import { parsePage } from '../domain/page-title-parser';
-import { VisitedPage } from '../domain/parsed-page';
+import { PageSignals } from '../domain/parsed-page';
 import { ClockPort } from '../ports/clock.port';
 import { CrashReporterPort } from '../ports/crash-reporter.port';
 import { ScanRepository } from '../ports/scan-repository.port';
@@ -11,7 +11,7 @@ export class RecordVisitedPageUseCase {
     private readonly clock: ClockPort,
   ) {}
 
-  async execute(page: VisitedPage): Promise<void> {
+  async execute(page: PageSignals): Promise<void> {
     const parsedPage = parsePage(page, this.clock.now());
     switch (parsedPage.kind) {
       case 'not-a-scan':
