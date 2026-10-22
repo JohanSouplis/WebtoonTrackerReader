@@ -1,6 +1,6 @@
 import {
   Component,
-  Inject,
+  inject,
   OnInit,
   ViewChild,
   AfterViewInit,
@@ -12,13 +12,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { environment } from '../../../environments/environment';
-import { DiscordNotification } from '../../gateway/discord-notify.service';
-import { AngularNotification } from '../../gateway/dev/angular-notify.service';
-import {
-  NOTIFICATION_TOKEN,
-  NotificationInterface,
-} from '../port/notification.interface';
+import { ProposeWebsiteUseCase } from '../../core/use-cases/propose-website.use-case';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
@@ -37,14 +31,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   ],
   templateUrl: './add_website_pattern.component.html',
   styleUrls: ['./add_website_pattern.component.css'],
-  providers: [
-    {
-      provide: NOTIFICATION_TOKEN,
-      useClass: environment.production
-        ? DiscordNotification
-        : AngularNotification,
-    },
-  ],
 })
 export class AddWebsitePatternComponent implements OnInit, AfterViewInit {
   websiteForm!: FormGroup;
@@ -93,10 +79,9 @@ export class AddWebsitePatternComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(
-    private fb: FormBuilder,
-    @Inject(NOTIFICATION_TOKEN) private notification: NotificationInterface,
-  ) {}
+  private readonly proposeWebsite = inject(ProposeWebsiteUseCase);
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.websiteForm = this.fb.group({
@@ -113,7 +98,7 @@ export class AddWebsitePatternComponent implements OnInit, AfterViewInit {
   proposeNewWebsite() {
     if (this.websiteForm.valid) {
       this.successMessage = true;
-      this.notification.notify(this.websiteForm.value.website);
+      this.proposeWebsite.execute(this.websiteForm.value.website);
       this.websiteForm.reset();
 
       setTimeout(() => {
