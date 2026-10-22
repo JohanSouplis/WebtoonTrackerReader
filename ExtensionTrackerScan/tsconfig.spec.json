@@ -4,6 +4,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "lib": ["ES2022", "dom"],
     "types": ["jest", "@testing-library/jest-dom", "chrome"]
   },
   "files": ["src/test-setup.ts"],

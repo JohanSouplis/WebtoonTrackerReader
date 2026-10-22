@@ -2,7 +2,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { ScanListView } from '../../../service/scan-list-view.vm';
-import { aRow } from '../../../service/scan-rows.fixture';
+import { aShownScan } from '../../../service/scan-rows.fixture';
 import { ScanRowsComponent } from './scan-rows.component';
 
 describe('ScanRowsComponent', () => {
@@ -26,6 +26,36 @@ describe('ScanRowsComponent', () => {
     expect(row).toHaveTextContent('Ch. 38');
     expect(row).toHaveTextContent('8 mo ago');
     expect(row).toHaveTextContent('asuracomic.net');
+  });
+
+  it('should show the cover of a scan beside its title when it has one', async () => {
+    await renderRows(SHOWN_SCANS);
+
+    expect(
+      within(rowOf('Omniscient Reader')).getByRole('presentation'),
+    ).toHaveAttribute('src', THUMBNAIL);
+    expect(rowOf('Omniscient Reader')).not.toHaveTextContent('OR');
+  });
+
+  it('should show the initials of a scan without a cover', async () => {
+    await renderRows(SHOWN_SCANS);
+
+    expect(rowOf('Solo Leveling')).toHaveTextContent('SL');
+    expect(
+      within(rowOf('Solo Leveling')).queryByRole('presentation'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should show neither a cover nor initials while the cover is unknown', async () => {
+    await renderRows({
+      ...SHOWN_SCANS,
+      rows: [{ ...SOLO_LEVELING, cover: { kind: 'pending' } }],
+    });
+
+    expect(rowOf('Solo Leveling')).not.toHaveTextContent('SL');
+    expect(
+      within(rowOf('Solo Leveling')).queryByRole('presentation'),
+    ).not.toBeInTheDocument();
   });
 
   it('should ask to delete the scan when its delete button is clicked', async () => {
@@ -106,18 +136,21 @@ describe('ScanRowsComponent', () => {
   });
 });
 
-const SOLO_LEVELING = aRow({
+const THUMBNAIL = 'data:image/webp;base64,UklGRg==';
+
+const SOLO_LEVELING = aShownScan({
   title: 'Solo Leveling',
   chapter: 38,
   url: 'https://asuracomic.net/series/solo-leveling/chapter/37',
   readAt: new Date('2024-07-13T09:45:30Z'),
 });
 
-const OMNISCIENT_READER = aRow({
+const OMNISCIENT_READER = aShownScan({
   title: 'Omniscient Reader',
   chapter: 246,
   isFavorite: true,
   rating: 9,
+  cover: { kind: 'thumbnail', src: THUMBNAIL },
 });
 
 const SHOWN_SCANS = {

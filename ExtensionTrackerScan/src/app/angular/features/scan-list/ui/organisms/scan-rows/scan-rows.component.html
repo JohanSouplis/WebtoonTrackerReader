@@ -4,7 +4,17 @@
     <ul aria-label="Library">
       @for (row of shown.rows; track row.title; let index = $index) {
         <li [style.--index]="index" @row>
-          <ds-monogram [text]="row.title" />
+          @switch (row.cover.kind) {
+            @case ("thumbnail") {
+              <ds-cover [src]="row.cover.src" />
+            }
+            @case ("monogram") {
+              <ds-monogram [text]="row.title" />
+            }
+            @default {
+              <span class="pending-cover"></span>
+            }
+          }
           <div class="body">
             <a class="title" [href]="row.url" target="_blank" rel="noopener">
               <ds-truncated-text [text]="row.title" [maxLength]="55" />

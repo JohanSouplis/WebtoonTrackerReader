@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   OnInit,
+  untracked,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Rating } from '../../../../../../core/domain/rating';
@@ -14,7 +16,12 @@ import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
-import { CLOCK, SCAN_REPOSITORY } from '../../../../../injection-tokens';
+import {
+  CLOCK,
+  COVER_BACKFILL,
+  COVER_REPOSITORY,
+  SCAN_REPOSITORY,
+} from '../../../../../injection-tokens';
 import { ScanRow } from '../../../service/scan-row.vm';
 import { ScanFiltersComponent } from '../../organisms/scan-filters/scan-filters.component';
 import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component';
@@ -31,12 +38,25 @@ import { ScanListStore } from './scan-list.store';
 })
 export class ScanListPage implements OnInit {
   private readonly scanRepository = inject(SCAN_REPOSITORY);
+  private readonly coverRepository = inject(COVER_REPOSITORY);
+  private readonly coverBackfill = inject(COVER_BACKFILL);
   private readonly deleteScan = inject(DeleteScanUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
   private readonly snackBar = inject(MatSnackBar);
   protected readonly store = inject(ScanListStore);
   protected readonly now = inject(CLOCK).now();
+
+  constructor() {
+    effect(() => {
+      const titles = this.store.shownTitles();
+      untracked(() => {
+        this.showCovers(titles).catch((error: unknown) =>
+          console.error('Error retrieving the covers:', error),
+        );
+      });
+    });
+  }
 
   ngOnInit(): void {
     this.showLibrary().catch((error: unknown) =>
@@ -74,6 +94,25 @@ export class ScanListPage implements OnInit {
       );
       await this.showLibrary();
     }
+  }
+
+  private async showCovers(titles: readonly string[]): Promise<void> {
+    if (titles.length === 0) {
+      return;
+    }
+    this.store.showCovers(
+      titles,
+      await this.coverRepository.find(titles.map(ScanTitle.of)),
+    );
+    const uncovered = this.store.uncoveredTitles();
+    if (uncovered.length === 0) {
+      return;
+    }
+    await this.coverBackfill.backfillCovers(uncovered);
+    this.store.showCovers(
+      uncovered,
+      await this.coverRepository.find(uncovered.map(ScanTitle.of)),
+    );
   }
 
   private async showLibrary(): Promise<void> {

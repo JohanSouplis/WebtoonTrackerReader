@@ -44,6 +44,14 @@ li:hover {
   border-color: var(--app-line);
 }
 
+.pending-cover {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--app-surface-3);
+}
+
 .body {
   flex: 1;
   min-width: 0;

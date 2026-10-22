@@ -1,3 +1,4 @@
+import { Cover, Thumbnail } from '../../../../../../core/domain/cover';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { NO_FILTERS } from '../../../service/scan-filters.rules';
@@ -140,6 +141,23 @@ describe('ScanListStore', () => {
     expect(store.filters()).toEqual(NO_FILTERS);
     expect(store.count()).toBe(12);
   });
+
+  it('should show the thumbnail of a found cover, the initials when the cover is missing, and nothing before the covers are read', () => {
+    const store = new ScanListStore();
+    store.showLibrary(TWELVE_SCANS);
+
+    store.showCovers(
+      [titleOf('12'), titleOf('11')],
+      new Map([[titleOf('12'), FOUND]]),
+    );
+
+    expect(coversOf(store.view()).slice(0, 3)).toEqual([
+      { kind: 'thumbnail', src: THUMBNAIL.dataUrl },
+      { kind: 'monogram' },
+      { kind: 'pending' },
+    ]);
+    expect(store.uncoveredTitles()).toEqual([titleOf('11')]);
+  });
 });
 
 const titleOf = (number: string): string => `Scan ${number}`;
@@ -154,3 +172,23 @@ const TWELVE_SCANS: ScanSnapshot[] = Array.from({ length: 12 }, (_, index) =>
 
 const shownTitles = (view: ScanListView): string[] =>
   view.kind === 'scans' ? view.rows.map((row) => row.title) : [];
+
+const coversOf = (view: ScanListView) =>
+  view.kind === 'scans' ? view.rows.map(({ cover }) => cover) : [];
+
+const thumbnail = (): Thumbnail => {
+  const parsed = Thumbnail.parse('data:image/webp;base64,UklGRg==');
+  if (!parsed) {
+    throw new Error('The thumbnail does not parse');
+  }
+  return parsed;
+};
+
+const THUMBNAIL = thumbnail();
+
+const FOUND: Cover = {
+  kind: 'found',
+  thumbnail: THUMBNAIL,
+  from: 'page',
+  at: new Date('2025-03-10T12:00:00Z'),
+};

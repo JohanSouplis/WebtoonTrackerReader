@@ -1,3 +1,4 @@
+import { ShownScan } from './scan-list-view.vm';
 import { ScanRow } from './scan-row.vm';
 
 export const aRow = (row: Partial<ScanRow>): ScanRow => ({
@@ -8,4 +9,10 @@ export const aRow = (row: Partial<ScanRow>): ScanRow => ({
   readAt: new Date('2024-06-01T13:05:10Z'),
   isFavorite: false,
   ...row,
+});
+
+export const aShownScan = (scan: Partial<ShownScan>): ShownScan => ({
+  ...aRow(scan),
+  cover: { kind: 'monogram' },
+  ...scan,
 });

@@ -1,11 +1,18 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { Covers } from '../../../../../../core/domain/cover';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import {
   filterScans,
   NO_FILTERS,
   ScanFilters,
 } from '../../../service/scan-filters.rules';
-import { ScanListView, ScanPage } from '../../../service/scan-list-view.vm';
+import {
+  CoverTile,
+  PENDING_COVER,
+  ScanListView,
+  ScanPage,
+  toCoverTile,
+} from '../../../service/scan-list-view.vm';
 import { ScanRow, toScanRow } from '../../../service/scan-row.vm';
 import {
   LATEST_READ_FIRST,
@@ -17,12 +24,29 @@ import {
 
 const FIRST_PAGE: ScanPage = { index: 0, size: 10 };
 
+type RowsView =
+  | Exclude<ScanListView, { kind: 'scans' }>
+  | {
+      readonly kind: 'scans';
+      readonly rows: readonly ScanRow[];
+      readonly page: ScanPage;
+      readonly length: number;
+    };
+
+const sameTitles = (
+  titles: readonly string[],
+  others: readonly string[],
+): boolean =>
+  titles.length === others.length &&
+  titles.every((title, index) => title === others[index]);
+
 @Injectable()
 export class ScanListStore {
   private readonly library = signal<readonly ScanRow[] | undefined>(undefined);
   private readonly shownFilters = signal<ScanFilters>(NO_FILTERS);
   private readonly shownSort = signal<ScanSort>(LATEST_READ_FIRST);
   private readonly shownPage = signal<ScanPage>(FIRST_PAGE);
+  private readonly covers = signal<ReadonlyMap<string, CoverTile>>(new Map());
   private readonly matchingScans = computed(() =>
     sortScans(
       filterScans(this.library() ?? [], this.shownFilters()),
@@ -32,7 +56,7 @@ export class ScanListStore {
   readonly filters = this.shownFilters.asReadonly();
   readonly sort = this.shownSort.asReadonly();
   readonly count = computed(() => this.matchingScans().length);
-  readonly view = computed((): ScanListView => {
+  private readonly rowsView = computed((): RowsView => {
     const library = this.library();
     if (library === undefined) {
       return { kind: 'loading' };
@@ -57,9 +81,50 @@ export class ScanListStore {
       length: scans.length,
     };
   });
+  readonly view = computed((): ScanListView => {
+    const view = this.rowsView();
+    const covers = this.covers();
+    return view.kind === 'scans'
+      ? {
+          ...view,
+          rows: view.rows.map((row) => ({
+            ...row,
+            cover: covers.get(row.title) ?? PENDING_COVER,
+          })),
+        }
+      : view;
+  });
+  readonly shownTitles = computed(
+    () => {
+      const view = this.rowsView();
+      return view.kind === 'scans' ? view.rows.map(({ title }) => title) : [];
+    },
+    { equal: sameTitles },
+  );
+  readonly uncoveredTitles = computed(() => {
+    const view = this.view();
+    return view.kind === 'scans'
+      ? view.rows
+          .filter(({ cover }) => cover.kind === 'monogram')
+          .map(({ title }) => title)
+      : [];
+  });
 
   showLibrary(snapshots: readonly ScanSnapshot[]): void {
     this.library.set(snapshots.map(toScanRow));
+  }
+
+  showCovers(titles: readonly string[], covers: Covers): void {
+    this.covers.update(
+      (shown) =>
+        new Map([
+          ...shown,
+          ...titles.map((title): [string, CoverTile] => [
+            title,
+            toCoverTile(covers.get(title)),
+          ]),
+        ]),
+    );
   }
 
   filter(change: Partial<ScanFilters>): void {
