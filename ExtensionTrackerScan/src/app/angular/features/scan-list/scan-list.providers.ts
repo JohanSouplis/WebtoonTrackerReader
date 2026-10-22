@@ -57,6 +57,7 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
     useFactory: () =>
       new DeleteScanUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is deleted'),
+        inject(COVER_REPOSITORY),
       ),
   },
   {

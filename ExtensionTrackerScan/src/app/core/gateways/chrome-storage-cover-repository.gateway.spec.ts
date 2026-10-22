@@ -40,6 +40,17 @@ describe('ChromeStorageCoverRepository', () => {
     );
   });
 
+  it('should delete the stored cover of a series and keep the others', async () => {
+    const storage = useStorage({});
+    const repository = new ChromeStorageCoverRepository();
+    await repository.save(ScanTitle.of('Solo Leveling'), FOUND);
+    await repository.save(ScanTitle.of('Nano Machine'), MISSING);
+
+    await repository.remove(ScanTitle.of('The Solo Leveling'));
+
+    expect(Object.keys(storage.items)).toEqual(['cover:nano machine']);
+  });
+
   it.each`
     stored
     ${'data:image/webp;base64,AAAA'}

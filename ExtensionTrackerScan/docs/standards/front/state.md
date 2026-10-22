@@ -67,7 +67,7 @@ async deleteScan(title: string): Promise<void> {
 - Un port propre à Angular est une interface de `service/*.port.ts`, sans import Angular. Aujourd'hui, deux
   en ont besoin : `FullPageNavigatorPort`, qui ouvre `news.html` dans un onglet, et `CoverBackfillPort`, qui
   demande au service worker de chercher les couvertures des lignes affichées sans couverture. Le use-case
-  `BackfillCoversUseCase` tourne dans le service worker, seul à écrire les couvertures : la popup ne fait que
+  `BackfillCoversUseCase` tourne dans le service worker, seul à enregistrer les couvertures : la popup ne fait que
   le demander, puis relit les couvertures par `CoverRepository`.
 - Son gateway Chrome et sa variante in-memory vivent dans `gateways/` de la même feature ou de `shell/`.
 - Un port qui lit ou écrit des scans n'est jamais un port Angular : c'est `ScanRepository` du core.

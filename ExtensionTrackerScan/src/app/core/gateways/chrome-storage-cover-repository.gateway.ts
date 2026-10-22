@@ -66,4 +66,8 @@ export class ChromeStorageCoverRepository implements CoverRepository {
   async save(title: ScanTitle, cover: Cover): Promise<void> {
     await chrome.storage.local.set({ [keyOf(title)]: toStored(cover) });
   }
+
+  async remove(title: ScanTitle): Promise<void> {
+    await chrome.storage.local.remove(keyOf(title));
+  }
 }

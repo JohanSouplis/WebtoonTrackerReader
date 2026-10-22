@@ -100,6 +100,8 @@ bannière) coûte plus cher que pas d'image : **dans le doute, le monogramme res
 - `BackfillCoversUseCase` cherche au plus 10 séries par ouverture de la popup, parmi les lignes affichées sans
   couverture, une requête à la fois par site. Il part de la page de la série si le scan la connaît, sinon de la
   dernière page lue.
+- Supprimer un scan supprime la couverture de sa série (`DeleteScanUseCase`). Aucun autre scan ne la partage : la
+  bibliothèque ne garde qu'un scan par `SeriesKey`, `restore()` et `recordReading()` fusionnent les autres.
 
 ## Tell-Don't-Ask
 

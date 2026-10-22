@@ -18,6 +18,10 @@ export class FakeChromeStorage {
   async set(items: Record<string, unknown>): Promise<void> {
     Object.assign(this.items, JSON.parse(JSON.stringify(items)));
   }
+
+  async remove(key: string): Promise<void> {
+    delete this.items[key];
+  }
 }
 
 export const installChrome = (chrome: object): void => {

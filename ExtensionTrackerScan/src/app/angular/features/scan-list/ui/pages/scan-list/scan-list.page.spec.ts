@@ -197,7 +197,7 @@ const renderPage = (
       { provide: CLOCK, useValue: new FixedClock() },
       {
         provide: DeleteScanUseCase,
-        useValue: new DeleteScanUseCase(scanRepository),
+        useValue: new DeleteScanUseCase(scanRepository, coverRepository),
       },
       {
         provide: ToggleFavoriteUseCase,
