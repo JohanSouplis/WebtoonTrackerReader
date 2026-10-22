@@ -18,9 +18,5 @@ import { ScanFilters } from '../../../service/scan-filters.rules';
 })
 export class ScanFiltersComponent {
   readonly filters = input.required<ScanFilters>();
-  readonly filtersChanged = output<ScanFilters>();
-
-  protected change(change: Partial<ScanFilters>): void {
-    this.filtersChanged.emit({ ...this.filters(), ...change });
-  }
+  readonly filtersChanged = output<Partial<ScanFilters>>();
 }

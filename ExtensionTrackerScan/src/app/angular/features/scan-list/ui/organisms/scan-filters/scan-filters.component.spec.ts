@@ -4,7 +4,7 @@ import { NO_FILTERS, ScanFilters } from '../../../service/scan-filters.rules';
 import { ScanFiltersComponent } from './scan-filters.component';
 
 describe('ScanFiltersComponent', () => {
-  it('should ask for favorites only and keep the other filters when Favorites only is pressed', async () => {
+  it('should ask for favorites only when Favorites only is pressed', async () => {
     const filtersChanged = jest.fn();
     await renderFilters(
       { title: 'solo', favoritesOnly: false, ratedOnly: true },
@@ -15,11 +15,7 @@ describe('ScanFiltersComponent', () => {
       screen.getByRole('button', { name: 'Favorites only' }),
     );
 
-    expect(filtersChanged).toHaveBeenCalledWith({
-      title: 'solo',
-      favoritesOnly: true,
-      ratedOnly: true,
-    });
+    expect(filtersChanged).toHaveBeenCalledWith({ favoritesOnly: true });
   });
 
   it('should ask for every scan again when a pressed Rated only is pressed', async () => {
@@ -28,7 +24,7 @@ describe('ScanFiltersComponent', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Rated only' }));
 
-    expect(filtersChanged).toHaveBeenCalledWith(NO_FILTERS);
+    expect(filtersChanged).toHaveBeenCalledWith({ ratedOnly: false });
   });
 
   it('should show which filters are on', async () => {
@@ -43,7 +39,7 @@ describe('ScanFiltersComponent', () => {
     );
   });
 
-  it('should search the typed title and keep the toggles when the reader types in Filter by title', async () => {
+  it('should search the typed title when the reader types in Filter by title', async () => {
     const filtersChanged = jest.fn();
     await renderFilters({ ...NO_FILTERS, favoritesOnly: true }, filtersChanged);
 
@@ -52,11 +48,7 @@ describe('ScanFiltersComponent', () => {
       'S',
     );
 
-    expect(filtersChanged).toHaveBeenLastCalledWith({
-      ...NO_FILTERS,
-      title: 'S',
-      favoritesOnly: true,
-    });
+    expect(filtersChanged).toHaveBeenLastCalledWith({ title: 'S' });
   });
 });
 
