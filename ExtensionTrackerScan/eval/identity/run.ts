@@ -1,6 +1,7 @@
 import { Chapter } from '../../src/app/core/domain/chapter';
 import { ScanLibrary } from '../../src/app/core/domain/scan-library';
 import { ScanTitle } from '../../src/app/core/domain/scan-title';
+import { SeriesMatch } from '../../src/app/core/domain/series-key';
 import {
   CROSS_LANGUAGE_ALIASES,
   ENGLISH_REWORDINGS,
@@ -17,8 +18,20 @@ type Slice = {
   readonly listsErrors: boolean;
 };
 
+const VERDICTS: readonly SeriesMatch[] = ['same', 'ambiguous', 'different'];
 const FOLLOWED_AT = new Date('2025-01-01T00:00:00Z');
 const READ_AT = new Date('2025-02-01T00:00:00Z');
+
+const parsed = (text: string): ScanTitle => {
+  const title = ScanTitle.parse(text);
+  if (!title) {
+    throw new Error(`Corpus title does not parse: "${text}"`);
+  }
+  return title;
+};
+
+const verdictOf = ([followedTitle, readTitle]: TitlePair): SeriesMatch =>
+  ScanTitle.of(followedTitle).seriesKey.match(parsed(readTitle).seriesKey);
 
 const isMergedByLibrary = ([followedTitle, readTitle]: TitlePair): boolean => {
   const library = ScanLibrary.restore([
@@ -30,10 +43,7 @@ const isMergedByLibrary = ([followedTitle, readTitle]: TitlePair): boolean => {
       isFavorite: false,
     },
   ]);
-  const title = ScanTitle.parse(readTitle);
-  if (!title) {
-    throw new Error(`Corpus title does not parse: "${readTitle}"`);
-  }
+  const title = parsed(readTitle);
   library.recordReading({
     title,
     chapter: Chapter.of(2),
@@ -105,6 +115,10 @@ const totals = slices.reduce(
       slice.isSameSeries
         ? `pairs ${slice.pairs.length}: merged ${merged.length} (recall ${percent(merged.length, slice.pairs.length)}), missed ${errors.length}`
         : `pairs ${slice.pairs.length}: kept apart ${slice.pairs.length - merged.length}, FALSE MERGES ${errors.length}`,
+    );
+    const verdicts = slice.pairs.map(verdictOf);
+    console.log(
+      `verdicts: ${VERDICTS.map((verdict) => `${verdict} ${verdicts.filter((each) => each === verdict).length}`).join(', ')}`,
     );
     if (slice.listsErrors) {
       for (const pair of errors) {

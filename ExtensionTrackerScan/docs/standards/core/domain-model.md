@@ -12,7 +12,7 @@ une projection de lecture.
 | Brique | Objet | Contenu |
 |---|---|---|
 | Agrégat | `ScanLibrary` | Tous les scans suivis par le lecteur. Tient les invariants de la bibliothèque. |
-| Value Object | `ScanTitle`, `Chapter`, `Rating`, `Reading` | Immuable, égalité par valeur, valide dès la construction |
+| Value Object | `ScanTitle`, `SeriesKey`, `Chapter`, `Rating`, `Reading` | Immuable, égalité par valeur, valide dès la construction |
 | Projection de lecture | `ScanSnapshot` | Donnée en lecture seule, sans identité ni mutateur. Lue par Angular et par le gateway. |
 | Service du domaine | `PageTitleParser` | Transforme une page visitée en `ParsedPage`, à l'aide du catalogue |
 | Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue, à partir du seul titre et de l'URL |
@@ -25,13 +25,36 @@ comparaison) est un Value Object.
 
 `ScanLibrary` est l'unique agrégat. Ses invariants :
 
-- un seul scan par titre, comparé par `ScanTitle.equals()` (casse ignorée, apostrophes typographiques
-  normalisées) ;
+- une lecture enrichit le scan de la même série, reconnue par sa `SeriesKey` (voir plus bas) ; le scan garde
+  son titre affiché, la lecture ne le renomme pas ;
+- supprimer, noter ou mettre en favori vise le titre affiché, comparé par `ScanTitle.equals()` (casse
+  ignorée) ;
 - une lecture plus ancienne que la lecture enregistrée ne remplace pas celle-ci ;
 - une note est un entier de 1 à 10 ;
 - noter, mettre en favori ou supprimer un scan absent échoue par une erreur du domaine.
 
 Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enregistre par `snapshot()`.
+
+## L'identité d'une série
+
+Un lecteur change de site, et un site change de domaine : la même série revient sous un titre un peu différent.
+`SeriesKey` est la forme normalisée d'un `ScanTitle` qui reconnaît la même série. Une fausse fusion écrase le
+chapitre d'une autre série, une fusion manquée laisse seulement un doublon : **dans le doute, ce sont deux
+séries.**
+
+- `SeriesKey.of()` retire la casse, les accents (Unicode NFKD), les apostrophes et la ponctuation, les articles
+  `the`, `a`, `an`. `×` devient `x`, `&` devient `and`, les chiffres romains `II` à `IX` deviennent des chiffres.
+- `SeriesKey.equals()` compare ces mots, dans l'ordre.
+- `SeriesKey.match()` rend `same`, `different` ou `ambiguous`. `same` : clés égales, ou égales sans espaces
+  (`Nano Machine`, `Nanomachine`), ou mêmes mots dans un autre ordre, sans `of` ni `s` final
+  (`Return of the Mount Hua Sect`, `Mount Hua Sect's Return`). `ambiguous` : tous les mots de l'un figurent dans
+  l'autre (`Solo Leveling`, `Solo Leveling: Ragnarok`). Le domaine traite `ambiguous` comme `different`.
+- Un nombre n'est jamais ignoré : `The Breaker 2` et `The Breaker 3` restent deux séries. Un mot ajouté non plus :
+  `(Remake)`, `(Novel)`, `0`, un sous-titre font une autre série.
+- Pas de similarité approximative (distance d'édition) : elle confond des séries proches sans preuve qu'elle
+  n'écrase rien. Un alias d'une autre langue (`Jeonjijeok Dokja Sijeom`) ou une reformulation
+  (`Return of the Blossoming Blade`) demande une source d'alias, pas une règle sur le titre.
+- Toute modification de cette règle se mesure avec `npm run eval:identity` ([`testing.md`](testing.md)).
 
 ## Tell-Don't-Ask
 

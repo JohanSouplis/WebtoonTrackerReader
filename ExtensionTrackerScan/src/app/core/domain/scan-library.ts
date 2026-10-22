@@ -2,6 +2,7 @@ import { Chapter } from './chapter';
 import { Rating } from './rating';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
+import { SeriesKey } from './series-key';
 
 export type ScanSnapshot = {
   readonly title: string;
@@ -46,7 +47,7 @@ export class ScanLibrary {
   }
 
   recordReading(reading: Reading): void {
-    const scan = this.find(reading.title);
+    const scan = this.findSeries(reading.title.seriesKey);
     if (!scan) {
       this.scans.push({ reading, isFavorite: false });
       return;
@@ -54,7 +55,7 @@ export class ScanLibrary {
     if (scan.reading.readAt > reading.readAt) {
       return;
     }
-    scan.reading = reading;
+    scan.reading = { ...reading, title: scan.reading.title };
   }
 
   remove(title: ScanTitle): void {
@@ -85,6 +86,19 @@ export class ScanLibrary {
       isFavorite,
       rating: rating?.value,
     }));
+  }
+
+  private findSeriesKey(key: SeriesKey): TrackedScan | undefined {
+    return this.scans.find((scan) => scan.reading.title.seriesKey.equals(key));
+  }
+
+  private findSeries(key: SeriesKey): TrackedScan | undefined {
+    return (
+      this.findSeriesKey(key) ??
+      this.scans.find(
+        (scan) => scan.reading.title.seriesKey.match(key) === 'same',
+      )
+    );
   }
 
   private find(title: ScanTitle): TrackedScan | undefined {
