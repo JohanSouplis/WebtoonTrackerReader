@@ -419,6 +419,7 @@ test.describe('add website', () => {
     await pin(page, 'add-02-filled');
     await propose.click();
     await expect(page.getByText('Website proposed. Thanks!')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Dismiss' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sent' })).toBeDisabled();
     await pin(page, 'add-03-success');
     await expect(page.getByText('Website proposed. Thanks!')).toBeHidden({
