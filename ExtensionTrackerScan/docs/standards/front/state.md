@@ -68,7 +68,8 @@ async deleteScan(title: string): Promise<void> {
   en ont besoin : `FullPageNavigatorPort`, qui ouvre `news.html` dans un onglet, et `CoverBackfillPort`, qui
   demande au service worker de chercher les couvertures des lignes affichées sans couverture. Le use-case
   `BackfillCoversUseCase` tourne dans le service worker, seul à enregistrer les couvertures : la popup ne fait que
-  le demander, puis relit les couvertures par `CoverRepository`.
+  le demander, puis relit les couvertures par `CoverRepository` chaque fois que le port lui signale une couverture
+  enregistrée.
 - Son gateway Chrome et sa variante in-memory vivent dans `gateways/` de la même feature ou de `shell/`.
 - Un port qui lit ou écrit des scans n'est jamais un port Angular : c'est `ScanRepository` du core.
 - Un port s'injecte par une `InjectionToken`. Toutes les `InjectionToken` vivent dans

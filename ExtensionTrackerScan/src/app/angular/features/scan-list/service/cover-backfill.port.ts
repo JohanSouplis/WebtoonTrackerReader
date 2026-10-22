@@ -1,3 +1,6 @@
 export interface CoverBackfillPort {
-  backfillCovers(titles: readonly string[]): Promise<void>;
+  backfillCovers(
+    titles: readonly string[],
+    onCoverSaved: () => void,
+  ): Promise<void>;
 }

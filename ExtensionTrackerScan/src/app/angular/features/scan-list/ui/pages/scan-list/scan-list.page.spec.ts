@@ -51,15 +51,40 @@ describe('ScanListPage', () => {
     await renderPage(scanRepository, {
       coverRepository,
       coverBackfill: {
-        backfillCovers: async (titles) => {
+        backfillCovers: async (titles, onCoverSaved) => {
           await Promise.all(
             titles.map((title) =>
               coverRepository.save(ScanTitle.of(title), FOUND),
             ),
           );
+          onCoverSaved();
         },
       },
     });
+
+    expect(
+      await within(await rowOf('Solo Leveling')).findByRole('presentation'),
+    ).toHaveAttribute('src', THUMBNAIL.dataUrl);
+  });
+
+  it('should show each cover as soon as the search saves it, before the search ends', async () => {
+    const coverRepository = new InMemoryCoverRepository();
+    await renderPage(
+      new InMemoryScanRepository([
+        aScan({ title: 'Solo Leveling' }),
+        aScan({ title: 'Omniscient Reader' }),
+      ]),
+      {
+        coverRepository,
+        coverBackfill: {
+          backfillCovers: async (_titles, onCoverSaved) => {
+            await coverRepository.save(ScanTitle.of('Solo Leveling'), FOUND);
+            onCoverSaved();
+            await new Promise<never>(() => undefined);
+          },
+        },
+      },
+    );
 
     expect(
       await within(await rowOf('Solo Leveling')).findByRole('presentation'),

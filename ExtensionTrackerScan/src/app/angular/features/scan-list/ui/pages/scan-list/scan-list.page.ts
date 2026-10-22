@@ -100,18 +100,22 @@ export class ScanListPage implements OnInit {
     if (titles.length === 0) {
       return;
     }
-    this.store.showCovers(
-      titles,
-      await this.coverRepository.find(titles.map(ScanTitle.of)),
-    );
+    await this.showCoversOf(titles);
     const uncovered = this.store.uncoveredTitles();
     if (uncovered.length === 0) {
       return;
     }
-    await this.coverBackfill.backfillCovers(uncovered);
+    await this.coverBackfill.backfillCovers(uncovered, () => {
+      this.showCoversOf(uncovered).catch((error: unknown) =>
+        console.error('Error retrieving the covers:', error),
+      );
+    });
+  }
+
+  private async showCoversOf(titles: readonly string[]): Promise<void> {
     this.store.showCovers(
-      uncovered,
-      await this.coverRepository.find(uncovered.map(ScanTitle.of)),
+      titles,
+      await this.coverRepository.find(titles.map(ScanTitle.of)),
     );
   }
 

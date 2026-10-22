@@ -127,8 +127,10 @@ Les doublons partent, puis 10 images et 50 liens au plus restent, ceux du fil d'
 couvertures passe par la même réduction.
 
 La popup ne télécharge aucune image. Elle demande au service worker de chercher les couvertures des lignes
-affichées sans couverture (`cover-backfill-message.ts`), puis relit les couvertures. Le service worker est le seul
-à chercher et enregistrer une couverture. La popup ne fait que supprimer celle du scan qu'elle supprime.
+affichées sans couverture (`cover-backfill-message.ts`), et relit leurs couvertures à chaque couverture
+enregistrée (`chrome.storage.onChanged` sur les clés `cover:`, le temps de la recherche) : elles apparaissent une à
+une. Le service worker est le seul à chercher et enregistrer une couverture. La popup ne fait que supprimer celle du
+scan qu'elle supprime.
 
 ## Gateways
 

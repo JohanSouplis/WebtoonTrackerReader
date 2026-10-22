@@ -11,7 +11,10 @@ type StoredCover =
     }
   | { readonly kind: 'missing'; readonly triedAt: string };
 
-const keyOf = (title: ScanTitle): string => `cover:${title.seriesKey.value}`;
+export const COVER_KEY_PREFIX = 'cover:';
+
+const keyOf = (title: ScanTitle): string =>
+  `${COVER_KEY_PREFIX}${title.seriesKey.value}`;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
