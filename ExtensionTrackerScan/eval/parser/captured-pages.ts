@@ -1,6 +1,7 @@
 import enAggregators from './captures/en-aggregators.json';
 import nonEnglish from './captures/non-english.json';
 import official from './captures/official.json';
+import { PageSignalsMessage } from '../../src/page-signals-message';
 
 type StructuredDataCapture = {
   readonly type?: string | readonly string[] | null;
@@ -18,6 +19,7 @@ export type Capture = {
   readonly seriesTitleFromParentPage?: string;
   readonly chapter: number | string | null;
   readonly finalUrl: string;
+  readonly titleAtLoad: string | null;
   readonly titleSettled: string | null;
   readonly ogTitle: string | null;
   readonly ogSiteName: string | null;
@@ -102,3 +104,40 @@ export const CAPTURED_PAGES: readonly CapturedPage[] = [
   ...capturedPagesOf('official', official),
   ...capturedPagesOf('non-english', nonEnglish),
 ];
+
+const firstOf = (joined: string | null): string | undefined =>
+  joined?.split(' || ')[0];
+
+const selectedOptionsOf = ({
+  chapterSelectSelected,
+}: Capture): readonly string[] =>
+  typeof chapterSelectSelected === 'string'
+    ? chapterSelectSelected.split(' || ')
+    : (chapterSelectSelected ?? []);
+
+export const messagesOf = (capture: Capture): PageSignalsMessage[] =>
+  [...new Set([capture.titleAtLoad, capture.titleSettled])].flatMap(
+    (pageTitle) =>
+      pageTitle
+        ? [
+            {
+              pageTitle,
+              url: capture.finalUrl,
+              ogTitle: capture.ogTitle ?? undefined,
+              ogSiteName: capture.ogSiteName ?? undefined,
+              canonicalUrl: capture.canonical ?? undefined,
+              heading: firstOf(capture.h1),
+              breadcrumb: firstOf(capture.breadcrumbText),
+              structuredData: (capture.jsonLd ?? []).map(
+                ({ type, name, headline, position }) => ({
+                  type,
+                  name,
+                  headline,
+                  position,
+                }),
+              ),
+              selectedOptions: selectedOptionsOf(capture),
+            },
+          ]
+        : [],
+  );

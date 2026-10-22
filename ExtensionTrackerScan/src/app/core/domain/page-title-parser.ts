@@ -1,5 +1,5 @@
 import { Chapter } from './chapter';
-import { ParsedPage, VisitedPage } from './parsed-page';
+import { PageSignals, ParsedPage, VisitedPage } from './parsed-page';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 import { parseUnsupportedWebsitePage } from './unsupported-website-page-parser';
@@ -75,7 +75,7 @@ const readingFrom = (
     : undefined;
 };
 
-export const parsePage = (page: VisitedPage, readAt: Date): ParsedPage => {
+export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
   const cleanedPage: VisitedPage = {
     pageTitle: withoutLeadingSpace(page.pageTitle.replace('\n', '')),
     url: page.url,

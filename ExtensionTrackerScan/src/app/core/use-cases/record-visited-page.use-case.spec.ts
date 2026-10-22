@@ -1,3 +1,4 @@
+import { parsePageSignals } from '../../../page-signals-message';
 import { ScanSnapshot } from '../domain/scan-library';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
@@ -137,6 +138,31 @@ describe('RecordVisitedPageUseCase', () => {
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
+
+  it('should leave the library unchanged when the content script sends the same page again', async () => {
+    const { recordVisitedPage, scans } = setUp();
+    const message = {
+      pageTitle: 'Nano Machine - Chapter 190 - Flame Comics',
+      url: 'https://flamecomics.xyz/nano-machine-chapter-190/',
+      ogTitle: 'Nano Machine - Chapter 190 - Flame Comics',
+      structuredData: [],
+      selectedOptions: [],
+    };
+    await recordVisitedPage.execute(signalsOf(message));
+    const recordedOnce = await scans();
+
+    await recordVisitedPage.execute(signalsOf(message));
+
+    expect(await scans()).toEqual(recordedOnce);
+    expect(recordedOnce).toEqual([
+      aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        url: message.url,
+        readAt: NOW,
+      }),
+    ]);
+  });
 
   it('should add the scan after the scans already followed when its title is new', async () => {
     const followed = aScan({ title: 'OldScanTitle', chapter: 8 });
@@ -426,6 +452,14 @@ const asuraPage = (title: string, chapter: string) => ({
   pageTitle: `${title} Chapter ${chapter} - Asura Scans`,
   url: asuraUrl(chapter),
 });
+
+const signalsOf = (message: unknown) => {
+  const signals = parsePageSignals(message);
+  if (!signals) {
+    throw new Error('The content script message does not parse');
+  }
+  return signals;
+};
 
 const setUp = (followed: ScanSnapshot[] = []) => {
   const scanRepository = new InMemoryScanRepository(followed);

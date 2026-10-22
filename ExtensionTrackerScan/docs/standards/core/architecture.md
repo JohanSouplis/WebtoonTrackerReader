@@ -49,7 +49,7 @@ export class RecordVisitedPageUseCase {
 ```
 src/
   background.ts            point d'entrée : écoute les événements Chrome, appelle les use-cases
-  content-script.ts        point d'entrée : envoie { pageTitle, url } au service worker
+  content-script.ts        point d'entrée : envoie les PageSignals de la page au service worker
   app/core/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · series-key.ts · chapter.ts · rating.ts
@@ -96,7 +96,12 @@ chrome.runtime.onMessage.addListener((message: unknown) => {
 });
 ```
 
-`content-script.ts` ne contient aucune règle. Il lit `document.title` et `location.href` et les envoie.
+`content-script.ts` ne contient aucune règle. Il lit la page telle quelle (`document.title`, `location.href`,
+`og:title`, `og:site_name`, `canonical`, le premier `h1`, le fil d'Ariane, les nœuds JSON-LD, les options
+sélectionnées) et l'envoie. Il renvoie la page quand son titre change, car certains sites ne posent le titre du
+chapitre qu'après le chargement. Enregistrer deux fois la même lecture ne change rien : le renvoi est sans risque.
+`background.ts` réduit le message (`unknown`) en `PageSignals` dans `page-signals-message.ts`, y compris le
+décodage des entités HTML que certains sites laissent dans leur JSON-LD (`I&#8217;ll`).
 
 ## Gateways
 

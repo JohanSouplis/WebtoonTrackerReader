@@ -1,5 +1,8 @@
 import { parsePage } from '../../src/app/core/domain/page-title-parser';
-import { VisitedPage } from '../../src/app/core/domain/parsed-page';
+import {
+  PageSignals,
+  VisitedPage,
+} from '../../src/app/core/domain/parsed-page';
 import { parseUnsupportedWebsitePage } from '../../src/app/core/domain/unsupported-website-page-parser';
 import { Reading } from '../../src/app/core/domain/reading';
 import { ScanTitle } from '../../src/app/core/domain/scan-title';
@@ -15,7 +18,13 @@ import {
   TUNING_OTHER_PAGES,
   OTHER_PAGES,
 } from './unsupported-website-pages';
-import { CAPTURED_PAGES, CapturedPage, Expected } from './captured-pages';
+import {
+  CAPTURED_PAGES,
+  CapturedPage,
+  Expected,
+  messagesOf,
+} from './captured-pages';
+import { parsePageSignals } from '../../src/page-signals-message';
 
 type Recorded = { readonly title: string; readonly chapter: number };
 
@@ -37,7 +46,7 @@ const READ_AT = new Date('2025-01-01T00:00:00Z');
 const recordedFrom = (reading?: Reading): Recorded | undefined =>
   reading && { title: reading.title.value, chapter: reading.chapter.value };
 
-const recordedBy = (page: VisitedPage): Recorded | undefined => {
+const recordedBy = (page: PageSignals): Recorded | undefined => {
   const parsed = parsePage(page, READ_AT);
   return recordedFrom(parsed.kind === 'reading' ? parsed.reading : undefined);
 };
@@ -184,7 +193,7 @@ console.log(
 
 type InputMode = {
   readonly name: string;
-  readonly record: (page: CapturedPage) => Recorded | undefined;
+  readonly record: (page: CapturedPage) => readonly Recorded[];
 };
 
 type CapturedOutcome =
@@ -202,18 +211,24 @@ const isSameSeries = (recorded: string, expected: string): boolean => {
   );
 };
 
+const isExact = (
+  expected: Extract<Expected, { kind: 'reading' }>,
+  recorded: Recorded,
+): boolean =>
+  expected.titles.some((title) => isSameSeries(recorded.title, title)) &&
+  expected.chapters.includes(recorded.chapter);
+
 const capturedOutcomeOf = (
   expected: Expected,
-  recorded?: Recorded,
+  recorded: readonly Recorded[],
 ): CapturedOutcome => {
   if (expected.kind === 'other') {
-    return recorded ? 'false-positive' : 'ignored';
+    return recorded.length > 0 ? 'false-positive' : 'ignored';
   }
-  if (!recorded) {
+  if (recorded.length === 0) {
     return 'missed';
   }
-  return expected.titles.some((title) => isSameSeries(recorded.title, title)) &&
-    expected.chapters.includes(recorded.chapter)
+  return recorded.every((reading) => isExact(expected, reading))
     ? 'exact'
     : 'wrong';
 };
@@ -223,14 +238,23 @@ const visitedPageOf = ({ capture }: CapturedPage): VisitedPage => ({
   url: capture.finalUrl,
 });
 
+const recordedFromMessage = (message: unknown): Recorded[] => {
+  const page = parsePageSignals(message);
+  const recorded = page && recordedBy(page);
+  return recorded ? [recorded] : [];
+};
+
 const INPUT_MODES: readonly InputMode[] = [
   {
     name: 'history import (title and url)',
-    record: (page) => recordedBy(visitedPageOf(page)),
+    record: (page) => {
+      const recorded = recordedBy(visitedPageOf(page));
+      return recorded ? [recorded] : [];
+    },
   },
   {
     name: 'content script (page signals)',
-    record: (page) => recordedBy(visitedPageOf(page)),
+    record: (page) => messagesOf(page.capture).flatMap(recordedFromMessage),
   },
 ];
 
@@ -268,7 +292,7 @@ const reportCaptured = (
     for (const { page, recorded, outcome } of outcomes) {
       if (outcome === 'wrong' || outcome === 'false-positive') {
         console.log(
-          `  ${outcome === 'wrong' ? 'WRONG ' : 'FALSE+'} ${recorded ? describe(recorded) : ''} expected ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
+          `  ${outcome === 'wrong' ? 'WRONG ' : 'FALSE+'} ${recorded.map(describe).join(', ')} expected ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
         );
       }
     }

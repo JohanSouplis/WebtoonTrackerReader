@@ -27,6 +27,7 @@ pas un synonyme.
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
+| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée | `pageData`, `metadata`, `message` |
 | `WebsitePattern` | Le format de titre d'un site, qui permet d'en extraire scan et chapitre | `parser`, `websiteJson` |
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
 | `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |

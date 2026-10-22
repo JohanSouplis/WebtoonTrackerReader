@@ -27,7 +27,7 @@ L'extension tourne dans trois contextes qui partagent un seul métier, le **core
 | Contexte | Point d'entrée | Rôle |
 |---|---|---|
 | Service worker | `src/background.ts` | Rôle « back » : reçoit les pages visitées, importe l'historique, appelle les use-cases |
-| Page web lue | `src/content-script.ts` | Envoie le titre et l'URL de la page au service worker |
+| Page web lue | `src/content-script.ts` | Envoie les signaux de la page (titre, URL, `og:title`, `h1`, JSON-LD...) au service worker |
 | Popup et page complète | `src/main.ts` (Angular 19) | Affiche la liste des scans, propose un site |
 
 Le core se lit avec les docs `core/`. Angular se lit avec les docs `front/`.
