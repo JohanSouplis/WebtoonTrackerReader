@@ -129,13 +129,7 @@ const hostOf = (url: string): string =>
 
 const isWebsiteName = (segment: string, host: string): boolean => {
   const name = compact(segment);
-  return (
-    name.length > 0 &&
-    (host.includes(name) ||
-      segment
-        .split(/\s+/)
-        .some((word) => word.length >= 4 && host.includes(compact(word))))
-  );
+  return name.length > 0 && host.includes(name);
 };
 
 const cleaned = (text: string): string =>
