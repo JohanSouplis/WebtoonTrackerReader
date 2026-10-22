@@ -86,4 +86,10 @@ export const SUPPORTED_WEBSITE_PAGES: readonly SupportedWebsitePage[] = [
   ["Return of the Frozen Player - chapter 8 - HARIMANGA", "https://harimanga.me/manga/return-of-the-frozen-player/chapter-8/", "Return of the Frozen Player", 8],
   ["I Saw the Future With the Killer Grand Duke - Chapter 5 - HARIMANGA", "https://harimanga.me/manga/i-saw-the-future-with-the-killer-grand-duke/chapter-5/", "I Saw the Future With the Killer Grand Duke", 5],
   ["Solo Spell Caster | MANGA DISTRICT - Read Scan - Manhwa", "https://mangadistrict.com/read-scan/solo-spell-caster/chapter-171/", "Solo Spell Caster", 171],
+  ["XX Dungeon - Chapter 49 - MANGA DISTRICT - Read Scan - Manhwa", "https://mangadistrict.com/series/xx-dungeon/chapter-49/", "XX Dungeon", 49],
+  ["Read Episode 1 - Solo Leveling | Tappytoon", "https://www.tappytoon.com/en/chapters/623723039?", "Solo Leveling", 1],
+  ["Ch. 1 (en) - Lord Blackwood Promised Me Death - EVA-SCANS | ComicK", "https://comick.dev/comic/lord-blackwood-promised-me-death/QUkHI7Dl-chapter-1-en", "Lord Blackwood Promised Me Death", 1],
+  ["EP 81 - 81 | Catastrophic Necromancer", "https://www.webtoons.com/es/fantasy/catastrophic-necromancer/ep-81/viewer?title_no=8467&episode_no=81", "Catastrophic Necromancer", 81],
+  ["第109話 - 109 | 絕對回歸", "https://www.webtoons.com/zh-hant/martial-arts/absolute-regression/%E7%AC%AC109%E8%A9%B1/viewer?title_no=6876&episode_no=109", "絕對回歸", 109],
+  ["Ep.128 - 129 | Operation: True Love", "https://www.webtoons.com/de/romance/operation-true-love/ep128/viewer?title_no=6126&episode_no=129", "Operation: True Love", 128],
 ];

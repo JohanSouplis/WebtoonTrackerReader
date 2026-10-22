@@ -78,8 +78,8 @@ describe('ImportReadingHistoryUseCase', () => {
 
   it('should report the history pages whose title matches no format of their supported website', async () => {
     const unparsed = visit(
-      'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
-      'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
+      'Lore Olympus | WEBTOON',
+      'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
       LATER,
     );
     const { importReadingHistory, scans, crashReporter } = setUp([

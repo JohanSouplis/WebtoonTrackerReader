@@ -126,6 +126,11 @@ déjà décidé.
   confiée à l'analyse générique.
 - Ajouter un site, c'est ajouter une entrée au catalogue et une ligne au tableau de cas de la spec
   ([`testing.md`](testing.md)).
+- Un site n'entre ou ne reste au catalogue que si ses formats battent l'analyse générique sur
+  `npm run eval:parser` (section « catalog against the generic parser »). Un site que l'analyse générique lit
+  aussi bien quitte le catalogue : il ne reçoit plus de format à maintenir quand il change de titre ou de
+  domaine. Un domaine mort ou repris par un autre site quitte le catalogue dès que l'analyse générique couvre
+  ses pages.
 
 ```ts
 // ❌ copie à la main, qui a déjà divergé : battwo.com et harimanga.me sont analysés mais absents de la page

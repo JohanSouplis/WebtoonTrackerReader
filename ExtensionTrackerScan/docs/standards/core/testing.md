@@ -60,8 +60,9 @@ it("should report the page when its title matches no pattern of a supported webs
 ## Le catalogue des sites se teste par un tableau de cas
 
 La spec de `RecordVisitedPageUseCase` porte un `it.each` : un titre de page réel, son URL, le titre et le
-chapitre attendus. Chaque site du catalogue y a au moins une ligne. Ajouter un site ajoute une ligne. Le
-tableau actuel de `retrieve_title_and_chapter.test.ts` en est la base.
+chapitre attendus. Chaque site du catalogue y a au moins une ligne. Ajouter un site ajoute une ligne. Les
+lignes d'un site sorti du catalogue restent : elles passent alors par l'analyse générique et en protègent le
+résultat.
 
 ## Les sites hors catalogue se mesurent sur un corpus
 

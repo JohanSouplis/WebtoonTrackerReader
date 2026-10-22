@@ -67,9 +67,7 @@ const readingFrom = (
   const { title, chapter } = format.url
     ? extract(format.url, page.url, fromPageTitle)
     : fromPageTitle;
-  const scanTitle = ScanTitle.parse(
-    withoutLeadingSpace(title).replace(' [Official]', ''),
-  );
+  const scanTitle = ScanTitle.parse(title.replace(' [Official]', '').trim());
   return scanTitle && chapter
     ? { title: scanTitle, chapter, url: page.url, readAt }
     : undefined;

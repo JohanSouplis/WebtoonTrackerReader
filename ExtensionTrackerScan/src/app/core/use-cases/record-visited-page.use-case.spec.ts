@@ -37,8 +37,12 @@ describe('RecordVisitedPageUseCase', () => {
       'https://www.tappytoon.com/en/comics/home',
     ],
     [
-      'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
-      'https://mangapark.org/title/341611-en-chronicles-of-the-demon-faction/9404698-ch-102',
+      'Lore Olympus | WEBTOON',
+      'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
+    ],
+    [
+      'รีวิว - 153 | เอาชีวิตรอดในเกมฉบับคนเถื่อน',
+      'https://www.webtoons.com/th/fantasy/surviving-the-game-as-a-barbarian/%E0%B8%A3%E0%B8%A7%E0%B8%A7/viewer?title_no=5530&episode_no=153',
     ],
   ])(
     'should report the page when its title "%s" matches no format of its supported website',
@@ -71,8 +75,8 @@ describe('RecordVisitedPageUseCase', () => {
     ],
     [
       'a page whose url contains "undefined"',
-      'Solo Leveling Chapter 3 - Asura Scans',
-      'https://asuracomic.net/series/undefined/chapter/3',
+      'Solo Leveling - Chapter 3 - MANGA DISTRICT - Read Scan - Manhwa',
+      'https://mangadistrict.com/series/undefined/chapter-3/',
     ],
   ])(
     'should ignore the page without reporting it when it is %s',
@@ -239,11 +243,16 @@ describe('RecordVisitedPageUseCase', () => {
     const followed = aScan({ title: 'OldScanTitle', chapter: 8 });
     const { recordVisitedPage, scans } = setUp([followed]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '13'));
+    await recordVisitedPage.execute(catalogPage('Title', '13'));
 
     expect(await scans()).toEqual([
       followed,
-      aScan({ title: 'Title', chapter: 13, url: asuraUrl('13'), readAt: NOW }),
+      aScan({
+        title: 'Title',
+        chapter: 13,
+        url: catalogUrl('13'),
+        readAt: NOW,
+      }),
     ]);
   });
 
@@ -252,10 +261,10 @@ describe('RecordVisitedPageUseCase', () => {
       aScan({ title: 'Title', chapter: 1 }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '2'));
+    await recordVisitedPage.execute(catalogPage('Title', '2'));
 
     expect(await scans()).toEqual([
-      aScan({ title: 'Title', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      aScan({ title: 'Title', chapter: 2, url: catalogUrl('2'), readAt: NOW }),
     ]);
   });
 
@@ -267,22 +276,22 @@ describe('RecordVisitedPageUseCase', () => {
     });
     const { recordVisitedPage, scans } = setUp([followed]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '2'));
+    await recordVisitedPage.execute(catalogPage('Title', '2'));
 
     expect(await scans()).toEqual([followed]);
   });
 
   it.each([
-    ['the chapter is not a number', 'Title Chapter abc - Asura Scans'],
-    ['the title is empty', '  Chapter 3 - Asura Scans'],
-    ['the title and the chapter are empty', '  Chapter x - Asura Scans'],
+    ['the chapter is not a number', 'Episode abc | Title'],
+    ['the title is empty', 'Episode 3 | '],
+    ['the title and the chapter are empty', 'Episode x | '],
   ])(
     'should leave the followed scans unchanged when %s',
     async (_, pageTitle) => {
       const followed = aScan({ title: 'Title', chapter: 1 });
       const { recordVisitedPage, scans } = setUp([followed]);
 
-      await recordVisitedPage.execute({ pageTitle, url: asuraUrl('3') });
+      await recordVisitedPage.execute({ pageTitle, url: catalogUrl('3') });
 
       expect(await scans()).toEqual([followed]);
     },
@@ -330,10 +339,10 @@ describe('RecordVisitedPageUseCase', () => {
         aScan({ title: followedTitle, chapter: 1 }),
       ]);
 
-      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+      await recordVisitedPage.execute(catalogPage(readTitle, '2'));
 
       expect(await scans()).toEqual([
-        aScan({ title: followedTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+        aScan({ title: followedTitle, chapter: 2, url: catalogUrl('2'), readAt: NOW }),
       ]);
     },
   );
@@ -355,11 +364,11 @@ describe('RecordVisitedPageUseCase', () => {
       const followed = aScan({ title: followedTitle, chapter: 1 });
       const { recordVisitedPage, scans } = setUp([followed]);
 
-      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+      await recordVisitedPage.execute(catalogPage(readTitle, '2'));
 
       expect(await scans()).toEqual([
         followed,
-        aScan({ title: readTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+        aScan({ title: readTitle, chapter: 2, url: catalogUrl('2'), readAt: NOW }),
       ]);
     },
   );
@@ -384,12 +393,17 @@ describe('RecordVisitedPageUseCase', () => {
       latest,
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
     expect(await scans()).toEqual([
       { ...latest, isFavorite: true },
       other,
-      aScan({ title: 'Eleceed', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      aScan({
+        title: 'Eleceed',
+        chapter: 2,
+        url: catalogUrl('2'),
+        readAt: NOW,
+      }),
     ]);
   });
 
@@ -416,14 +430,14 @@ describe('RecordVisitedPageUseCase', () => {
         }),
       ]);
 
-      await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+      await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
       expect(await scans()).toEqual([
         { ...latest, rating: mergedRating },
         aScan({
           title: 'Eleceed',
           chapter: 2,
-          url: asuraUrl('2'),
+          url: catalogUrl('2'),
           readAt: NOW,
         }),
       ]);
@@ -439,7 +453,7 @@ describe('RecordVisitedPageUseCase', () => {
     const eleceed = aScan({
       title: 'Eleceed',
       chapter: 2,
-      url: asuraUrl('2'),
+      url: catalogUrl('2'),
       readAt: NOW,
     });
     const { recordVisitedPage, scans } = setUp([
@@ -451,8 +465,8 @@ describe('RecordVisitedPageUseCase', () => {
       latest,
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
-    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
 
     expect(await scans()).toEqual([latest, eleceed]);
   });
@@ -462,14 +476,14 @@ describe('RecordVisitedPageUseCase', () => {
     const joined = aScan({ title: 'Nanomachine', chapter: 1 });
     const { recordVisitedPage, scans } = setUp([spaced, joined]);
 
-    await recordVisitedPage.execute(asuraPage('Nanomachine', '2'));
+    await recordVisitedPage.execute(catalogPage('Nanomachine', '2'));
 
     expect(await scans()).toEqual([
       spaced,
       aScan({
         title: 'Nanomachine',
         chapter: 2,
-        url: asuraUrl('2'),
+        url: catalogUrl('2'),
         readAt: NOW,
       }),
     ]);
@@ -480,10 +494,10 @@ describe('RecordVisitedPageUseCase', () => {
       aScan({ title: 'Title', chapter: 1, url: '' }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '1'));
+    await recordVisitedPage.execute(catalogPage('Title', '1'));
 
     expect(await scans()).toEqual([
-      aScan({ title: 'Title', chapter: 1, url: asuraUrl('1'), readAt: NOW }),
+      aScan({ title: 'Title', chapter: 1, url: catalogUrl('1'), readAt: NOW }),
     ]);
   });
 
@@ -499,13 +513,13 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Title', '1'));
+    await recordVisitedPage.execute(catalogPage('Title', '1'));
 
     expect(await scans()).toEqual([
       aScan({
         title: 'Title',
         chapter: 1,
-        url: asuraUrl('1'),
+        url: catalogUrl('1'),
         readAt: NOW,
         isFavorite: true,
         rating: 9,
@@ -516,12 +530,12 @@ describe('RecordVisitedPageUseCase', () => {
 
 const NOW = new Date('2025-01-01T09:00:10Z');
 
-const asuraUrl = (chapter: string): string =>
-  `https://asuracomic.net/series/title/chapter/${chapter}`;
+const catalogUrl = (chapter: string): string =>
+  `https://www.webtoons.com/en/fantasy/title/episode-${chapter}/viewer?title_no=1&episode_no=${chapter}`;
 
-const asuraPage = (title: string, chapter: string) => ({
-  pageTitle: `${title} Chapter ${chapter} - Asura Scans`,
-  url: asuraUrl(chapter),
+const catalogPage = (title: string, chapter: string) => ({
+  pageTitle: `Episode ${chapter} | ${title}`,
+  url: catalogUrl(chapter),
 });
 
 const contentScriptMessage = (signals: object) => ({
