@@ -27,6 +27,8 @@ pas un synonyme.
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
 | `WebsitePattern` | Le format de titre d'un site, qui permet d'en extraire scan et chapitre | `parser`, `websiteJson` |
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
+| `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |
+| `ChapterMention` | Le numéro de chapitre que le titre d'une page annonce, avec le texte qui l'entoure | `marker`, `match` |
 | `WebsiteProposal` | Un site que le lecteur propose d'ajouter | `notification` pour ce sens |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.

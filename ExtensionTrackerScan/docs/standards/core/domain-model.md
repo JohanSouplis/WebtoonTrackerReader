@@ -15,6 +15,7 @@ une projection de lecture.
 | Value Object | `ScanTitle`, `Chapter`, `Rating`, `Reading` | Immuable, égalité par valeur, valide dès la construction |
 | Projection de lecture | `ScanSnapshot` | Donnée en lecture seule, sans identité ni mutateur. Lue par Angular et par le gateway. |
 | Service du domaine | `PageTitleParser` | Transforme une page visitée en `ParsedPage`, à l'aide du catalogue |
+| Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue, à partir du seul titre et de l'URL |
 | Catalogue | `WEBSITE_PATTERNS` | Les sites supportés et le format de titre de chacun |
 
 Préfère un Value Object à un champ primitif. Une notion qui porte une règle (normalisation, intervalle,
@@ -93,6 +94,8 @@ déjà décidé.
   `SUPPORTED_WEBSITES`, dérivé du catalogue. Elle n'en tient pas une copie.
 - Le catalogue est typé (`readonly WebsitePattern[]`), sans `any`. Les formats d'un site forment un tableau,
   pas un objet indexé par `'1'`, `'2'`, `'3'`.
+- Le catalogue garde la priorité. Une page d'un site supporté qui ne suit aucun format est signalée, jamais
+  confiée à l'analyse générique.
 - Ajouter un site, c'est ajouter une entrée au catalogue et une ligne au tableau de cas de la spec
   ([`testing.md`](testing.md)).
 
@@ -103,3 +106,20 @@ availableWebsites: string[] = ['toonily.com', 'asuracomic.net', ...];
 // ✅ une source, une dérivation
 export const SUPPORTED_WEBSITES = WEBSITE_PATTERNS.map((pattern) => pattern.host);
 ```
+
+## Les sites hors catalogue
+
+Une page d'un `UnsupportedWebsite` devient une lecture seulement si tous les indices concordent. Une entrée
+fausse dans la bibliothèque coûte plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans
+signalement.
+
+- Le titre de la page porte une `ChapterMention` (`Chapter 12`, `Chapitre 12,5`, `Ep. 12`, `第12話`), suivie
+  d'un séparateur ou d'un qualificatif (`Online`, `VF`), jamais d'un mot de phrase (`Chapter 11 bankruptcy`).
+- L'URL confirme le même numéro (`/chapter-12`, `/c12`, `?ep=12`, `/12/`). Un identifiant
+  (`/chapter/3186773`) ne confirme rien.
+- La page parle de lecture (`manga`, `manhwa`, `webtoon`, `scan`...) et d'aucun autre média (`anime`,
+  `novel`, `wiki`, `podcast`...). Les deux lexiques sont des tableaux du domaine.
+- Le titre du scan précède la mention. S'il la suit (`Chapter 12 - Titre | Site`), l'URL doit le contenir.
+
+Le contenu de la page (`og:title`, JSON-LD) n'entre pas en jeu : l'import de l'historique ne connaît que le
+titre et l'URL, et les deux chemins appliquent la même règle.

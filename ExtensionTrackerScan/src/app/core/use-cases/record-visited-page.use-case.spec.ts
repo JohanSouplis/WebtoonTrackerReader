@@ -85,6 +85,57 @@ describe('RecordVisitedPageUseCase', () => {
     },
   );
 
+  // prettier-ignore
+  it.each<[string, string, string, number]>([
+    ['Nano Machine - Chapter 190 - Flame Comics', 'https://flamecomics.xyz/nano-machine-chapter-190/', 'Nano Machine', 190],
+    ["Read Omniscient Reader's Viewpoint Chapter 205 Online Free - ManhwaClan", 'https://manhwaclan.com/manga/omniscient-readers-viewpoint/chapter-205/', "Omniscient Reader's Viewpoint", 205],
+    ['The Breaker: Eternal Force - Chapter 79 - Hivetoon', 'https://hivetoon.com/series/the-breaker-eternal-force/chapter-79', 'The Breaker: Eternal Force', 79],
+    ['86 - Eighty Six Chapter 42 - MangaBuddy', 'https://mangabuddy.com/86-eighty-six/chapter-42', '86 - Eighty Six', 42],
+    ['Kaiju No. 8 Chapter 98.5 - Read Kaiju No. 8 Manga Online', 'https://kaijuno8.online/manga/kaiju-no-8-chapter-98-5/', 'Kaiju No. 8', 98.5],
+    ['Dandadan Chapitre 150,5 - Sushiscan', 'https://sushiscan.net/dandadan-chapitre-150-5/', 'Dandadan', 150.5],
+    ['Chapter 99 | Eleceed | ManhwaFreak', 'https://manhwa-freak.com/eleceed-chapter-99/', 'Eleceed', 99],
+    ['Chapter 12.5 - Spy x Family - Read Manga', 'https://readspyxfamily.com/manga/spy-x-family-chapter-12-5/', 'Spy x Family', 12.5],
+    ['Berserk Chapter 375 - MangaKatana', 'https://mangakatana.com/manga/berserk.1234/c375', 'Berserk', 375],
+    ['Lookism Ep 412 - WebtoonScan', 'https://www.webtoonscan.com/read?series=lookism&ep=412', 'Lookism', 412],
+    ['Eleceed Ch. 300 | ReadM', 'https://readm.today/manga/eleceed/300/all-pages', 'Eleceed', 300],
+  ])(
+    'should record the scan read on a website outside the catalog when the page title is "%s"',
+    async (pageTitle, url, title, chapter) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+
+      await recordVisitedPage.execute({ pageTitle, url });
+
+      expect(await scans()).toEqual([aScan({ title, chapter, url, readAt: NOW })]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
+  // prettier-ignore
+  it.each([
+    ['the overview page of a scan', 'Nano Machine - Flame Comics', 'https://flamecomics.xyz/series/nano-machine/'],
+    ['a page whose url does not confirm the chapter of its title', 'Martial Peak Manga - Read Martial Peak Chapter 3800 Online', 'https://www.mangago.me/read-manga/martial_peak/'],
+    ['a search for a chapter', 'solo leveling chapter 110 - Google Search', 'https://www.google.com/search?q=solo+leveling+chapter+110'],
+    ['a news article about a bankruptcy', 'Party City files for Chapter 11 bankruptcy - Reuters', 'https://www.reuters.com/business/retail-consumer/party-city-files-chapter-11-bankruptcy-2023-01-17/'],
+    ['an article about the spoilers of a chapter', 'Solo Leveling Chapter 110 Spoilers & Raw Scans - Manga Thrill', 'https://mangathrill.com/solo-leveling-chapter-110-spoilers-raw-scans/'],
+    ['a chapter of a book on a website unrelated to scans', 'Genesis Chapter 1 - King James Bible Online', 'https://www.kingjamesbibleonline.org/Genesis-Chapter-1/'],
+    ['an anime episode', 'Watch One Piece Episode 1100 English Sub - GogoAnime', 'https://gogoanime3.co/one-piece-episode-1100'],
+    ['a novel chapter', 'Read Lord of the Mysteries Chapter 12 Online - NovelBin', 'https://novelbin.me/novel-book/lord-of-the-mysteries/chapter-12'],
+    ['a wiki page about a chapter', 'Chapter 110 | Solo Leveling Wiki | Fandom', 'https://solo-leveling.fandom.com/wiki/Chapter_110'],
+    ['a discussion of a chapter', '[DISC] Solo Leveling - Chapter 110 : r/manga', 'https://www.reddit.com/r/manga/comments/xyz789/disc_solo_leveling_chapter_110/'],
+    ['a lesson of an online course', 'Chapter 3 - Introduction to Manga Drawing | Udemy', 'https://www.udemy.com/course/manga-drawing/learn/lecture/chapter-3'],
+    ['a tutorial whose title is missing from its url', 'Chapter 7 - Manga Studio Tutorial: Inking | Clip Studio Tips', 'https://tips.clip-studio.com/en-us/articles/chapter-7'],
+  ])(
+    'should ignore the page of a website outside the catalog without reporting it when it is %s',
+    async (_, pageTitle, url) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+
+      await recordVisitedPage.execute({ pageTitle, url });
+
+      expect(await scans()).toEqual([]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
   it('should add the scan after the scans already followed when its title is new', async () => {
     const followed = aScan({ title: 'OldScanTitle', chapter: 8 });
     const { recordVisitedPage, scans } = setUp([followed]);

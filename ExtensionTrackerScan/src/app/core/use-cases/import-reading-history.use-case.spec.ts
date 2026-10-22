@@ -57,6 +57,25 @@ describe('ImportReadingHistoryUseCase', () => {
     ]);
   });
 
+  it('should record the scans read in the history on websites outside the catalog', async () => {
+    const { importReadingHistory, scans, crashReporter } = setUp([
+      visit('Nano Machine - Chapter 190 - Flame Comics', FLAME_URL, LATER),
+      visit('Nano Machine - Flame Comics', FLAME_SERIES_URL, LATER),
+    ]);
+
+    await importReadingHistory.execute();
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        url: FLAME_URL,
+        readAt: LATER,
+      }),
+    ]);
+    expect(crashReporter.reportedPages).toEqual([]);
+  });
+
   it('should report the history pages whose title matches no format of their supported website', async () => {
     const unparsed = visit(
       'Chronicles Of The Demon Faction - Ch - Share Any Manga on MangaPark',
@@ -79,6 +98,8 @@ describe('ImportReadingHistoryUseCase', () => {
 const EARLIER = new Date('2025-03-01T10:00:00Z');
 const LATER = new Date('2025-03-02T10:00:00Z');
 const MANGANATO_URL = 'https://chapmanganato.to/manga-hi985065/chapter-266';
+const FLAME_URL = 'https://flamecomics.xyz/nano-machine-chapter-190/';
+const FLAME_SERIES_URL = 'https://flamecomics.xyz/series/nano-machine/';
 const DRAGON_TEA_URL =
   'https://dragontea.ink/novel/super-god-system/chapter-85/';
 

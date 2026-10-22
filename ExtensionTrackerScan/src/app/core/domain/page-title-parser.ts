@@ -2,6 +2,7 @@ import { Chapter } from './chapter';
 import { ParsedPage, VisitedPage } from './parsed-page';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
+import { parseUnsupportedWebsitePage } from './unsupported-website-page-parser';
 import { WEBSITE_PATTERNS, WebsitePattern } from './website-patterns';
 
 const TITLE_MARKER = 't';
@@ -82,7 +83,11 @@ export const parsePage = (page: VisitedPage, readAt: Date): ParsedPage => {
   const pattern = WEBSITE_PATTERNS.find(({ host }) =>
     servesScans(page.url, host),
   );
-  if (!pattern || isExcluded(cleanedPage, pattern)) {
+  if (!pattern) {
+    const reading = parseUnsupportedWebsitePage(cleanedPage, readAt);
+    return reading ? { kind: 'reading', reading } : { kind: 'not-a-scan' };
+  }
+  if (isExcluded(cleanedPage, pattern)) {
     return { kind: 'not-a-scan' };
   }
   for (const format of pattern.formats) {

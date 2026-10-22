@@ -1,10 +1,16 @@
 import { parsePage } from '../../src/app/core/domain/page-title-parser';
 import { VisitedPage } from '../../src/app/core/domain/parsed-page';
+import { parseUnsupportedWebsitePage } from '../../src/app/core/domain/unsupported-website-page-parser';
+import { Reading } from '../../src/app/core/domain/reading';
 import { WEBSITE_PATTERNS } from '../../src/app/core/domain/website-patterns';
 import { SUPPORTED_WEBSITE_PAGES } from '../../src/app/core/use-cases/supported-website-pages.fixture';
 import {
   CHAPTER_PAGES,
   ChapterPage,
+  HELD_OUT_CHAPTER_PAGES,
+  HELD_OUT_OTHER_PAGES,
+  TUNING_CHAPTER_PAGES,
+  TUNING_OTHER_PAGES,
   OTHER_PAGES,
 } from './unsupported-website-pages';
 
@@ -25,20 +31,13 @@ type Slice = {
 
 const READ_AT = new Date('2025-01-01T00:00:00Z');
 
+const recordedFrom = (reading?: Reading): Recorded | undefined =>
+  reading && { title: reading.title.value, chapter: reading.chapter.value };
+
 const recordedBy = (page: VisitedPage): Recorded | undefined => {
   const parsed = parsePage(page, READ_AT);
-  return parsed.kind === 'reading'
-    ? {
-        title: parsed.reading.title.value,
-        chapter: parsed.reading.chapter.value,
-      }
-    : undefined;
+  return recordedFrom(parsed.kind === 'reading' ? parsed.reading : undefined);
 };
-
-const asUnsupportedWebsite = (page: VisitedPage): VisitedPage => ({
-  ...page,
-  url: page.url.replace(/^https?:\/\/[^/]+/, 'https://unsupported.example'),
-});
 
 const isSupported = ({ url }: VisitedPage): boolean =>
   WEBSITE_PATTERNS.some(({ host }) => url.includes(host));
@@ -104,9 +103,14 @@ const report = (slice: Slice): { recorded: number; exact: number } => {
   return { recorded, exact };
 };
 
-const leakedSupportedPages = [...CHAPTER_PAGES, ...OTHER_PAGES].filter(
-  isSupported,
-);
+const leakedSupportedPages = [
+  ...CHAPTER_PAGES,
+  ...OTHER_PAGES,
+  ...TUNING_CHAPTER_PAGES,
+  ...TUNING_OTHER_PAGES,
+  ...HELD_OUT_CHAPTER_PAGES,
+  ...HELD_OUT_OTHER_PAGES,
+].filter(isSupported);
 if (leakedSupportedPages.length > 0) {
   throw new Error(
     `Unsupported-website corpus holds supported websites: ${leakedSupportedPages.map(({ url }) => url).join(', ')}`,
@@ -125,7 +129,7 @@ const slices: Slice[] = [
       }),
     ),
     otherPages: [],
-    record: (page) => recordedBy(asUnsupportedWebsite(page)),
+    record: (page) => recordedFrom(parseUnsupportedWebsitePage(page, READ_AT)),
   },
   {
     name: 'unsupported websites, chapter pages',
@@ -137,6 +141,18 @@ const slices: Slice[] = [
     name: 'unsupported websites, other pages',
     chapterPages: [],
     otherPages: OTHER_PAGES,
+    record: recordedBy,
+  },
+  {
+    name: 'second round, written after the first design and tuned on',
+    chapterPages: TUNING_CHAPTER_PAGES,
+    otherPages: TUNING_OTHER_PAGES,
+    record: recordedBy,
+  },
+  {
+    name: 'third round, held out for one run, then used for the title-in-url rule',
+    chapterPages: HELD_OUT_CHAPTER_PAGES,
+    otherPages: HELD_OUT_OTHER_PAGES,
     record: recordedBy,
   },
 ];

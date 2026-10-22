@@ -54,6 +54,7 @@ src/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · chapter.ts · rating.ts · reading.ts
                            parsed-page.ts · page-title-parser.ts · website-patterns.ts
+                           unsupported-website-page-parser.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · toggle-favorite.use-case.ts · rate-scan.use-case.ts
                            propose-website.use-case.ts         (chacun avec son .spec.ts à côté)

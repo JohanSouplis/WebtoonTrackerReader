@@ -63,6 +63,18 @@ La spec de `RecordVisitedPageUseCase` porte un `it.each` : un titre de page rée
 chapitre attendus. Chaque site du catalogue y a au moins une ligne. Ajouter un site ajoute une ligne. Le
 tableau actuel de `retrieve_title_and_chapter.test.ts` en est la base.
 
+## Les sites hors catalogue se mesurent sur un corpus
+
+La spec de `RecordVisitedPageUseCase` porte un tableau de pages de sites hors catalogue lues, et un tableau de
+pages à ignorer avec leur raison. Chaque règle de l'analyse générique y a au moins une ligne qui échoue sans
+elle.
+
+`npm run eval:parser` rejoue un corpus étiqueté plus large (`eval/parser/`) : les pages du catalogue sans le
+catalogue, des chapitres et des pages ordinaires de sites hors catalogue. Il affiche, tranche par tranche, les
+lectures exactes, fausses, manquées et les faux positifs. Lance-le avant et après toute modification de
+l'analyse générique et cite les deux résultats dans la PR. Une page ajoutée au corpus après une modification
+sert de contrôle : ne règle pas l'analyse sur elle dans la même PR.
+
 ## Ce qu'on ne teste pas seul
 
 - L'agrégat, les Value Objects et `PageTitleParser` se testent par les use-cases qui les appellent. Une

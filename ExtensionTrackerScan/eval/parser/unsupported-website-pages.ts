@@ -107,3 +107,80 @@ export const OTHER_PAGES: readonly OtherPage[] = [
   { pageTitle: 'Episode 12 - The Daily Podcast', url: 'https://thedaily.example.com/episodes/12' },
   { pageTitle: 'Inbox (12) - someone@gmail.com - Gmail', url: 'https://mail.google.com/mail/u/0/#inbox' },
 ];
+
+// prettier-ignore
+export const TUNING_CHAPTER_PAGES: readonly ChapterPage[] = [
+  { pageTitle: 'Infinite Mage - Chapter 85 | Night Scans', url: 'https://nightscans.net/infinite-mage-chapter-85/', title: 'Infinite Mage', chapter: 85 },
+  { pageTitle: 'Chapter 210 - Nano Machine - Mangatx', url: 'https://mangatx.com/manga/nano-machine/chapter-210/', title: 'Nano Machine', chapter: 210 },
+  { pageTitle: 'Read The Greatest Estate Developer - Chapter 150 | Reset Scans', url: 'https://reset-scans.co/manga/the-greatest-estate-developer/chapter-150/', title: 'The Greatest Estate Developer', chapter: 150 },
+  { pageTitle: 'Vagabond Chapter 327 - Read Vagabond Manga Online', url: 'https://readvagabond.com/manga/vagabond-chapter-327/', title: 'Vagabond', chapter: 327 },
+  { pageTitle: "Frieren: Beyond Journey's End, Chapter 120 - Frieren Manga Online", url: 'https://frierenmanga.com/manga/frieren-beyond-journeys-end-chapter-120/', title: "Frieren: Beyond Journey's End", chapter: 120 },
+  { pageTitle: 'Oshi no Ko Chapter 160.5 | MangaNelo', url: 'https://m.manganelo.com/chapter/oshi-no-ko/chapter-160.5', title: 'Oshi no Ko', chapter: 160.5 },
+  { pageTitle: 'Tomb Raider King - Chapitre 300 - Phenix Scans', url: 'https://phenixscans.fr/manga/tomb-raider-king/chapitre-300/', title: 'Tomb Raider King', chapter: 300 },
+  { pageTitle: 'Sakamoto Days Capítulo 150 - LectorManga', url: 'https://lectormanga.com/view/sakamoto-days/150', title: 'Sakamoto Days', chapter: 150 },
+  { pageTitle: 'Ep. 25 | Lore of the Abyss | ComicWalker', url: 'https://comic-walker.com/detail/KC_123/episodes/KC_123_E?episodeType=first&ep=25', title: 'Lore of the Abyss', chapter: 25 },
+  { pageTitle: 'Dragon Ball Super Chapter 103 - TCB Scans', url: 'https://tcbscans.me/chapters/7654/dragon-ball-super-chapter-103', title: 'Dragon Ball Super', chapter: 103 },
+  { pageTitle: 'My Hero Academia, Chapter 430 - My Hero Academia Manga Online', url: 'https://myheroacademia-manga.com/manga/my-hero-academia-chapter-430/', title: 'My Hero Academia', chapter: 430 },
+  { pageTitle: 'Solo Max-Level Newbie Chapter 160 - Mangakakalot', url: 'https://mangakakalot.to/read/solo-max-level-newbie-chapter-160', title: 'Solo Max-Level Newbie', chapter: 160 },
+  { pageTitle: 'Blue Lock - Chapter 270 - Weeb Central', url: 'https://weebcentral.com/chapters/01JABCD1234EFG', title: 'Blue Lock', chapter: 270 },
+  { pageTitle: 'Talentless Nana Chapter 55 - MangaFreak', url: 'https://w15.mangafreak.net/Read1_Talentless_Nana_55', title: 'Talentless Nana', chapter: 55 },
+  { pageTitle: '恋は双子で割り切れない 第12話 | となりのヤングジャンプ', url: 'https://tonarinoyj.jp/episode/4856001361151231234', title: '恋は双子で割り切れない', chapter: 12 },
+];
+
+// prettier-ignore
+export const TUNING_OTHER_PAGES: readonly OtherPage[] = [
+  { pageTitle: 'Chapter 12 - The Wandering Inn', url: 'https://wanderinginn.com/2017/03/03/chapter-12/' },
+  { pageTitle: 'Chapter 12: Bonds - Beware Of Chicken | Royal Road', url: 'https://www.royalroad.com/fiction/39408/beware-of-chicken/chapter/680000/chapter-12-bonds' },
+  { pageTitle: 'Chapter 12 - Mother of Learning | Scribble Hub', url: 'https://www.scribblehub.com/read/123456-mother-of-learning/chapter/654321/' },
+  { pageTitle: 'Read Shadow Slave Chapter 1800 Online Free - FreeWebNovel', url: 'https://freewebnovel.com/shadow-slave/chapter-1800.html' },
+  { pageTitle: 'Re:Zero Episode 12 - Watch on Crunchyroll', url: 'https://www.crunchyroll.com/series/GRGGPG93R/rezero/episode-12' },
+  { pageTitle: 'Attack on Titan Chapter 139 Ending Explained | Screen Rant', url: 'https://screenrant.com/attack-titan-chapter-139-ending-explained/' },
+  { pageTitle: 'One Piece chapter 1120: Release date, time, where to read - Times of India', url: 'https://timesofindia.indiatimes.com/web-stories/one-piece-chapter-1120-release-date/photostory/123456.cms' },
+  { pageTitle: 'Lesson 3 - Chapter 3 Quiz | Quizlet', url: 'https://quizlet.com/123456/chapter-3-quiz-flash-cards/' },
+  { pageTitle: 'Chapter 5 Notes - Biology 101 - Course Hero', url: 'https://www.coursehero.com/file/123456/chapter-5-notes/' },
+  { pageTitle: 'Chapter 7 - Solutions | Physics Textbook - Chegg', url: 'https://www.chegg.com/homework-help/physics-chapter-7-solutions' },
+  { pageTitle: 'Episode 45 - Darknet Diaries', url: 'https://darknetdiaries.com/episode/45/' },
+  { pageTitle: 'Twitch', url: 'https://www.twitch.tv/videos/123456789' },
+  { pageTitle: 'Tower of God Season 2 Episode 12 Review | IGN', url: 'https://www.ign.com/articles/tower-of-god-season-2-episode-12-review' },
+  { pageTitle: 'Solo Leveling Chapter 200 - MyAnimeList Forum', url: 'https://myanimelist.net/forum/?topicid=12345' },
+  { pageTitle: 'Omniscient Reader - Chapter 200 Discussion : r/OmniscientReader', url: 'https://www.reddit.com/r/OmniscientReader/comments/abc/chapter_200_discussion/' },
+  { pageTitle: 'Chapter 3 - Introduction to Manga Drawing | Udemy', url: 'https://www.udemy.com/course/manga-drawing/learn/lecture/chapter-3' },
+  { pageTitle: 'Naruto Shippuden Episode 12 English Dubbed - AnimeKisa', url: 'https://animekisa.tv/naruto-shippuden-episode-12' },
+  { pageTitle: 'Pokemon Scarlet Walkthrough Chapter 12 - Game8', url: 'https://game8.co/games/Pokemon-Scarlet-Violet/archives/chapter-12' },
+  { pageTitle: 'Read Chapter 12 - The Hobbit by J.R.R. Tolkien Online', url: 'https://readanybook.com/online/12345#chapter-12' },
+  { pageTitle: 'Chapter 4 - Pride and Prejudice - Read Online Free - Novel', url: 'https://www.readbooksonline.example/pride-and-prejudice/chapter-4' },
+];
+
+// prettier-ignore
+export const HELD_OUT_CHAPTER_PAGES: readonly ChapterPage[] = [
+  { pageTitle: 'Lookism - Chapter 500 - MangaClash', url: 'https://mangaclash.com/manga/lookism/chapter-500/', title: 'Lookism', chapter: 500 },
+  { pageTitle: 'Read Wind Breaker Chapter 480 - Manhwa Land', url: 'https://manhwaland.cc/wind-breaker-chapter-480/', title: 'Wind Breaker', chapter: 480 },
+  { pageTitle: "Chapter 45 - The Novel's Extra (Remake) | Arya Scans", url: 'https://aryascans.com/manga/the-novels-extra-remake/chapter-45/', title: "The Novel's Extra (Remake)", chapter: 45 },
+  { pageTitle: 'Blue Period Ch.150 - MangaReader', url: 'https://mangareader.to/read/blue-period-123/en/chapter-150', title: 'Blue Period', chapter: 150 },
+  { pageTitle: 'Sono Bisque Doll wa Koi wo Suru - Chapter 100 - MangaKatana', url: 'https://mangakatana.com/manga/sono-bisque-doll.2345/c100', title: 'Sono Bisque Doll wa Koi wo Suru', chapter: 100 },
+  { pageTitle: 'Eleceed Episode 250 | Webtoon Pic', url: 'https://webtoonpic.com/eleceed/episode-250', title: 'Eleceed', chapter: 250 },
+  { pageTitle: 'Absolute Sword Sense - Chapitre 90 - Sushi Scan', url: 'https://sushiscan.fr/absolute-sword-sense-chapitre-90/', title: 'Absolute Sword Sense', chapter: 90 },
+  { pageTitle: 'Vinland Saga Chapter 210 - Read Vinland Saga Manga Online Free', url: 'https://vinlandsagamanga.net/manga/vinland-saga-chapter-210/', title: 'Vinland Saga', chapter: 210 },
+  { pageTitle: 'Chapter 77 | The Boxer | ManhwaBuddy', url: 'https://manhwabuddy.com/manhwa/the-boxer/chapter-77/', title: 'The Boxer', chapter: 77 },
+  { pageTitle: 'Hunter x Hunter Chapter 400 - Hunter x Hunter Manga Online', url: 'https://hunterxhuntermanga.com/manga/hunter-x-hunter-chapter-400/', title: 'Hunter x Hunter', chapter: 400 },
+  { pageTitle: 'SPY×FAMILY 第95話 - 少年ジャンプ＋', url: 'https://shonenjumpplus.com/episode/3161128964553201234', title: 'SPY×FAMILY', chapter: 95 },
+];
+
+// prettier-ignore
+export const HELD_OUT_OTHER_PAGES: readonly OtherPage[] = [
+  { pageTitle: 'Lookism Manhwa - Read Lookism Online - MangaClash', url: 'https://mangaclash.com/manga/lookism/' },
+  { pageTitle: 'Chapter 500 is coming! Lookism news / X', url: 'https://x.com/lookism/status/1789' },
+  { pageTitle: 'Lookism Chapter 500: The fight we waited for — Manhwa Review Blog', url: 'https://manhwareviews.blog/lookism-chapter-500/' },
+  { pageTitle: 'Chapter 5: Arrays - Introduction to Algorithms Notes', url: 'https://algo-notes.dev/chapter-5' },
+  { pageTitle: 'Episode 12 - Solo Leveling -ReAwakening- | Anime Corner', url: 'https://animecorner.me/solo-leveling-episode-12/' },
+  { pageTitle: 'Mob Psycho 100 Season 3 Episode 12 | Watch on Netflix', url: 'https://www.netflix.com/watch/81234567' },
+  { pageTitle: 'Download One Piece Chapter 1100 PDF - Manga Downloads', url: 'https://mangapdf.net/one-piece-chapter-1100-pdf/' },
+  { pageTitle: 'Chapter 1100 | One Piece Wiki | Fandom', url: 'https://onepiece.fandom.com/wiki/Chapter_1100' },
+  { pageTitle: 'The Lord of the Rings Chapter 3 Summary | SparkNotes', url: 'https://www.sparknotes.com/lit/lotr/section3/' },
+  { pageTitle: 'Chapter 7 - Manga Studio Tutorial: Inking | Clip Studio Tips', url: 'https://tips.clip-studio.com/en-us/articles/chapter-7' },
+  { pageTitle: 'Buy Chainsaw Man, Vol. 12 - Viz Media', url: 'https://www.viz.com/read/manga/chainsaw-man-volume-12/product/7890' },
+  { pageTitle: 'Dandadan Episode 12 Recap & Review - Comic Book Resources', url: 'https://www.cbr.com/dandadan-episode-12-recap-review/' },
+  { pageTitle: 'Chapter 3 - Getting Started | Manga Translation Guide', url: 'https://scanlation-guide.org/chapter-3' },
+  { pageTitle: 'Tower of God Chapter 600 Explained | Webtoon Theories', url: 'https://webtoontheories.com/tower-of-god-chapter-600-explained/' },
+  { pageTitle: 'Omniscient Reader Chapter 200 | Manhwa Discord Server', url: 'https://discord.com/channels/123456/789012' },
+];
