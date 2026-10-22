@@ -1,90 +1,34 @@
 import { container } from './app/core/container';
-import { RetrieveTitleAndChapter } from './app/core/src/domain/retrieve_title_and_chapter';
-import { Scan } from './app/core/src/domain/scan.type';
-import { updateScansWithNewVisitedScan } from './app/core/src/domain/update_scans';
+import { VisitedPage } from './app/core/domain/parsed-page';
+import { ImportReadingHistoryUseCase } from './app/core/use-cases/import-reading-history.use-case';
+import { RecordVisitedPageUseCase } from './app/core/use-cases/record-visited-page.use-case';
 
-const retrieveTitleAndChapter = container.get<RetrieveTitleAndChapter>(
-  'RetrieveTitleAndChapter'
-);
+const IMPORT_INTERVAL_MS = 3600000;
 
-chrome.runtime.onMessage.addListener(
-  (message: { title: string; url: string }) => {
-    if (!message.title) {
-      return;
-    }
-    let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
-      message.title,
-      message.url
-    );
-    if (titleAndChapter.length === 0) {
-      return;
-    }
-    let [title, chapter] = titleAndChapter;
-    chrome.storage.local.get({ scans: [] }, function (result) {
-      var scansList: Scan[] = updateScansWithNewVisitedScan(result['scans'], {
-        title: title,
-        chapter: chapter,
-        url: message.url,
-        whenWasItRead: new Date().toString(),
-        isFavorite: false,
-      } as Scan);
+const recordVisitedPage = container.get(RecordVisitedPageUseCase);
+const importReadingHistory = container.get(ImportReadingHistoryUseCase);
 
-      chrome.storage.local.set({ scans: scansList }, function () {});
-    });
+const parseVisitedPage = (message: unknown): VisitedPage | undefined =>
+  typeof message === 'object' &&
+  message !== null &&
+  'pageTitle' in message &&
+  'url' in message &&
+  typeof message.pageTitle === 'string' &&
+  message.pageTitle !== '' &&
+  typeof message.url === 'string'
+    ? { pageTitle: message.pageTitle, url: message.url }
+    : undefined;
+
+const importHistory = (): void => {
+  void importReadingHistory.execute();
+};
+
+chrome.runtime.onMessage.addListener((message: unknown) => {
+  const visitedPage = parseVisitedPage(message);
+  if (visitedPage) {
+    void recordVisitedPage.execute(visitedPage);
   }
-);
+});
 
-getScansFromHistory();
-setInterval(getScansFromHistory, 3600000);
-
-function getScansFromHistory() {
-  chrome.storage.local.get(['dateLastSearch'], function (dateLastSearch) {
-    let searchStartTime = 0;
-    if (dateLastSearch['dateLastSearch']) {
-      searchStartTime = dateLastSearch['dateLastSearch'];
-    }
-    chrome.history.search(
-      {
-        text: '',
-        maxResults: 100000,
-        startTime: searchStartTime,
-      },
-      function (results) {
-        let scans: Scan[] = [];
-        results.forEach((page) => {
-          if (page.title && page.url) {
-            let titleAndChapter: string[] = retrieveTitleAndChapter.execute(
-              page.title,
-              page.url
-            );
-            if (titleAndChapter.length === 0) {
-              return;
-            }
-            let scan: Scan = {
-              title: titleAndChapter[0],
-              chapter: titleAndChapter[1],
-              url: page.url,
-              whenWasItRead: page.lastVisitTime
-                ? new Date(page.lastVisitTime).toString()
-                : '',
-              isFavorite: false,
-            };
-            scans.push(scan);
-          }
-        });
-        chrome.storage.local.get({ scans: [] }, function (result) {
-          let scanList: Scan[] = result['scans'];
-          scans.forEach((scan) => {
-            scanList = updateScansWithNewVisitedScan(scanList, scan);
-          });
-
-          chrome.storage.local.set({ scans: scanList }, function () {});
-        });
-        chrome.storage.local.set(
-          { dateLastSearch: Date.now() },
-          function () {}
-        );
-      }
-    );
-  });
-}
+importHistory();
+setInterval(importHistory, IMPORT_INTERVAL_MS);

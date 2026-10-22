@@ -1,13 +1,32 @@
 import { Container } from 'inversify';
 
-import { CrashReport } from './src/domain/ports/crash_report.interface';
-import { DiscordCrashReport } from './src/gateway/discord_crash_report';
-import { RetrieveTitleAndChapter } from './src/domain/retrieve_title_and_chapter';
+import { ChromeBrowserHistory } from './gateways/chrome-browser-history.gateway';
+import { ChromeStorageScanRepository } from './gateways/chrome-storage-scan-repository.gateway';
+import { DiscordCrashReporter } from './gateways/discord-crash-reporter.gateway';
+import { SystemClock } from './gateways/system-clock.gateway';
+import { ImportReadingHistoryUseCase } from './use-cases/import-reading-history.use-case';
+import { RecordVisitedPageUseCase } from './use-cases/record-visited-page.use-case';
 
 const container = new Container();
-container.bind<CrashReport>('CrashReport').to(DiscordCrashReport);
 container
-  .bind<RetrieveTitleAndChapter>('RetrieveTitleAndChapter')
-  .to(RetrieveTitleAndChapter);
+  .bind(RecordVisitedPageUseCase)
+  .toDynamicValue(
+    () =>
+      new RecordVisitedPageUseCase(
+        new ChromeStorageScanRepository(),
+        new DiscordCrashReporter(),
+        new SystemClock(),
+      ),
+  );
+container
+  .bind(ImportReadingHistoryUseCase)
+  .toDynamicValue(
+    () =>
+      new ImportReadingHistoryUseCase(
+        new ChromeBrowserHistory(),
+        new ChromeStorageScanRepository(),
+        new DiscordCrashReporter(),
+      ),
+  );
 
 export { container };
