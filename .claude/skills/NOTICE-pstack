@@ -1,0 +1,8 @@
+The deslop, control-cli, and control-ui skills are adapted from cursor-team-kit:
+https://github.com/cursor/plugins/tree/d0ef80d86795816da932a153458c5dbe192d294e/cursor-team-kit
+
+Copyright (c) 2026 Cursor
+Licensed under the MIT License, reproduced in LICENSE-cursor-team-kit.
+
+The port adds Claude Code and Codex invocation policies, platform-specific
+tool selection, branch and working-diff selection, and evidence/cleanup guidance.
