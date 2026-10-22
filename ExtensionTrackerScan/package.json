@@ -12,7 +12,8 @@
     "verify:ui:update": "playwright test -c verify/playwright.config.ts --update-snapshots=all",
     "verify:build": "ng build --configuration production && webpack --config webpack.common.js",
     "eval:parser": "esbuild eval/parser/run.ts --bundle --platform=node --log-level=warning | node",
-    "eval:identity": "esbuild eval/identity/run.ts --bundle --platform=node --log-level=warning | node"
+    "eval:identity": "esbuild eval/identity/run.ts --bundle --platform=node --log-level=warning | node",
+    "sites:verified": "esbuild eval/parser/write-verified-websites.ts --bundle --platform=node --log-level=warning | node"
   },
   "private": true,
   "dependencies": {

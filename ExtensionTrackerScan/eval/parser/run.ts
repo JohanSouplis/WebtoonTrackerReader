@@ -1,11 +1,6 @@
-import { parsePage } from '../../src/app/core/domain/page-title-parser';
-import {
-  PageSignals,
-  VisitedPage,
-} from '../../src/app/core/domain/parsed-page';
+import { VisitedPage } from '../../src/app/core/domain/parsed-page';
 import { parseUnsupportedWebsitePage } from '../../src/app/core/domain/unsupported-website-page-parser';
-import { Reading } from '../../src/app/core/domain/reading';
-import { ScanTitle } from '../../src/app/core/domain/scan-title';
+import { VERIFIED_WEBSITES } from '../../src/app/core/domain/verified-websites';
 import { WEBSITE_PATTERNS } from '../../src/app/core/domain/website-patterns';
 import { SUPPORTED_WEBSITE_PAGES } from '../../src/app/core/use-cases/supported-website-pages.fixture';
 import {
@@ -25,8 +20,16 @@ import {
   messagesOf,
 } from './captured-pages';
 import { parsePageSignals } from '../../src/page-signals-message';
-
-type Recorded = { readonly title: string; readonly chapter: number };
+import {
+  CapturedOutcome,
+  READ_AT,
+  Recorded,
+  capturedOutcomeOf,
+  recordedBy,
+  recordedFrom,
+  recordedFromMessage,
+} from './recorded';
+import { verifiedWebsites } from './verified-websites';
 
 type Outcome =
   | { readonly kind: 'exact' }
@@ -39,16 +42,6 @@ type Slice = {
   readonly chapterPages: readonly ChapterPage[];
   readonly otherPages: readonly VisitedPage[];
   readonly record: (page: VisitedPage) => Recorded | undefined;
-};
-
-const READ_AT = new Date('2025-01-01T00:00:00Z');
-
-const recordedFrom = (reading?: Reading): Recorded | undefined =>
-  reading && { title: reading.title.value, chapter: reading.chapter.value };
-
-const recordedBy = (page: PageSignals): Recorded | undefined => {
-  const parsed = parsePage(page, READ_AT);
-  return recordedFrom(parsed.kind === 'reading' ? parsed.reading : undefined);
 };
 
 const isSupported = ({ url }: VisitedPage): boolean =>
@@ -196,53 +189,10 @@ type InputMode = {
   readonly record: (page: CapturedPage) => readonly Recorded[];
 };
 
-type CapturedOutcome =
-  | 'exact'
-  | 'missed'
-  | 'wrong'
-  | 'ignored'
-  | 'false-positive';
-
-const isSameSeries = (recorded: string, expected: string): boolean => {
-  const title = ScanTitle.parse(recorded);
-  return (
-    title !== undefined &&
-    title.seriesKey.match(ScanTitle.of(expected).seriesKey) === 'same'
-  );
-};
-
-const isExact = (
-  expected: Extract<Expected, { kind: 'reading' }>,
-  recorded: Recorded,
-): boolean =>
-  expected.titles.some((title) => isSameSeries(recorded.title, title)) &&
-  expected.chapters.includes(recorded.chapter);
-
-const capturedOutcomeOf = (
-  expected: Expected,
-  recorded: readonly Recorded[],
-): CapturedOutcome => {
-  if (expected.kind === 'other') {
-    return recorded.length > 0 ? 'false-positive' : 'ignored';
-  }
-  if (recorded.length === 0) {
-    return 'missed';
-  }
-  return recorded.every((reading) => isExact(expected, reading))
-    ? 'exact'
-    : 'wrong';
-};
-
 const visitedPageOf = ({ capture }: CapturedPage): VisitedPage => ({
   pageTitle: capture.titleSettled ?? '',
   url: capture.finalUrl,
 });
-
-const recordedFromMessage = (message: unknown): Recorded[] => {
-  const page = parsePageSignals(message);
-  const recorded = page && recordedBy(page);
-  return recorded ? [recorded] : [];
-};
 
 const INPUT_MODES: readonly InputMode[] = [
   {
@@ -406,3 +356,11 @@ for (const { host } of WEBSITE_PATTERNS) {
       .join(' | '),
   );
 }
+
+const verified = verifiedWebsites();
+console.log('\n## verified websites shown on the Add website screen');
+console.log(
+  JSON.stringify(verified) === JSON.stringify(VERIFIED_WEBSITES)
+    ? `${verified.length} verified, committed list up to date`
+    : `${verified.length} verified, committed list stale: run npm run sites:verified`,
+);

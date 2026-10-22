@@ -29,6 +29,7 @@ export type Capture = {
   readonly jsonLd: readonly StructuredDataCapture[] | null;
   readonly chapterSelectSelected: string | readonly string[] | null;
   readonly notes: string | null;
+  readonly capturedAt?: string;
 };
 
 export type Expected =
@@ -39,10 +40,14 @@ export type Expected =
     }
   | { readonly kind: 'other'; readonly reason: string };
 
-export type CapturedPage = {
+export type DatedCapture = {
   readonly partition: string;
-  readonly language: string;
+  readonly capturedOn: string;
   readonly capture: Capture;
+};
+
+export type CapturedPage = DatedCapture & {
+  readonly language: string;
   readonly expected: Expected;
 };
 
@@ -85,25 +90,38 @@ const expectedOf = (capture: Capture): Expected => {
   };
 };
 
-const capturedPagesOf = (
-  partition: string,
-  captures: readonly Capture[],
-): CapturedPage[] =>
-  captures
-    .filter(({ status }) => status === 'captured')
-    .map((capture) => ({
-      partition,
-      language:
-        capture.language ?? (partition === 'official' ? 'official' : 'en'),
-      capture,
-      expected: expectedOf(capture),
-    }));
-
-export const CAPTURED_PAGES: readonly CapturedPage[] = [
-  ...capturedPagesOf('en-aggregators', enAggregators),
-  ...capturedPagesOf('official', official),
-  ...capturedPagesOf('non-english', nonEnglish),
+const CAPTURE_FILES: readonly {
+  readonly partition: string;
+  readonly capturedOn: string;
+  readonly captures: readonly Capture[];
+}[] = [
+  {
+    partition: 'en-aggregators',
+    capturedOn: '2026-10-22',
+    captures: enAggregators,
+  },
+  { partition: 'official', capturedOn: '2026-10-22', captures: official },
+  { partition: 'non-english', capturedOn: '2026-10-22', captures: nonEnglish },
 ];
+
+export const CAPTURES: readonly DatedCapture[] = CAPTURE_FILES.flatMap(
+  ({ partition, capturedOn, captures }) =>
+    captures.map((capture) => ({
+      partition,
+      capturedOn: capture.capturedAt?.slice(0, 10) ?? capturedOn,
+      capture,
+    })),
+);
+
+export const CAPTURED_PAGES: readonly CapturedPage[] = CAPTURES.filter(
+  ({ capture }) => capture.status === 'captured',
+).map((dated) => ({
+  ...dated,
+  language:
+    dated.capture.language ??
+    (dated.partition === 'official' ? 'official' : 'en'),
+  expected: expectedOf(dated.capture),
+}));
 
 const firstOf = (joined: string | null): string | undefined =>
   joined?.split(' || ')[0];
