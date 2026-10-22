@@ -12,7 +12,7 @@
     <button
       type="button"
       [attr.aria-label]="clearLabel()"
-      (click)="searched.emit(''); query.focus()"
+      (click)="query.value = ''; searched.emit(''); query.focus()"
     >
       <mat-icon>close</mat-icon>
     </button>
