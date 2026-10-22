@@ -12,11 +12,7 @@ describe('ImportReadingHistoryUseCase', () => {
     const { importReadingHistory, scans } = setUp(
       [
         visit('Overgeared Chapter 266 - Manganato', MANGANATO_URL, LATER),
-        visit(
-          'Super God System - chapter 85 - Dragon Tea',
-          DRAGON_TEA_URL,
-          EARLIER,
-        ),
+        visit('Read Episode 3 - The Hidden Muse | Manta', MANTA_URL, EARLIER),
       ],
       [followed],
     );
@@ -31,9 +27,9 @@ describe('ImportReadingHistoryUseCase', () => {
         readAt: LATER,
       }),
       aScan({
-        title: 'Super God System',
-        chapter: 85,
-        url: DRAGON_TEA_URL,
+        title: 'The Hidden Muse',
+        chapter: 3,
+        url: MANTA_URL,
         readAt: EARLIER,
       }),
     ]);
@@ -100,8 +96,8 @@ const LATER = new Date('2025-03-02T10:00:00Z');
 const MANGANATO_URL = 'https://chapmanganato.to/manga-hi985065/chapter-266';
 const FLAME_URL = 'https://flamecomics.xyz/nano-machine-chapter-190/';
 const FLAME_SERIES_URL = 'https://flamecomics.xyz/series/nano-machine/';
-const DRAGON_TEA_URL =
-  'https://dragontea.ink/novel/super-god-system/chapter-85/';
+const MANTA_URL =
+  'https://manta.net/en/series/the-hidden-muse/episodes/episode-3?episodeId=117732';
 
 const visit = (pageTitle: string, url: string, readAt: Date): HistoryVisit => ({
   page: { pageTitle, url },

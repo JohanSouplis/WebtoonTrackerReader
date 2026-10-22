@@ -13,15 +13,14 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 14" [level=2]
+  - heading "Supported websites 13" [level=2]
   - searchbox "Filter by website"
   - list "Supported websites":
-    - listitem: bato.to
     - listitem: mangaplus.shueisha.co.jp
     - listitem: mangadistrict
     - listitem: battwo.com
   - group:
-    - text: 11–14 of 14
+    - text: 11–13 of 13
     - button "First page"
     - button "Previous page"
     - button "Next page" [disabled]

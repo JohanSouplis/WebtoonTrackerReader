@@ -13,21 +13,21 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 14" [level=2]
+  - heading "Supported websites 13" [level=2]
   - searchbox "Filter by website"
   - list "Supported websites":
     - listitem: manhuatop.org
     - listitem: arvencomics.com
     - listitem: comick
     - listitem: reaper-scan.net
-    - listitem: dragontea.ink
     - listitem: mangadex.org
     - listitem: scantrad-union.com
     - listitem: manta.net
     - listitem: webtoons.com
     - listitem: tappytoon.com
+    - listitem: bato.to
   - group:
-    - text: 1–10 of 14
+    - text: 1–10 of 13
     - button "First page" [disabled]
     - button "Previous page" [disabled]
     - button "Next page"

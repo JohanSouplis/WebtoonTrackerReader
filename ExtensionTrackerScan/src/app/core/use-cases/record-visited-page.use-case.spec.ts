@@ -132,6 +132,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a cartoon episode', 'Adventure Time Episode 12 - KimCartoon', 'https://kimcartoon.li/Cartoon/Adventure-Time/Episode-12'],
     ['a news page about a scandal', 'Celebrity Scandal: Chapter 3 - The Fallout | Daily Gossip', 'https://dailygossip.example/celebrity-scandal/chapter-3/'],
     ['a novel chapter', 'Read Lord of the Mysteries Chapter 12 Online - NovelBin', 'https://novelbin.me/novel-book/lord-of-the-mysteries/chapter-12'],
+    ['a novel chapter whose tab title reads like a scan chapter', 'Super God System - chapter 85 - Dragon Tea', 'https://dragontea.ink/novel/super-god-system/chapter-85/'],
     ['a wiki page about a chapter', 'Chapter 110 | Solo Leveling Wiki | Fandom', 'https://solo-leveling.fandom.com/wiki/Chapter_110'],
     ['a discussion of a chapter', '[DISC] Solo Leveling - Chapter 110 : r/manga', 'https://www.reddit.com/r/manga/comments/xyz789/disc_solo_leveling_chapter_110/'],
     ['a lesson of an online course', 'Chapter 3 - Introduction to Manga Drawing | Udemy', 'https://www.udemy.com/course/manga-drawing/learn/lecture/chapter-3'],

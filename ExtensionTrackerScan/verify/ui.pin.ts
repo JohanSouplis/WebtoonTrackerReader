@@ -432,11 +432,11 @@ test.describe('add website', () => {
     await openLibrary(page);
     await goToAddWebsite(page);
     await page.getByRole('button', { name: 'Next page' }).click();
-    await expect(page.getByText('11–14 of 14')).toBeVisible();
+    await expect(page.getByText('11–13 of 13')).toBeVisible();
     await pin(page, 'add-list-01-page-2');
     await page.getByRole('button', { name: 'First page' }).click();
     await page.getByRole('button', { name: 'Last page' }).click();
-    await expect(page.getByText('11–14 of 14')).toBeVisible();
+    await expect(page.getByText('11–13 of 13')).toBeVisible();
     await pin(page, 'add-list-02-last-page');
     await page.getByRole('button', { name: 'First page' }).click();
     await page

@@ -48,14 +48,6 @@ export const WEBSITE_PATTERNS: readonly WebsitePattern[] = [
     ],
   },
   {
-    host: 'dragontea.ink',
-    formats: [
-      {
-        pageTitle: 't§ - chapter §c§ - Dragon Tea',
-      },
-    ],
-  },
-  {
     host: 'mangadex.org',
     formats: [
       {
