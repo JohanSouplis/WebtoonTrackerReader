@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022"
+  },
+  "files": ["src/background.ts", "src/content-script.ts"],
+  "include": ["src/**/*.d.ts"]
+}

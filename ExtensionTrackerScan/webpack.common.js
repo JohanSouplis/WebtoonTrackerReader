@@ -22,7 +22,7 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: "ts-loader",
-        options: { compilerOptions: { target: "ES2022" } },
+        options: { configFile: "tsconfig.worker.json" },
         exclude: /node_modules/,
       },
     ],
