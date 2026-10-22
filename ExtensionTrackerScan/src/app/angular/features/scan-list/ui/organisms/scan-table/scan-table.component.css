@@ -39,23 +39,17 @@
   flex: 0.1;
 }
 
-.wasRead-column {
+.read-at-column {
   flex: 2;
 }
 
-.wasRead-header {
+.read-at-header {
   display: flex;
   justify-content: center;
 }
 
-.favorite-icon {
+.delete-icon {
   width: 20px;
   height: 20px;
   cursor: pointer;
-}
-
-.mat-form-field {
-  width: 300px;
-  margin-left: 20px;
-  margin-top: 20px;
 }

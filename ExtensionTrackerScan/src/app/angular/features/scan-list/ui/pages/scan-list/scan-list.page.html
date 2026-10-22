@@ -1,0 +1,15 @@
+<div class="mat-elevation-z8">
+  <app-scan-filters
+    [filters]="store.filters()"
+    (filtersChanged)="store.applyFilters($event)"
+    (searched)="store.searchTitle($event)"
+  />
+  <app-scan-table
+    [scans]="store.scans()"
+    [titleFilter]="store.titleFilter()"
+    (deleted)="delete($event)"
+    (favoriteToggled)="toggleFavorite($event)"
+    (rated)="rate($event)"
+    (opened)="open($event)"
+  />
+</div>

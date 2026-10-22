@@ -1,0 +1,13 @@
+<ds-search-field label="Filter by title" (searched)="searched.emit($event)" />
+<mat-checkbox
+  [checked]="filters().favoritesOnly"
+  (change)="showFavoritesOnly($event.checked)"
+>
+  Favorites Only
+</mat-checkbox>
+<mat-checkbox
+  [checked]="filters().ratedOnly"
+  (change)="showRatedOnly($event.checked)"
+>
+  Rating Only
+</mat-checkbox>
