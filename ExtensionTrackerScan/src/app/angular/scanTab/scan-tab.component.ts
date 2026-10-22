@@ -6,7 +6,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import {
   MatCheckboxModule,
   MatCheckboxChange,
@@ -18,7 +17,6 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ChromeStorageService } from '../../gateway/chrome-storage.service';
 import { InMemoryStorageService } from '../../gateway/dev/in-memory-storage.service';
@@ -31,14 +29,12 @@ import {
 @Component({
   selector: 'scan-tab',
   imports: [
-    RouterModule,
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
     MatTableModule,
     MatInputModule,
     MatCheckboxModule,
-    FormsModule,
     MatSortModule,
     CommonModule,
     MatTooltipModule,

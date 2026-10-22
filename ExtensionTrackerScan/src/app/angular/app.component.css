@@ -32,21 +32,3 @@
 .button.informations {
   background-color: #28a745;
 }
-
-.available-sites {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.available-sites ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.available-sites li {
-  background-color: #f8f9fa;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 16px;
-}

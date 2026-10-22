@@ -6,13 +6,11 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
-  FormsModule,
 } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { DiscordNotification } from '../../gateway/discord-notify.service';
@@ -31,13 +29,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatInputModule,
     MatFormFieldModule,
-    FormsModule,
   ],
   templateUrl: './add_website_pattern.component.html',
   styleUrls: ['./add_website_pattern.component.css'],

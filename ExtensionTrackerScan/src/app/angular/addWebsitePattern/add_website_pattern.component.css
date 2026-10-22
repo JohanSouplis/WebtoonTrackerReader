@@ -114,33 +114,10 @@
   background-color: #ddd;
 }
 
-.available-websites ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.available-websites li {
-  background-color: #f8f9fa;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
 .mat-form-field {
   width: 100%;
   margin-left: 0;
   margin-top: 20px;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  border-color: transparent;
-}
-
-.mat-form-field-appearance-outline
-  .mat-form-field-outline-thick.mat-focused
-  .mat-form-field-outline {
-  border-color: transparent;
 }
 
 .filter-info {
