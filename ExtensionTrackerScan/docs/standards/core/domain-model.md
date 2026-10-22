@@ -119,6 +119,9 @@ signalement.
   (`/chapter/3186773`) ne confirme rien.
 - La page parle de lecture (`manga`, `manhwa`, `webtoon`, `scan`...) et d'aucun autre média (`anime`,
   `novel`, `wiki`, `podcast`...). Les deux lexiques sont des tableaux du domaine.
+- Un mot de lecture compte s'il est un mot entier du titre ou de l'URL, pluriel compris, ou s'il figure dans
+  le nom d'hôte (`asuratoon`, `reaperscans`) : `scandal` ne parle pas de scan. Un mot d'un autre média compte
+  partout, même au milieu d'un mot (`kimcartoon`) : dans le doute, la page est ignorée.
 - Aucun segment du chemin de l'URL ne désigne autre chose qu'une lecture (`/course/`). Ces segments forment
   un troisième tableau, distinct des lexiques : ils se comparent segment par segment, pas mot par mot.
 - Le titre du scan précède la mention. S'il la suit (`Chapter 12 - Titre | Site`), l'URL doit le contenir.

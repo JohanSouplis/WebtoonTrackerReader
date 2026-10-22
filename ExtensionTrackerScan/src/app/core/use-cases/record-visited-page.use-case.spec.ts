@@ -119,6 +119,8 @@ describe('RecordVisitedPageUseCase', () => {
     ['an article about the spoilers of a chapter', 'Solo Leveling Chapter 110 Spoilers & Raw Scans - Manga Thrill', 'https://mangathrill.com/solo-leveling-chapter-110-spoilers-raw-scans/'],
     ['a chapter of a book on a website unrelated to scans', 'Genesis Chapter 1 - King James Bible Online', 'https://www.kingjamesbibleonline.org/Genesis-Chapter-1/'],
     ['an anime episode', 'Watch One Piece Episode 1100 English Sub - GogoAnime', 'https://gogoanime3.co/one-piece-episode-1100'],
+    ['a cartoon episode', 'Adventure Time Episode 12 - KimCartoon', 'https://kimcartoon.li/Cartoon/Adventure-Time/Episode-12'],
+    ['a news page about a scandal', 'Celebrity Scandal: Chapter 3 - The Fallout | Daily Gossip', 'https://dailygossip.example/celebrity-scandal/chapter-3/'],
     ['a novel chapter', 'Read Lord of the Mysteries Chapter 12 Online - NovelBin', 'https://novelbin.me/novel-book/lord-of-the-mysteries/chapter-12'],
     ['a wiki page about a chapter', 'Chapter 110 | Solo Leveling Wiki | Fandom', 'https://solo-leveling.fandom.com/wiki/Chapter_110'],
     ['a discussion of a chapter', '[DISC] Solo Leveling - Chapter 110 : r/manga', 'https://www.reddit.com/r/manga/comments/xyz789/disc_solo_leveling_chapter_110/'],

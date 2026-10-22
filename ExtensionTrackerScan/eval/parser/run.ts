@@ -9,6 +9,7 @@ import {
   ChapterPage,
   HELD_OUT_CHAPTER_PAGES,
   HELD_OUT_OTHER_PAGES,
+  HIDDEN_WORD_OTHER_PAGES,
   TUNING_CHAPTER_PAGES,
   TUNING_OTHER_PAGES,
   OTHER_PAGES,
@@ -110,6 +111,7 @@ const leakedSupportedPages = [
   ...TUNING_OTHER_PAGES,
   ...HELD_OUT_CHAPTER_PAGES,
   ...HELD_OUT_OTHER_PAGES,
+  ...HIDDEN_WORD_OTHER_PAGES,
 ].filter(isSupported);
 if (leakedSupportedPages.length > 0) {
   throw new Error(
@@ -153,6 +155,12 @@ const slices: Slice[] = [
     name: 'third round, held out for one run, then used for the title-in-url rule',
     chapterPages: HELD_OUT_CHAPTER_PAGES,
     otherPages: HELD_OUT_OTHER_PAGES,
+    record: recordedBy,
+  },
+  {
+    name: 'other pages whose words hide a reading word (cartoon, scandal)',
+    chapterPages: [],
+    otherPages: HIDDEN_WORD_OTHER_PAGES,
     record: recordedBy,
   },
 ];

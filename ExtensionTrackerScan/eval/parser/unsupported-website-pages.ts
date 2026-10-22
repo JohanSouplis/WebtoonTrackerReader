@@ -184,3 +184,11 @@ export const HELD_OUT_OTHER_PAGES: readonly OtherPage[] = [
   { pageTitle: 'Tower of God Chapter 600 Explained | Webtoon Theories', url: 'https://webtoontheories.com/tower-of-god-chapter-600-explained/' },
   { pageTitle: 'Omniscient Reader Chapter 200 | Manhwa Discord Server', url: 'https://discord.com/channels/123456/789012' },
 ];
+
+// prettier-ignore
+export const HIDDEN_WORD_OTHER_PAGES: readonly OtherPage[] = [
+  { pageTitle: 'Adventure Time Episode 12 - KimCartoon', url: 'https://kimcartoon.li/Cartoon/Adventure-Time/Episode-12' },
+  { pageTitle: 'Gravity Falls Episode 12 | Cartoon Recaps', url: 'https://recaps.example.com/gravity-falls/episode-12/' },
+  { pageTitle: 'Celebrity Scandal: Chapter 3 - The Fallout | Daily Gossip', url: 'https://dailygossip.example/celebrity-scandal/chapter-3/' },
+  { pageTitle: 'K-Pop Scandal Explained - Episode 12 - Insider Talk', url: 'https://insidertalk.example/kpop-scandal-explained/episode-12/' },
+];

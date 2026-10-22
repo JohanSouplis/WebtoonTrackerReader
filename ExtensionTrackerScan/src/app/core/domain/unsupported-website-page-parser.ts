@@ -43,6 +43,7 @@ const READING_WORDS = [
 ];
 const OTHER_MEDIA_WORDS = [
   'anime',
+  'cartoon',
   'novel',
   'podcast',
   'wiki',
@@ -105,27 +106,33 @@ const urlChapters = (url: string): number[] => [
     .map(Number),
 ];
 
-const mentionsAny = (
-  page: VisitedPage,
-  lexicon: readonly string[],
-): boolean => {
-  const text = `${page.pageTitle} ${page.url}`.toLowerCase();
-  return lexicon.some((word) => text.includes(word));
-};
-
-const isChapterPage = (page: VisitedPage, mention: ChapterMention): boolean =>
-  urlChapters(page.url).includes(mention.chapter.value) &&
-  mentionsAny(page, READING_WORDS) &&
-  !mentionsAny(page, OTHER_MEDIA_WORDS) &&
-  !pathSegments(page.url).some((segment) =>
-    NON_READING_PATHS.includes(segment.toLowerCase()),
-  );
-
 const compact = (text: string): string =>
   text.toLowerCase().replace(/[^\p{L}\d]/gu, '');
 
 const hostOf = (url: string): string =>
   compact(url.replace(/^\w+:\/\/(www\.)?/, '').split('/')[0]);
+
+const mentionsReading = (page: VisitedPage): boolean => {
+  const host = hostOf(page.url);
+  const words = `${page.pageTitle} ${page.url}`.toLowerCase().split(/\P{L}+/u);
+  return READING_WORDS.some(
+    (word) =>
+      host.includes(word) || words.includes(word) || words.includes(`${word}s`),
+  );
+};
+
+const mentionsOtherMedia = (page: VisitedPage): boolean => {
+  const text = `${page.pageTitle} ${page.url}`.toLowerCase();
+  return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
+};
+
+const isChapterPage = (page: VisitedPage, mention: ChapterMention): boolean =>
+  urlChapters(page.url).includes(mention.chapter.value) &&
+  mentionsReading(page) &&
+  !mentionsOtherMedia(page) &&
+  !pathSegments(page.url).some((segment) =>
+    NON_READING_PATHS.includes(segment.toLowerCase()),
+  );
 
 const isWebsiteName = (segment: string, host: string): boolean => {
   const name = compact(segment);
