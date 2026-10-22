@@ -54,7 +54,7 @@ describe('ScanListPage', () => {
         backfillCovers: async (titles, onCoverSaved) => {
           await Promise.all(
             titles.map((title) =>
-              coverRepository.save(ScanTitle.of(title), FOUND),
+              coverRepository.update(ScanTitle.of(title), () => FOUND),
             ),
           );
           onCoverSaved();
@@ -78,7 +78,10 @@ describe('ScanListPage', () => {
         coverRepository,
         coverBackfill: {
           backfillCovers: async (_titles, onCoverSaved) => {
-            await coverRepository.save(ScanTitle.of('Solo Leveling'), FOUND);
+            await coverRepository.update(
+              ScanTitle.of('Solo Leveling'),
+              () => FOUND,
+            );
             onCoverSaved();
             await new Promise<never>(() => undefined);
           },

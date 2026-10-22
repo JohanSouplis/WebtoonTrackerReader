@@ -8,8 +8,8 @@ describe('ChromeStorageCoverRepository', () => {
     const storage = useStorage({});
     const repository = new ChromeStorageCoverRepository();
 
-    await repository.save(ScanTitle.of('Solo Leveling'), FOUND);
-    await repository.save(ScanTitle.of('Nano Machine'), MISSING);
+    await repository.update(ScanTitle.of('Solo Leveling'), () => FOUND);
+    await repository.update(ScanTitle.of('Nano Machine'), () => MISSING);
 
     expect(
       await repository.find([
@@ -33,7 +33,7 @@ describe('ChromeStorageCoverRepository', () => {
     useStorage({});
     const repository = new ChromeStorageCoverRepository();
 
-    await repository.save(ScanTitle.of('The Solo Leveling'), FOUND);
+    await repository.update(ScanTitle.of('The Solo Leveling'), () => FOUND);
 
     expect(await repository.find([ScanTitle.of('solo leveling!')])).toEqual(
       new Map([['solo leveling!', FOUND]]),
@@ -43,12 +43,29 @@ describe('ChromeStorageCoverRepository', () => {
   it('should delete the stored cover of a series and keep the others', async () => {
     const storage = useStorage({});
     const repository = new ChromeStorageCoverRepository();
-    await repository.save(ScanTitle.of('Solo Leveling'), FOUND);
-    await repository.save(ScanTitle.of('Nano Machine'), MISSING);
+    await repository.update(ScanTitle.of('Solo Leveling'), () => FOUND);
+    await repository.update(ScanTitle.of('Nano Machine'), () => MISSING);
 
     await repository.remove(ScanTitle.of('The Solo Leveling'));
 
     expect(Object.keys(storage.items)).toEqual(['cover:nano machine']);
+  });
+
+  it('should apply each update to the cover the previous one stored, across repositories', async () => {
+    useStorage({});
+    const title = ScanTitle.of('Solo Leveling');
+
+    await Promise.all([
+      new ChromeStorageCoverRepository().update(title, () => FOUND),
+      new ChromeStorageCoverRepository().update(
+        title,
+        (stored) => stored ?? MISSING,
+      ),
+    ]);
+
+    expect(await new ChromeStorageCoverRepository().find([title])).toEqual(
+      new Map([['Solo Leveling', FOUND]]),
+    );
   });
 
   it.each`

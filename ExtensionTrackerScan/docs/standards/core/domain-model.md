@@ -83,6 +83,10 @@ bannière) coûte plus cher que pas d'image : **dans le doute, le monogramme res
   été cherchée.
 - Une série se cherche si elle n'a pas d'état, ou si son dernier essai manqué date de 7 jours ou plus
   (`isCoverDue`). Une couverture trouvée ne se cherche plus.
+- Une couverture trouvée reste. Deux recherches de la même série peuvent tourner ensemble (la page lue et la
+  popup) : celle qui se termine sans image ne remplace pas la couverture que l'autre a trouvée (`settleCover`).
+  `CoverRepository.update()` applique ce choix à l'état enregistré, et le gateway Chrome passe les mises à jour une
+  à une, pour qu'aucune ne parte d'un état déjà dépassé.
 - `CoverSearch` (`cover-search.ts`) est la machine à états d'une recherche. Elle dit l'étape suivante
   (télécharger une image, lire une page, terminé) et le use-case exécute l'étape par un port. Les règles
   vivent dans la machine, les ports restent visibles dans `execute()`.

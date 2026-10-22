@@ -1,3 +1,4 @@
+import { settleCover } from '../domain/cover';
 import { planCoverBackfill } from '../domain/cover-search';
 import { ScanTitle } from '../domain/scan-title';
 import { ClockPort } from '../ports/clock.port';
@@ -34,7 +35,10 @@ export class BackfillCoversUseCase {
             }
             step = search.nextStep();
           }
-          await this.coverRepository.save(search.title, step.cover);
+          await this.coverRepository.update(
+            search.title,
+            settleCover(step.cover),
+          );
         }
       }),
     );

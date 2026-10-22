@@ -14,6 +14,7 @@ import {
 import { PageSignalsMessage } from '../../../page-signals-message';
 import { withCoverCandidatesOnly } from '../../../page-signals-reader';
 import { COVER_PAGES, CoverPage, signalsOf } from './cover-pages.fixture';
+import { BackfillCoversUseCase } from './backfill-covers.use-case';
 import { RecordCoverUseCase } from './record-cover.use-case';
 import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
 import { aScan } from './scans.fixture';
@@ -75,6 +76,52 @@ describe('RecordCoverUseCase', () => {
     expect(
       JSON.stringify(withCoverCandidatesOnly(message)).length,
     ).toBeLessThan(20_000);
+  });
+
+  it('should keep the cover a backfill found while the search of the page read ended without one', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Nano Machine', seriesUrl: SERIES_URL }),
+    ]);
+    const coverRepository = new InMemoryCoverRepository();
+    const web = new InMemoryWeb(
+      {
+        [SERIES_URL]: {
+          pageTitle: 'Nano Machine | WEBTOON',
+          url: SERIES_URL,
+          metaImages: [COVER_URL],
+        },
+      },
+      { [COVER_URL]: PORTRAIT },
+    );
+    const clock = new FixedClock(NOW);
+
+    await Promise.all([
+      new BackfillCoversUseCase(
+        scanRepository,
+        coverRepository,
+        web,
+        web,
+        clock,
+      ).execute([ScanTitle.of('Nano Machine')]),
+      new RecordCoverUseCase(
+        scanRepository,
+        coverRepository,
+        web,
+        web,
+        clock,
+      ).execute({
+        ...catalogPage('Nano Machine', '4'),
+        metaImages: [1, 2, 3, 4].map(
+          (banner) => `https://webtoon-phinf.pstatic.net/banner-${banner}.jpg`,
+        ),
+      }),
+    ]);
+
+    expect(
+      (await coverRepository.find([ScanTitle.of('Nano Machine')])).get(
+        'Nano Machine',
+      ),
+    ).toEqual(found(COVER_URL, 'series-page'));
   });
 
   it('should record the cover as missing when neither the page nor its series page shows a cover', async () => {

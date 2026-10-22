@@ -3,6 +3,9 @@ import { ScanTitle } from '../domain/scan-title';
 
 export interface CoverRepository {
   find(titles: readonly ScanTitle[]): Promise<Covers>;
-  save(title: ScanTitle, cover: Cover): Promise<void>;
+  update(
+    title: ScanTitle,
+    change: (stored: Cover | undefined) => Cover,
+  ): Promise<void>;
   remove(title: ScanTitle): Promise<void>;
 }

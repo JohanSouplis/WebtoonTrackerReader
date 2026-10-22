@@ -56,6 +56,8 @@ const toStored = (cover: Cover): StoredCover =>
     : { kind: 'missing', triedAt: cover.triedAt.toISOString() };
 
 export class ChromeStorageCoverRepository implements CoverRepository {
+  private static updates: Promise<unknown> = Promise.resolve();
+
   async find(titles: readonly ScanTitle[]): Promise<Covers> {
     const stored = await chrome.storage.local.get(titles.map(keyOf));
     return new Map(
@@ -66,8 +68,19 @@ export class ChromeStorageCoverRepository implements CoverRepository {
     );
   }
 
-  async save(title: ScanTitle, cover: Cover): Promise<void> {
-    await chrome.storage.local.set({ [keyOf(title)]: toStored(cover) });
+  update(
+    title: ScanTitle,
+    change: (stored: Cover | undefined) => Cover,
+  ): Promise<void> {
+    const key = keyOf(title);
+    const update = ChromeStorageCoverRepository.updates.then(async () => {
+      const stored = await chrome.storage.local.get([key]);
+      await chrome.storage.local.set({
+        [key]: toStored(change(toCover(stored[key]))),
+      });
+    });
+    ChromeStorageCoverRepository.updates = update.catch(() => undefined);
+    return update;
   }
 
   async remove(title: ScanTitle): Promise<void> {

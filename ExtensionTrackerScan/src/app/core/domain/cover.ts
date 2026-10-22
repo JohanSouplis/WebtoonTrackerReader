@@ -23,6 +23,11 @@ export type Cover =
 
 export type Covers = ReadonlyMap<string, Cover>;
 
+export const settleCover =
+  (searched: Cover) =>
+  (stored: Cover | undefined): Cover =>
+    stored?.kind === 'found' ? stored : searched;
+
 export const isCoverDue = (cover: Cover | undefined, now: Date): boolean => {
   switch (cover?.kind) {
     case undefined:

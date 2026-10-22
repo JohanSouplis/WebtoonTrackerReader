@@ -1,4 +1,4 @@
-import { isCoverDue } from '../domain/cover';
+import { isCoverDue, settleCover } from '../domain/cover';
 import { CoverSearch } from '../domain/cover-search';
 import { parsePage } from '../domain/page-title-parser';
 import { PageSignals } from '../domain/parsed-page';
@@ -42,6 +42,6 @@ export class RecordCoverUseCase {
       }
       step = search.nextStep();
     }
-    await this.coverRepository.save(title, step.cover);
+    await this.coverRepository.update(title, settleCover(step.cover));
   }
 }
