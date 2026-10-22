@@ -139,6 +139,77 @@ describe('RecordVisitedPageUseCase', () => {
     },
   );
 
+  // prettier-ignore
+  it.each<[string, object, string, number]>([
+    ['its url is an opaque id and its structured data names the series', { pageTitle: "Omniscient Reader's Viewpoint - Prologue - Chapter 0 - Flame Comics", url: 'https://flamecomics.xyz/series/2/0c9db8012fbd1257', ogTitle: "Omniscient Reader's Viewpoint - Prologue - Chapter 0 - Flame Comics", structuredData: [{ type: 'Organization', name: 'Flame Comics' }, { type: 'Chapter', name: "Omniscient Reader's Viewpoint - Prologue - Chapter 0", headline: 'Prologue' }, { type: 'CreativeWorkSeries', name: "Omniscient Reader's Viewpoint" }] }, "Omniscient Reader's Viewpoint", 0],
+    ['its tab title is one chapter ahead of its heading, selected chapter and url', { pageTitle: 'Chapter 3 - Rakuen wo Mezashite - ManhwaClan', url: 'https://www.manhwafan.com/manga/rakuen-wo-mezashite/chapter-2', ogTitle: 'Chapter 3 - Rakuen wo Mezashite - ManhwaClan', heading: 'Rakuen wo Mezashite - Chapter 2: Depression and Mania', breadcrumb: 'Home Rakuen wo Mezashite Chapter 2: Depression and Mania', selectedOptions: ['Chapter 2'] }, 'Rakuen wo Mezashite', 2],
+    ['its structured data names the series with HTML entities', { pageTitle: 'I’ll Retire After Saving the World Chapter 107 – Akaza Scans', url: 'https://akazascans.org/ill-retire-after-saving-the-world-chapter-107/', structuredData: [{ type: 'ListItem', name: 'I&#8217;ll Retire After Saving the World Chapter 107' }, { type: 'ComicSeries', name: 'I&#8217;ll Retire After Saving the World' }] }, "I'll Retire After Saving the World", 107],
+    ['its chapters are numbered again in each volume', { pageTitle: 'Читать Том 8. Глава 1 манги Гон бесплатно — InkStory', url: 'https://inkstory.net/content/gon/881370cc-55e6-443e-946a-03277876ad42', ogTitle: 'Читать Том 8. Глава 1 манги Гон бесплатно', structuredData: [{ type: 'ListItem', name: 'Гон', position: 3 }, { type: 'Chapter', name: 'Том 8. Глава 1' }] }, 'Гон', 1],
+    ['its tab title names the series after the chapter and a connector word', { pageTitle: 'Lire le chapitre 144 de Kindergarten Wars — Manga Nova', url: 'https://www.manga-nova.com/lecture-en-ligne/kindergarten-wars/chapitre/144' }, 'Kindergarten Wars', 144],
+    ['its tab title announces the next chapter', { pageTitle: 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de Chap 3: Creativity Wall and Memories Next Chap 4', url: 'https://www.zinmanga.net/manga/otto-no-yuigon-ga-doujinshi-kake-datta-mono-de/chapter-3' }, 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de', 3],
+    ['its url glues a post id to the chapter number', { pageTitle: "Baca I Became a Human's Daughter Chapter 58 Bahasa Indonesia - Kiryuu ID", url: 'https://v7.kiryuu.to/manga/i-became-a-humans-daughter/chapter-58.826511/' }, "I Became a Human's Daughter", 58],
+    ['its tab title has no chapter but its breadcrumb and selected chapter have', { pageTitle: 'Lire Mariage Toxine Scan FR - Mangas Origines', url: 'https://mangas-origines.fr/oeuvre/marriage-toxin/chapitre-183/', ogTitle: 'Mariage Toxine Scan FR - Lire le manga sur Mangas Origines', breadcrumb: 'Accueil Catalogue Mariage Toxine Chapitre 183', selectedOptions: ['Chapitre 183', '1/18'] }, 'Mariage Toxine', 183],
+  ])(
+    'should record the reading its page signals agree on when %s',
+    async (_, message, title, chapter) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const page = signalsOf(contentScriptMessage(message));
+
+      await recordVisitedPage.execute(page);
+
+      expect(await scans()).toEqual([
+        aScan({ title, chapter, url: page.url, readAt: NOW }),
+      ]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
+  // prettier-ignore
+  it.each<[string, object]>([
+    ['a novel chapter of a scan website', { pageTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition] | DivaScans', url: 'https://divascans.org/series/novel/crazy-doctor-19-uncensored-edition/chapter/19', ogTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition]', structuredData: [{ type: 'ListItem', name: 'Crazy Doctor [19+ Uncensored Edition]' }, { type: 'ListItem', name: 'Chapter 19' }] }],
+    ['a chapter whose tab title is the tagline of the website', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', ogTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', heading: 'Capítulo 95' }],
+    ['a chapter whose series is named only in its url', { pageTitle: '99 | Team-X', url: 'https://olympustaff.com/series/the-academys-sashimi-sword-master/99', heading: '99', selectedOptions: ['فصل رقم : 99'] }],
+    ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
+  ])(
+    'should ignore the page of a website outside the catalog without reporting it when it is %s',
+    async (_, message) => {
+      const { recordVisitedPage, scans, crashReporter } = setUp();
+
+      await recordVisitedPage.execute(signalsOf(contentScriptMessage(message)));
+
+      expect(await scans()).toEqual([]);
+      expect(crashReporter.reportedPages).toEqual([]);
+    },
+  );
+
+  it('should keep the reading when the tab title falls back to the website name after the chapter was recorded', async () => {
+    const { recordVisitedPage, scans } = setUp();
+    const url = 'https://arvenscans.net/series/secret-family/chapter-80';
+
+    await recordVisitedPage.execute(
+      signalsOf(
+        contentScriptMessage({
+          pageTitle: 'Secret Family — Chapter 80 | ARVENSCANS',
+          url,
+        }),
+      ),
+    );
+    await recordVisitedPage.execute(
+      signalsOf(
+        contentScriptMessage({
+          pageTitle: 'ARVENSCANS',
+          url,
+          ogTitle: 'ARVENSCANS',
+          heading: 'Chapter reader',
+        }),
+      ),
+    );
+
+    expect(await scans()).toEqual([
+      aScan({ title: 'Secret Family', chapter: 80, url, readAt: NOW }),
+    ]);
+  });
+
   it('should leave the library unchanged when the content script sends the same page again', async () => {
     const { recordVisitedPage, scans } = setUp();
     const message = {
@@ -451,6 +522,12 @@ const asuraUrl = (chapter: string): string =>
 const asuraPage = (title: string, chapter: string) => ({
   pageTitle: `${title} Chapter ${chapter} - Asura Scans`,
   url: asuraUrl(chapter),
+});
+
+const contentScriptMessage = (signals: object) => ({
+  structuredData: [],
+  selectedOptions: [],
+  ...signals,
 });
 
 const signalsOf = (message: unknown) => {

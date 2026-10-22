@@ -1,5 +1,22 @@
 import { Chapter } from './chapter';
-import { VisitedPage } from './parsed-page';
+import {
+  CHAPTER_SUFFIXES,
+  CHAPTER_WORDS,
+  NON_READING_PATHS,
+  OTHER_MEDIA_WORDS,
+  QUALIFIERS,
+  READING_MARKS,
+  READING_TYPES,
+  READING_WORDS,
+  SERIES_TYPES,
+  TITLE_CONNECTORS,
+  TITLE_NOISE,
+  TITLE_SEPARATOR,
+  TITLE_STOP_WORDS,
+  URL_CHAPTER_WORDS,
+  WEBSITE_TYPES,
+} from './page-lexicon';
+import { PageSignals, StructuredDataItem } from './parsed-page';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 
@@ -9,96 +26,84 @@ type ChapterMention = {
   readonly after: string;
 };
 
-const TITLE_CHAPTER_WORDS = [
-  'chapter',
-  'chapitre',
-  'capítulo',
-  'capitulo',
-  'chap',
-  'ch',
-  'episode',
-  'épisode',
-  'ep',
-];
-const URL_CHAPTER_WORDS = [
-  'chapters',
-  'chapter',
-  'chapitre',
-  'capitulo',
-  'chap',
-  'ch',
-  'c',
-  'episodes',
-  'episode',
-  'ep',
-];
-const READING_WORDS = [
-  'manga',
-  'manhwa',
-  'manhua',
-  'webtoon',
-  'toon',
-  'comic',
-  'scan',
-];
-const OTHER_MEDIA_WORDS = [
-  'anime',
-  'cartoon',
-  'novel',
-  'podcast',
-  'wiki',
-  'fandom',
-  'reddit',
-  'youtube',
-  'watch',
-  'video',
-];
-const NON_READING_PATHS = ['course'];
-const QUALIFIERS = ['online', 'free', 'vf', 'raw', 'english', 'eng', 'vostfr'];
-const TITLE_NOISE: readonly RegExp[] = [
-  /^.*(?:^|[-|–:]\s*)read\s+/i,
-  /^manga:\s*/i,
-  /\[official\]|\(official\)/gi,
-  /^\s*\([^)]*\)/,
-  /\(?\bs\d+\)?\s*$/i,
-  /\bvol(?:ume)?\.?\s*\d+\s*$/i,
-  /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
-  /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online))+$/i,
-];
+const byLength = (words: readonly string[]): string[] =>
+  [...words].sort((left, right) => right.length - left.length);
 
-const TITLE_MENTION = new RegExp(
-  `(?<![\\p{L}\\d])(?:${TITLE_CHAPTER_WORDS.join('|')})\\.?\\s*[-:]?\\s*(\\d+(?:[.,]\\d+)?)(?!\\d)|第\\s*(\\d+(?:\\.\\d+)?)\\s*[話话章回]|(\\d+)\\s*화`,
+const NUMBER = '(\\d+(?:[.,]\\d+)?)';
+
+const MENTION = new RegExp(
+  [
+    `(?<![\\p{L}\\d])(?:${byLength(CHAPTER_WORDS).join('|')})\\.?\\s*(?:رقم\\s*)?[-:]?\\s*${NUMBER}(?!\\d)`,
+    `第\\s*${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}]`,
+    `(?<![\\p{L}\\d+])${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}](?!\\p{L})`,
+  ].join('|'),
   'giu',
 );
+
 const URL_MENTION = new RegExp(
   `(?<![a-z\\d])(?:${URL_CHAPTER_WORDS.join('|')})(?:_?no)?[-_./=]?(\\d+)(?:[.\\-_](\\d+))?(?![\\da-z])`,
   'gi',
 );
 
+const CONNECTOR = new RegExp(
+  `^\\s*(?:${TITLE_CONNECTORS.join('|')})\\s+(.+)$`,
+  'iu',
+);
+
+const withAsciiDigits = (text: string): string =>
+  text.replace(/[０-９．]/g, (character) =>
+    String.fromCharCode(character.charCodeAt(0) - 0xfee0),
+  );
+
+const decoded = (url: string): string => {
+  try {
+    return decodeURIComponent(url);
+  } catch {
+    return url;
+  }
+};
+
+const folded = (text: string): string =>
+  text
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/đ/g, 'd')
+    .replace(/[^\p{L}\p{N}]/gu, '');
+
 const isBoundary = (after: string): boolean => {
+  if (CONNECTOR.test(after)) {
+    return true;
+  }
   const word = /^\s*([\p{L}]+)/u.exec(after);
   return !word || QUALIFIERS.includes(word[1].toLowerCase());
 };
 
-const chapterMentionIn = (pageTitle: string): ChapterMention | undefined => {
-  for (const match of pageTitle.matchAll(TITLE_MENTION)) {
-    const after = pageTitle.substring(match.index + match[0].length);
+const chapterMentionsIn = (text: string): ChapterMention[] =>
+  [...withAsciiDigits(text).matchAll(MENTION)].flatMap((match) => {
+    const source = match.input;
+    const after = source.substring(match.index + match[0].length);
     const chapter = Chapter.parse(match[1] ?? match[2] ?? match[3]);
-    if (chapter && isBoundary(after)) {
-      return {
-        chapter,
-        before: pageTitle.substring(0, match.index),
-        after,
-      };
-    }
-  }
-  return undefined;
-};
+    return chapter && (match[1] === undefined || isBoundary(after))
+      ? [{ chapter, before: source.substring(0, match.index), after }]
+      : [];
+  });
 
-const pathSegments = (url: string): string[] => url.split(/[/?#]/);
+const displays = (text: string, chapter: Chapter): boolean =>
+  chapterMentionsIn(text).some(
+    (mention) => mention.chapter.value === chapter.value,
+  );
+
+const pathOf = (url: string): string =>
+  decoded(url.replace(/^\w+:\/\/[^/?#]*/, ''));
+
+const hostOf = (url: string): string =>
+  folded(url.replace(/^\w+:\/\/(www\.)?/, '').split(/[/?#]/)[0]);
+
+const pathSegments = (url: string): string[] => pathOf(url).split(/[/?#&]/);
 
 const urlChapters = (url: string): number[] => [
-  ...[...url.matchAll(URL_MENTION)].flatMap(([, whole, decimal]) =>
+  ...[...pathOf(url).matchAll(URL_MENTION)].flatMap(([, whole, decimal]) =>
     decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)],
   ),
   ...pathSegments(url)
@@ -106,82 +111,291 @@ const urlChapters = (url: string): number[] => [
     .map(Number),
 ];
 
-const compact = (text: string): string =>
-  text.toLowerCase().replace(/[^\p{L}\d]/gu, '');
+type Website = {
+  readonly host: string;
+  readonly names: readonly string[];
+};
 
-const hostOf = (url: string): string =>
-  compact(url.replace(/^\w+:\/\/(www\.)?/, '').split('/')[0]);
+const isWebsiteNode = ({ types }: StructuredDataItem): boolean =>
+  types.some((type) => WEBSITE_TYPES.includes(type));
 
-const mentionsReading = (page: VisitedPage): boolean => {
-  const host = hostOf(page.url);
-  const words = `${page.pageTitle} ${page.url}`.toLowerCase().split(/\P{L}+/u);
-  return READING_WORDS.some(
-    (word) =>
-      host.includes(word) || words.includes(word) || words.includes(`${word}s`),
+const structuredTexts = (page: PageSignals): string[] =>
+  (page.structuredData ?? [])
+    .filter((item) => !isWebsiteNode(item))
+    .flatMap(({ name, headline }) =>
+      [name, headline].flatMap((text) => text ?? []),
+    );
+
+const websiteOf = (page: PageSignals): Website => ({
+  host: hostOf(page.url),
+  names: [
+    page.ogSiteName,
+    ...(page.structuredData ?? [])
+      .filter(isWebsiteNode)
+      .map(({ name }) => name),
+  ].flatMap((name) => (name ? [folded(name)] : [])),
+});
+
+const isWebsiteName = (text: string, website: Website): boolean => {
+  const name = folded(text);
+  const firstWord = folded(text.trim().split(/\s+/)[0]);
+  return (
+    name.length > 0 &&
+    (website.host.includes(name) ||
+      website.names.includes(name) ||
+      (firstWord.length >= 4 && website.host.startsWith(firstWord)))
   );
 };
 
-const mentionsOtherMedia = (page: VisitedPage): boolean => {
+const seriesNames = (page: PageSignals): string[] =>
+  (page.structuredData ?? []).flatMap(({ types, name }) =>
+    name && types.some((type) => SERIES_TYPES.includes(type)) ? [name] : [],
+  );
+
+const isOgIndependent = (page: PageSignals): boolean =>
+  page.ogTitle !== undefined && folded(page.ogTitle) !== folded(page.pageTitle);
+
+type ChapterDisplay = {
+  readonly text: string;
+  readonly isHeadline: boolean;
+};
+
+const chapterDisplays = (page: PageSignals): ChapterDisplay[] => [
+  ...[page.pageTitle, page.ogTitle, page.heading].flatMap((text) =>
+    text ? [{ text, isHeadline: true }] : [],
+  ),
+  ...[page.breadcrumb, ...(page.selectedOptions ?? [])].flatMap((text) =>
+    text ? [{ text, isHeadline: false }] : [],
+  ),
+];
+
+const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
+  [
+    isOgIndependent(page) ? page.ogTitle : undefined,
+    page.heading,
+    page.breadcrumb,
+    ...structuredTexts(page),
+    ...(page.selectedOptions ?? []),
+  ].flatMap((text) => (text && text !== displaying ? [text] : []));
+
+const isChapterConfirmed = (
+  page: PageSignals,
+  display: ChapterDisplay,
+  chapter: Chapter,
+): boolean =>
+  urlChapters(page.url).includes(chapter.value) ||
+  (display.isHeadline &&
+    (chapterWitnesses(page, display.text).some((text) =>
+      displays(text, chapter),
+    ) ||
+      (page.selectedOptions ?? []).some(
+        (option) => Number(option) === chapter.value,
+      )));
+
+const textWords = (page: PageSignals): string[] =>
+  [
+    page.pageTitle,
+    decoded(page.url),
+    page.ogTitle,
+    page.ogSiteName,
+    page.heading,
+    page.breadcrumb,
+    ...structuredTexts(page),
+  ]
+    .flatMap((text) => text ?? [])
+    .join(' ')
+    .toLowerCase()
+    .split(/\P{L}+/u);
+
+const mentionsReading = (page: PageSignals): boolean => {
+  const host = hostOf(page.url);
+  const words = textWords(page);
+  const text = folded(words.join(' '));
+  return (
+    READING_WORDS.some(
+      (word) =>
+        host.includes(word) ||
+        words.includes(word) ||
+        words.includes(`${word}s`),
+    ) ||
+    READING_MARKS.some((mark) => text.includes(folded(mark))) ||
+    (page.structuredData ?? []).some(({ types }) =>
+      types.some((type) => READING_TYPES.includes(type)),
+    )
+  );
+};
+
+const mentionsOtherMedia = (page: PageSignals): boolean => {
   const text = `${page.pageTitle} ${page.url}`.toLowerCase();
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
-const isChapterPage = (page: VisitedPage, mention: ChapterMention): boolean =>
-  urlChapters(page.url).includes(mention.chapter.value) &&
+const isReadingPage = (page: PageSignals): boolean =>
   mentionsReading(page) &&
   !mentionsOtherMedia(page) &&
   !pathSegments(page.url).some((segment) =>
     NON_READING_PATHS.includes(segment.toLowerCase()),
   );
 
-const isWebsiteName = (segment: string, host: string): boolean => {
-  const name = compact(segment);
-  return name.length > 0 && host.includes(name);
-};
-
 const cleaned = (text: string): string =>
   TITLE_NOISE.reduce((title, noise) => title.replace(noise, ''), text).trim();
 
-const titleBefore = (before: string): string => {
-  const title = cleaned(before);
-  return /^\d*$/.test(title) ? '' : title;
+const isTitle = (text: string): boolean =>
+  /\p{L}/u.test(text) &&
+  chapterMentionsIn(text).length === 0 &&
+  text
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .some((word) => word !== '' && !TITLE_STOP_WORDS.includes(word));
+
+const SEPARATED = new RegExp(`(${TITLE_SEPARATOR.source})`, 'u');
+
+type SegmentPlace = {
+  readonly isFirst: boolean;
+  readonly isLast: boolean;
+  readonly isAdjacentToMention: boolean;
 };
 
-const withoutWebsiteName = (segments: string[], host: string): string[] =>
-  segments.length > 1 && isWebsiteName(segments[segments.length - 1], host)
-    ? segments.slice(0, -1)
-    : segments;
+const segmentsOf = (text: string): string[] =>
+  text
+    .split(SEPARATED)
+    .filter((part, index) => index % 2 === 0 && cleaned(part) !== '');
 
-const titleAmong = (segments: string[], host: string): string =>
-  withoutWebsiteName(segments.map(cleaned).filter(Boolean), host)[0] ?? '';
-
-const titleAfter = (after: string, host: string): string => {
-  const [mentionSegment, ...nextSegments] = after.split('|');
-  const nextTitle = titleAmong(nextSegments, host);
-  return nextTitle && !isWebsiteName(nextTitle, host)
-    ? nextTitle
-    : titleAmong(mentionSegment.split(/\s[-–—•:]\s|\s+-\s+/), host);
-};
-
-const titleOf = (page: VisitedPage, mention: ChapterMention): string => {
-  const before = titleBefore(mention.before);
-  if (before) {
-    return before;
+const titleSpan = (
+  text: string,
+  isDropped: (segment: string, place: SegmentPlace) => boolean,
+): string[] => {
+  const parts = text.split(SEPARATED);
+  const filled = parts.flatMap((part, index) =>
+    index % 2 === 0 && cleaned(part) !== '' ? [index] : [],
+  );
+  const kept =
+    filled.length > 1
+      ? filled.filter(
+          (index, position) =>
+            !isDropped(parts[index], {
+              isFirst: position === 0,
+              isLast: position === filled.length - 1,
+              isAdjacentToMention: index === 0,
+            }),
+        )
+      : filled;
+  if (kept.length === 0) {
+    return [];
   }
-  const after = titleAfter(mention.after, hostOf(page.url));
-  return compact(page.url).includes(compact(after)) ? after : '';
+  const span = cleaned(
+    parts.slice(kept[0], kept[kept.length - 1] + 1).join(''),
+  );
+  return isTitle(span) ? [span] : [];
+};
+
+const containsNumber = (text: string, chapter: Chapter): boolean =>
+  text
+    .split(/[^\d.]+/)
+    .some((token) => token !== '' && Number(token) === chapter.value);
+
+const beforeCandidates = (
+  mention: ChapterMention,
+  website: Website,
+): string[] =>
+  titleSpan(
+    mention.before,
+    (segment, { isFirst }) =>
+      (isFirst && isWebsiteName(segment, website)) ||
+      containsNumber(segment, mention.chapter),
+  );
+
+const afterCandidates = (after: string, website: Website): string[] => {
+  const connected = CONNECTOR.exec(after);
+  const [mentionPiece, ...pieces] = after.split(/\s*[|｜]\s*/);
+  const isWebsiteAtEnd = (segment: string, { isLast }: SegmentPlace) =>
+    isLast && isWebsiteName(segment, website);
+  const nextTitles = titleSpan(
+    pieces
+      .filter(
+        (piece, index) =>
+          !(index === pieces.length - 1 && isWebsiteName(piece, website)),
+      )
+      .join(' | '),
+    isWebsiteAtEnd,
+  );
+  return [
+    ...(connected ? titleSpan(connected[1], isWebsiteAtEnd) : []),
+    ...(nextTitles.length > 0
+      ? nextTitles
+      : titleSpan(
+          mentionPiece,
+          (segment, place) =>
+            place.isAdjacentToMention || isWebsiteAtEnd(segment, place),
+        )),
+  ];
+};
+
+const titleWitnesses = (page: PageSignals, displaying: string): string[] =>
+  [
+    pathOf(page.url),
+    page.canonicalUrl && pathOf(page.canonicalUrl),
+    isOgIndependent(page) ? page.ogTitle : undefined,
+    page.heading,
+    page.breadcrumb,
+    ...structuredTexts(page),
+  ].flatMap((text) => (text && text !== displaying ? [folded(text)] : []));
+
+const pageTitleCandidates = (page: PageSignals, website: Website): string[] =>
+  titleSpan(
+    page.pageTitle,
+    (segment, { isFirst, isLast }) =>
+      (isFirst || isLast) && isWebsiteName(segment, website),
+  );
+
+const titleOf = (
+  page: PageSignals,
+  display: ChapterDisplay,
+  mention: ChapterMention,
+): string | undefined => {
+  const website = websiteOf(page);
+  const series = seriesNames(page).find((name) =>
+    folded(display.text).includes(folded(name)),
+  );
+  if (series) {
+    return series;
+  }
+  const witnesses = titleWitnesses(page, display.text);
+  const before = beforeCandidates(mention, website);
+  const confirmed = [
+    ...before,
+    ...afterCandidates(mention.after, website),
+    ...(display.text === page.pageTitle
+      ? []
+      : pageTitleCandidates(page, website)),
+  ].find((candidate) =>
+    witnesses.some((witness) => witness.includes(folded(candidate))),
+  );
+  if (confirmed) {
+    return confirmed;
+  }
+  return display.isHeadline &&
+    segmentsOf(mention.before).length === 1 &&
+    before.length > 0
+    ? before[0]
+    : undefined;
 };
 
 export const parseUnsupportedWebsitePage = (
-  page: VisitedPage,
+  page: PageSignals,
   readAt: Date,
 ): Reading | undefined => {
-  const mention = chapterMentionIn(page.pageTitle);
-  if (!mention || !isChapterPage(page, mention)) {
+  if (!isReadingPage(page)) {
     return undefined;
   }
-  const title = ScanTitle.parse(titleOf(page, mention));
-  return title
-    ? { title, chapter: mention.chapter, url: page.url, readAt }
-    : undefined;
+  for (const display of chapterDisplays(page)) {
+    const mention = chapterMentionsIn(display.text)[0];
+    if (mention && isChapterConfirmed(page, display, mention.chapter)) {
+      const title = ScanTitle.parse(titleOf(page, display, mention) ?? '');
+      return title
+        ? { title, chapter: mention.chapter, url: page.url, readAt }
+        : undefined;
+    }
+  }
+  return undefined;
 };

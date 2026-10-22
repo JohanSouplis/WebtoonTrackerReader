@@ -50,11 +50,12 @@ export class RecordVisitedPageUseCase {
 src/
   background.ts            point d'entrée : écoute les événements Chrome, appelle les use-cases
   content-script.ts        point d'entrée : envoie les PageSignals de la page au service worker
+  page-signals-message.ts  frontière : réduit le message du content script en PageSignals
   app/core/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · series-key.ts · chapter.ts · rating.ts
                            reading.ts · parsed-page.ts · page-title-parser.ts · website-patterns.ts
-                           unsupported-website-page-parser.ts
+                           unsupported-website-page-parser.ts · page-lexicon.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · toggle-favorite.use-case.ts · rate-scan.use-case.ts
                            propose-website.use-case.ts         (chacun avec son .spec.ts à côté)

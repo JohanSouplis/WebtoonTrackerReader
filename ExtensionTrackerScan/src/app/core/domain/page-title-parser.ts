@@ -84,7 +84,10 @@ export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
     servesScans(page.url, host),
   );
   if (!pattern) {
-    const reading = parseUnsupportedWebsitePage(cleanedPage, readAt);
+    const reading = parseUnsupportedWebsitePage(
+      { ...page, pageTitle: cleanedPage.pageTitle },
+      readAt,
+    );
     return reading ? { kind: 'reading', reading } : { kind: 'not-a-scan' };
   }
   if (isExcluded(cleanedPage, pattern)) {
