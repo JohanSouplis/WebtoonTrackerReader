@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     background: "./src/background.ts",
     "content-script": "./src/content-script.ts",
+    offscreen: "./src/offscreen.ts",
   },
   devtool: false,
   optimization: {
@@ -29,7 +30,10 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: "src/assets", to: "public" }],
+      patterns: [
+        { from: "src/assets", to: "public" },
+        { from: "src/offscreen.html", to: "offscreen.html" },
+      ],
     }),
   ],
 };
