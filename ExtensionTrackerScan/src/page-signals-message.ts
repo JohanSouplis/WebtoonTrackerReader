@@ -1,10 +1,17 @@
-import { PageSignals, StructuredDataItem } from './app/core/domain/parsed-page';
+import {
+  PageImage,
+  PageLink,
+  PageSignals,
+  StructuredDataItem,
+} from './app/core/domain/parsed-page';
 
 export type StructuredDataNode = {
   readonly type: unknown;
   readonly name: unknown;
   readonly headline: unknown;
   readonly position: unknown;
+  readonly image?: unknown;
+  readonly item?: unknown;
 };
 
 export type PageSignalsMessage = {
@@ -17,6 +24,9 @@ export type PageSignalsMessage = {
   readonly breadcrumb?: string;
   readonly structuredData: readonly StructuredDataNode[];
   readonly selectedOptions: readonly string[];
+  readonly metaImages?: readonly string[];
+  readonly images?: readonly PageImage[];
+  readonly links?: readonly PageLink[];
 };
 
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
@@ -73,20 +83,73 @@ const positionOf = (value: unknown): number | undefined => {
     : undefined;
 };
 
-const structuredDataItemOf = (node: unknown): StructuredDataItem[] => {
-  if (!isRecord(node)) {
-    return [];
+const linkedUrlOf = (value: unknown): string | undefined => {
+  if (Array.isArray(value)) {
+    return linkedUrlOf(value[0]);
   }
-  const types = Array.isArray(node['type']) ? node['type'] : [node['type']];
-  return [
-    {
-      types: types.flatMap((type) => textOf(type) ?? []),
-      name: decodedTextOf(node['name']),
-      headline: decodedTextOf(node['headline']),
-      position: positionOf(node['position']),
-    },
-  ];
+  if (isRecord(value)) {
+    return (
+      textOf(value['url']) ??
+      textOf(value['contentUrl']) ??
+      textOf(value['@id'])
+    );
+  }
+  return textOf(value);
 };
+
+const absoluteUrlOf = (value: unknown, pageUrl: string): string | undefined => {
+  const url = linkedUrlOf(value);
+  if (url === undefined) {
+    return undefined;
+  }
+  try {
+    return new URL(url, pageUrl).href;
+  } catch {
+    return undefined;
+  }
+};
+
+const structuredDataItemOf =
+  (pageUrl: string) =>
+  (node: unknown): StructuredDataItem[] => {
+    if (!isRecord(node)) {
+      return [];
+    }
+    const types = Array.isArray(node['type']) ? node['type'] : [node['type']];
+    return [
+      {
+        types: types.flatMap((type) => textOf(type) ?? []),
+        name: decodedTextOf(node['name']),
+        headline: decodedTextOf(node['headline']),
+        position: positionOf(node['position']),
+        image: absoluteUrlOf(node['image'], pageUrl),
+        item: absoluteUrlOf(node['item'], pageUrl),
+      },
+    ];
+  };
+
+const pageImageOf =
+  (pageUrl: string) =>
+  (image: unknown): PageImage[] => {
+    if (!isRecord(image)) {
+      return [];
+    }
+    const src = absoluteUrlOf(image['src'], pageUrl);
+    return src ? [{ src, alt: textOf(image['alt']) ?? '' }] : [];
+  };
+
+const pageLinkOf =
+  (pageUrl: string) =>
+  (link: unknown): PageLink[] => {
+    if (!isRecord(link)) {
+      return [];
+    }
+    const href = absoluteUrlOf(link['href'], pageUrl);
+    const text = textOf(link['text']);
+    return href && text
+      ? [{ href, text, isBreadcrumb: link['isBreadcrumb'] === true }]
+      : [];
+  };
 
 export const parsePageSignals = (message: unknown): PageSignals | undefined => {
   if (
@@ -97,19 +160,25 @@ export const parsePageSignals = (message: unknown): PageSignals | undefined => {
   ) {
     return undefined;
   }
+  const url = message['url'];
   return {
     pageTitle: message['pageTitle'],
-    url: message['url'],
+    url,
     ogTitle: textOf(message['ogTitle']),
     ogSiteName: textOf(message['ogSiteName']),
     canonicalUrl: textOf(message['canonicalUrl']),
     heading: textOf(message['heading']),
     breadcrumb: textOf(message['breadcrumb']),
     structuredData: listOf(message['structuredData']).flatMap(
-      structuredDataItemOf,
+      structuredDataItemOf(url),
     ),
     selectedOptions: listOf(message['selectedOptions']).flatMap(
       (option) => textOf(option) ?? [],
     ),
+    metaImages: listOf(message['metaImages']).flatMap(
+      (image) => absoluteUrlOf(image, url) ?? [],
+    ),
+    images: listOf(message['images']).flatMap(pageImageOf(url)),
+    links: listOf(message['links']).flatMap(pageLinkOf(url)),
   };
 };

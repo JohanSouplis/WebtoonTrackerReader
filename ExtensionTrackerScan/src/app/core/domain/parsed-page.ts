@@ -10,6 +10,19 @@ export type StructuredDataItem = {
   readonly name?: string;
   readonly headline?: string;
   readonly position?: number;
+  readonly image?: string;
+  readonly item?: string;
+};
+
+export type PageImage = {
+  readonly src: string;
+  readonly alt: string;
+};
+
+export type PageLink = {
+  readonly href: string;
+  readonly text: string;
+  readonly isBreadcrumb: boolean;
 };
 
 export type PageSignals = VisitedPage & {
@@ -20,6 +33,9 @@ export type PageSignals = VisitedPage & {
   readonly breadcrumb?: string;
   readonly structuredData?: readonly StructuredDataItem[];
   readonly selectedOptions?: readonly string[];
+  readonly metaImages?: readonly string[];
+  readonly images?: readonly PageImage[];
+  readonly links?: readonly PageLink[];
 };
 
 export type ParsedPage =
