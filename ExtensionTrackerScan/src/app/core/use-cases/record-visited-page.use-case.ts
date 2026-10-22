@@ -1,5 +1,6 @@
 import { parsePage } from '../domain/page-title-parser';
 import { PageSignals } from '../domain/parsed-page';
+import { seriesPageUrlOf } from '../domain/series-page';
 import { ClockPort } from '../ports/clock.port';
 import { CrashReporterPort } from '../ports/crash-reporter.port';
 import { ScanRepository } from '../ports/scan-repository.port';
@@ -21,7 +22,11 @@ export class RecordVisitedPageUseCase {
         return;
       case 'reading': {
         const library = await this.scanRepository.load();
-        library.recordReading(parsedPage.reading);
+        const { reading } = parsedPage;
+        library.recordReading({
+          ...reading,
+          seriesUrl: seriesPageUrlOf(page, reading.title),
+        });
         await this.scanRepository.save(library);
       }
     }

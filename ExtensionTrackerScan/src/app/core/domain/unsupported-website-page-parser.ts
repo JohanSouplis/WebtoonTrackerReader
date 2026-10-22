@@ -10,11 +10,11 @@ import {
   READING_WORDS,
   SERIES_TYPES,
   TITLE_CONNECTORS,
-  TITLE_NOISE,
   TITLE_SEPARATOR,
   TITLE_STOP_WORDS,
   URL_CHAPTER_WORDS,
   WEBSITE_TYPES,
+  withoutTitleNoise,
 } from './page-lexicon';
 import { PageSignals, StructuredDataItem } from './parsed-page';
 import { Reading } from './reading';
@@ -237,9 +237,6 @@ const isReadingPage = (page: PageSignals): boolean =>
     NON_READING_PATHS.includes(segment.toLowerCase()),
   );
 
-const cleaned = (text: string): string =>
-  TITLE_NOISE.reduce((title, noise) => title.replace(noise, ''), text).trim();
-
 const isTitle = (text: string): boolean =>
   /\p{L}/u.test(text) &&
   chapterMentionsIn(text).length === 0 &&
@@ -258,7 +255,7 @@ type SegmentPlace = {
 const segmentsOf = (text: string): string[] =>
   text
     .split(SEPARATED)
-    .filter((part, index) => index % 2 === 0 && cleaned(part) !== '');
+    .filter((part, index) => index % 2 === 0 && withoutTitleNoise(part) !== '');
 
 const titleSpan = (
   text: string,
@@ -266,7 +263,7 @@ const titleSpan = (
 ): string[] => {
   const parts = text.split(SEPARATED);
   const filled = parts.flatMap((part, index) =>
-    index % 2 === 0 && cleaned(part) !== '' ? [index] : [],
+    index % 2 === 0 && withoutTitleNoise(part) !== '' ? [index] : [],
   );
   const kept =
     filled.length > 1
@@ -281,7 +278,7 @@ const titleSpan = (
   if (kept.length === 0) {
     return [];
   }
-  const span = cleaned(
+  const span = withoutTitleNoise(
     parts.slice(kept[0], kept[kept.length - 1] + 1).join(''),
   );
   return isTitle(span) ? [span] : [];

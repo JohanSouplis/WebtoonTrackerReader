@@ -3,6 +3,7 @@ import { Rating } from './rating';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 import { SeriesKey } from './series-key';
+import { siteOf } from './site';
 
 export type ScanSnapshot = {
   readonly title: string;
@@ -11,6 +12,7 @@ export type ScanSnapshot = {
   readonly readAt: Date;
   readonly isFavorite: boolean;
   readonly rating?: number;
+  readonly seriesUrl?: string;
 };
 
 export class ScanNotFound extends Error {
@@ -18,6 +20,14 @@ export class ScanNotFound extends Error {
     super(`No scan is titled ${title.value}`);
   }
 }
+
+const seriesUrlOnSameSite = (
+  previous: Reading,
+  next: Reading,
+): string | undefined =>
+  previous.seriesUrl && siteOf(previous.seriesUrl) === siteOf(next.url)
+    ? previous.seriesUrl
+    : undefined;
 
 type TrackedScan = {
   reading: Reading;
@@ -37,6 +47,7 @@ export class ScanLibrary {
           chapter: Chapter.of(snapshot.chapter),
           url: snapshot.url,
           readAt: snapshot.readAt,
+          seriesUrl: snapshot.seriesUrl,
         },
         isFavorite: snapshot.isFavorite,
         rating:
@@ -57,7 +68,12 @@ export class ScanLibrary {
     if (scan.reading.readAt > reading.readAt) {
       return;
     }
-    scan.reading = { ...reading, title: scan.reading.title };
+    scan.reading = {
+      ...reading,
+      title: scan.reading.title,
+      seriesUrl:
+        reading.seriesUrl ?? seriesUrlOnSameSite(scan.reading, reading),
+    };
   }
 
   remove(title: ScanTitle): void {
@@ -79,6 +95,10 @@ export class ScanLibrary {
     this.get(title).rating = rating;
   }
 
+  trackedTitleOf(title: ScanTitle): ScanTitle | undefined {
+    return this.findSeries(title.seriesKey)?.reading.title;
+  }
+
   snapshot(): ScanSnapshot[] {
     return this.scans.map(({ reading, isFavorite, rating }) => ({
       title: reading.title.value,
@@ -87,6 +107,7 @@ export class ScanLibrary {
       readAt: reading.readAt,
       isFavorite,
       rating: rating?.value,
+      seriesUrl: reading.seriesUrl,
     }));
   }
 

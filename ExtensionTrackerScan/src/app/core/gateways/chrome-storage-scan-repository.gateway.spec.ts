@@ -100,6 +100,28 @@ describe('ChromeStorageScanRepository', () => {
       },
     ]);
   });
+  it('should keep the series page of a scan through a save and a load', async () => {
+    useStorage({});
+    const repository = new ChromeStorageScanRepository();
+    const seriesUrl = 'https://asuracomic.net/series/solo-leveling';
+
+    await repository.save(
+      ScanLibrary.restore([
+        {
+          title: 'Solo Leveling',
+          chapter: 12,
+          url: 'url2.com',
+          readAt: new Date(STORED_DATE),
+          isFavorite: false,
+          seriesUrl,
+        },
+      ]),
+    );
+
+    expect((await repository.load()).snapshot()).toMatchObject([
+      { title: 'Solo Leveling', seriesUrl },
+    ]);
+  });
 });
 
 const STORED_DATE =

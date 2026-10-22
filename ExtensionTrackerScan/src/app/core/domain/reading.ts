@@ -6,4 +6,5 @@ export type Reading = {
   readonly chapter: Chapter;
   readonly url: string;
   readonly readAt: Date;
+  readonly seriesUrl?: string;
 };

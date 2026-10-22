@@ -8,6 +8,7 @@ type StoredScan = {
   readonly whenWasItRead: string;
   readonly isFavorite: boolean;
   readonly rating?: number;
+  readonly seriesUrl?: string;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -20,6 +21,8 @@ const toSnapshot = (stored: Record<string, unknown>): ScanSnapshot => ({
   readAt: new Date(String(stored['whenWasItRead'])),
   isFavorite: stored['isFavorite'] === true,
   rating: typeof stored['rating'] === 'number' ? stored['rating'] : undefined,
+  seriesUrl:
+    typeof stored['seriesUrl'] === 'string' ? stored['seriesUrl'] : undefined,
 });
 
 const toStored = (snapshot: ScanSnapshot): StoredScan => ({
@@ -31,6 +34,7 @@ const toStored = (snapshot: ScanSnapshot): StoredScan => ({
     : snapshot.readAt.toString(),
   isFavorite: snapshot.isFavorite,
   rating: snapshot.rating,
+  seriesUrl: snapshot.seriesUrl,
 });
 
 export class ChromeStorageScanRepository implements ScanRepository {

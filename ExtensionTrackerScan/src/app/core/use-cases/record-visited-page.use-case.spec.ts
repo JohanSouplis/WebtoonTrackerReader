@@ -532,9 +532,69 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
   });
+  it('should keep the series page the chapter page links to', async () => {
+    const { recordVisitedPage, scans } = setUp();
+
+    await recordVisitedPage.execute({
+      ...catalogPage('Title', '12'),
+      links: [{ href: CATALOG_SERIES_URL, text: 'Title', isBreadcrumb: true }],
+    });
+
+    expect(await scans()).toEqual([
+      aScan({
+        chapter: 12,
+        url: catalogUrl('12'),
+        readAt: NOW,
+        seriesUrl: CATALOG_SERIES_URL,
+      }),
+    ]);
+  });
+
+  it.each`
+    link                                                                                                                          | reason
+    ${{ text: 'Title Episode 11', href: 'https://www.webtoons.com/en/fantasy/title/episode-11/viewer?title_no=1&episode_no=11' }} | ${'names a chapter'}
+    ${{ text: 'Title', href: 'https://www.tappytoon.com/en/comics/title' }}                                                       | ${'leaves the website'}
+    ${{ text: 'Title', href: 'https://www.webtoons.com/' }}                                                                       | ${'is the home page'}
+  `(
+    'should not keep a series page when the only link $reason',
+    async ({ link }) => {
+      const { recordVisitedPage, scans } = setUp();
+
+      await recordVisitedPage.execute({
+        ...catalogPage('Title', '12'),
+        links: [{ ...link, isBreadcrumb: false }],
+      });
+
+      expect((await scans())[0].seriesUrl).toBeUndefined();
+    },
+  );
+
+  // prettier-ignore
+  it.each`
+    website                  | pageTitle                              | url                                                                                        | seriesUrl
+    ${'the same website'}    | ${'Episode 13 | Title'}                 | ${'https://www.webtoons.com/en/fantasy/title/episode-13/viewer?title_no=1&episode_no=13'} | ${'https://www.webtoons.com/en/fantasy/title/list?title_no=1'}
+    ${'another website'}     | ${'Title Chapter 13 - Asura Scans'}    | ${'https://asuracomic.net/series/title-27f19aba/chapter/13'}                               | ${undefined}
+  `(
+    'should keep the series page $seriesUrl when a newer reading without one comes from $website',
+    async ({ pageTitle, url, seriesUrl }) => {
+      const { recordVisitedPage, scans } = setUp([
+        aScan({
+          url: catalogUrl('12'),
+          readAt: new Date(0),
+          seriesUrl: CATALOG_SERIES_URL,
+        }),
+      ]);
+
+      await recordVisitedPage.execute({ pageTitle, url });
+
+      expect(await scans()).toMatchObject([{ chapter: 13, seriesUrl }]);
+    },
+  );
 });
 
 const NOW = new Date('2025-01-01T09:00:10Z');
+const CATALOG_SERIES_URL =
+  'https://www.webtoons.com/en/fantasy/title/list?title_no=1';
 
 const catalogUrl = (chapter: string): string =>
   `https://www.webtoons.com/en/fantasy/title/episode-${chapter}/viewer?title_no=1&episode_no=${chapter}`;

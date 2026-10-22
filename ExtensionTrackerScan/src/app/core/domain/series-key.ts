@@ -31,10 +31,12 @@ const looseWordsOf = (words: readonly string[]): string[] =>
     .sort();
 
 export class SeriesKey {
+  readonly value: string;
   private readonly compact: string;
   private readonly looseWords: readonly string[];
 
-  private constructor(private readonly words: readonly string[]) {
+  private constructor(words: readonly string[]) {
+    this.value = words.join(' ');
     this.compact = words.join('');
     this.looseWords = looseWordsOf(words);
   }
@@ -45,7 +47,7 @@ export class SeriesKey {
   }
 
   equals(other: SeriesKey): boolean {
-    return this.words.join(' ') === other.words.join(' ');
+    return this.value === other.value;
   }
 
   match(other: SeriesKey): SeriesMatch {

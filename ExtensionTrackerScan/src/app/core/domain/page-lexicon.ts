@@ -150,3 +150,6 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
   /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online|онлайн|бесплатно)\.?)+$/iu,
 ];
+
+export const withoutTitleNoise = (text: string): string =>
+  TITLE_NOISE.reduce((title, noise) => title.replace(noise, ''), text).trim();
