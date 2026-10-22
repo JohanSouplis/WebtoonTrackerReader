@@ -4,5 +4,5 @@ import { appConfig } from './app/angular/app.config';
 import { AppComponent } from './app/angular/app.component';
 
 bootstrapApplication(AppComponent, appConfig).catch((err) =>
-  console.error(err)
+  console.error(err),
 );

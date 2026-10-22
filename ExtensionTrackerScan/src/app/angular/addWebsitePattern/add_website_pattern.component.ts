@@ -99,7 +99,7 @@ export class AddWebsitePatternComponent implements OnInit, AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
-    @Inject(NOTIFICATION_TOKEN) private notification: NotificationInterface
+    @Inject(NOTIFICATION_TOKEN) private notification: NotificationInterface,
   ) {}
 
   ngOnInit(): void {

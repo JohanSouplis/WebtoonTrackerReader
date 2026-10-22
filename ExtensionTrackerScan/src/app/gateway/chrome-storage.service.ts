@@ -17,20 +17,20 @@ export class ChromeStorageService implements StorageInterface {
   constructor() {}
   delete(scan: Scan): void {
     void new DeleteScanUseCase(this.scanRepository).execute(
-      ScanTitle.of(scan.title)
+      ScanTitle.of(scan.title),
     );
   }
 
   toggleFavorite(scan: Scan): void {
     void new ToggleFavoriteUseCase(this.scanRepository).execute(
-      ScanTitle.of(scan.title)
+      ScanTitle.of(scan.title),
     );
   }
 
   rate(scan: Scan, rating: number): void {
     void new RateScanUseCase(this.scanRepository).execute(
       ScanTitle.of(scan.title),
-      Rating.of(rating)
+      Rating.of(rating),
     );
   }
 

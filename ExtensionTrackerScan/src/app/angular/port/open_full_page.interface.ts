@@ -5,5 +5,5 @@ export interface NavigatorHandler {
 }
 
 export const NAVIGATOR_HANDLER_TOKEN = new InjectionToken<NavigatorHandler>(
-  'NavigatorHandler'
+  'NavigatorHandler',
 );

@@ -5,5 +5,5 @@ export interface NotificationInterface {
 }
 
 export const NOTIFICATION_TOKEN = new InjectionToken<NotificationInterface>(
-  'NotificationInterface'
+  'NotificationInterface',
 );

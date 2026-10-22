@@ -79,7 +79,7 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(STORAGE_TOKEN)
     private storage: StorageInterface,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -90,7 +90,7 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
       },
       (error) => {
         console.error('Error retrieving all data:', error);
-      }
+      },
     );
   }
 
@@ -167,7 +167,7 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
     let scansListFiltered = this.scans;
     if (this.checkedRating) {
       scansListFiltered = scansListFiltered.filter(
-        (scan) => scan.rating !== undefined
+        (scan) => scan.rating !== undefined,
       );
     }
     if (this.checkedFavorite) {

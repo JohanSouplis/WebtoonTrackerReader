@@ -18,5 +18,5 @@ export interface StorageInterface {
 }
 
 export const STORAGE_TOKEN = new InjectionToken<StorageInterface>(
-  'StorageInterface'
+  'StorageInterface',
 );

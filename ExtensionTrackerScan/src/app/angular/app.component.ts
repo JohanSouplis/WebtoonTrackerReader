@@ -30,13 +30,13 @@ export class AppComponent implements OnInit {
   public constructor(
     @Inject(NAVIGATOR_HANDLER_TOKEN)
     private navigatorHandler: NavigatorHandler,
-    private router: Router
+    private router: Router,
   ) {}
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.isAddWebsitePatternComponent = event.url.includes(
-          'add_website_pattern'
+          'add_website_pattern',
         );
       }
     });

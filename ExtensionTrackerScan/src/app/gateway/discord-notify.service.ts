@@ -20,7 +20,7 @@ export class DiscordNotification implements NotificationInterface {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!response.ok) {

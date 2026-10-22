@@ -46,7 +46,9 @@
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%; /* Ensure button width matches input width */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
