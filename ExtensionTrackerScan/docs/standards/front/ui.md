@@ -23,11 +23,13 @@ Exemples tirés de l'extension :
 
 | Composant | Niveau | Raison |
 |---|---|---|
-| `star-toggle` | atom | Une image cliquable `aria-pressed`, `input()` `checked`, `output()` `toggled`. Ne sait pas ce qu'est un favori. |
+| `star-toggle` | atom | Un `<button>` `aria-pressed` avec une étoile, `input()` `checked` et `label`, `output()` `toggled`. Ne sait pas ce qu'est un favori. |
 | `truncated-text` | atom | Coupe un texte au-delà d'une longueur et pose `matTooltip` avec le texte entier. |
-| `search-field` | molecule | `mat-form-field`, `mat-label` et `input` assemblés. Émet le texte saisi, nettoyé. Sert aux deux onglets. |
-| `scan-table` | organism | Affiche des `ScanRow`, émet suppression, favori, note. |
-| `scan-filters` | organism | Champ de recherche et cases « Favorites Only », « Rating Only ». Émet un `ScanFilters`. |
+| `monogram` | atom | Tire d'un texte ses initiales et une teinte stable. Décoratif, `aria-hidden`. |
+| `relative-date` | atom | Affiche « 3 mo ago » depuis une date et `now`, et pose `matTooltip` avec la date exacte. |
+| `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
+| `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), émet suppression, favori, note, page. |
+| `scan-filters` | organism | Champ de recherche et bascules « Favorites only », « Rated only ». Émet un `ScanFilters`. |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 
 ## Atoms et molecules sont le design-system, et rien d'autre

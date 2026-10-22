@@ -39,23 +39,23 @@ src/app/angular/
     shell.providers.ts
     service/   full-page-navigator.port.ts
     gateways/  chrome-full-page-navigator.gateway.ts · in-memory-full-page-navigator.gateway.ts
-    ui/pages/app-shell/              app-shell.page.ts · .html   (composant d'amorçage)
+    ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
-    atoms/      star-toggle/ · truncated-text/
+    atoms/      star-toggle/ · truncated-text/ · monogram/ · relative-date/
     molecules/  search-field/
   features/
-    scan-list/                       onglet « Scan list », route ''
+    scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
-      service/  scan-row.vm.ts · scan-filters.rules.ts
+      service/  scan-row.vm.ts · scan-list-view.vm.ts · scan-filters.rules.ts · scan-sort.rules.ts
       ui/
-        pages/      scan-list/       scan-list.page.ts · .html · .css · scan-list.store.ts
-        organisms/  scan-table/ · scan-filters/
-    add-website-pattern/             onglet « Add Website », route 'add_website_pattern'
+        pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
+        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/
+    add-website-pattern/             onglet « Add website », route 'add_website_pattern'
       add-website-pattern.providers.ts
       ui/
         pages/      add-website-pattern/
-        organisms/  website-proposal-form/ · supported-websites-table/
+        organisms/  website-proposal-form/ · supported-websites/
   shared/ui/                         organisms et templates partagés par 2 features ou plus
 ```
 

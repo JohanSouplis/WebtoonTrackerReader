@@ -44,7 +44,7 @@ un diff, sans le chemin.
 | gateways (core et Angular) | `.gateway.ts`, préfixé par la technologie | `chrome-storage-scan-repository.gateway.ts`, `in-memory-scan-repository.gateway.ts` |
 | racine de feature | `.providers.ts` | `scan-list.providers.ts` |
 | Angular `service/` | `.vm.ts`, `.rules.ts` | `scan-row.vm.ts`, `scan-filters.rules.ts` |
-| Angular `ui/` | `.page.ts`, `.template.ts`, `.component.ts`, `.store.ts`, `.types.ts` | `scan-list.page.ts`, `scan-list.store.ts`, `scan-table.component.ts` |
+| Angular `ui/` | `.page.ts`, `.template.ts`, `.component.ts`, `.store.ts`, `.types.ts` | `scan-list.page.ts`, `scan-list.store.ts`, `scan-rows.component.ts` |
 | design-system | `.component.ts`, `.types.ts` | `search-field.component.ts` |
 | tests | `.spec.ts`, `.fixture.ts` | `rate-scan.use-case.spec.ts`, `scans.fixture.ts` |
 
@@ -58,7 +58,7 @@ un diff, sans le chemin.
 | Port | nom de rôle + `Port`, ou `Repository` pour un agrégat | `CrashReporterPort`, `ScanRepository` |
 | Gateway | technologie + nom du port sans `Port` | `DiscordCrashReporter`, `InMemoryScanRepository` |
 | Page, composant | nom + `Page` ou `Component` | `ScanListPage`, `SearchFieldComponent` |
-| Sélecteur | `app-` pour `features/` et `shell/`, `ds-` pour `design-system/` | `app-scan-table`, `ds-search-field` |
+| Sélecteur | `app-` pour `features/` et `shell/`, `ds-` pour `design-system/` | `app-scan-rows`, `ds-search-field` |
 | Booléen | `is`, `has`, `can` + adjectif | `isFavorite`, `isTruncated` |
 
 ## Bannis
