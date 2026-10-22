@@ -64,6 +64,11 @@ describe('RecordVisitedPageUseCase', () => {
     ],
     ['the home page of the website', 'Asura Scans', 'https://asuracomic.net/'],
     [
+      'a chapter page whose title still shows only the website name',
+      'MangaDex',
+      'https://mangadex.org/chapter/8160d350-19a9-499c-88a8-c20a1cd7fe8b',
+    ],
+    [
       'the page listing the chapters of a scan',
       'Izure Saikyou no Renkinjutsushi? - MangaDex',
       'https://mangadex.org/title/17b4a134-65a5-4ba9-851e-9cc824755bf5/izure-saikyou-no-renkinjutsushi?tab=chapters',

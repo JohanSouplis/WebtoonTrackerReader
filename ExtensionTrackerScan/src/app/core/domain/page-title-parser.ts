@@ -18,9 +18,16 @@ const servesScans = (url: string, host: string): boolean =>
   url.substring(0, HOST_PREFIX_LENGTH + host.length).includes(host) &&
   url.length > HOST_PREFIX_LENGTH + host.length;
 
+const lettersOf = (text: string): string =>
+  text.toLowerCase().replace(/[^a-z\d]/g, '');
+
+const isWebsiteNameOnly = (pageTitle: string, host: string): boolean =>
+  lettersOf(pageTitle) === lettersOf(host.replace(/\.[a-z]+$/, ''));
+
 const isExcluded = (page: VisitedPage, pattern: WebsitePattern): boolean =>
   page.url.includes(String(pattern.excludedUrlPart)) ||
-  page.pageTitle.includes(String(pattern.excludedTitlePart));
+  page.pageTitle.includes(String(pattern.excludedTitlePart)) ||
+  isWebsiteNameOnly(page.pageTitle, pattern.host);
 
 const titleAt = (text: string, segments: string[], index: number): string => {
   if (index === 0) {
