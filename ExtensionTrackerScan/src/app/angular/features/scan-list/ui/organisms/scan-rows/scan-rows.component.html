@@ -1,0 +1,90 @@
+@let shown = view();
+@switch (shown.kind) {
+  @case ("scans") {
+    <ul aria-label="Library">
+      @for (row of shown.rows; track row.title; let index = $index) {
+        <li [style.--index]="index" @row>
+          <ds-monogram [text]="row.title" />
+          <div class="body">
+            <a class="title" [href]="row.url" target="_blank" rel="noopener">
+              <ds-truncated-text [text]="row.title" [maxLength]="55" />
+            </a>
+            <div class="meta">
+              <span class="chapter">Ch. {{ row.chapter }}</span>
+              <span class="dot"></span>
+              <ds-relative-date [date]="row.readAt" [now]="now()" />
+              <span class="dot"></span>
+              <span class="website">{{ row.website }}</span>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="rating" [class.is-rated]="row.rating !== undefined">
+              <mat-icon [class.is-filled]="row.rating !== undefined"
+                >star</mat-icon
+              >
+              <mat-select
+                [value]="row.rating"
+                placeholder="–"
+                panelClass="rating-panel"
+                [panelWidth]="null"
+                hideSingleSelectionIndicator
+                aria-label="Rating for {{ row.title }}"
+                (selectionChange)="
+                  rated.emit({ scan: row, rating: $event.value })
+                "
+              >
+                @for (rating of ratings; track rating) {
+                  <mat-option [value]="rating">{{ rating }}</mat-option>
+                }
+              </mat-select>
+            </div>
+            <ds-star-toggle
+              [checked]="row.isFavorite"
+              label="Favorite {{ row.title }}"
+              (toggled)="favoriteToggled.emit(row)"
+            />
+            <button
+              type="button"
+              class="delete"
+              attr.aria-label="Delete {{ row.title }}"
+              (click)="deleted.emit(row)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+    <mat-paginator
+      [length]="shown.length"
+      [pageIndex]="shown.page.index"
+      [pageSize]="shown.page.size"
+      [pageSizeOptions]="pageSizes"
+      showFirstLastButtons
+      (page)="
+        pageTurned.emit({ index: $event.pageIndex, size: $event.pageSize })
+      "
+    />
+  }
+  @case ("no-match") {
+    <section class="empty" aria-live="polite">
+      <mat-icon>travel_explore</mat-icon>
+      <h2>No reads match</h2>
+      <p>
+        Nothing in your library for “{{
+          shown.searchedTitle || "these filters"
+        }}”.
+      </p>
+      <button type="button" class="clear" (click)="filtersCleared.emit()">
+        Clear filters
+      </button>
+    </section>
+  }
+  @case ("empty-library") {
+    <section class="empty">
+      <mat-icon>auto_stories</mat-icon>
+      <h2>No reads yet</h2>
+      <p>Read a chapter on a supported website and it shows up here.</p>
+    </section>
+  }
+}

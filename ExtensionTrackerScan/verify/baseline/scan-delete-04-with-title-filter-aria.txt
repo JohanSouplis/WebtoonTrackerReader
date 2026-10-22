@@ -1,0 +1,35 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title": sss
+  - button "Clear Filter by title"
+  - button "Favorites only"
+  - button "Rated only"
+  - text: 1 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "Return of the SSS-Class Ranker":
+        - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
+      - text: Ch. 141
+      - time: 10 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Return of the SSS-Class Ranker": "9"
+      - button "Favorite Return of the SSS-Class Ranker"
+      - button "Delete Return of the SSS-Class Ranker"
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 1–1 of 1
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page" [disabled]
+    - button "Last page" [disabled]

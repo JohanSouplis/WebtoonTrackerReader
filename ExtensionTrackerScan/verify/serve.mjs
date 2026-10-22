@@ -11,6 +11,7 @@ const types = {
   ".ico": "image/x-icon",
   ".json": "application/json",
   ".svg": "image/svg+xml",
+  ".woff2": "font/woff2",
 };
 
 createServer(async (req, res) => {

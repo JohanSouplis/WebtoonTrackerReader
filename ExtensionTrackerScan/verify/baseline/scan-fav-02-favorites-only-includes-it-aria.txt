@@ -1,128 +1,115 @@
-- navigation: Scan list Add Website Informations
-- text: Filter by title
-- textbox "Filter by title"
-- checkbox "Favorites Only" [checked]
-- text: Favorites Only
-- checkbox "Rating Only"
-- text: Rating Only
-- table:
-  - row "Fav Title Chapter Was read Rating":
-    - columnheader
-    - columnheader "Fav":
-      - button "Fav"
-    - columnheader "Title":
-      - button "Title"
-    - columnheader "Chapter":
-      - button "Chapter"
-    - columnheader "Was read":
-      - button "Was read"
-    - columnheader "Rating":
-      - button "Rating"
-  - row "assets/delete.png Favorited Local 9999 24/01/2025":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Local"
-    - cell "9999"
-    - cell "24/01/2025"
-    - cell:
-      - combobox
-  - row "assets/delete.png Favorited Omniscient Reader’s Viewpoint 246 01/12/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Omniscient Reader’s Viewpoint"
-    - cell "246"
-    - cell "01/12/2024"
-    - cell "9":
-      - combobox "9"
-  - row "assets/delete.png Favorited The Executioner 46 22/11/2024 7":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "The Executioner"
-    - cell "46"
-    - cell "22/11/2024"
-    - cell "7":
-      - combobox "7"
-  - row "assets/delete.png Favorited I Obtained a Mythic Item 115 10/10/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "I Obtained a Mythic Item"
-    - cell "115"
-    - cell "10/10/2024"
-    - cell "9":
-      - combobox "9"
-  - row "assets/delete.png Favorited Dungeon Odyssey 118 03/09/2024 10":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Dungeon Odyssey"
-    - cell "118"
-    - cell "03/09/2024"
-    - cell "10":
-      - combobox "10"
-  - row "assets/delete.png Favorited Worthless Regression 68 05/08/2024 6":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Worthless Regression"
-    - cell "68"
-    - cell "05/08/2024"
-    - cell "6":
-      - combobox "6"
-  - row "assets/delete.png Favorited Duke Pendragon 120 19/07/2024":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Duke Pendragon"
-    - cell "120"
-    - cell "19/07/2024"
-    - cell:
-      - combobox
-  - 'row "assets/delete.png Favorited Solo Leveling: Ragnarok 38 13/07/2024"':
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - 'cell "Solo Leveling: Ragnarok"'
-    - cell "38"
-    - cell "13/07/2024"
-    - cell:
-      - combobox
-  - row "assets/delete.png Favorited The Reincarnated Assassin is a Genius Swordsman 50 18/06/2024 8":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "The Reincarnated Assassin is a Genius Swordsman"
-    - cell "50"
-    - cell "18/06/2024"
-    - cell "8":
-      - combobox "8"
-  - row "assets/delete.png Favorited Pick Me Up, Infinite Gacha 132 02/04/2024 10":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Pick Me Up, Infinite Gacha"
-    - cell "132"
-    - cell "02/04/2024"
-    - cell "10":
-      - combobox "10"
-- group:
-  - text: "Items per page:"
-  - combobox "10 Items per page:": "10"
-  - text: 1 – 10 of 12
-  - button "First page" [disabled]
-  - button "Previous page" [disabled]
-  - button "Next page"
-  - button "Last page"
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title"
+  - button "Favorites only" [pressed]
+  - button "Rated only"
+  - text: 12 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "Local":
+        - /url: Localhost:4200
+      - text: Ch. 9999
+      - time: 1 mo ago
+      - text: localhost:4200
+      - combobox "Rating for Local": –
+      - button "Favorite Local" [pressed]
+      - button "Delete Local"
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
+      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "The Executioner":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
+      - text: Ch. 46
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Executioner": "7"
+      - button "Favorite The Executioner" [pressed]
+      - button "Delete The Executioner"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for I Obtained a Mythic Item": "9"
+      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Dungeon Odyssey": "10"
+      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+    - listitem:
+      - link "Worthless Regression":
+        - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
+      - text: Ch. 68
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Worthless Regression": "6"
+      - button "Favorite Worthless Regression" [pressed]
+      - button "Delete Worthless Regression"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Duke Pendragon": –
+      - button "Favorite Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+    - listitem:
+      - 'link "Solo Leveling: Ragnarok"':
+        - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
+      - text: Ch. 38
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - 'combobox "Rating for Solo Leveling: Ragnarok"': –
+      - 'button "Favorite Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Delete Solo Leveling: Ragnarok"'
+    - listitem:
+      - link "The Reincarnated Assassin is a Genius Swordsman":
+        - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
+      - text: Ch. 50
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
+      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+    - listitem:
+      - link "Pick Me Up, Infinite Gacha":
+        - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
+      - text: Ch. 132
+      - time: 11 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
+      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Delete Pick Me Up, Infinite Gacha"
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 1–10 of 12
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"

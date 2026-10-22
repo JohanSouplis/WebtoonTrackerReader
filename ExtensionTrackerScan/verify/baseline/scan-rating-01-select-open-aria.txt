@@ -1,132 +1,119 @@
-- navigation: Scan list Add Website Informations
-- text: Filter by title
-- textbox "Filter by title"
-- checkbox "Favorites Only"
-- text: Favorites Only
-- checkbox "Rating Only"
-- text: Rating Only
-- table:
-  - row "Fav Title Chapter Was read Rating":
-    - columnheader
-    - columnheader "Fav":
-      - button "Fav"
-    - columnheader "Title":
-      - button "Title"
-    - columnheader "Chapter":
-      - button "Chapter"
-    - columnheader "Was read":
-      - button "Was read"
-    - columnheader "Rating":
-      - button "Rating"
-  - row "assets/delete.png Favorited Local 9999 24/01/2025":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Local"
-    - cell "9999"
-    - cell "24/01/2025"
-    - cell:
-      - combobox
-  - row "assets/delete.png Favorited Omniscient Reader’s Viewpoint 246 01/12/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Omniscient Reader’s Viewpoint"
-    - cell "246"
-    - cell "01/12/2024"
-    - cell "9":
-      - combobox "9"
-  - row "assets/delete.png Favorited The Executioner 46 22/11/2024 7":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "The Executioner"
-    - cell "46"
-    - cell "22/11/2024"
-    - cell "7":
-      - combobox "7"
-  - row "assets/delete.png Not Favorited Absolute Sword Sense 117 04/11/2024 7":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "Absolute Sword Sense"
-    - cell "117"
-    - cell "04/11/2024"
-    - cell "7":
-      - combobox "7"
-  - row "assets/delete.png Favorited I Obtained a Mythic Item 115 10/10/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "I Obtained a Mythic Item"
-    - cell "115"
-    - cell "10/10/2024"
-    - cell "9":
-      - combobox "9"
-  - row "assets/delete.png Favorited Dungeon Odyssey 118 03/09/2024 10":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Dungeon Odyssey"
-    - cell "118"
-    - cell "03/09/2024"
-    - cell "10":
-      - combobox "10"
-  - row "assets/delete.png Not Favorited A Dragonslayer's Peerless Regression 23 14/08/2024 5":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "A Dragonslayer's Peerless Regression"
-    - cell "23"
-    - cell "14/08/2024"
-    - cell "5":
-      - combobox "5"
-  - row "assets/delete.png Not Favorited Worthless Regression 68 05/08/2024 6":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "Worthless Regression"
-    - cell "68"
-    - cell "05/08/2024"
-    - cell "6":
-      - combobox "6"
-  - row "assets/delete.png Favorited Duke Pendragon 120 19/07/2024":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Duke Pendragon"
-    - cell "120"
-    - cell "19/07/2024"
-    - cell:
-      - combobox [expanded]
-  - 'row "assets/delete.png Favorited Solo Leveling: Ragnarok 38 13/07/2024"':
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - 'cell "Solo Leveling: Ragnarok"'
-    - cell "38"
-    - cell "13/07/2024"
-    - cell:
-      - combobox
-- group:
-  - text: "Items per page:"
-  - combobox "10 Items per page:": "10"
-  - text: 1 – 10 of 20
-  - button "First page" [disabled]
-  - button "Previous page" [disabled]
-  - button "Next page"
-  - button "Last page"
-- listbox:
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title"
+  - button "Favorites only"
+  - button "Rated only"
+  - text: 20 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "Local":
+        - /url: Localhost:4200
+      - text: Ch. 9999
+      - time: 1 mo ago
+      - text: localhost:4200
+      - combobox "Rating for Local": –
+      - button "Favorite Local" [pressed]
+      - button "Delete Local"
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
+      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "The Executioner":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
+      - text: Ch. 46
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Executioner": "7"
+      - button "Favorite The Executioner" [pressed]
+      - button "Delete The Executioner"
+    - listitem:
+      - link "Absolute Sword Sense":
+        - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
+      - text: Ch. 117
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Absolute Sword Sense": "7"
+      - button "Favorite Absolute Sword Sense"
+      - button "Delete Absolute Sword Sense"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for I Obtained a Mythic Item": "9"
+      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Dungeon Odyssey": "10"
+      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+    - listitem:
+      - link "A Dragonslayer's Peerless Regression":
+        - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
+      - text: Ch. 23
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for A Dragonslayer's Peerless Regression": "5"
+      - button "Favorite A Dragonslayer's Peerless Regression"
+      - button "Delete A Dragonslayer's Peerless Regression"
+    - listitem:
+      - link "Worthless Regression":
+        - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
+      - text: Ch. 68
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Worthless Regression": "6"
+      - button "Favorite Worthless Regression"
+      - button "Delete Worthless Regression"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Duke Pendragon" [expanded]: –
+      - button "Favorite Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+    - listitem:
+      - 'link "Solo Leveling: Ragnarok"':
+        - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
+      - text: Ch. 38
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - 'combobox "Rating for Solo Leveling: Ragnarok"': –
+      - 'button "Favorite Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Delete Solo Leveling: Ragnarok"'
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 1–10 of 20
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"
+- listbox "Rating for Duke Pendragon":
   - option "1"
   - option "2"
   - option "3"

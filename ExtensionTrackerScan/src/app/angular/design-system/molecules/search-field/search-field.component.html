@@ -1,4 +1,20 @@
-<mat-form-field>
-  <mat-label>{{ label() }}</mat-label>
-  <input matInput #query (keyup)="search(query.value)" />
-</mat-form-field>
+<label>
+  <mat-icon>search</mat-icon>
+  <input
+    type="search"
+    [attr.aria-label]="label()"
+    [placeholder]="label()"
+    [value]="value()"
+    (input)="searched.emit(query.value)"
+    #query
+  />
+  @if (value()) {
+    <button
+      type="button"
+      [attr.aria-label]="clearLabel()"
+      (click)="searched.emit(''); query.focus()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</label>

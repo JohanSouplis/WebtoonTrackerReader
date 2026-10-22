@@ -1,21 +1,25 @@
-<div class="navbar-container">
-  <nav class="button-container">
-    <div
-      (click)="navigated.emit('')"
-      [class.selected]="selectedPath() === ''"
-      class="button"
-    >
-      Scan list
-    </div>
-    <div
-      (click)="navigated.emit('add_website_pattern')"
-      [class.selected]="selectedPath() === 'add_website_pattern'"
-      class="button"
-    >
-      Add Website
-    </div>
-    <div (click)="fullPageRequested.emit()" class="button informations">
-      Informations
-    </div>
-  </nav>
+<div class="brand">
+  <span class="logo"><mat-icon class="is-filled">auto_stories</mat-icon></span>
+  Scan Tracker
 </div>
+<nav aria-label="Main">
+  @for (tab of tabs(); track tab.path) {
+    <button
+      type="button"
+      [attr.aria-current]="tab.isSelected ? 'page' : null"
+      (click)="navigated.emit(tab.path)"
+    >
+      <mat-icon>{{ tab.icon }}</mat-icon>
+      {{ tab.label }}
+    </button>
+  }
+</nav>
+<button
+  type="button"
+  class="informations"
+  aria-label="Informations"
+  matTooltip="Informations"
+  (click)="fullPageRequested.emit()"
+>
+  <mat-icon>info</mat-icon>
+</button>

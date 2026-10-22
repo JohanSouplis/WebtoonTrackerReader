@@ -1,36 +1,34 @@
-- navigation: Scan list Add Website Informations
-- heading "Propose a new website for the next update" [level=1]
-- textbox "Enter website name"
-- button "Ask" [disabled]
-- heading "Available websites for now" [level=2]
-- text: Filter by website
-- textbox "Filter by website"
-- table:
-  - rowgroup:
-    - row "toonily.com":
-      - cell "toonily.com"
-    - row "asuracomic.net":
-      - cell "asuracomic.net"
-    - row "manhuatop.org":
-      - cell "manhuatop.org"
-    - row "arvencomics.com":
-      - cell "arvencomics.com"
-    - row "vortexscans.org":
-      - cell "vortexscans.org"
-    - row "manhuaus.com":
-      - cell "manhuaus.com"
-    - row "manhuafast.net":
-      - cell "manhuafast.net"
-    - row "comick.io":
-      - cell "comick.io"
-    - row "reaper-scan.net":
-      - cell "reaper-scan.net"
-    - row "en-thunderscans.com":
-      - cell "en-thunderscans.com"
-- group:
-  - text: "Items per page: 10 1 – 10 of 36"
-  - button "First page" [disabled]
-  - button "Previous page" [disabled]
-  - button "Next page"
-  - button "Last page"
-- paragraph: The website url is the one where you read a story and not the one where you can see the list of different stories. Sometimes its different, some websites use redirection for url.
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - heading "Propose a website" [level=2]
+  - paragraph: Reading somewhere we don't track yet? Send it for the next update.
+  - textbox "Website name":
+    - /placeholder: e.g. mangadex.org
+  - button "Propose" [disabled]
+  - paragraph:
+    - text: Use the URL of the page where you
+    - emphasis: read
+    - text: a chapter, not the series list. Some sites redirect to another domain.
+  - heading "Supported websites 36" [level=2]
+  - searchbox "Filter by website"
+  - list "Supported websites":
+    - listitem: toonily.com
+    - listitem: asuracomic.net
+    - listitem: manhuatop.org
+    - listitem: arvencomics.com
+    - listitem: vortexscans.org
+    - listitem: manhuaus.com
+    - listitem: manhuafast.net
+    - listitem: comick.io
+    - listitem: reaper-scan.net
+    - listitem: en-thunderscans.com
+  - group:
+    - text: 1–10 of 36
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"

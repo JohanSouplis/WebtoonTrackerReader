@@ -1,0 +1,20 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title": asura
+  - button "Clear Filter by title"
+  - button "Favorites only"
+  - button "Rated only"
+  - text: 0 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - heading "No reads match" [level=2]
+  - paragraph: Nothing in your library for “asura”.
+  - button "Clear filters"

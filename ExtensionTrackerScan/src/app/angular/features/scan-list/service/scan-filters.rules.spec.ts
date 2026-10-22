@@ -1,45 +1,56 @@
 import { filterScans, NO_FILTERS } from './scan-filters.rules';
-import { ScanRow } from './scan-row.vm';
+import { aRow } from './scan-rows.fixture';
 
 describe('filterScans', () => {
-  it('should keep every scan when no filter is checked', () => {
+  it('should keep every scan when no filter is set', () => {
     expect(filterScans(SCANS, NO_FILTERS)).toEqual(SCANS);
   });
 
-  it('should keep only favorite scans when Favorites Only is checked', () => {
-    expect(
-      filterScans(SCANS, { favoritesOnly: true, ratedOnly: false }),
-    ).toEqual([FAVORITE, RATED_FAVORITE]);
+  it('should keep only favorite scans when Favorites only is on', () => {
+    expect(filterScans(SCANS, { ...NO_FILTERS, favoritesOnly: true })).toEqual([
+      SOLO_LEVELING,
+      DUKE_PENDRAGON,
+    ]);
   });
 
-  it('should keep only rated scans when Rating Only is checked', () => {
-    expect(
-      filterScans(SCANS, { favoritesOnly: false, ratedOnly: true }),
-    ).toEqual([RATED, RATED_FAVORITE]);
+  it('should keep only rated scans when Rated only is on', () => {
+    expect(filterScans(SCANS, { ...NO_FILTERS, ratedOnly: true })).toEqual([
+      SSS_CLASS_HUNTER,
+      DUKE_PENDRAGON,
+    ]);
   });
 
-  it('should keep only rated favorite scans when both filters are checked', () => {
+  it('should keep scans whose title contains the search, whatever its case and surrounding spaces', () => {
+    expect(filterScans(SCANS, { ...NO_FILTERS, title: '  sss ' })).toEqual([
+      SSS_CLASS_HUNTER,
+    ]);
+  });
+
+  it('should match the title only, never the url or the website', () => {
+    expect(filterScans(SCANS, { ...NO_FILTERS, title: 'asura' })).toEqual([]);
+  });
+
+  it('should keep only scans matching every filter when they are combined', () => {
     expect(
-      filterScans(SCANS, { favoritesOnly: true, ratedOnly: true }),
-    ).toEqual([RATED_FAVORITE]);
+      filterScans(SCANS, { ...NO_FILTERS, title: 'd', favoritesOnly: true }),
+    ).toEqual([DUKE_PENDRAGON]);
+    expect(
+      filterScans(SCANS, { title: 's', favoritesOnly: true, ratedOnly: true }),
+    ).toEqual([]);
   });
 });
 
-const aRow = (row: Partial<ScanRow>): ScanRow => ({
-  title: 'Title',
-  chapter: 1,
-  url: 'url.com',
-  readAt: new Date('2024-06-01T13:05:10Z'),
-  isFavorite: false,
-  ...row,
-});
-
-const PLAIN = aRow({ title: 'Plain' });
-const FAVORITE = aRow({ title: 'Favorite', isFavorite: true });
-const RATED = aRow({ title: 'Rated', rating: 7 });
-const RATED_FAVORITE = aRow({
-  title: 'Rated favorite',
+const SOLO_LEVELING = aRow({ title: 'Solo Leveling', isFavorite: true });
+const SSS_CLASS_HUNTER = aRow({ title: 'SSS-Class Hunter', rating: 7 });
+const DUKE_PENDRAGON = aRow({
+  title: 'Duke Pendragon',
   isFavorite: true,
   rating: 9,
 });
-const SCANS = [PLAIN, FAVORITE, RATED, RATED_FAVORITE];
+const DUNGEON_ODYSSEY = aRow({ title: 'Dungeon Odyssey' });
+const SCANS = [
+  SOLO_LEVELING,
+  SSS_CLASS_HUNTER,
+  DUKE_PENDRAGON,
+  DUNGEON_ODYSSEY,
+];

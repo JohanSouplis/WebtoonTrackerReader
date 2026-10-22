@@ -1,8 +1,6 @@
-<div class="new-website">
-  <app-website-proposal-form
-    [form]="form"
-    [isProposalSent]="isProposalSent()"
-    (proposed)="propose($event)"
-  />
-  <app-supported-websites-table [websites]="supportedWebsites" />
-</div>
+<app-website-proposal-form
+  [form]="form"
+  [isProposalSent]="isProposalSent()"
+  (proposed)="propose($event)"
+/>
+<app-supported-websites [websites]="supportedWebsites" />

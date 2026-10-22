@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  padding: 20px;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: var(--app-surface);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--app-accent-soft);
+  color: var(--app-accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+ds-search-field {
+  flex: 0 0 235px;
+  --search-field-height: 36px;
+  --search-field-background: transparent;
+}
+
+ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--app-bg);
+  font-weight: 600;
+  font-size: 13px;
+  animation: rise 0.25s both;
+  animation-delay: calc(var(--index) * 15ms);
+}
+
+ds-monogram {
+  --monogram-size: 22px;
+  --monogram-radius: 6px;
+  --monogram-font-size: 11px;
+}
+
+mat-paginator {
+  margin-top: 12px;
+  --mat-paginator-container-background-color: transparent;
+  --mat-paginator-container-text-color: var(--app-muted);
+  --mat-paginator-container-text-size: 12.5px;
+  --mat-paginator-container-text-font: inherit;
+  --mat-paginator-container-size: 40px;
+  --mat-paginator-enabled-icon-color: var(--app-text);
+  --mat-paginator-disabled-icon-color: var(--app-faint);
+}
+
+:host ::ng-deep .mat-mdc-paginator-container {
+  padding: 0;
+}
+
+:host ::ng-deep .mat-mdc-paginator-range-label {
+  margin: 0 16px 0 0;
+  color: var(--app-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 0;
+  border: 1px dashed var(--app-line);
+  border-radius: 16px;
+  color: var(--app-muted);
+  text-align: center;
+}
+
+.empty mat-icon.mat-icon {
+  font-size: 40px;
+  color: var(--app-accent);
+}

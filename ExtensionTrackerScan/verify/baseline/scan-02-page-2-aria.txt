@@ -1,128 +1,115 @@
-- navigation: Scan list Add Website Informations
-- text: Filter by title
-- textbox "Filter by title"
-- checkbox "Favorites Only"
-- text: Favorites Only
-- checkbox "Rating Only"
-- text: Rating Only
-- table:
-  - row "Fav Title Chapter Was read Rating":
-    - columnheader
-    - columnheader "Fav":
-      - button "Fav"
-    - columnheader "Title":
-      - button "Title"
-    - columnheader "Chapter":
-      - button "Chapter"
-    - columnheader "Was read":
-      - button "Was read"
-    - columnheader "Rating":
-      - button "Rating"
-  - row "assets/delete.png Not Favorited The Priest of Corruption 72 25/06/2024 6":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "The Priest of Corruption"
-    - cell "72"
-    - cell "25/06/2024"
-    - cell "6":
-      - combobox "6"
-  - row "assets/delete.png Favorited The Reincarnated Assassin is a Genius Swordsman 50 18/06/2024 8":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "The Reincarnated Assassin is a Genius Swordsman"
-    - cell "50"
-    - cell "18/06/2024"
-    - cell "8":
-      - combobox "8"
-  - row "assets/delete.png Not Favorited My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per... 96 01/06/2024 6":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Per..."
-    - cell "96"
-    - cell "01/06/2024"
-    - cell "6":
-      - combobox "6"
-  - row "assets/delete.png Not Favorited Return of the SSS-Class Ranker 141 09/05/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "Return of the SSS-Class Ranker"
-    - cell "141"
-    - cell "09/05/2024"
-    - cell "9":
-      - combobox "9"
-  - row "assets/delete.png Favorited Pick Me Up, Infinite Gacha 132 02/04/2024 10":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Pick Me Up, Infinite Gacha"
-    - cell "132"
-    - cell "02/04/2024"
-    - cell "10":
-      - combobox "10"
-  - row "assets/delete.png Favorited Trash of the Count’s Family 136 17/03/2024":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "Trash of the Count’s Family"
-    - cell "136"
-    - cell "17/03/2024"
-    - cell:
-      - combobox
-  - row "assets/delete.png Favorited The Heavenly Demon Wants a Quiet Life 16 12/03/2024 8":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Favorited":
-      - img "Favorited"
-    - cell "The Heavenly Demon Wants a Quiet Life"
-    - cell "16"
-    - cell "12/03/2024"
-    - cell "8":
-      - combobox "8"
-  - row "assets/delete.png Not Favorited Return of the Disaster-Class Hero 110 20/02/2024":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "Return of the Disaster-Class Hero"
-    - cell "110"
-    - cell "20/02/2024"
-    - cell:
-      - combobox
-  - row "assets/delete.png Not Favorited SSS-Class Suicide Hunter 124 29/01/2024 10":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "SSS-Class Suicide Hunter"
-    - cell "124"
-    - cell "29/01/2024"
-    - cell "10":
-      - combobox "10"
-  - row "assets/delete.png Not Favorited The Heavenly Demon Can't Live a Normal Life 142 21/01/2024 9":
-    - cell "assets/delete.png":
-      - img "assets/delete.png"
-    - cell "Not Favorited":
-      - img "Not Favorited"
-    - cell "The Heavenly Demon Can't Live a Normal Life"
-    - cell "142"
-    - cell "21/01/2024"
-    - cell "9":
-      - combobox "9"
-- group:
-  - text: "Items per page:"
-  - combobox "10 Items per page:": "10"
-  - text: 11 – 20 of 20
-  - button "First page"
-  - button "Previous page"
-  - button "Next page" [disabled]
-  - button "Last page" [disabled]
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title"
+  - button "Favorites only"
+  - button "Rated only"
+  - text: 20 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "The Priest of Corruption":
+        - /url: https://asuracomic.net/series/the-priest-of-corruption-7e4b6868/chapter/72
+      - text: Ch. 72
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Priest of Corruption": "6"
+      - button "Favorite The Priest of Corruption"
+      - button "Delete The Priest of Corruption"
+    - listitem:
+      - link "The Reincarnated Assassin is a Genius Swordsman":
+        - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
+      - text: Ch. 50
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
+      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+    - listitem:
+      - link "My School Life Pretending To Be a Worthless Person - My...":
+        - /url: https://asuracomic.net/series/my-school-life-pretending-to-be-a-worthless-person-4fbaf58c/chapter/96
+      - text: Ch. 96
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person": "6"
+      - button "Favorite My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "Delete My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+    - listitem:
+      - link "Return of the SSS-Class Ranker":
+        - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
+      - text: Ch. 141
+      - time: 10 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Return of the SSS-Class Ranker": "9"
+      - button "Favorite Return of the SSS-Class Ranker"
+      - button "Delete Return of the SSS-Class Ranker"
+    - listitem:
+      - link "Pick Me Up, Infinite Gacha":
+        - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
+      - text: Ch. 132
+      - time: 11 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
+      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Delete Pick Me Up, Infinite Gacha"
+    - listitem:
+      - link "Trash of the Count’s Family":
+        - /url: https://asuracomic.net/series/trash-of-the-counts-family-38493e56/chapter/136
+      - text: Ch. 136
+      - time: 12 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Trash of the Count’s Family": –
+      - button "Favorite Trash of the Count’s Family" [pressed]
+      - button "Delete Trash of the Count’s Family"
+    - listitem:
+      - link "The Heavenly Demon Wants a Quiet Life":
+        - /url: https://asuracomic.net/series/the-heavenly-demon-wants-a-quiet-life-71be586c/chapter/16
+      - text: Ch. 16
+      - time: 12 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
+      - button "Favorite The Heavenly Demon Wants a Quiet Life" [pressed]
+      - button "Delete The Heavenly Demon Wants a Quiet Life"
+    - listitem:
+      - link "Return of the Disaster-Class Hero":
+        - /url: https://asuracomic.net/series/return-of-the-disaster-class-hero-a31a2306/chapter/110
+      - text: Ch. 110
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - combobox "Rating for Return of the Disaster-Class Hero": –
+      - button "Favorite Return of the Disaster-Class Hero"
+      - button "Delete Return of the Disaster-Class Hero"
+    - listitem:
+      - link "SSS-Class Suicide Hunter":
+        - /url: https://asuracomic.net/series/sss-class-suicide-hunter-c35bcf93/chapter/124
+      - text: Ch. 124
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - combobox "Rating for SSS-Class Suicide Hunter": "10"
+      - button "Favorite SSS-Class Suicide Hunter"
+      - button "Delete SSS-Class Suicide Hunter"
+    - listitem:
+      - link "The Heavenly Demon Can't Live a Normal Life":
+        - /url: https://asuracomic.net/series/the-heavenly-demon-cant-live-a-normal-life-f04530a5/chapter/139
+      - text: Ch. 142
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - combobox "Rating for The Heavenly Demon Can't Live a Normal Life": "9"
+      - button "Favorite The Heavenly Demon Can't Live a Normal Life"
+      - button "Delete The Heavenly Demon Can't Live a Normal Life"
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 11–20 of 20
+    - button "First page"
+    - button "Previous page"
+    - button "Next page" [disabled]
+    - button "Last page" [disabled]

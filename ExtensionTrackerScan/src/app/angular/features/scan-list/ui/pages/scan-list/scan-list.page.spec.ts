@@ -1,16 +1,18 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { render, screen, within } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { ScanLibrary } from '../../../../../../core/domain/scan-library';
+import { FixedClock } from '../../../../../../core/gateways/in-memory/fixed-clock.gateway';
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
-import { SCAN_REPOSITORY } from '../../../../../injection-tokens';
+import { CLOCK, SCAN_REPOSITORY } from '../../../../../injection-tokens';
 import { ScanListPage } from './scan-list.page';
 
 describe('ScanListPage', () => {
-  it('should show a scan under Favorites Only and save it when its star is clicked', async () => {
+  it('should show a scan under Favorites only and save it when its star is clicked', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
       aScan({ title: 'Omniscient Reader' }),
@@ -18,40 +20,81 @@ describe('ScanListPage', () => {
     await renderPage(scanRepository);
 
     await userEvent.click(
-      within(
-        await screen.findByRole('row', { name: /Solo Leveling/ }),
-      ).getByRole('img', { name: 'Not Favorited' }),
+      await screen.findByRole('button', { name: 'Favorite Solo Leveling' }),
     );
     await userEvent.click(
-      screen.getByRole('checkbox', { name: 'Favorites Only' }),
+      screen.getByRole('button', { name: 'Favorites only' }),
     );
 
-    expect(screen.getByText('Solo Leveling')).toBeInTheDocument();
-    expect(screen.queryByText('Omniscient Reader')).not.toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'Solo Leveling' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Omniscient Reader' }),
+    ).not.toBeInTheDocument();
     expect((await scanRepository.load()).snapshot()).toEqual([
       aScan({ title: 'Solo Leveling', isFavorite: true }),
       aScan({ title: 'Omniscient Reader' }),
     ]);
   });
 
-  it('should remove a scan from the list and the library when its delete icon is clicked', async () => {
+  it('should remove a scan from the list and the library and keep the title filter when its delete button is clicked', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'SSS-Class Suicide Hunter' }),
+      aScan({ title: 'Return of the SSS-Class Ranker' }),
+      aScan({ title: 'Omniscient Reader' }),
+    ]);
+    await renderPage(scanRepository);
+    await userEvent.type(
+      await screen.findByRole('searchbox', { name: 'Filter by title' }),
+      'sss',
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Delete SSS-Class Suicide Hunter' }),
+    );
+
+    expect(
+      await screen.findByRole('link', {
+        name: 'Return of the SSS-Class Ranker',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'SSS-Class Suicide Hunter' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Omniscient Reader' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('1 series')).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({ title: 'Return of the SSS-Class Ranker' }),
+      aScan({ title: 'Omniscient Reader' }),
+    ]);
+  });
+
+  it('should tell the reader and refresh the list when the scan was already removed elsewhere', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
       aScan({ title: 'Omniscient Reader' }),
     ]);
     await renderPage(scanRepository);
-
-    await userEvent.click(
-      within(
-        await screen.findByRole('row', { name: /Solo Leveling/ }),
-      ).getByRole('img', { name: 'assets/delete.png' }),
+    const deleteSoloLeveling = await screen.findByRole('button', {
+      name: 'Delete Solo Leveling',
+    });
+    await scanRepository.save(
+      ScanLibrary.restore([aScan({ title: 'Omniscient Reader' })]),
     );
 
-    expect(await screen.findByText('Omniscient Reader')).toBeInTheDocument();
-    expect(screen.queryByText('Solo Leveling')).not.toBeInTheDocument();
-    expect((await scanRepository.load()).snapshot()).toEqual([
-      aScan({ title: 'Omniscient Reader' }),
-    ]);
+    await userEvent.click(deleteSoloLeveling);
+
+    expect(
+      await screen.findByText(
+        'This scan is no longer in your library. The list is up to date.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Solo Leveling' }),
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -60,6 +103,7 @@ const renderPage = (scanRepository: InMemoryScanRepository) =>
     providers: [
       provideNoopAnimations(),
       { provide: SCAN_REPOSITORY, useValue: scanRepository },
+      { provide: CLOCK, useValue: new FixedClock() },
       {
         provide: DeleteScanUseCase,
         useValue: new DeleteScanUseCase(scanRepository),
