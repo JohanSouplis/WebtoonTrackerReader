@@ -1,6 +1,7 @@
 <div class="mat-elevation-z8">
   <app-scan-filters
     [filters]="store.filters()"
+    [title]="store.titleFilter()"
     (filtersChanged)="store.applyFilters($event)"
     (searched)="store.searchTitle($event)"
   />

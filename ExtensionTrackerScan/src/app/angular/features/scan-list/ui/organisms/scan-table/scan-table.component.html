@@ -26,6 +26,7 @@
     <mat-cell *matCellDef="let scan">
       <ds-star-toggle
         [checked]="scan.isFavorite"
+        label="Favorite"
         (toggled)="favoriteToggled.emit(scan)"
       />
     </mat-cell>

@@ -22,7 +22,7 @@ describe('SupportedWebsitesTableComponent', () => {
     });
 
     await userEvent.type(
-      screen.getByRole('textbox', { name: 'Filter by website' }),
+      screen.getByRole('searchbox', { name: 'Filter by website' }),
       'MANGA',
     );
 

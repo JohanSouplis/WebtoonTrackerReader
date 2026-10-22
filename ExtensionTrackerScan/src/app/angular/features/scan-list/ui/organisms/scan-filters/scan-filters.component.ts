@@ -17,6 +17,7 @@ import { ScanFilters } from '../../../service/scan-filters.rules';
 })
 export class ScanFiltersComponent {
   readonly filters = input.required<ScanFilters>();
+  readonly title = input.required<string>();
   readonly filtersChanged = output<ScanFilters>();
   readonly searched = output<string>();
 

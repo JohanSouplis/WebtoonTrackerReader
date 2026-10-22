@@ -1,6 +1,10 @@
 <div class="available-websites">
   <h2>Available websites for now</h2>
-  <ds-search-field label="Filter by website" (searched)="filter($event)" />
+  <ds-search-field
+    label="Filter by website"
+    [value]="query()"
+    (searched)="filter($event)"
+  />
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="website">

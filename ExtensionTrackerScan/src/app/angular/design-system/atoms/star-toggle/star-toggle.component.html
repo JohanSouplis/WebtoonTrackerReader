@@ -1,1 +1,8 @@
-<img [src]="src()" [alt]="alt()" (click)="toggled.emit()" />
+<button
+  type="button"
+  [attr.aria-label]="label()"
+  [attr.aria-pressed]="checked()"
+  (click)="toggled.emit()"
+>
+  <mat-icon [class.is-filled]="checked()" [@pop]="checked()">star</mat-icon>
+</button>

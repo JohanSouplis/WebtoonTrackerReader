@@ -1,24 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   output,
 } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ds-search-field',
-  imports: [MatFormFieldModule, MatInputModule],
+  imports: [MatIconModule],
   templateUrl: './search-field.component.html',
   styleUrl: './search-field.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFieldComponent {
   readonly label = input.required<string>();
+  readonly value = input.required<string>();
   readonly searched = output<string>();
-
-  protected search(text: string): void {
-    this.searched.emit(text.trim().toLowerCase());
-  }
+  protected readonly clearLabel = computed(() => `Clear ${this.label()}`);
 }

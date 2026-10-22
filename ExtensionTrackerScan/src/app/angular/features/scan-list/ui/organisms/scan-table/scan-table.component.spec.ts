@@ -23,8 +23,8 @@ describe('ScanTableComponent', () => {
     await renderTable({ favoriteToggled });
 
     await userEvent.click(
-      within(rowOf('Solo Leveling')).getByRole('img', {
-        name: 'Not Favorited',
+      within(rowOf('Solo Leveling')).getByRole('button', {
+        name: 'Favorite',
       }),
     );
 

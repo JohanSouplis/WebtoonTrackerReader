@@ -1,0 +1,18 @@
+:host {
+  width: var(--monogram-size, 42px);
+  height: var(--monogram-size, 42px);
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--monogram-radius, 10px);
+  font-weight: 800;
+  font-size: var(--monogram-font-size, 14px);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(
+    140deg,
+    hsl(var(--hue) 60% 46%),
+    hsl(calc(var(--hue) + 50) 55% 28%)
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}

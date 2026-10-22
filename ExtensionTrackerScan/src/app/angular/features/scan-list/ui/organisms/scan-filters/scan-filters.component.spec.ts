@@ -6,7 +6,10 @@ describe('ScanFiltersComponent', () => {
   it('should ask for favorites only and keep the rating filter when Favorites Only is checked', async () => {
     const filtersChanged = jest.fn();
     await render(ScanFiltersComponent, {
-      inputs: { filters: { favoritesOnly: false, ratedOnly: true } },
+      inputs: {
+        filters: { favoritesOnly: false, ratedOnly: true },
+        title: '',
+      },
       on: { filtersChanged },
     });
 
@@ -23,7 +26,10 @@ describe('ScanFiltersComponent', () => {
   it('should ask for rated scans only when Rating Only is checked', async () => {
     const filtersChanged = jest.fn();
     await render(ScanFiltersComponent, {
-      inputs: { filters: { favoritesOnly: false, ratedOnly: false } },
+      inputs: {
+        filters: { favoritesOnly: false, ratedOnly: false },
+        title: '',
+      },
       on: { filtersChanged },
     });
 
@@ -40,15 +46,18 @@ describe('ScanFiltersComponent', () => {
   it('should search the typed title when the reader types in Filter by title', async () => {
     const searched = jest.fn();
     await render(ScanFiltersComponent, {
-      inputs: { filters: { favoritesOnly: false, ratedOnly: false } },
+      inputs: {
+        filters: { favoritesOnly: false, ratedOnly: false },
+        title: '',
+      },
       on: { searched },
     });
 
     await userEvent.type(
-      screen.getByRole('textbox', { name: 'Filter by title' }),
+      screen.getByRole('searchbox', { name: 'Filter by title' }),
       'Solo',
     );
 
-    expect(searched).toHaveBeenLastCalledWith('solo');
+    expect(searched).toHaveBeenLastCalledWith('Solo');
   });
 });

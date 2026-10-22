@@ -4,6 +4,7 @@ import {
   Component,
   effect,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -20,12 +21,13 @@ import { SearchFieldComponent } from '../../../../../design-system/molecules/sea
 export class SupportedWebsitesTableComponent implements AfterViewInit {
   readonly websites = input.required<string[]>();
   protected readonly columns = ['website'];
+  protected readonly query = signal('');
   protected readonly dataSource = new MatTableDataSource<string>();
   private readonly paginator = viewChild.required(MatPaginator);
 
   constructor() {
     this.dataSource.filterPredicate = (website, filter) =>
-      website.toLowerCase().includes(filter);
+      website.toLowerCase().includes(filter.trim().toLowerCase());
     effect(() => {
       this.dataSource.data = this.websites();
     });
@@ -36,6 +38,7 @@ export class SupportedWebsitesTableComponent implements AfterViewInit {
   }
 
   protected filter(text: string): void {
+    this.query.set(text);
     this.dataSource.filter = text;
   }
 }

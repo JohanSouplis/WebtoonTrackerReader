@@ -20,7 +20,7 @@ describe('ScanListPage', () => {
     await userEvent.click(
       within(
         await screen.findByRole('row', { name: /Solo Leveling/ }),
-      ).getByRole('img', { name: 'Not Favorited' }),
+      ).getByRole('button', { name: 'Favorite' }),
     );
     await userEvent.click(
       screen.getByRole('checkbox', { name: 'Favorites Only' }),
