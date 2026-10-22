@@ -253,7 +253,6 @@ const SEPARATED = new RegExp(`(${TITLE_SEPARATOR.source})`, 'u');
 type SegmentPlace = {
   readonly isFirst: boolean;
   readonly isLast: boolean;
-  readonly isAdjacentToMention: boolean;
 };
 
 const segmentsOf = (text: string): string[] =>
@@ -276,7 +275,6 @@ const titleSpan = (
             !isDropped(parts[index], {
               isFirst: position === 0,
               isLast: position === filled.length - 1,
-              isAdjacentToMention: index === 0,
             }),
         )
       : filled;
@@ -297,13 +295,19 @@ const containsNumber = (text: string, chapter: Chapter): boolean =>
 const beforeCandidates = (
   mention: ChapterMention,
   website: Website,
-): string[] =>
-  titleSpan(
-    mention.before,
-    (segment, { isFirst }) =>
-      (isFirst && isWebsiteName(segment, website)) ||
-      containsNumber(segment, mention.chapter),
-  );
+): string[] => {
+  const isWebsiteAtStart = (segment: string, { isFirst }: SegmentPlace) =>
+    isFirst && isWebsiteName(segment, website);
+  return [
+    ...titleSpan(mention.before, isWebsiteAtStart),
+    ...titleSpan(
+      mention.before,
+      (segment, place) =>
+        isWebsiteAtStart(segment, place) ||
+        containsNumber(segment, mention.chapter),
+    ),
+  ];
+};
 
 const afterCandidates = (after: string, website: Website): string[] => {
   const connected = CONNECTOR.exec(after);
@@ -324,9 +328,8 @@ const afterCandidates = (after: string, website: Website): string[] => {
     ...(nextTitles.length > 0
       ? nextTitles
       : titleSpan(
-          mentionPiece,
-          (segment, place) =>
-            place.isAdjacentToMention || isWebsiteAtEnd(segment, place),
+          mentionPiece.split(SEPARATED).slice(1).join(''),
+          isWebsiteAtEnd,
         )),
   ];
 };

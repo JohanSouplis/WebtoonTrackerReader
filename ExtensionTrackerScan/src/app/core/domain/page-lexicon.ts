@@ -134,7 +134,7 @@ export const TITLE_STOP_WORDS = [
   'free',
 ];
 
-export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»]\s*|\s+::\s+/;
+export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»】」]\s*|\s+::\s+/;
 
 export const TITLE_NOISE: readonly RegExp[] = [
   /^.*(?:^|[-|–:]\s*)read\s+/i,

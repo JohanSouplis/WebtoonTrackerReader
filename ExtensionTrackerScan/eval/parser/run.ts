@@ -323,3 +323,86 @@ for (const [language, pages] of groupedBy(({ language }) => language)) {
   reportCaptured(language, pages, false);
 }
 reportCaptured('all real pages', CAPTURED_PAGES, false);
+
+type HostOutcomes = {
+  readonly exact: number;
+  readonly wrong: number;
+};
+
+const hostOutcomesOf = (
+  outcomes: readonly CapturedOutcome[],
+): HostOutcomes => ({
+  exact: outcomes.filter((outcome) => outcome === 'exact').length,
+  wrong: outcomes.filter(
+    (outcome) => outcome === 'wrong' || outcome === 'false-positive',
+  ).length,
+});
+
+const comparisonText = (
+  label: string,
+  count: number,
+  catalog: HostOutcomes,
+  generic: HostOutcomes,
+): string =>
+  count === 0
+    ? ''
+    : `${label} ${count}: catalog ${catalog.exact} exact ${catalog.wrong} wrong, generic ${generic.exact} exact ${generic.wrong} wrong`;
+
+const recordedByGenericParser = (message: unknown): Recorded[] => {
+  const page = parsePageSignals(message);
+  const recorded =
+    page && recordedFrom(parseUnsupportedWebsitePage(page, READ_AT));
+  return recorded ? [recorded] : [];
+};
+
+const fixtureOutcomes = (
+  host: string,
+  record: (message: unknown) => readonly Recorded[],
+): HostOutcomes =>
+  hostOutcomesOf(
+    SUPPORTED_WEBSITE_PAGES.filter(([, url]) => url.includes(host)).map(
+      ([pageTitle, url, title, chapter]) =>
+        capturedOutcomeOf(
+          { kind: 'reading', titles: [title], chapters: [chapter] },
+          record({ pageTitle, url }),
+        ),
+    ),
+  );
+
+const capturedOutcomes = (
+  host: string,
+  record: (message: unknown) => readonly Recorded[],
+): HostOutcomes =>
+  hostOutcomesOf(
+    CAPTURED_PAGES.filter(({ capture }) => capture.finalUrl.includes(host)).map(
+      (page) =>
+        capturedOutcomeOf(
+          page.expected,
+          messagesOf(page.capture).flatMap(record),
+        ),
+    ),
+  );
+
+console.log('\n## catalog against the generic parser, per catalog host');
+for (const { host } of WEBSITE_PATTERNS) {
+  console.log(
+    [
+      host,
+      comparisonText(
+        'fixture rows',
+        SUPPORTED_WEBSITE_PAGES.filter(([, url]) => url.includes(host)).length,
+        fixtureOutcomes(host, recordedFromMessage),
+        fixtureOutcomes(host, recordedByGenericParser),
+      ),
+      comparisonText(
+        'captured pages',
+        CAPTURED_PAGES.filter(({ capture }) => capture.finalUrl.includes(host))
+          .length,
+        capturedOutcomes(host, recordedFromMessage),
+        capturedOutcomes(host, recordedByGenericParser),
+      ),
+    ]
+      .filter(Boolean)
+      .join(' | '),
+  );
+}
