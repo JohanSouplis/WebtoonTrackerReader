@@ -1,0 +1,34 @@
+<header>
+  <h2>
+    Supported websites
+    <span class="badge">{{ websites().length }}</span>
+  </h2>
+  <ds-search-field
+    label="Filter by website"
+    [value]="query()"
+    (searched)="search($event)"
+  />
+</header>
+@if (matchingWebsites().length) {
+  <ul aria-label="Supported websites">
+    @for (website of shownWebsites(); track $index) {
+      <li [style.--index]="$index">
+        <ds-monogram [text]="website" />
+        <span>{{ website }}</span>
+      </li>
+    }
+  </ul>
+  <mat-paginator
+    [length]="matchingWebsites().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize"
+    hidePageSize
+    showFirstLastButtons
+    (page)="turnPage($event)"
+  />
+} @else {
+  <p class="empty">
+    <mat-icon>public_off</mat-icon>
+    No supported website matches “{{ searchedWebsite() }}”.
+  </p>
+}

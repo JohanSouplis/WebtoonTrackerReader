@@ -1,15 +1,30 @@
-<h1>Propose a new website for the next update</h1>
+<h2>Propose a website</h2>
+<p class="lead">
+  Reading somewhere we don't track yet? Send it for the next update.
+</p>
 <form [formGroup]="form()" (ngSubmit)="propose()">
-  <input
-    id="website"
-    formControlName="website"
-    type="text"
-    placeholder="Enter website name"
-  />
-  <button type="submit" [disabled]="isProposalSent() || form().invalid">
-    Ask
+  <label class="field">
+    <mat-icon>language</mat-icon>
+    <input
+      formControlName="website"
+      type="text"
+      aria-label="Website name"
+      placeholder="e.g. mangadex.org"
+    />
+  </label>
+  <button
+    mat-flat-button
+    type="submit"
+    [disabled]="isProposalSent() || form().invalid"
+  >
+    <mat-icon>{{ submit().icon }}</mat-icon>
+    {{ submit().label }}
   </button>
 </form>
-@if (isProposalSent()) {
-  <div class="success-message">The website has been proposed successfully</div>
-}
+<p class="hint">
+  <mat-icon>lightbulb</mat-icon>
+  <span
+    >Use the URL of the page where you <em>read</em> a chapter, not the series
+    list. Some sites redirect to another domain.</span
+  >
+</p>

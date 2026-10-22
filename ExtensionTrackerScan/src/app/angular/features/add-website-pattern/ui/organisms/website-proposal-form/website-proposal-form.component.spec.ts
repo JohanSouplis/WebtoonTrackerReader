@@ -5,42 +5,51 @@ import { WebsiteProposalFormComponent } from './website-proposal-form.component'
 import { WebsiteProposalForm } from './website-proposal-form.types';
 
 describe('WebsiteProposalFormComponent', () => {
-  it('should title the form as a proposal for the next update', async () => {
+  it('should explain that a website url is the one where a chapter is read', async () => {
     await renderForm({ isProposalSent: false });
 
     expect(
-      screen.getByRole('heading', {
-        name: 'Propose a new website for the next update',
-      }),
-    ).toBeInTheDocument();
+      screen.getByText(/Use the URL of the page where you/),
+    ).toHaveTextContent(
+      'Use the URL of the page where you read a chapter, not the series list.',
+    );
   });
 
-  it('should keep Ask disabled when no website is typed', async () => {
+  it('should keep Propose disabled when no website is typed', async () => {
     await renderForm({ isProposalSent: false });
 
-    expect(screen.getByRole('button', { name: 'Ask' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Propose' })).toBeDisabled();
   });
 
-  it('should propose the typed website when Ask is clicked', async () => {
+  it('should propose the typed website without surrounding spaces when Propose is clicked', async () => {
     const proposed = jest.fn();
     await renderForm({ isProposalSent: false, proposed });
 
     await userEvent.type(
-      screen.getByPlaceholderText('Enter website name'),
-      'example-scans.com',
+      screen.getByRole('textbox', { name: 'Website name' }),
+      ' example-scans.com ',
     );
-    await userEvent.click(screen.getByRole('button', { name: 'Ask' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Propose' }));
 
     expect(proposed).toHaveBeenCalledWith('example-scans.com');
   });
 
-  it('should confirm the proposal and disable Ask when the proposal is sent', async () => {
+  it('should propose the typed website when Enter is pressed in the field', async () => {
+    const proposed = jest.fn();
+    await renderForm({ isProposalSent: false, proposed });
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Website name' }),
+      'example-scans.com{Enter}',
+    );
+
+    expect(proposed).toHaveBeenCalledWith('example-scans.com');
+  });
+
+  it('should show a disabled Sent button when the proposal is sent', async () => {
     await renderForm({ isProposalSent: true });
 
-    expect(
-      screen.getByText('The website has been proposed successfully'),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Ask' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Sent' })).toBeDisabled();
   });
 });
 
