@@ -75,6 +75,16 @@ lectures exactes, fausses, manquées et les faux positifs. Lance-le avant et apr
 l'analyse générique et cite les deux résultats dans la PR. Une page ajoutée au corpus après une modification
 sert de contrôle : ne règle pas l'analyse sur elle dans la même PR.
 
+## L'identité d'une série se mesure sur un corpus
+
+`npm run eval:identity` rejoue un corpus étiqueté de paires de titres (`eval/identity/`) : un scan suivi, puis
+une lecture sous un autre titre. Chaque paire cite sa source (MangaUpdates, AniList, MangaDex, titre de page
+réel). Le corpus sépare les variantes d'écriture d'une même langue, les reformulations et les titres d'une autre
+langue (qui demandent une source d'alias), les suites, spin-offs et remakes, et les homonymes. Il affiche, tranche
+par tranche, les fusions, les fusions manquées et les **fausses fusions**. Une fausse fusion écrase le chapitre
+d'une autre série : toute modification de l'identité d'une série garde zéro fausse fusion hors homonymes. Lance-le
+avant et après et cite les deux résultats dans la PR.
+
 ## Ce qu'on ne teste pas seul
 
 - L'agrégat, les Value Objects et `PageTitleParser` se testent par les use-cases qui les appellent. Une
