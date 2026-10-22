@@ -49,4 +49,22 @@ describe('SearchFieldComponent', () => {
 
     expect(searched).toHaveBeenCalledWith('');
   });
+
+  it('should keep only the text typed after the clear button is clicked', async () => {
+    const searched = jest.fn();
+    await render(SearchFieldComponent, {
+      inputs: { label: 'Filter by title', value: 'sss' },
+      on: { searched },
+    });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Clear Filter by title' }),
+    );
+    await userEvent.keyboard('asura');
+
+    expect(
+      screen.getByRole('searchbox', { name: 'Filter by title' }),
+    ).toHaveValue('asura');
+    expect(searched).toHaveBeenLastCalledWith('asura');
+  });
 });
