@@ -29,8 +29,9 @@ export class ScanLibrary {
   private constructor(private scans: TrackedScan[]) {}
 
   static restore(snapshots: readonly ScanSnapshot[]): ScanLibrary {
-    return new ScanLibrary(
-      snapshots.map((snapshot) => ({
+    const library = new ScanLibrary([]);
+    for (const snapshot of snapshots) {
+      library.mergeSameSeriesKey({
         reading: {
           title: ScanTitle.of(snapshot.title),
           chapter: Chapter.of(snapshot.chapter),
@@ -42,8 +43,9 @@ export class ScanLibrary {
           snapshot.rating === undefined
             ? undefined
             : Rating.of(snapshot.rating),
-      })),
-    );
+      });
+    }
+    return library;
   }
 
   recordReading(reading: Reading): void {
@@ -86,6 +88,19 @@ export class ScanLibrary {
       isFavorite,
       rating: rating?.value,
     }));
+  }
+
+  private mergeSameSeriesKey(scan: TrackedScan): void {
+    const twin = this.findSeriesKey(scan.reading.title.seriesKey);
+    if (!twin) {
+      this.scans.push(scan);
+      return;
+    }
+    const [latest, earliest] =
+      scan.reading.readAt > twin.reading.readAt ? [scan, twin] : [twin, scan];
+    twin.reading = latest.reading;
+    twin.isFavorite = twin.isFavorite || scan.isFavorite;
+    twin.rating = latest.rating ?? earliest.rating;
   }
 
   private findSeriesKey(key: SeriesKey): TrackedScan | undefined {

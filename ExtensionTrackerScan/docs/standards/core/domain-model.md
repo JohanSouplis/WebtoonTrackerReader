@@ -35,6 +35,11 @@ comparaison) est un Value Object.
 
 Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enregistre par `snapshot()`.
 
+`restore()` fusionne les scans dont la `SeriesKey` est égale (`SeriesKey.equals()`, jamais `match()`) : une
+bibliothèque enregistrée avant la règle d'identité peut contenir deux lignes pour une série. Le scan fusionné
+garde la place du premier, la lecture la plus récente (titre compris), le favori si l'un l'était, et la note de
+la lecture la plus récente, sinon celle de l'autre. Fusionner une bibliothèque déjà fusionnée ne change rien.
+
 ## L'identité d'une série
 
 Un lecteur change de site, et un site change de domaine : la même série revient sous un titre un peu différent.

@@ -267,6 +267,99 @@ describe('RecordVisitedPageUseCase', () => {
     },
   );
 
+  it('should merge the followed scans with the same series key into the latest reading, favorite if either was', async () => {
+    const latest = aScan({
+      title: 'The Beginning After the End',
+      chapter: 170,
+      url: 'https://asuracomic.net/series/tbate/chapter/170',
+      readAt: new Date('2024-12-01T00:00:00Z'),
+    });
+    const other = aScan({ title: 'Solo Leveling', chapter: 200 });
+    const { recordVisitedPage, scans } = setUp([
+      aScan({
+        title: 'Beginning After The End',
+        chapter: 150,
+        url: 'https://flamecomics.xyz/beginning-after-the-end-chapter-150/',
+        readAt: new Date('2024-06-01T00:00:00Z'),
+        isFavorite: true,
+      }),
+      other,
+      latest,
+    ]);
+
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+
+    expect(await scans()).toEqual([
+      { ...latest, isFavorite: true },
+      other,
+      aScan({ title: 'Eleceed', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+    ]);
+  });
+
+  it.each([
+    ['only the earlier scan is rated', 4, undefined, 4],
+    ['only the latest scan is rated', undefined, 8, 8],
+    ['both scans are rated', 4, 8, 8],
+  ])(
+    'should keep the rating of the merged scans when %s',
+    async (_, earlierRating, latestRating, mergedRating) => {
+      const latest = aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        readAt: new Date('2024-12-01T00:00:00Z'),
+        rating: latestRating,
+      });
+      const { recordVisitedPage, scans } = setUp([
+        latest,
+        aScan({
+          title: 'NANO MACHINE!',
+          chapter: 150,
+          readAt: new Date('2024-06-01T00:00:00Z'),
+          rating: earlierRating,
+        }),
+      ]);
+
+      await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+
+      expect(await scans()).toEqual([
+        { ...latest, rating: mergedRating },
+        aScan({
+          title: 'Eleceed',
+          chapter: 2,
+          url: asuraUrl('2'),
+          readAt: NOW,
+        }),
+      ]);
+    },
+  );
+
+  it('should leave a merged library unchanged when it is loaded and saved again', async () => {
+    const latest = aScan({
+      title: 'Return of The Mount Hua Sect',
+      chapter: 121,
+      readAt: new Date('2024-12-01T00:00:00Z'),
+    });
+    const eleceed = aScan({
+      title: 'Eleceed',
+      chapter: 2,
+      url: asuraUrl('2'),
+      readAt: NOW,
+    });
+    const { recordVisitedPage, scans } = setUp([
+      aScan({
+        title: 'Return of the Mount Hua Sect',
+        chapter: 120,
+        readAt: new Date('2024-06-01T00:00:00Z'),
+      }),
+      latest,
+    ]);
+
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+
+    expect(await scans()).toEqual([latest, eleceed]);
+  });
+
   it('should update the scan whose title matches exactly when several followed scans are the same series', async () => {
     const spaced = aScan({ title: 'Nano Machine', chapter: 1 });
     const joined = aScan({ title: 'Nanomachine', chapter: 1 });
