@@ -213,16 +213,164 @@ describe('RecordVisitedPageUseCase', () => {
     ]);
   });
 
-  it('should update the followed scan with the new spelling when the title differs only by case', async () => {
+  // prettier-ignore
+  it.each([
+    ['case', 'Mount Hua sect Genius', 'Mount hua Sect genius'],
+    ['a stored typographic apostrophe', 'The Player That Can’t Level Up', "The Player That Can't Level Up"],
+    ['an article', 'The Beginning After the End', 'Beginning After The End'],
+    ['spacing', 'Nano Machine', 'Nanomachine'],
+    ['punctuation', 'The Breaker - New Waves', 'The Breaker: New Waves'],
+    ['diacritics', 'Wu Lian Dian Feng', 'Wǔ Liàn Diānfēng'],
+    ['a multiplication sign', 'Spy x Family', 'SPY×FAMILY'],
+    ['an ampersand', 'Tales of Demons and Gods', 'Tales of Demons & Gods'],
+    ['a roman numeral', 'Douluo Dalu II: Jueshi Tangmen', 'Douluo Dalu 2 - Jueshi Tangmen'],
+    ['word order and a possessive', 'Return of the Mount Hua Sect', "Mount Hua Sect's Return"],
+    ['a plural', 'Tales of Demons and Gods', 'Tale of Demons and Gods'],
+  ])(
+    'should update the followed scan and keep its title when the title read differs by %s',
+    async (_, followedTitle, readTitle) => {
+      const { recordVisitedPage, scans } = setUp([
+        aScan({ title: followedTitle, chapter: 1 }),
+      ]);
+
+      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+
+      expect(await scans()).toEqual([
+        aScan({ title: followedTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      ]);
+    },
+  );
+
+  // prettier-ignore
+  it.each([
+    ['a sequel', 'Solo Leveling', 'Solo Leveling: Ragnarok'],
+    ['a numbered sequel', 'The Breaker 2', 'The Breaker 3'],
+    ['a sequel numbered in roman numerals', 'Kingdom Hearts II', 'Kingdom Hearts III'],
+    ['a prequel', 'Jujutsu Kaisen', 'Jujutsu Kaisen 0'],
+    ['a remake', "The Novel's Extra", "The Novel's Extra (Remake)"],
+    ['a novel edition', 'Martial God Asura', 'Martial God Asura (Novel)'],
+    ['a sequel marked by a suffix', 'Tokyo Ghoul', 'Tokyo Ghoul:re'],
+    ['a look-alike title', 'Return of the Mount Hua Sect', "Mount Hua Sect's Genius Phantom Swordsman"],
+    ['a look-alike title sharing its first words', 'Omniscient Reader', "Omniscient First-Person's Viewpoint"],
+  ])(
+    'should follow a new scan and leave the followed one unchanged when the title read is %s of it',
+    async (_, followedTitle, readTitle) => {
+      const followed = aScan({ title: followedTitle, chapter: 1 });
+      const { recordVisitedPage, scans } = setUp([followed]);
+
+      await recordVisitedPage.execute(asuraPage(readTitle, '2'));
+
+      expect(await scans()).toEqual([
+        followed,
+        aScan({ title: readTitle, chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+      ]);
+    },
+  );
+
+  it('should merge the followed scans with the same series key into the latest reading, favorite if either was', async () => {
+    const latest = aScan({
+      title: 'The Beginning After the End',
+      chapter: 170,
+      url: 'https://asuracomic.net/series/tbate/chapter/170',
+      readAt: new Date('2024-12-01T00:00:00Z'),
+    });
+    const other = aScan({ title: 'Solo Leveling', chapter: 200 });
     const { recordVisitedPage, scans } = setUp([
-      aScan({ title: 'Mount Hua sect Genius', chapter: 1 }),
+      aScan({
+        title: 'Beginning After The End',
+        chapter: 150,
+        url: 'https://flamecomics.xyz/beginning-after-the-end-chapter-150/',
+        readAt: new Date('2024-06-01T00:00:00Z'),
+        isFavorite: true,
+      }),
+      other,
+      latest,
     ]);
 
-    await recordVisitedPage.execute(asuraPage('Mount hua Sect genius', '2'));
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
 
     expect(await scans()).toEqual([
+      { ...latest, isFavorite: true },
+      other,
+      aScan({ title: 'Eleceed', chapter: 2, url: asuraUrl('2'), readAt: NOW }),
+    ]);
+  });
+
+  it.each([
+    ['only the earlier scan is rated', 4, undefined, 4],
+    ['only the latest scan is rated', undefined, 8, 8],
+    ['both scans are rated', 4, 8, 8],
+  ])(
+    'should keep the rating of the merged scans when %s',
+    async (_, earlierRating, latestRating, mergedRating) => {
+      const latest = aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        readAt: new Date('2024-12-01T00:00:00Z'),
+        rating: latestRating,
+      });
+      const { recordVisitedPage, scans } = setUp([
+        latest,
+        aScan({
+          title: 'NANO MACHINE!',
+          chapter: 150,
+          readAt: new Date('2024-06-01T00:00:00Z'),
+          rating: earlierRating,
+        }),
+      ]);
+
+      await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+
+      expect(await scans()).toEqual([
+        { ...latest, rating: mergedRating },
+        aScan({
+          title: 'Eleceed',
+          chapter: 2,
+          url: asuraUrl('2'),
+          readAt: NOW,
+        }),
+      ]);
+    },
+  );
+
+  it('should leave a merged library unchanged when it is loaded and saved again', async () => {
+    const latest = aScan({
+      title: 'Return of The Mount Hua Sect',
+      chapter: 121,
+      readAt: new Date('2024-12-01T00:00:00Z'),
+    });
+    const eleceed = aScan({
+      title: 'Eleceed',
+      chapter: 2,
+      url: asuraUrl('2'),
+      readAt: NOW,
+    });
+    const { recordVisitedPage, scans } = setUp([
       aScan({
-        title: 'Mount hua Sect genius',
+        title: 'Return of the Mount Hua Sect',
+        chapter: 120,
+        readAt: new Date('2024-06-01T00:00:00Z'),
+      }),
+      latest,
+    ]);
+
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+    await recordVisitedPage.execute(asuraPage('Eleceed', '2'));
+
+    expect(await scans()).toEqual([latest, eleceed]);
+  });
+
+  it('should update the scan whose title matches exactly when several followed scans are the same series', async () => {
+    const spaced = aScan({ title: 'Nano Machine', chapter: 1 });
+    const joined = aScan({ title: 'Nanomachine', chapter: 1 });
+    const { recordVisitedPage, scans } = setUp([spaced, joined]);
+
+    await recordVisitedPage.execute(asuraPage('Nanomachine', '2'));
+
+    expect(await scans()).toEqual([
+      spaced,
+      aScan({
+        title: 'Nanomachine',
         chapter: 2,
         url: asuraUrl('2'),
         readAt: NOW,

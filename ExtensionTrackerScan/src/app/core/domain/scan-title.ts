@@ -1,5 +1,11 @@
+import { SeriesKey } from './series-key';
+
 export class ScanTitle {
-  private constructor(readonly value: string) {}
+  readonly seriesKey: SeriesKey;
+
+  private constructor(readonly value: string) {
+    this.seriesKey = SeriesKey.of(value);
+  }
 
   static of(value: string): ScanTitle {
     return new ScanTitle(value);

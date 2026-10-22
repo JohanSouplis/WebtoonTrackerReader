@@ -18,6 +18,8 @@ pas un synonyme.
 | `Scan` | Une série (manga, manhwa, webtoon) que le lecteur suit | `webtoon`, `story`, `manga` dans un nom de type |
 | `ScanLibrary` | Tous les scans suivis par le lecteur | `scansList`, `scanList`, `scansTab` |
 | `ScanTitle` | Le titre d'un scan, normalisé | `titleWebpage` pour ce sens |
+| `SeriesKey` | La forme normalisée d'un `ScanTitle` qui reconnaît la même série sous un titre un peu différent | `normalizedTitle`, `slug`, `fuzzyTitle` |
+| `SeriesMatch` | Le verdict de deux `SeriesKey` : `same`, `different` ou `ambiguous` | `similarity`, `score` |
 | `Chapter` | Le numéro du dernier chapitre lu, un nombre | un `chapter` en `string` |
 | `Reading` | La lecture d'un chapitre d'un scan à une date | `newScan`, `scanVisited` |
 | `readAt` | La date de la dernière lecture | `whenWasItRead`, `wasRead`, `dateReading` |
