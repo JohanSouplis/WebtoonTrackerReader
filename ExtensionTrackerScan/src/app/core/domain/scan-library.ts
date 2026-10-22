@@ -1,4 +1,5 @@
 import { Chapter } from './chapter';
+import { Rating } from './rating';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 
@@ -11,14 +12,20 @@ export type ScanSnapshot = {
   readonly rating?: number;
 };
 
+export class ScanNotFound extends Error {
+  constructor(title: ScanTitle) {
+    super(`No scan is titled ${title.value}`);
+  }
+}
+
 type TrackedScan = {
   reading: Reading;
-  readonly isFavorite: boolean;
-  readonly rating?: number;
+  isFavorite: boolean;
+  rating?: Rating;
 };
 
 export class ScanLibrary {
-  private constructor(private readonly scans: TrackedScan[]) {}
+  private constructor(private scans: TrackedScan[]) {}
 
   static restore(snapshots: readonly ScanSnapshot[]): ScanLibrary {
     return new ScanLibrary(
@@ -30,15 +37,16 @@ export class ScanLibrary {
           readAt: snapshot.readAt,
         },
         isFavorite: snapshot.isFavorite,
-        rating: snapshot.rating,
+        rating:
+          snapshot.rating === undefined
+            ? undefined
+            : Rating.of(snapshot.rating),
       })),
     );
   }
 
   recordReading(reading: Reading): void {
-    const scan = this.scans.find((candidate) =>
-      candidate.reading.title.equals(reading.title),
-    );
+    const scan = this.find(reading.title);
     if (!scan) {
       this.scans.push({ reading, isFavorite: false });
       return;
@@ -49,6 +57,25 @@ export class ScanLibrary {
     scan.reading = reading;
   }
 
+  remove(title: ScanTitle): void {
+    const remaining = this.scans.filter(
+      (scan) => !scan.reading.title.equals(title),
+    );
+    if (remaining.length === this.scans.length) {
+      throw new ScanNotFound(title);
+    }
+    this.scans = remaining;
+  }
+
+  toggleFavorite(title: ScanTitle): void {
+    const scan = this.get(title);
+    scan.isFavorite = !scan.isFavorite;
+  }
+
+  rate(title: ScanTitle, rating: Rating): void {
+    this.get(title).rating = rating;
+  }
+
   snapshot(): ScanSnapshot[] {
     return this.scans.map(({ reading, isFavorite, rating }) => ({
       title: reading.title.value,
@@ -56,7 +83,19 @@ export class ScanLibrary {
       url: reading.url,
       readAt: reading.readAt,
       isFavorite,
-      rating,
+      rating: rating?.value,
     }));
+  }
+
+  private find(title: ScanTitle): TrackedScan | undefined {
+    return this.scans.find((scan) => scan.reading.title.equals(title));
+  }
+
+  private get(title: ScanTitle): TrackedScan {
+    const scan = this.find(title);
+    if (!scan) {
+      throw new ScanNotFound(title);
+    }
+    return scan;
   }
 }

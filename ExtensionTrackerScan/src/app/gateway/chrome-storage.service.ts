@@ -1,27 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StorageInterface } from '../angular/port/storage.interface';
-import { Scan } from '../core/src/domain/scan.type';
-import { updateScansModifiedByUser } from '../core/src/domain/update_scans';
-import { deleteScan } from '../core/src/domain/delete_scan';
+import { Scan, StorageInterface } from '../angular/port/storage.interface';
+import { Rating } from '../core/domain/rating';
+import { ScanTitle } from '../core/domain/scan-title';
+import { ChromeStorageScanRepository } from '../core/gateways/chrome-storage-scan-repository.gateway';
+import { DeleteScanUseCase } from '../core/use-cases/delete-scan.use-case';
+import { RateScanUseCase } from '../core/use-cases/rate-scan.use-case';
+import { ToggleFavoriteUseCase } from '../core/use-cases/toggle-favorite.use-case';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChromeStorageService implements StorageInterface {
+  private readonly scanRepository = new ChromeStorageScanRepository();
+
   constructor() {}
   delete(scan: Scan): void {
-    chrome.storage.local.get({ scans: [] }, function (result) {
-      var scansList: Scan[] = deleteScan(result['scans'], scan);
-      chrome.storage.local.set({ scans: scansList }, function () {});
-    });
+    void new DeleteScanUseCase(this.scanRepository).execute(
+      ScanTitle.of(scan.title)
+    );
   }
 
-  updateScan(scan: Scan): void {
-    chrome.storage.local.get({ scans: [] }, function (result) {
-      var scansList: Scan[] = updateScansModifiedByUser(result['scans'], scan);
-      chrome.storage.local.set({ scans: scansList }, function () {});
-    });
+  toggleFavorite(scan: Scan): void {
+    void new ToggleFavoriteUseCase(this.scanRepository).execute(
+      ScanTitle.of(scan.title)
+    );
+  }
+
+  rate(scan: Scan, rating: number): void {
+    void new RateScanUseCase(this.scanRepository).execute(
+      ScanTitle.of(scan.title),
+      Rating.of(rating)
+    );
   }
 
   getScans(): Observable<Scan[]> {

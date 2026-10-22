@@ -20,10 +20,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { Scan } from '../../core/src/domain/scan.type';
 import { ChromeStorageService } from '../../gateway/chrome-storage.service';
 import { InMemoryStorageService } from '../../gateway/dev/in-memory-storage.service';
-import { STORAGE_TOKEN, StorageInterface } from '../port/storage.interface';
+import {
+  Scan,
+  STORAGE_TOKEN,
+  StorageInterface,
+} from '../port/storage.interface';
 
 @Component({
   selector: 'scan-tab',
@@ -124,7 +127,7 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
 
   toggleFavorite(scan: Scan): void {
     scan.isFavorite = !scan.isFavorite;
-    this.storeScanUpdated(scan);
+    this.storage.toggleFavorite(scan);
   }
 
   formatDate(date: string): string {
@@ -132,7 +135,7 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
   }
 
   onRatingChange(event: MatSelectChange, scan: Scan) {
-    this.storeScanUpdated(scan);
+    this.storage.rate(scan, event.value);
   }
 
   delete(scanToDelete: Scan) {
@@ -143,10 +146,6 @@ export class ScanTabComponent implements OnInit, AfterViewInit {
     this.scansTab = new MatTableDataSource<Scan>(this.scans);
     this.setTableScan();
     this.setFilters();
-  }
-
-  private storeScanUpdated(scan: Scan) {
-    this.storage.updateScan(scan);
   }
 
   applyFilter(event: Event) {

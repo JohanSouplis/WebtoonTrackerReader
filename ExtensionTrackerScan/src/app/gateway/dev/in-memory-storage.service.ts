@@ -1,12 +1,14 @@
 import { Observable, of } from 'rxjs';
-import { StorageInterface } from '../../angular/port/storage.interface';
-import { Scan } from '../../core/src/domain/scan.type';
+import { Scan, StorageInterface } from '../../angular/port/storage.interface';
 
 export class InMemoryStorageService implements StorageInterface {
   delete(scan: Scan): void {
     console.log('scan is deleted');
   }
-  updateScan(scan: Scan): void {
+  toggleFavorite(scan: Scan): void {
+    console.log('scan is updated');
+  }
+  rate(scan: Scan, rating: number): void {
     console.log('scan is updated');
   }
 

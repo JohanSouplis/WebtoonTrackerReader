@@ -1,10 +1,19 @@
 import { Observable } from 'rxjs';
-import { Scan } from '../../core/src/domain/scan.type';
 import { InjectionToken } from '@angular/core';
+
+export type Scan = {
+  title: string;
+  chapter: string;
+  url: string;
+  whenWasItRead: string;
+  isFavorite: boolean;
+  rating?: number;
+};
 
 export interface StorageInterface {
   delete(scan: Scan): void;
-  updateScan(scan: Scan): void;
+  toggleFavorite(scan: Scan): void;
+  rate(scan: Scan, rating: number): void;
   getScans(): Observable<Scan[]>;
 }
 
