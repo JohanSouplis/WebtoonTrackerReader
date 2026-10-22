@@ -119,6 +119,8 @@ signalement.
   (`/chapter/3186773`) ne confirme rien.
 - La page parle de lecture (`manga`, `manhwa`, `webtoon`, `scan`...) et d'aucun autre média (`anime`,
   `novel`, `wiki`, `podcast`...). Les deux lexiques sont des tableaux du domaine.
+- Aucun segment du chemin de l'URL ne désigne autre chose qu'une lecture (`/course/`). Ces segments forment
+  un troisième tableau, distinct des lexiques : ils se comparent segment par segment, pas mot par mot.
 - Le titre du scan précède la mention. S'il la suit (`Chapter 12 - Titre | Site`), l'URL doit le contenir.
 
 Le contenu de la page (`og:title`, JSON-LD) n'entre pas en jeu : l'import de l'historique ne connaît que le

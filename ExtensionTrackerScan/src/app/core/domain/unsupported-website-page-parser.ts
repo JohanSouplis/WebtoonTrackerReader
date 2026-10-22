@@ -51,8 +51,8 @@ const OTHER_MEDIA_WORDS = [
   'youtube',
   'watch',
   'video',
-  '/course',
 ];
+const NON_READING_PATHS = ['course'];
 const QUALIFIERS = ['online', 'free', 'vf', 'raw', 'english', 'eng', 'vostfr'];
 const TITLE_NOISE = {
   readLeadIn: /^.*(?:^|[-|–:]\s*)read\s+/i,
@@ -94,12 +94,13 @@ const chapterMentionIn = (pageTitle: string): ChapterMention | undefined => {
   return undefined;
 };
 
+const pathSegments = (url: string): string[] => url.split(/[/?#]/);
+
 const urlChapters = (url: string): number[] => [
   ...[...url.matchAll(URL_MENTION)].flatMap(([, whole, decimal]) =>
     decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)],
   ),
-  ...url
-    .split(/[/?#]/)
+  ...pathSegments(url)
     .filter((segment) => /^\d+$/.test(segment))
     .map(Number),
 ];
@@ -115,7 +116,10 @@ const mentionsAny = (
 const isChapterPage = (page: VisitedPage, mention: ChapterMention): boolean =>
   urlChapters(page.url).includes(mention.chapter.value) &&
   mentionsAny(page, READING_WORDS) &&
-  !mentionsAny(page, OTHER_MEDIA_WORDS);
+  !mentionsAny(page, OTHER_MEDIA_WORDS) &&
+  !pathSegments(page.url).some((segment) =>
+    NON_READING_PATHS.includes(segment.toLowerCase()),
+  );
 
 const compact = (text: string): string =>
   text.toLowerCase().replace(/[^\p{L}\d]/gu, '');
