@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--app-surface-3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fade-in 0.24s var(--app-ease-out, ease-out) both;
+}
