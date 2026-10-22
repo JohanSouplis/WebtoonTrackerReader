@@ -55,16 +55,16 @@ const OTHER_MEDIA_WORDS = [
 ];
 const NON_READING_PATHS = ['course'];
 const QUALIFIERS = ['online', 'free', 'vf', 'raw', 'english', 'eng', 'vostfr'];
-const TITLE_NOISE = {
-  readLeadIn: /^.*(?:^|[-|–:]\s*)read\s+/i,
-  mangaPrefix: /^manga:\s*/i,
-  officialTag: /\[official\]|\(official\)/gi,
-  leadingParenthetical: /^\s*\([^)]*\)/,
-  season: /\(?\bs\d+\)?\s*$/i,
-  volume: /\bvol(?:ume)?\.?\s*\d+\s*$/i,
-  separators: /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
-  typeSuffixes: /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online))+$/i,
-};
+const TITLE_NOISE: readonly RegExp[] = [
+  /^.*(?:^|[-|–:]\s*)read\s+/i,
+  /^manga:\s*/i,
+  /\[official\]|\(official\)/gi,
+  /^\s*\([^)]*\)/,
+  /\(?\bs\d+\)?\s*$/i,
+  /\bvol(?:ume)?\.?\s*\d+\s*$/i,
+  /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
+  /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online))+$/i,
+];
 
 const TITLE_MENTION = new RegExp(
   `(?<![\\p{L}\\d])(?:${TITLE_CHAPTER_WORDS.join('|')})\\.?\\s*[-:]?\\s*(\\d+(?:[.,]\\d+)?)(?!\\d)|第\\s*(\\d+(?:\\.\\d+)?)\\s*[話话章回]|(\\d+)\\s*화`,
@@ -140,9 +140,7 @@ const isWebsiteName = (segment: string, host: string): boolean => {
 };
 
 const cleaned = (text: string): string =>
-  Object.values(TITLE_NOISE)
-    .reduce((title, noise) => title.replace(noise, ''), text)
-    .trim();
+  TITLE_NOISE.reduce((title, noise) => title.replace(noise, ''), text).trim();
 
 const titleBefore = (before: string): string => {
   const title = cleaned(before);
