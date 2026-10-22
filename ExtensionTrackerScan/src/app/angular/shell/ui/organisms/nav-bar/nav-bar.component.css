@@ -1,34 +1,97 @@
-.navbar-container {
+:host {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  background-color: #f8f9fa;
-  padding: 10px;
-  border-radius: 5px;
+  gap: 16px;
+  padding: 18px 24px 14px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.button {
-  text-align: center;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 0 10px;
-  cursor: pointer;
+.brand {
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.01em;
 }
 
-.button.selected {
-  background-color: #0056b3;
+.logo {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--app-accent), #ff8ab3);
+  color: var(--app-accent-ink);
 }
 
-.button.informations {
-  background-color: #28a745;
+.logo mat-icon.mat-icon {
+  font-size: 19px;
+}
+
+nav {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-surface);
+}
+
+nav button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--app-muted);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+nav button mat-icon.mat-icon {
+  font-size: 18px;
+}
+
+nav button:hover {
+  color: var(--app-text);
+}
+
+nav button[aria-current="page"] {
+  background: var(--app-surface-3);
+  color: var(--app-text);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+nav button[aria-current="page"] mat-icon {
+  color: var(--app-accent);
+}
+
+.informations {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  background: none;
+  color: var(--app-muted);
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.informations:hover {
+  color: var(--app-text);
+  background: var(--app-surface-2);
 }
