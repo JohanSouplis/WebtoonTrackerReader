@@ -159,5 +159,3 @@ export const WEBSITE_PATTERNS: readonly WebsitePattern[] = [
     ],
   },
 ];
-
-export const SUPPORTED_WEBSITES = WEBSITE_PATTERNS.map(({ host }) => host);

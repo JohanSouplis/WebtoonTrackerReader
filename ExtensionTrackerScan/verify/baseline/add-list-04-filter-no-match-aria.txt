@@ -13,7 +13,8 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 13" [level=2]
+  - heading "Verified websites 134" [level=2]
   - searchbox "Filter by website": nothing-here
   - button "Clear Filter by website"
-  - paragraph: No supported website matches “nothing-here”.
+  - paragraph: Most reading sites are recognized automatically. These were checked on a real chapter page.
+  - paragraph: No verified website matches “nothing-here”.

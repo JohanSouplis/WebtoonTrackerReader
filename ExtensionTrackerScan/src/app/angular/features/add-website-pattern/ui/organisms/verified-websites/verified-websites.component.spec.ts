@@ -1,14 +1,14 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { SupportedWebsitesComponent } from './supported-websites.component';
+import { VerifiedWebsitesComponent } from './verified-websites.component';
 
-describe('SupportedWebsitesComponent', () => {
-  it('should count every supported website next to the title', async () => {
+describe('VerifiedWebsitesComponent', () => {
+  it('should count every verified website next to the title', async () => {
     await renderWebsites(['toonily.com', 'mangadex.org', 'mangapark']);
 
     expect(
-      screen.getByRole('heading', { name: 'Supported websites 3' }),
+      screen.getByRole('heading', { name: 'Verified websites 3' }),
     ).toBeInTheDocument();
   });
 
@@ -42,13 +42,13 @@ describe('SupportedWebsitesComponent', () => {
     );
 
     expect(
-      screen.getByText('No supported website matches “nothing-here”.'),
+      screen.getByText('No verified website matches “nothing-here”.'),
     ).toBeInTheDocument();
   });
 });
 
 const shownWebsites = (): string[] =>
-  within(screen.getByRole('list', { name: 'Supported websites' }))
+  within(screen.getByRole('list', { name: 'Verified websites' }))
     .getAllByRole('listitem')
     .map(
       (item) =>
@@ -57,7 +57,7 @@ const shownWebsites = (): string[] =>
     );
 
 const renderWebsites = (websites: string[]) =>
-  render(SupportedWebsitesComponent, {
+  render(VerifiedWebsitesComponent, {
     inputs: { websites },
     providers: [provideNoopAnimations()],
   });

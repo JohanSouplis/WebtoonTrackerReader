@@ -13,18 +13,18 @@ import { SearchFieldComponent } from '../../../../../design-system/molecules/sea
 const PAGE_SIZE = 10;
 
 @Component({
-  selector: 'app-supported-websites',
+  selector: 'app-verified-websites',
   imports: [
     MatIconModule,
     MatPaginatorModule,
     MonogramComponent,
     SearchFieldComponent,
   ],
-  templateUrl: './supported-websites.component.html',
-  styleUrl: './supported-websites.component.css',
+  templateUrl: './verified-websites.component.html',
+  styleUrl: './verified-websites.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SupportedWebsitesComponent {
+export class VerifiedWebsitesComponent {
   readonly websites = input.required<readonly string[]>();
   protected readonly pageSize = PAGE_SIZE;
   protected readonly query = signal('');

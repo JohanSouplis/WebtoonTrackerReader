@@ -6,15 +6,15 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SUPPORTED_WEBSITES } from '../../../../../../core/domain/website-patterns';
+import { VERIFIED_WEBSITES } from '../../../../../../core/domain/verified-websites';
 import { ProposeWebsiteUseCase } from '../../../../../../core/use-cases/propose-website.use-case';
-import { SupportedWebsitesComponent } from '../../organisms/supported-websites/supported-websites.component';
+import { VerifiedWebsitesComponent } from '../../organisms/verified-websites/verified-websites.component';
 import { WebsiteProposalFormComponent } from '../../organisms/website-proposal-form/website-proposal-form.component';
 import { WebsiteProposalForm } from '../../organisms/website-proposal-form/website-proposal-form.types';
 
 @Component({
   selector: 'app-add-website-pattern',
-  imports: [WebsiteProposalFormComponent, SupportedWebsitesComponent],
+  imports: [WebsiteProposalFormComponent, VerifiedWebsitesComponent],
   templateUrl: './add-website-pattern.page.html',
   styleUrl: './add-website-pattern.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,9 @@ import { WebsiteProposalForm } from '../../organisms/website-proposal-form/websi
 export class AddWebsitePatternPage {
   private readonly proposeWebsite = inject(ProposeWebsiteUseCase);
   private readonly snackBar = inject(MatSnackBar);
-  protected readonly supportedWebsites = SUPPORTED_WEBSITES;
+  protected readonly verifiedWebsites = VERIFIED_WEBSITES.map(
+    ({ host }) => host,
+  );
   protected readonly isProposalSent = signal(false);
   protected readonly form: WebsiteProposalForm = new FormGroup({
     website: new FormControl('', {

@@ -13,15 +13,23 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 13" [level=2]
+  - heading "Verified websites 134" [level=2]
   - searchbox "Filter by website"
-  - list "Supported websites":
-    - listitem: mangaplus.shueisha.co.jp
-    - listitem: mangadistrict
-    - listitem: battwo.com
+  - paragraph: Most reading sites are recognized automatically. These were checked on a real chapter page.
+  - list "Verified websites":
+    - listitem: comic-walker.com
+    - listitem: comic.naver.com
+    - listitem: comick.dev
+    - listitem: comikey.com
+    - listitem: comix.to
+    - listitem: dassouscan.com
+    - listitem: demonicscans.org
+    - listitem: dongmanmanhua.cn
+    - listitem: drakecomic.net
+    - listitem: dynasty-scans.com
   - group:
-    - text: 11–13 of 13
+    - text: 11–20 of 134
     - button "First page"
     - button "Previous page"
-    - button "Next page" [disabled]
-    - button "Last page" [disabled]
+    - button "Next page"
+    - button "Last page"

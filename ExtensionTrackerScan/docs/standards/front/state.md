@@ -43,8 +43,8 @@ use-cases du core, partagés avec le service worker. **Une feature n'a pas de `*
 
 - **Commande** (supprimer, mettre en favori, noter, proposer un site) : la page appelle le `execute()` d'un
   use-case. Elle n'appelle jamais `scanRepository.save()` elle-même.
-- **Requête** (charger la bibliothèque, lister les sites supportés) : la page lit le port
-  (`scanRepository.load()`) ou le catalogue du core (`SUPPORTED_WEBSITES`) directement. Pas de méthode
+- **Requête** (charger la bibliothèque, lister les sites vérifiés) : la page lit le port
+  (`scanRepository.load()`) ou la liste du core (`VERIFIED_WEBSITES`) directement. Pas de méthode
   passe-plat.
 - Le use-case retourne son résultat. La page le pose dans le store. Le use-case ne connaît ni store, ni
   composant, ni route.

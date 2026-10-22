@@ -55,13 +55,13 @@ src/app/angular/
       add-website-pattern.providers.ts
       ui/
         pages/      add-website-pattern/
-        organisms/  website-proposal-form/ · supported-websites/
+        organisms/  website-proposal-form/ · verified-websites/
   shared/ui/                         organisms et templates partagés par 2 features ou plus
 ```
 
 - **Feature-first** : l'arbre annonce les onglets de l'extension, pas la technique.
 - Les noms de dossiers sont imposés, mais un dossier n'est créé que s'il a du contenu.
-  `add-website-pattern` n'a ni `service/` ni `gateways/` : il lit le catalogue du core et écrit par
+  `add-website-pattern` n'a ni `service/` ni `gateways/` : il lit la liste des sites vérifiés du core et écrit par
   `ProposeWebsiteUseCase`.
 - Le composant d'amorçage est traité comme une page : il injecte, il ne porte aucun markup métier.
 

@@ -428,15 +428,15 @@ test.describe('add website', () => {
     await pin(page, 'add-04-success-dismissed');
   });
 
-  test('supported websites filter and pagination', async ({ page }) => {
+  test('verified websites filter and pagination', async ({ page }) => {
     await openLibrary(page);
     await goToAddWebsite(page);
     await page.getByRole('button', { name: 'Next page' }).click();
-    await expect(page.getByText('11–13 of 13')).toBeVisible();
+    await expect(page.getByText('11–20 of 134')).toBeVisible();
     await pin(page, 'add-list-01-page-2');
     await page.getByRole('button', { name: 'First page' }).click();
     await page.getByRole('button', { name: 'Last page' }).click();
-    await expect(page.getByText('11–13 of 13')).toBeVisible();
+    await expect(page.getByText('131–134 of 134')).toBeVisible();
     await pin(page, 'add-list-02-last-page');
     await page.getByRole('button', { name: 'First page' }).click();
     await page
@@ -448,7 +448,7 @@ test.describe('add website', () => {
       .getByRole('searchbox', { name: 'Filter by website' })
       .pressSequentially('nothing-here');
     await expect(
-      page.getByText('No supported website matches “nothing-here”.'),
+      page.getByText('No verified website matches “nothing-here”.'),
     ).toBeVisible();
     await pin(page, 'add-list-04-filter-no-match');
   });

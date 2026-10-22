@@ -13,16 +13,24 @@
     - text: Use the URL of the page where you
     - emphasis: read
     - text: a chapter, not the series list. Some sites redirect to another domain.
-  - heading "Supported websites 13" [level=2]
+  - heading "Verified websites 134" [level=2]
   - searchbox "Filter by website": manga
   - button "Clear Filter by website"
-  - list "Supported websites":
-    - listitem: mangadex.org
-    - listitem: mangaplus.shueisha.co.jp
-    - listitem: mangadistrict
+  - paragraph: Most reading sites are recognized automatically. These were checked on a real chapter page.
+  - list "Verified websites":
+    - listitem: ezmanga.org
+    - listitem: inmanga.com
+    - listitem: kakamanga.com
+    - listitem: kunmanga.online
+    - listitem: lector-mangas.lat
+    - listitem: lelmanga.com
+    - listitem: likemanga.ink
+    - listitem: lilymanga.net
+    - listitem: manga-corporation.com
+    - listitem: manga-nova.com
   - group:
-    - text: 1–3 of 3
+    - text: 1–10 of 42
     - button "First page" [disabled]
     - button "Previous page" [disabled]
-    - button "Next page" [disabled]
-    - button "Last page" [disabled]
+    - button "Next page"
+    - button "Last page"

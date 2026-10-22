@@ -1,6 +1,6 @@
 <header>
   <h2>
-    Supported websites
+    Verified websites
     <span class="badge">{{ websites().length }}</span>
   </h2>
   <ds-search-field
@@ -9,8 +9,12 @@
     (searched)="search($event)"
   />
 </header>
+<p class="lead">
+  Most reading sites are recognized automatically. These were checked on a real
+  chapter page.
+</p>
 @if (matchingWebsites().length) {
-  <ul aria-label="Supported websites">
+  <ul aria-label="Verified websites">
     @for (website of shownWebsites(); track $index) {
       <li [style.--index]="$index">
         <ds-monogram [text]="website" />
@@ -29,6 +33,6 @@
 } @else {
   <p class="empty">
     <mat-icon>public_off</mat-icon>
-    No supported website matches “{{ searchedWebsite() }}”.
+    No verified website matches “{{ searchedWebsite() }}”.
   </p>
 }

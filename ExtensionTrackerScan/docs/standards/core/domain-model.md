@@ -17,6 +17,7 @@ une projection de lecture.
 | Service du domaine | `PageTitleParser` | Transforme une page visitée en `ParsedPage`, à l'aide du catalogue |
 | Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue quand les signaux de la page s'accordent |
 | Catalogue | `WEBSITE_PATTERNS` | Les sites supportés et le format de titre de chacun |
+| Liste générée | `VERIFIED_WEBSITES` | Les sites vérifiés sur une vraie page de chapitre, avec la date de vérification |
 
 Préfère un Value Object à un champ primitif. Une notion qui porte une règle (normalisation, intervalle,
 comparaison) est un Value Object.
@@ -118,8 +119,14 @@ déjà décidé.
 
 ## Le catalogue des sites
 
-- `WEBSITE_PATTERNS` est la seule liste des sites supportés. La page « Add Website » affiche
-  `SUPPORTED_WEBSITES`, dérivé du catalogue. Elle n'en tient pas une copie.
+- `WEBSITE_PATTERNS` est la seule liste des sites supportés. Un domaine mort y reste tant que l'analyse
+  générique ne lit pas ses pages : l'import de l'historique en rencontre encore.
+- La page « Add Website » affiche `VERIFIED_WEBSITES`, généré par `npm run sites:verified` dans
+  `verified-websites.json`. Un site y figure si le content script lit exactement une de ses pages de chapitre
+  capturées (`eval/parser/captures/*.json`) sans en lire aucune de travers, ou si c'est un site du catalogue
+  dont aucune capture ne le dit mort ou redirigé. Chaque site porte la date de sa capture. La liste ne
+  s'écrit pas à la main : après de nouvelles captures, relance le script et commite le fichier.
+  `npm run eval:parser` signale un fichier en retard.
 - Le catalogue est typé (`readonly WebsitePattern[]`), sans `any`. Les formats d'un site forment un tableau,
   pas un objet indexé par `'1'`, `'2'`, `'3'`.
 - Le catalogue garde la priorité. Une page d'un site supporté qui ne suit aucun format est signalée, jamais
@@ -136,8 +143,11 @@ déjà décidé.
 // ❌ copie à la main, qui a déjà divergé : battwo.com et harimanga.me sont analysés mais absents de la page
 availableWebsites: string[] = ['toonily.com', 'asuracomic.net', ...];
 
-// ✅ une source, une dérivation
+// ❌ le catalogue entier : il affiche des domaines morts et tait les sites lus par l'analyse générique
 export const SUPPORTED_WEBSITES = WEBSITE_PATTERNS.map((pattern) => pattern.host);
+
+// ✅ la liste que l'eval a vérifiée, régénérée par un script
+export const VERIFIED_WEBSITES: readonly VerifiedWebsite[] = verifiedWebsites;
 ```
 
 ## Les sites hors catalogue
