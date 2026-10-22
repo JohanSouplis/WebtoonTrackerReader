@@ -1,28 +1,30 @@
-- navigation: Scan list Add Website Informations
-- heading "Propose a new website for the next update" [level=1]
-- textbox "Enter website name"
-- button "Ask" [disabled]
-- heading "Available websites for now" [level=2]
-- text: Filter by website
-- textbox "Filter by website"
-- table:
-  - rowgroup:
-    - row "manhuaplus.org":
-      - cell "manhuaplus.org"
-    - row "manhwahub.net":
-      - cell "manhwahub.net"
-    - row "1st-kissmanga":
-      - cell "1st-kissmanga"
-    - row "templetoons.com":
-      - cell "templetoons.com"
-    - row "mangafire.to":
-      - cell "mangafire.to"
-    - row "kunmanga.com":
-      - cell "kunmanga.com"
-- group:
-  - text: "Items per page: 10 31 – 36 of 36"
-  - button "First page"
-  - button "Previous page"
-  - button "Next page" [disabled]
-  - button "Last page" [disabled]
-- paragraph: The website url is the one where you read a story and not the one where you can see the list of different stories. Sometimes its different, some websites use redirection for url.
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - heading "Propose a website" [level=2]
+  - paragraph: Reading somewhere we don't track yet? Send it for the next update.
+  - textbox "Website name":
+    - /placeholder: e.g. mangadex.org
+  - button "Propose" [disabled]
+  - paragraph:
+    - text: Use the URL of the page where you
+    - emphasis: read
+    - text: a chapter, not the series list. Some sites redirect to another domain.
+  - heading "Supported websites 36" [level=2]
+  - searchbox "Filter by website"
+  - list "Supported websites":
+    - listitem: manhuaplus.org
+    - listitem: manhwahub.net
+    - listitem: 1st-kissmanga
+    - listitem: templetoons.com
+    - listitem: mangafire.to
+    - listitem: kunmanga.com
+  - group:
+    - text: 31–36 of 36
+    - button "First page"
+    - button "Previous page"
+    - button "Next page" [disabled]
+    - button "Last page" [disabled]

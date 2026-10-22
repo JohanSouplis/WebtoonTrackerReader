@@ -1,0 +1,115 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title"
+  - button "Favorites only"
+  - button "Rated only"
+  - text: 19 series
+  - group "Sort by":
+    - button "Last read"
+    - button "Title (ascending)" [pressed]
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "A Dragonslayer's Peerless Regression":
+        - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
+      - text: Ch. 23
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for A Dragonslayer's Peerless Regression": "5"
+      - button "Favorite A Dragonslayer's Peerless Regression"
+      - button "Delete A Dragonslayer's Peerless Regression"
+    - listitem:
+      - link "Absolute Sword Sense":
+        - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
+      - text: Ch. 117
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Absolute Sword Sense": "7"
+      - button "Favorite Absolute Sword Sense"
+      - button "Delete Absolute Sword Sense"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Duke Pendragon": –
+      - button "Favorite Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Dungeon Odyssey": "10"
+      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for I Obtained a Mythic Item": "9"
+      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+    - listitem:
+      - link "My School Life Pretending To Be a Worthless Person - My...":
+        - /url: https://asuracomic.net/series/my-school-life-pretending-to-be-a-worthless-person-4fbaf58c/chapter/96
+      - text: Ch. 96
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person": "6"
+      - button "Favorite My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "Delete My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
+      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "Pick Me Up, Infinite Gacha":
+        - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
+      - text: Ch. 132
+      - time: 11 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
+      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Delete Pick Me Up, Infinite Gacha"
+    - listitem:
+      - link "Return of the Disaster-Class Hero":
+        - /url: https://asuracomic.net/series/return-of-the-disaster-class-hero-a31a2306/chapter/110
+      - text: Ch. 110
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - combobox "Rating for Return of the Disaster-Class Hero": –
+      - button "Favorite Return of the Disaster-Class Hero"
+      - button "Delete Return of the Disaster-Class Hero"
+    - listitem:
+      - link "Return of the SSS-Class Ranker":
+        - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
+      - text: Ch. 141
+      - time: 10 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Return of the SSS-Class Ranker": "9"
+      - button "Favorite Return of the SSS-Class Ranker"
+      - button "Delete Return of the SSS-Class Ranker"
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 1–10 of 19
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"

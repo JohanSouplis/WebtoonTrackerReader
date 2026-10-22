@@ -1,36 +1,35 @@
-- navigation: Scan list Add Website Informations
-- heading "Propose a new website for the next update" [level=1]
-- textbox "Enter website name"
-- button "Ask" [disabled]
-- heading "Available websites for now" [level=2]
-- text: Filter by website
-- textbox "Filter by website": manga
-- table:
-  - rowgroup:
-    - row "mangadex.org":
-      - cell "mangadex.org"
-    - row "chapmanganato.to":
-      - cell "chapmanganato.to"
-    - row "chapmanganelo.com":
-      - cell "chapmanganelo.com"
-    - row "mangapanda.in":
-      - cell "mangapanda.in"
-    - row "mangapark":
-      - cell "mangapark"
-    - row "mangaplus.shueisha.co.jp":
-      - cell "mangaplus.shueisha.co.jp"
-    - row "mangainn.org":
-      - cell "mangainn.org"
-    - row "mangadistrict.com":
-      - cell "mangadistrict.com"
-    - row "1st-kissmanga":
-      - cell "1st-kissmanga"
-    - row "mangafire.to":
-      - cell "mangafire.to"
-- group:
-  - text: "Items per page: 10 1 – 10 of 11"
-  - button "First page" [disabled]
-  - button "Previous page" [disabled]
-  - button "Next page"
-  - button "Last page"
-- paragraph: The website url is the one where you read a story and not the one where you can see the list of different stories. Sometimes its different, some websites use redirection for url.
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - heading "Propose a website" [level=2]
+  - paragraph: Reading somewhere we don't track yet? Send it for the next update.
+  - textbox "Website name":
+    - /placeholder: e.g. mangadex.org
+  - button "Propose" [disabled]
+  - paragraph:
+    - text: Use the URL of the page where you
+    - emphasis: read
+    - text: a chapter, not the series list. Some sites redirect to another domain.
+  - heading "Supported websites 36" [level=2]
+  - searchbox "Filter by website": manga
+  - button "Clear Filter by website"
+  - list "Supported websites":
+    - listitem: mangadex.org
+    - listitem: chapmanganato.to
+    - listitem: chapmanganelo.com
+    - listitem: mangapanda.in
+    - listitem: mangapark
+    - listitem: mangaplus.shueisha.co.jp
+    - listitem: mangainn.org
+    - listitem: mangadistrict.com
+    - listitem: 1st-kissmanga
+    - listitem: mangafire.to
+  - group:
+    - text: 1–10 of 11
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"

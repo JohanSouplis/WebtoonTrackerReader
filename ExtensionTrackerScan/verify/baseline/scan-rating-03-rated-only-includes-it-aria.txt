@@ -1,0 +1,115 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - searchbox "Filter by title"
+  - button "Favorites only"
+  - button "Rated only" [pressed]
+  - text: 16 series
+  - group "Sort by":
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Favorite"
+  - list "Library":
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
+      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "The Executioner":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
+      - text: Ch. 46
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Executioner": "7"
+      - button "Favorite The Executioner" [pressed]
+      - button "Delete The Executioner"
+    - listitem:
+      - link "Absolute Sword Sense":
+        - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
+      - text: Ch. 117
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Absolute Sword Sense": "7"
+      - button "Favorite Absolute Sword Sense"
+      - button "Delete Absolute Sword Sense"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for I Obtained a Mythic Item": "9"
+      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Dungeon Odyssey": "10"
+      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+    - listitem:
+      - link "A Dragonslayer's Peerless Regression":
+        - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
+      - text: Ch. 23
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for A Dragonslayer's Peerless Regression": "5"
+      - button "Favorite A Dragonslayer's Peerless Regression"
+      - button "Delete A Dragonslayer's Peerless Regression"
+    - listitem:
+      - link "Worthless Regression":
+        - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
+      - text: Ch. 68
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Worthless Regression": "6"
+      - button "Favorite Worthless Regression"
+      - button "Delete Worthless Regression"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for Duke Pendragon": "3"
+      - button "Favorite Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+    - listitem:
+      - link "The Priest of Corruption":
+        - /url: https://asuracomic.net/series/the-priest-of-corruption-7e4b6868/chapter/72
+      - text: Ch. 72
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Priest of Corruption": "6"
+      - button "Favorite The Priest of Corruption"
+      - button "Delete The Priest of Corruption"
+    - listitem:
+      - link "The Reincarnated Assassin is a Genius Swordsman":
+        - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
+      - text: Ch. 50
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
+      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+  - group:
+    - text: Rows
+    - combobox "10 Rows": "10"
+    - text: 1–10 of 16
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"
