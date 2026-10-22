@@ -54,8 +54,16 @@ const OTHER_MEDIA_WORDS = [
   '/course',
 ];
 const QUALIFIERS = ['online', 'free', 'vf', 'raw', 'english', 'eng', 'vostfr'];
-const TYPE_SUFFIX = /\s+(manga|manhwa|manhua|webtoon|comic|online)$/i;
-const SEPARATORS = /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g;
+const TITLE_NOISE = {
+  readLeadIn: /^.*(?:^|[-|–:]\s*)read\s+/i,
+  mangaPrefix: /^manga:\s*/i,
+  officialTag: /\[official\]|\(official\)/gi,
+  leadingParenthetical: /^\s*\([^)]*\)/,
+  season: /\(?\bs\d+\)?\s*$/i,
+  volume: /\bvol(?:ume)?\.?\s*\d+\s*$/i,
+  separators: /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
+  typeSuffixes: /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online))+$/i,
+};
 
 const TITLE_MENTION = new RegExp(
   `(?<![\\p{L}\\d])(?:${TITLE_CHAPTER_WORDS.join('|')})\\.?\\s*[-:]?\\s*(\\d+(?:[.,]\\d+)?)(?!\\d)|第\\s*(\\d+(?:\\.\\d+)?)\\s*[話话章回]|(\\d+)\\s*화`,
@@ -126,18 +134,10 @@ const isWebsiteName = (segment: string, host: string): boolean => {
   );
 };
 
-const cleaned = (text: string): string => {
-  const withoutLead = text
-    .replace(/^.*(?:^|[-|–:]\s*)read\s+/i, '')
-    .replace(/^manga:\s*/i, '')
-    .replace(/\[official\]|\(official\)/gi, '')
-    .replace(/\(?\bs\d+\)?\s*$/i, '')
-    .replace(/\bvol(?:ume)?\.?\s*\d+\s*$/i, '')
-    .replace(SEPARATORS, '')
+const cleaned = (text: string): string =>
+  Object.values(TITLE_NOISE)
+    .reduce((title, noise) => title.replace(noise, ''), text)
     .trim();
-  const withoutType = withoutLead.replace(TYPE_SUFFIX, '');
-  return withoutType === withoutLead ? withoutLead : cleaned(withoutType);
-};
 
 const titleBefore = (before: string): string => {
   const title = cleaned(before);
@@ -153,9 +153,7 @@ const titleAmong = (segments: string[], host: string): string =>
   withoutWebsiteName(segments.map(cleaned).filter(Boolean), host)[0] ?? '';
 
 const titleAfter = (after: string, host: string): string => {
-  const [mentionSegment, ...nextSegments] = after
-    .replace(/^\s*\([^)]*\)/, '')
-    .split('|');
+  const [mentionSegment, ...nextSegments] = after.split('|');
   const nextTitle = titleAmong(nextSegments, host);
   return nextTitle && !isWebsiteName(nextTitle, host)
     ? nextTitle
