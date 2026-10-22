@@ -39,7 +39,8 @@ src/app/angular/
     shell.providers.ts
     service/   full-page-navigator.port.ts
     gateways/  chrome-full-page-navigator.gateway.ts · in-memory-full-page-navigator.gateway.ts
-    ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage, barre de navigation)
+    ui/pages/app-shell/              app-shell.page.ts · .html   (composant d'amorçage)
+    ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
     atoms/      star-toggle/ · truncated-text/
     molecules/  search-field/

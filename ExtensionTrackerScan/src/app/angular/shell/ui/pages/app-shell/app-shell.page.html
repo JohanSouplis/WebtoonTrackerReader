@@ -1,20 +1,6 @@
-<div class="navbar-container">
-  <nav class="button-container">
-    <div
-      (click)="select('')"
-      [class.selected]="selectedPath() === ''"
-      class="button"
-    >
-      Scan list
-    </div>
-    <div
-      (click)="select('add_website_pattern')"
-      [class.selected]="selectedPath() === 'add_website_pattern'"
-      class="button"
-    >
-      Add Website
-    </div>
-    <div (click)="openFullPage()" class="button informations">Informations</div>
-  </nav>
-</div>
+<app-nav-bar
+  [selectedPath]="selectedPath()"
+  (navigated)="select($event)"
+  (fullPageRequested)="openFullPage()"
+/>
 <router-outlet />

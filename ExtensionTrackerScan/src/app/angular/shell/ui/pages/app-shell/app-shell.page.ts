@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { FULL_PAGE_NAVIGATOR } from '../../../../injection-tokens';
+import { NavBarComponent } from '../../organisms/nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavBarComponent],
   templateUrl: './app-shell.page.html',
-  styleUrl: './app-shell.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppShellPage {

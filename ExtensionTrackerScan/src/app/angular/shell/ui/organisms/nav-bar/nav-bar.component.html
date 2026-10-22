@@ -1,0 +1,21 @@
+<div class="navbar-container">
+  <nav class="button-container">
+    <div
+      (click)="navigated.emit('')"
+      [class.selected]="selectedPath() === ''"
+      class="button"
+    >
+      Scan list
+    </div>
+    <div
+      (click)="navigated.emit('add_website_pattern')"
+      [class.selected]="selectedPath() === 'add_website_pattern'"
+      class="button"
+    >
+      Add Website
+    </div>
+    <div (click)="fullPageRequested.emit()" class="button informations">
+      Informations
+    </div>
+  </nav>
+</div>
