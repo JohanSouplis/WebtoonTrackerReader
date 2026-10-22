@@ -78,7 +78,8 @@ private readonly url = toSignal(this.router.events.pipe(filter((event) => event 
 ## Formatage
 
 **Prettier tranche toute question de forme.** La configuration est le `.prettierrc` à la racine du dépôt
-(`tabWidth: 2`, le reste aux valeurs par défaut de Prettier, donc guillemets doubles). Aucun débat de style
+(`tabWidth: 2`), complétée par le `.editorconfig` du projet (`quote_type = single`, que Prettier 3 lit : donc
+guillemets simples). Aucun débat de style
 en revue.
 
 ```bash
