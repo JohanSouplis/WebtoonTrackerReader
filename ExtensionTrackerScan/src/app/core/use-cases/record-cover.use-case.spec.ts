@@ -11,7 +11,9 @@ import {
   InMemoryWeb,
   thumbnailOf,
 } from '../gateways/in-memory/in-memory-web.gateway';
-import { COVER_PAGES, CoverPage } from './cover-pages.fixture';
+import { PageSignalsMessage } from '../../../page-signals-message';
+import { withCoverCandidatesOnly } from '../../../page-signals-reader';
+import { COVER_PAGES, CoverPage, signalsOf } from './cover-pages.fixture';
 import { RecordCoverUseCase } from './record-cover.use-case';
 import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
 import { aScan } from './scans.fixture';
@@ -50,6 +52,29 @@ describe('RecordCoverUseCase', () => {
       kind: 'found',
       from: 'series-page',
     });
+  });
+
+  it('should find the cover from the series link of a chapter page that lists a thousand episodes, in a message under 20 KB', async () => {
+    const message = chapterPageListingEpisodes(1000);
+    const { readPage, coverOf } = setUp({
+      pages: [
+        {
+          pageTitle: 'Nano Machine | WEBTOON',
+          url: SERIES_URL,
+          metaImages: [COVER_URL],
+        },
+      ],
+      images: { [COVER_URL]: PORTRAIT },
+    });
+
+    await readPage(signalsOf(message));
+
+    expect(await coverOf('Nano Machine')).toEqual(
+      found(COVER_URL, 'series-page'),
+    );
+    expect(
+      JSON.stringify(withCoverCandidatesOnly(message)).length,
+    ).toBeLessThan(20_000);
   });
 
   it('should record the cover as missing when neither the page nor its series page shows a cover', async () => {
@@ -107,6 +132,8 @@ describe('RecordCoverUseCase', () => {
 const NOW = new Date('2025-03-10T12:00:00Z');
 const COVER_URL = 'https://webtoon-phinf.pstatic.net/nano-machine/cover.jpg';
 const PORTRAIT: ImageSize = { width: 720, height: 1030 };
+const SERIES_URL =
+  'https://www.webtoons.com/en/action/nano-machine/list?title_no=2212';
 
 const coverPageOf = (host: string): CoverPage => {
   const coverPage = COVER_PAGES.find((page) => page.host === host);
@@ -120,6 +147,30 @@ const catalogPage = (title: string, chapter: string): PageSignals => ({
   pageTitle: `Episode ${chapter} | ${title}`,
   url: `https://www.webtoons.com/en/action/nano-machine/episode-${chapter}/viewer?title_no=2212&episode_no=${chapter}`,
 });
+
+const chapterPageListingEpisodes = (count: number): PageSignalsMessage => {
+  const episodes = Array.from({ length: count }, (_, index) => index + 1);
+  return {
+    ...catalogPage('Nano Machine', '3'),
+    structuredData: [],
+    images: episodes.flatMap((episode) => [
+      {
+        src: `https://webtoon-phinf.pstatic.net/nano-machine/${episode}.jpg`,
+        alt: `Nano Machine Episode ${episode}`,
+      },
+      { src: 'https://webtoons.com/bg.png', alt: 'image' },
+    ]),
+    links: [
+      { href: '/', text: 'WEBTOON', isBreadcrumb: false },
+      { href: SERIES_URL, text: 'Nano Machine', isBreadcrumb: false },
+      ...episodes.map((episode) => ({
+        href: `/en/action/nano-machine/episode-${episode}/viewer?title_no=2212&episode_no=${episode}`,
+        text: `Episode ${episode}`,
+        isBreadcrumb: false,
+      })),
+    ],
+  };
+};
 
 const found = (imageUrl: string, from: 'page' | 'series-page'): Cover => {
   const thumbnail = thumbnailOf(imageUrl);

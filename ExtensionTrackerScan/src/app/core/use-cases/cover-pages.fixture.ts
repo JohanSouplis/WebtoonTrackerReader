@@ -1,4 +1,8 @@
-import { parsePageSignals } from '../../../page-signals-message';
+import {
+  PageSignalsMessage,
+  parsePageSignals,
+} from '../../../page-signals-message';
+import { withCoverCandidatesOnly } from '../../../page-signals-reader';
 import { CoverSource } from '../domain/cover';
 import { PageSignals } from '../domain/parsed-page';
 import { ImageSize } from '../gateways/in-memory/in-memory-web.gateway';
@@ -16,8 +20,8 @@ export type CoverPage = {
   };
 };
 
-export const signalsOf = (message: unknown): PageSignals => {
-  const signals = parsePageSignals(message);
+export const signalsOf = (message: PageSignalsMessage): PageSignals => {
+  const signals = parsePageSignals(withCoverCandidatesOnly(message));
   if (!signals) {
     throw new Error('The content script message does not parse');
   }

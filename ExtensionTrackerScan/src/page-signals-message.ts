@@ -7,9 +7,9 @@ import {
 
 export type StructuredDataNode = {
   readonly type: unknown;
-  readonly name: unknown;
-  readonly headline: unknown;
-  readonly position: unknown;
+  readonly name?: unknown;
+  readonly headline?: unknown;
+  readonly position?: unknown;
   readonly image?: unknown;
   readonly item?: unknown;
 };
@@ -23,7 +23,7 @@ export type PageSignalsMessage = {
   readonly heading?: string;
   readonly breadcrumb?: string;
   readonly structuredData: readonly StructuredDataNode[];
-  readonly selectedOptions: readonly string[];
+  readonly selectedOptions?: readonly string[];
   readonly metaImages?: readonly string[];
   readonly images?: readonly PageImage[];
   readonly links?: readonly PageLink[];

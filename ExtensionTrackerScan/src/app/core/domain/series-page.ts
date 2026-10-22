@@ -19,14 +19,14 @@ const urlOf = (text: string): URL | undefined => {
 
 const withoutFragment = (url: string): string => url.split('#')[0];
 
-const isInsideSite = (page: PageSignals, href: string): boolean => {
+export const isInsideSite = (pageUrl: string, href: string): boolean => {
   const target = urlOf(href);
   return (
     target !== undefined &&
     /^https?:$/.test(target.protocol) &&
-    siteOf(href) === siteOf(page.url) &&
+    siteOf(href) === siteOf(pageUrl) &&
     target.pathname !== '/' &&
-    withoutFragment(href) !== withoutFragment(page.url)
+    withoutFragment(href) !== withoutFragment(pageUrl)
   );
 };
 
@@ -50,5 +50,5 @@ export const seriesPageUrlOf = (
   linksOf(page).find(
     ({ href, text }) =>
       SeriesKey.of(withoutTitleNoise(text)).match(title.seriesKey) === 'same' &&
-      isInsideSite(page, href),
+      isInsideSite(page.url, href),
   )?.href;

@@ -119,6 +119,13 @@ signaux. Le service worker n'a pas de DOM. Pour lire une page qu'il récupère (
 le document offscreen (`chrome.offscreen`, raison `DOM_PARSER`), via le gateway
 `chrome-offscreen-page-reader.gateway.ts`.
 
+Le message ne porte que les images et les liens que les règles de couverture peuvent retenir
+(`withCoverCandidatesOnly`) : une page de webtoons.com liste plus de mille épisodes, et le message est renvoyé à
+chaque changement de titre. Une image reste si son texte alternatif ne nomme aucun numéro, page ou chapitre absent
+des titres de la page (`mayNameTheSeries`), un lien s'il reste sur le site et porte un texte (`isInsideSite`).
+Les doublons partent, puis 10 images et 50 liens au plus restent, ceux du fil d'Ariane d'abord. Le corpus de
+couvertures passe par la même réduction.
+
 La popup ne télécharge aucune image. Elle demande au service worker de chercher les couvertures des lignes
 affichées sans couverture (`cover-backfill-message.ts`), puis relit les couvertures. Le service worker est le seul
 à écrire les couvertures.

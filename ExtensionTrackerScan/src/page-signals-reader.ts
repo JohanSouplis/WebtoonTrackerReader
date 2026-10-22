@@ -1,8 +1,13 @@
+import { mayNameTheSeries } from './app/core/domain/cover-search';
+import { PageImage, PageLink } from './app/core/domain/parsed-page';
+import { isInsideSite } from './app/core/domain/series-page';
 import { PageSignalsMessage, StructuredDataNode } from './page-signals-message';
 
 const BREADCRUMB = 'nav[aria-label*="breadcrumb" i], [class*="breadcrumb" i]';
 const BREADCRUMB_LINK = `${BREADCRUMB}, [itemtype*="BreadcrumbList"]`;
 const META_IMAGES = ['og:image', 'twitter:image', 'twitter:image:src'];
+const MAX_IMAGES = 10;
+const MAX_LINKS = 50;
 
 const structuredDataNodesIn = (value: unknown): StructuredDataNode[] => {
   if (Array.isArray(value)) {
@@ -35,6 +40,63 @@ const parsedJson = (text: string): unknown => {
   }
 };
 
+const absoluteUrlOf = (href: string, pageUrl: string): string => {
+  try {
+    return new URL(href, pageUrl).href;
+  } catch {
+    return '';
+  }
+};
+
+const firstOfEach = <T>(
+  items: readonly T[],
+  keyOf: (item: T) => string,
+): T[] => {
+  const firsts = new Map<string, T>();
+  for (const item of items) {
+    if (!firsts.has(keyOf(item))) {
+      firsts.set(keyOf(item), item);
+    }
+  }
+  return [...firsts.values()];
+};
+
+export const withCoverCandidatesOnly = (
+  message: PageSignalsMessage,
+): PageSignalsMessage => {
+  const pageTexts = [
+    message.pageTitle,
+    message.ogTitle,
+    message.heading,
+    message.breadcrumb,
+    ...message.structuredData.flatMap(({ name, headline }) => [name, headline]),
+  ].filter((text): text is string => typeof text === 'string');
+  const images = (message.images ?? []).filter(({ alt }) =>
+    mayNameTheSeries(alt, pageTexts),
+  );
+  const links = (message.links ?? []).flatMap((link): PageLink[] => {
+    const href = absoluteUrlOf(link.href, message.url);
+    const text = link.text.replace(/\s+/g, ' ').trim();
+    return text !== '' && isInsideSite(message.url, href)
+      ? [{ href, text, isBreadcrumb: link.isBreadcrumb }]
+      : [];
+  });
+  return {
+    ...message,
+    images: firstOfEach(images, ({ src, alt }) => `${src} ${alt}`).slice(
+      0,
+      MAX_IMAGES,
+    ),
+    links: firstOfEach(
+      [
+        ...links.filter(({ isBreadcrumb }) => isBreadcrumb),
+        ...links.filter(({ isBreadcrumb }) => !isBreadcrumb),
+      ],
+      ({ href, text }) => `${href} ${text}`,
+    ).slice(0, MAX_LINKS),
+  };
+};
+
 export const readPageSignals = (
   page: Document,
   url: string,
@@ -49,7 +111,7 @@ export const readPageSignals = (
       page.querySelectorAll(selector),
       (element) => element.getAttribute(attribute) ?? [],
     ).flat();
-  return {
+  return withCoverCandidatesOnly({
     pageTitle: page.title,
     url,
     ogTitle: metaContent('og:title'),
@@ -77,7 +139,7 @@ export const readPageSignals = (
     ],
     images: Array.from(
       page.querySelectorAll('img[alt]:not([alt=""])'),
-      (image) => ({
+      (image): PageImage => ({
         src:
           image.getAttribute('data-src') ??
           image.getAttribute('data-lazy-src') ??
@@ -91,5 +153,5 @@ export const readPageSignals = (
       text: link.textContent ?? '',
       isBreadcrumb: link.closest(BREADCRUMB_LINK) !== null,
     })),
-  };
+  });
 };

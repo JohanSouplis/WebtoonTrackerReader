@@ -57,6 +57,18 @@ const isNotACoverWord = (word: string): boolean =>
   word === 'ch' ||
   NOT_A_COVER_WORD_STARTS.some((start) => word.startsWith(start));
 
+const wordsOf = (text: string): string[] => SeriesKey.of(text).value.split(' ');
+
+export const mayNameTheSeries = (
+  alt: string,
+  pageTexts: readonly string[],
+): boolean => {
+  const pageWords = new Set(pageTexts.flatMap(wordsOf));
+  return wordsOf(alt).every(
+    (word) => !isNotACoverWord(word) || pageWords.has(word),
+  );
+};
+
 const ALT_NAMES_SERIES: Readonly<
   Record<CoverSource, (alt: string, title: ScanTitle) => boolean>
 > = {
