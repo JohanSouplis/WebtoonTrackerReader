@@ -134,6 +134,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Теневой раб — глава 14 читать онлайн | WaManga', 'https://wamanga.ru/manhwa/tenevoy-rab/glava-14', 'Теневой раб', 14],
     ['Solo Leveling - Vol: 2. Chapter: 56 - Manga Reader', 'https://mangareader.example/solo-leveling/chapter-56', 'Solo Leveling', 56],
     ['مانجا Black Clover الفصل 392 مترجم | مانجا اون لاين', 'https://onma.top/manga/black-clover/392', 'Black Clover', 392],
+    ['Read Wedding Blues - Chapter 6.5 | KaliScans', 'https://kaliscans.org/series/wedding-blues/6-5', 'Wedding Blues', 6.5],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {

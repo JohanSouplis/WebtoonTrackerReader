@@ -395,7 +395,7 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   (`Absolute Batman DC Go! Edition #12` et `Episode 12 - Batman and Alfred...`) ; une option sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
   comme chapitre : c'est souvent un index (`episode_no=653` pour l'épisode 235) ou un identifiant collé
   (`chapter-58.826511`).
-- **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un
+- **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`, `/12-5` pour 12.5) confirme un
   numéro affiché. Pour un texte d'en-tête (titre de l'onglet, `og:title` s'il diffère du titre, `h1`), un autre
   élément de la page confirme aussi : `h1`, titres de section (`h1` à `h3`), fil d'Ariane, JSON-LD, option
   sélectionnée, ou le début du texte visible s'il n'affiche que ce numéro, ou ce numéro et ses voisins (liens

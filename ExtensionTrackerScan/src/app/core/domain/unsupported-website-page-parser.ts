@@ -115,13 +115,17 @@ const hostOf = (url: string): string => folded(hostnameOf(url));
 
 const pathSegments = (url: string): string[] => pathOf(url).split(/[/?#&]/);
 
+const numbersOf = (whole: string, decimal?: string): number[] =>
+  decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)];
+
 const urlChapters = (url: string): number[] => [
   ...[...pathOf(url).matchAll(URL_MENTION)].flatMap(([, whole, decimal]) =>
-    decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)],
+    numbersOf(whole, decimal),
   ),
-  ...pathSegments(url)
-    .filter((segment) => /^\d+$/.test(segment))
-    .map(Number),
+  ...pathSegments(url).flatMap((segment) => {
+    const number = /^(\d+)(?:[.-](\d+))?$/.exec(segment);
+    return number ? numbersOf(number[1], number[2]) : [];
+  }),
 ];
 
 const BARE_NUMBER = new RegExp(
