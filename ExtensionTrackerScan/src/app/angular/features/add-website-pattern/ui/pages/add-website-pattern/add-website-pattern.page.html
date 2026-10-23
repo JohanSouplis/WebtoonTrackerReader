@@ -1,6 +1,10 @@
 <app-website-proposal-form
   [form]="form"
-  [isProposalSent]="isProposalSent()"
+  [status]="store.proposalStatus()"
   (proposed)="propose($event)"
+  (edited)="store.edit()"
 />
-<app-verified-websites [websites]="verifiedWebsites" />
+<app-verified-websites
+  [websites]="verifiedWebsites"
+  (siteRequested)="requestSite($event)"
+/>

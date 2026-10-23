@@ -33,6 +33,8 @@ Exemples tirés de l'extension :
 | `new-chapter-settings` | organism | Un bouton qui annonce la fréquence et ouvre un menu : fréquence (`1h`, `6h`, `24h`) et notifications. Émet le choix, la page l'applique. |
 | `scan-filters` | organism | Champ de recherche et bascules « Following only », « Rated only ». Émet un `ScanFilters`. |
 | `about-sections` | organism | Ce que l'extension suit et comment, la veille des chapitres, la confidentialité avec l'interrupteur des rapports, le contact et la version. Émet le choix des rapports. |
+| `website-proposal-form` | organism | Le champ « Chapter page URL » et l'état de la demande (`ProposalStatus` : envoi, envoyé, déjà supporté, échec et « Retry ») dans une zone `role="status"`. La page lui demande le focus par `focus()` quand le lecteur vient de la liste. |
+| `verified-websites` | organism | La liste filtrable des sites vérifiés. Une adresse collée se compare par son hôte ; sans résultat, il propose « Request this site ». |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 
 ## Atoms et molecules sont le design-system, et rien d'autre

@@ -241,12 +241,15 @@ déjà décidé.
 
 - `WEBSITE_PATTERNS` est la seule liste des sites supportés. Un domaine mort y reste tant que l'analyse
   générique ne lit pas ses pages : l'import de l'historique en rencontre encore.
-- La page « Add Website » affiche `VERIFIED_WEBSITES`, généré par `npm run sites:verified` dans
+- L'écran « Request a site » affiche `VERIFIED_WEBSITES`, généré par `npm run sites:verified` dans
   `verified-websites.json`. Un site y figure si le content script lit exactement une de ses pages de chapitre
   capturées (`eval/parser/captures/*.json`) sans en lire aucune de travers, ou si c'est un site du catalogue
   dont aucune capture ne le dit mort ou redirigé. Chaque site porte la date de sa capture. La liste ne
   s'écrit pas à la main : après de nouvelles captures, relance le script et commite le fichier.
   `npm run eval:parser` signale un fichier en retard.
+- Une demande d'ajout (`ProposeWebsiteUseCase`) porte l'adresse d'une page de chapitre. Si son site est déjà
+  vérifié (`isVerifiedWebsite`), rien n'est envoyé et le use-case rend `already-supported` ; sinon il attend
+  l'envoi et rend `sent`. Un envoi qui échoue rejette : le lecteur doit pouvoir réessayer.
 - Le catalogue est typé (`readonly WebsitePattern[]`), sans `any`. Les formats d'un site forment un tableau,
   pas un objet indexé par `'1'`, `'2'`, `'3'`.
 - Le catalogue garde la priorité. Une page d'un site supporté qui ne suit aucun format est signalée, jamais

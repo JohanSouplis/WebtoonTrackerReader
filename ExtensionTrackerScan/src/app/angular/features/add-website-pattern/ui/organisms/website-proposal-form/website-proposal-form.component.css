@@ -89,10 +89,22 @@ button mat-icon.mat-icon {
   font-size: 18px;
 }
 
+.status {
+  min-height: 1.5em;
+  margin-top: 10px;
+  color: var(--app-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status.is-failed {
+  color: var(--app-danger);
+}
+
 .hint {
   display: flex;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 6px;
   color: var(--app-muted);
   font-size: 12.5px;
   line-height: 1.5;

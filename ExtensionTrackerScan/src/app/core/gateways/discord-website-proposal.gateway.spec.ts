@@ -8,8 +8,7 @@ describe('DiscordWebsiteProposal', () => {
       statusText: 'OK',
     });
 
-    new DiscordWebsiteProposal().propose('example-scans.com');
-    await flush();
+    await new DiscordWebsiteProposal().propose('example-scans.com');
 
     expect(requests).toEqual([
       {
@@ -25,23 +24,14 @@ describe('DiscordWebsiteProposal', () => {
     ]);
   });
 
-  it('should log the failure without rejecting when the webhook answers an error', async () => {
+  it('should reject when the webhook answers an error', async () => {
     useWebhookAnswering({ ok: false, status: 500, statusText: 'Server Error' });
-    const errors = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    new DiscordWebsiteProposal().propose('example-scans.com');
-    await flush();
-
-    expect(errors.mock.calls).toEqual([
-      ['Error when sending to discord', 'Server Error'],
-      ['Error while sending to discord :', new Error('Erreur HTTP : 500')],
-    ]);
-    errors.mockRestore();
+    await expect(
+      new DiscordWebsiteProposal().propose('example-scans.com'),
+    ).rejects.toThrow('The proposal webhook answered HTTP 500');
   });
 });
-
-const flush = (): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, 0));
 
 const useWebhookAnswering = (
   response: Pick<Response, 'ok' | 'status' | 'statusText'>,

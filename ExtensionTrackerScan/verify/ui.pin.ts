@@ -102,9 +102,9 @@ function toggle(page: Page, name: string): Locator {
 }
 
 async function goToAddWebsite(page: Page) {
-  await page.getByRole('button', { name: 'Add website' }).click();
+  await page.getByRole('button', { name: 'Request a site' }).click();
   await expect(
-    page.getByRole('heading', { name: 'Propose a website' }),
+    page.getByRole('heading', { name: 'Request a site' }),
   ).toBeVisible();
 }
 
@@ -119,7 +119,7 @@ test.describe('navbar', () => {
     await goToAddWebsite(page);
     await expect(page).toHaveURL(/#\/add_website_pattern$/);
     await expect(
-      page.getByRole('button', { name: 'Add website' }),
+      page.getByRole('button', { name: 'Request a site' }),
     ).toHaveAttribute('aria-current', 'page');
     await pin(page, 'nav-02-add-website-selected');
     await page.getByRole('button', { name: 'Library' }).click();
@@ -157,10 +157,10 @@ test.describe('navbar', () => {
   }) => {
     await page.goto('/#/add_website_pattern');
     await expect(
-      page.getByRole('heading', { name: 'Propose a website' }),
+      page.getByRole('heading', { name: 'Request a site' }),
     ).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Add website' }),
+      page.getByRole('button', { name: 'Request a site' }),
     ).toHaveAttribute('aria-current', 'page');
     await expect(
       page.getByRole('button', { name: 'Library' }),
@@ -580,27 +580,47 @@ test.describe('new chapters', () => {
 });
 
 test.describe('add website', () => {
-  test('propose a website', async ({ page }) => {
+  test('request a site', async ({ page }) => {
     await openLibrary(page);
     await goToAddWebsite(page);
-    const propose = page.getByRole('button', { name: 'Propose' });
-    await expect(propose).toBeDisabled();
+    const send = page.getByRole('button', { name: 'Send request' });
+    const url = page.getByRole('textbox', { name: 'Chapter page URL' });
+    await expect(send).toBeDisabled();
     await pin(page, 'add-01-initial');
-    await page
-      .getByRole('textbox', { name: 'Website name' })
-      .fill('example-scans.com');
-    await expect(propose).toBeEnabled();
-    await pin(page, 'add-02-filled');
-    await propose.click();
-    await expect(page.getByText('Website proposed. Thanks!')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Dismiss' })).toBeVisible();
+    await url.fill('example-scans.com');
+    await expect(send).toBeDisabled();
+    await expect(
+      page.getByText('Paste a full address, starting with https://'),
+    ).toBeVisible();
+    await pin(page, 'add-02-not-an-address');
+    await url.fill('https://example-scans.com/series/solo/chapter-12');
+    await expect(send).toBeEnabled();
+    await send.click();
+    await expect(page.getByText("Thanks, we'll review it.")).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sent' })).toBeDisabled();
-    await pin(page, 'add-03-success');
-    await expect(page.getByText('Website proposed. Thanks!')).toBeHidden({
-      timeout: 7000,
-    });
-    await expect(propose).toBeDisabled();
-    await pin(page, 'add-04-success-dismissed');
+    await pin(page, 'add-03-sent');
+    await url.fill('https://asurascans.com/series/solo/chapter-12');
+    await page.getByRole('button', { name: 'Send request' }).click();
+    await expect(page.getByText(/^\s*Already supported\./)).toBeVisible();
+    await pin(page, 'add-04-already-supported');
+  });
+
+  test('a pasted address the list does not know can be requested', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    await goToAddWebsite(page);
+    await page
+      .getByRole('searchbox', { name: 'Filter by website or address' })
+      .fill('https://unknown-scans.net/manga/chapter-3');
+    await page.getByRole('button', { name: 'Request this site' }).click();
+    await expect(
+      page.getByRole('textbox', { name: 'Chapter page URL' }),
+    ).toHaveValue('https://unknown-scans.net/manga/chapter-3');
+    await expect(
+      page.getByRole('textbox', { name: 'Chapter page URL' }),
+    ).toBeFocused();
+    await pin(page, 'add-05-request-from-list');
   });
 
   test('verified websites filter and pagination', async ({ page }) => {
@@ -615,12 +635,14 @@ test.describe('add website', () => {
     await pin(page, 'add-list-02-last-page');
     await page.getByRole('button', { name: 'First page' }).click();
     await page
-      .getByRole('searchbox', { name: 'Filter by website' })
+      .getByRole('searchbox', { name: 'Filter by website or address' })
       .pressSequentially('manga');
     await pin(page, 'add-list-03-filter-manga');
-    await page.getByRole('searchbox', { name: 'Filter by website' }).fill('');
     await page
-      .getByRole('searchbox', { name: 'Filter by website' })
+      .getByRole('searchbox', { name: 'Filter by website or address' })
+      .fill('');
+    await page
+      .getByRole('searchbox', { name: 'Filter by website or address' })
       .pressSequentially('nothing-here');
     await expect(
       page.getByText('No verified website matches “nothing-here”.'),

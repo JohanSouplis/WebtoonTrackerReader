@@ -13,16 +13,15 @@ class AddWebsiteStubPage {}
 class AboutStubPage {}
 
 describe('AppShellPage', () => {
-  it('should mark Add website as the current page when the popup opens on its route', async () => {
+  it('should mark Request a site as the current page when the popup opens on its route', async () => {
     await renderShell('add_website_pattern');
 
     expect(
       await screen.findByRole('heading', { name: 'Add website page' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Add website' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    expect(
+      screen.getByRole('button', { name: 'Request a site' }),
+    ).toHaveAttribute('aria-current', 'page');
   });
 
   it('should show the library and mark it current when Library is clicked', async () => {

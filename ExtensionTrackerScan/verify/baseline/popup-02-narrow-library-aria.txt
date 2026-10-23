@@ -1,6 +1,6 @@
 - navigation "Main":
   - button "Library"
-  - button "Add website"
+  - button "Request a site"
 - button "About"
 - main:
   - searchbox "Filter by title"

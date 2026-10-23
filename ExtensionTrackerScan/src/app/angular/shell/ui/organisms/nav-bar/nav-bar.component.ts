@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 const TABS = [
   { path: '', label: 'Library', icon: 'bookmarks' },
-  { path: 'add_website_pattern', label: 'Add website', icon: 'add_link' },
+  { path: 'add_website_pattern', label: 'Request a site', icon: 'add_link' },
 ] as const;
 
 const ABOUT_PATH = 'about';

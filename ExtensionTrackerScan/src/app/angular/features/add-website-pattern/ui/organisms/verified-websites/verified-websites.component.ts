@@ -3,18 +3,22 @@ import {
   Component,
   computed,
   input,
+  output,
   signal,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MonogramComponent } from '../../../../../design-system/atoms/monogram/monogram.component';
 import { SearchFieldComponent } from '../../../../../design-system/molecules/search-field/search-field.component';
+import { matchWebsites } from '../../../service/site-request.rules';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-verified-websites',
   imports: [
+    MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
     MonogramComponent,
@@ -26,16 +30,14 @@ const PAGE_SIZE = 10;
 })
 export class VerifiedWebsitesComponent {
   readonly websites = input.required<readonly string[]>();
+  readonly siteRequested = output<string>();
   protected readonly pageSize = PAGE_SIZE;
   protected readonly query = signal('');
   protected readonly pageIndex = signal(0);
   protected readonly searchedWebsite = computed(() => this.query().trim());
-  protected readonly matchingWebsites = computed(() => {
-    const query = this.searchedWebsite().toLowerCase();
-    return this.websites().filter((website) =>
-      website.toLowerCase().includes(query),
-    );
-  });
+  protected readonly matchingWebsites = computed(() =>
+    matchWebsites(this.websites(), this.searchedWebsite()),
+  );
   protected readonly shownWebsites = computed(() =>
     this.matchingWebsites().slice(
       this.pageIndex() * PAGE_SIZE,

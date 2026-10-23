@@ -16,7 +16,7 @@ describe('VerifiedWebsitesComponent', () => {
     await renderWebsites(['toonily.com', 'mangadex.org', 'mangapark']);
 
     await userEvent.type(
-      screen.getByRole('searchbox', { name: 'Filter by website' }),
+      screen.getByRole('searchbox', { name: 'Filter by website or address' }),
       'MANGA',
     );
 
@@ -33,17 +33,37 @@ describe('VerifiedWebsitesComponent', () => {
     expect(shownWebsites()).toEqual(['site-11.com', 'site-12.com']);
   });
 
-  it('should say no website matches when the filter matches nothing', async () => {
-    await renderWebsites(['toonily.com']);
+  it('should say no website matches and offer to request it when the filter matches nothing', async () => {
+    const siteRequested = jest.fn();
+    await renderWebsites(['toonily.com'], { siteRequested });
 
     await userEvent.type(
-      screen.getByRole('searchbox', { name: 'Filter by website' }),
-      'nothing-here',
+      screen.getByRole('searchbox', { name: 'Filter by website or address' }),
+      'https://nothing-here.net/chapter-2',
+    );
+    expect(
+      screen.getByText(
+        'No verified website matches “https://nothing-here.net/chapter-2”.',
+      ),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Request this site' }),
     );
 
-    expect(
-      screen.getByText('No verified website matches “nothing-here”.'),
-    ).toBeInTheDocument();
+    expect(siteRequested).toHaveBeenCalledWith(
+      'https://nothing-here.net/chapter-2',
+    );
+  });
+
+  it('should find the verified website of a pasted chapter address', async () => {
+    await renderWebsites(['toonily.com', 'mangadex.org']);
+
+    await userEvent.type(
+      screen.getByRole('searchbox', { name: 'Filter by website or address' }),
+      'https://toonily.com/webtoon/solo/chapter-3',
+    );
+
+    expect(shownWebsites()).toEqual(['toonily.com']);
   });
 });
 
@@ -56,8 +76,12 @@ const shownWebsites = (): string[] =>
         '',
     );
 
-const renderWebsites = (websites: string[]) =>
+const renderWebsites = (
+  websites: string[],
+  outputs: Record<string, jest.Mock> = {},
+) =>
   render(VerifiedWebsitesComponent, {
     inputs: { websites },
+    on: outputs,
     providers: [provideNoopAnimations()],
   });

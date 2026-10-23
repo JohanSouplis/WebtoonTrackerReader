@@ -34,7 +34,7 @@ pas un synonyme.
 | `VerifiedWebsite` | Un site dont `npm run eval:parser` lit exactement une vraie page de chapitre capturée, ou un site vivant du catalogue | `supportedWebsites` pour ce sens |
 | `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |
 | `ChapterMention` | Le numéro de chapitre qu'un texte de la page annonce, avec le texte qui l'entoure | `marker`, `match` |
-| `WebsiteProposal` | Un site que le lecteur propose d'ajouter | `notification` pour ce sens |
+| `WebsiteProposal` | Un site que le lecteur demande d'ajouter, par l'adresse d'une de ses pages de chapitre. L'interface dit « Request a site » | `notification` pour ce sens |
 | `seriesUrl` | L'adresse de la page d'une série, qui liste ses chapitres | `seriesLink`, `mangaUrl` |
 | `Cover` | L'état connu de la couverture d'une série : `found` ou `missing` | `image`, `poster`, `thumbnail` pour ce sens |
 | `Thumbnail` | La vignette WebP d'une couverture, en data URL, stockée par l'extension | `coverUrl`, `imageData` |

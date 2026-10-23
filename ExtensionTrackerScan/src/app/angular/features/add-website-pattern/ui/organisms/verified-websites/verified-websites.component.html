@@ -4,14 +4,14 @@
     <span class="badge">{{ websites().length }}</span>
   </h2>
   <ds-search-field
-    label="Filter by website"
+    label="Filter by website or address"
     [value]="query()"
     (searched)="search($event)"
   />
 </header>
 <p class="lead">
-  Most reading sites are recognized automatically. These were checked on a real
-  chapter page.
+  These were checked on a real chapter page. Most other reading sites are
+  recognized automatically, so they may still work.
 </p>
 @if (matchingWebsites().length) {
   <ul aria-label="Verified websites">
@@ -31,8 +31,16 @@
     (page)="turnPage($event)"
   />
 } @else {
-  <p class="empty">
+  <div class="empty">
     <mat-icon>public_off</mat-icon>
-    No verified website matches “{{ searchedWebsite() }}”.
-  </p>
+    <p>No verified website matches “{{ searchedWebsite() }}”.</p>
+    <p>It may still work. If your reads don't show up, request it.</p>
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="siteRequested.emit(searchedWebsite())"
+    >
+      Request this site
+    </button>
+  </div>
 }

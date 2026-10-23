@@ -1,3 +1,3 @@
 export interface WebsiteProposalPort {
-  propose(website: string): void;
+  propose(chapterUrl: string): Promise<void>;
 }

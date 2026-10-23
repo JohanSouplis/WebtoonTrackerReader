@@ -58,10 +58,11 @@ src/app/angular/
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
         organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/
-    add-website-pattern/             onglet « Add website », route 'add_website_pattern'
+    add-website-pattern/             onglet « Request a site », route 'add_website_pattern'
       add-website-pattern.providers.ts
+      service/  site-request.rules.ts
       ui/
-        pages/      add-website-pattern/
+        pages/      add-website-pattern/     add-website-pattern.page.ts · .html · add-website-pattern.store.ts
         organisms/  website-proposal-form/ · verified-websites/
     about/                           bouton « About » (i), route 'about'
       about.providers.ts
@@ -73,7 +74,7 @@ src/app/angular/
 
 - **Feature-first** : l'arbre annonce les onglets de l'extension, pas la technique.
 - Les noms de dossiers sont imposés, mais un dossier n'est créé que s'il a du contenu.
-  `add-website-pattern` n'a ni `service/` ni `gateways/` : il lit la liste des sites vérifiés du core et écrit par
+  `add-website-pattern` n'a pas de `gateways/` : il lit la liste des sites vérifiés du core et écrit par
   `ProposeWebsiteUseCase`.
 - Le composant d'amorçage est traité comme une page : il injecte, il ne porte aucun markup métier.
 

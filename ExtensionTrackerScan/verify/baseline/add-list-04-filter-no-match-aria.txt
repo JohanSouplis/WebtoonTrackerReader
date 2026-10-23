@@ -1,20 +1,23 @@
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
-  - button "Add website"
+  - button "Request a site"
 - button "About"
 - main:
-  - heading "Propose a website" [level=2]
-  - paragraph: Reading somewhere we don't track yet? Send it for the next update.
-  - textbox "Website name":
-    - /placeholder: e.g. mangadex.org
-  - button "Propose" [disabled]
+  - heading "Request a site" [level=2]
+  - paragraph: Reading on a site Scan Tracker doesn't know? Send one of its chapter pages and the developer will look at it.
+  - textbox "Chapter page URL":
+    - /placeholder: https://example.com/series/title/chapter-12
+  - button "Send request" [disabled]
+  - status
   - paragraph:
-    - text: Use the URL of the page where you
+    - text: Use the address of a page where you
     - emphasis: read
-    - text: a chapter, not the series list. Some sites redirect to another domain.
+    - text: "a chapter, not the series list. Sites missing from the list below may still work: most reading sites are recognized automatically."
   - heading "Verified websites 134" [level=2]
-  - searchbox "Filter by website": nothing-here
-  - button "Clear Filter by website"
-  - paragraph: Most reading sites are recognized automatically. These were checked on a real chapter page.
+  - searchbox "Filter by website or address": nothing-here
+  - button "Clear Filter by website or address"
+  - paragraph: These were checked on a real chapter page. Most other reading sites are recognized automatically, so they may still work.
   - paragraph: No verified website matches “nothing-here”.
+  - paragraph: It may still work. If your reads don't show up, request it.
+  - button "Request this site"

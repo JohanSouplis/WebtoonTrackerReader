@@ -120,6 +120,15 @@ mat-paginator {
   text-align: center;
 }
 
+.empty button {
+  margin-top: 4px;
+  --mdc-outlined-button-label-text-color: var(--app-accent);
+  --mdc-outlined-button-outline-color: var(--app-accent-line);
+  --mdc-outlined-button-container-shape: 12px;
+  --mdc-outlined-button-label-text-weight: 700;
+  --mdc-outlined-button-label-text-font: inherit;
+}
+
 .empty mat-icon.mat-icon {
   font-size: 40px;
   color: var(--app-accent);

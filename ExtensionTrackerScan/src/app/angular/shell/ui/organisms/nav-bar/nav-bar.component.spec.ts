@@ -3,11 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { NavBarComponent } from './nav-bar.component';
 
 describe('NavBarComponent', () => {
-  it('should go to the add website tab when Add website is clicked', async () => {
+  it('should go to the add website tab when Request a site is clicked', async () => {
     const navigated = jest.fn();
     await renderNavBar('', { navigated });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Add website' }));
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Request a site' }),
+    );
 
     expect(navigated).toHaveBeenCalledWith('add_website_pattern');
   });
@@ -24,10 +26,9 @@ describe('NavBarComponent', () => {
   it('should mark the tab of the selected path as the current page', async () => {
     await renderNavBar('add_website_pattern');
 
-    expect(screen.getByRole('button', { name: 'Add website' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    expect(
+      screen.getByRole('button', { name: 'Request a site' }),
+    ).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('button', { name: 'Library' })).not.toHaveAttribute(
       'aria-current',
     );
