@@ -162,6 +162,7 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /\[official\]|\(official\)/gi,
   /\s+(?:scans?\s+)?(?:fr|vf|vostfr)$/i,
   /^\s*\([^)]*\)/,
+  /^(?:page|pagina|página|seite)\s*\d+(?:\s*\/\s*\d+)?\s*$/iu,
   /\(?\bs\d+\)?\s*$/i,
   /(?<!\p{L})(?:vol(?:ume)?|том|часть)\.?\s*\d+\.?\s*$/iu,
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
