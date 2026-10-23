@@ -22,10 +22,10 @@
                 [href]="row.url"
                 target="_blank"
                 rel="noopener"
+                [matTooltip]="row.readingHint"
                 #titleLink
+                >{{ row.title }}</a
               >
-                <ds-truncated-text [text]="row.title" [maxLength]="55" />
-              </a>
               <div class="meta">
                 <span class="chapter">Ch. {{ row.chapter }}</span>
                 @if (row.watch.kind === "new") {
@@ -38,15 +38,18 @@
                   >
                 }
                 <span class="dot"></span>
-                <ds-relative-date [date]="row.readAt" [now]="now()" />
+                <span class="read-at"
+                  >read <ds-relative-date [date]="row.readAt" [now]="now()"
+                /></span>
                 <span class="dot"></span>
                 <span class="website">{{ row.website }}</span>
                 @if (row.watch.kind === "unsupported") {
                   <span class="dot"></span>
                   <span
                     class="unchecked"
-                    matTooltip="New chapters on this site can't be checked from your browser"
-                    >Can't check this site</span
+                    tabindex="0"
+                    matTooltip="This site can't be checked for new chapters. Reading it is still tracked."
+                    ><mat-icon>info</mat-icon>Can't check this site</span
                   >
                 }
               </div>

@@ -10,7 +10,7 @@
   - text: 20 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"
@@ -20,7 +20,7 @@
     - listitem:
       - link "Local":
         - /url: Localhost:4200
-      - text: Ch. 9999
+      - text: Ch. 9999 read
       - time: 1 mo ago
       - text: localhost:4200
       - 'button "Rating for Local: not rated"'
@@ -29,7 +29,7 @@
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
         - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
-      - text: Ch. 246
+      - text: Ch. 246 read
       - time: 3 mo ago
       - text: asuracomic.net
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
@@ -41,6 +41,7 @@
       - text: Ch. 46
       - link "New · Ch. 47":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+      - text: read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Executioner: 7/10"'
@@ -49,7 +50,7 @@
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
-      - text: Ch. 117
+      - text: Ch. 117 read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for Absolute Sword Sense: 7/10"'
@@ -58,7 +59,7 @@
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
-      - text: Ch. 115
+      - text: Ch. 115 read
       - time: 5 mo ago
       - text: asuracomic.net
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'

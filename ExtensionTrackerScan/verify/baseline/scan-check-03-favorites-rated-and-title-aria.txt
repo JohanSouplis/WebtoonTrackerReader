@@ -11,7 +11,7 @@
   - text: 1 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"
@@ -21,7 +21,7 @@
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
         - /url: https://asuracomic.net/series/the-heavenly-demon-wants-a-quiet-life-71be586c/chapter/16
-      - text: Ch. 16
+      - text: Ch. 16 read
       - time: 12 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'

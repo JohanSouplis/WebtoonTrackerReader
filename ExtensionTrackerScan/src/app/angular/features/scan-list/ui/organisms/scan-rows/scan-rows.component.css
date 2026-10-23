@@ -130,8 +130,20 @@ li:hover {
 }
 
 .unchecked {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 4px;
   color: var(--app-faint);
-  font-style: italic;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.unchecked mat-icon.mat-icon {
+  font-size: 14px;
+}
+
+.read-at {
   white-space: nowrap;
 }
 

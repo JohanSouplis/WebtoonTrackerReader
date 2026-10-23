@@ -16,7 +16,6 @@ import { CoverComponent } from '../../../../../design-system/atoms/cover/cover.c
 import { BellToggleComponent } from '../../../../../design-system/atoms/bell-toggle/bell-toggle.component';
 import { MonogramComponent } from '../../../../../design-system/atoms/monogram/monogram.component';
 import { RelativeDateComponent } from '../../../../../design-system/atoms/relative-date/relative-date.component';
-import { TruncatedTextComponent } from '../../../../../design-system/atoms/truncated-text/truncated-text.component';
 import { ScanListView, ScanPage } from '../../../service/scan-list-view.vm';
 import { ScanRow } from '../../../service/scan-row.vm';
 import { ScanRating } from './scan-rows.types';
@@ -34,7 +33,6 @@ const SHIFTED_ROW_GUARD_MS = 300;
     MatTooltipModule,
     MonogramComponent,
     RelativeDateComponent,
-    TruncatedTextComponent,
   ],
   templateUrl: './scan-rows.component.html',
   styleUrl: './scan-rows.component.css',

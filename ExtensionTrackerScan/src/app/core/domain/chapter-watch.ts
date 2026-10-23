@@ -25,7 +25,7 @@ export type UpToDateWatch = Checked & {
 export type NewChapterWatch = Checked & {
   readonly kind: 'new';
   readonly latest: number;
-  readonly url?: string;
+  readonly url: string;
   readonly foundAt: Date;
 };
 
@@ -147,7 +147,7 @@ export const watchStatusOf = (
     ? {
         kind: 'new',
         chapter: known.latest,
-        url: known.url ?? scan.seriesUrl ?? scan.url,
+        url: known.url,
       }
     : { kind: 'quiet' };
 };
@@ -295,7 +295,7 @@ export const watchAfter = (
 export const newlyFoundChapter = (
   previous: ChapterWatch | undefined,
   next: ChapterWatch,
-  { title, url, seriesUrl }: WatchedScan,
+  { title }: WatchedScan,
 ): NewChapter | undefined => {
   const known = lastKnownOf(previous);
   return next.kind === 'new' &&
@@ -303,7 +303,7 @@ export const newlyFoundChapter = (
     ? {
         title: title.value,
         chapter: next.latest,
-        url: next.url ?? seriesUrl ?? url,
+        url: next.url,
       }
     : undefined;
 };

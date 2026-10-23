@@ -35,12 +35,9 @@ const lastKnownOf = (
   }
   const foundAt = dateOf(stored['foundAt']);
   const url = stored['url'];
-  if (stored['kind'] !== 'new' || !foundAt) {
-    return undefined;
-  }
-  return typeof url === 'string'
+  return stored['kind'] === 'new' && foundAt && typeof url === 'string'
     ? { kind: 'new', site, latest, url, foundAt, checkedAt }
-    : { kind: 'new', site, latest, foundAt, checkedAt };
+    : undefined;
 };
 
 const toWatch = (stored: unknown): ChapterWatch | undefined => {

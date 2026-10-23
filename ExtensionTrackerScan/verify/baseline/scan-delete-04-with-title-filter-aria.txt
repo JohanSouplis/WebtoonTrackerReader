@@ -11,7 +11,7 @@
   - text: 1 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"
@@ -21,7 +21,7 @@
     - listitem:
       - link "Return of the SSS-Class Ranker":
         - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
-      - text: Ch. 141
+      - text: Ch. 141 read
       - time: 10 mo ago
       - text: asuracomic.net
       - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'

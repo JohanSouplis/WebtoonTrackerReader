@@ -60,6 +60,7 @@ const newChapter = (latest: number): ChapterWatch => ({
   kind: 'new',
   site: 'scans.org',
   latest,
+  url: `https://scans.org/chapter-${latest}`,
   foundAt: new Date('2026-10-23T10:00:00Z'),
   checkedAt: new Date('2026-10-23T10:00:00Z'),
 });

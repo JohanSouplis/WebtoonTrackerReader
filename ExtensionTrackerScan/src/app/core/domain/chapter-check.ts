@@ -57,7 +57,7 @@ export type CheckOutcome =
       readonly kind: 'answered';
       readonly strategy: StrategyKind;
       readonly latest: number;
-      readonly url?: string;
+      readonly url: string;
     }
   | { readonly kind: 'unsupported'; readonly reason: UnsupportedReason }
   | { readonly kind: 'blocked' }

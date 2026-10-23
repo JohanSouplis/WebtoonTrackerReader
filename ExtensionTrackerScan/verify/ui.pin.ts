@@ -478,18 +478,46 @@ test.describe('scan list', () => {
     await pin(page, 'scan-delete-06-after-title-sort');
   });
 
-  test('long title is truncated with tooltip', async ({ page }) => {
+  test('long title is cut and its tooltip gives it whole with the chapter to continue', async ({
+    page,
+  }) => {
     await openLibrary(page);
     await showAllRows(page);
-    const title = library(page).getByRole('link').getByText(LONG_TITLE_START);
-    await expect(title).toHaveText(/\.\.\.$/);
+    const title = library(page).getByRole('link', {
+      name: FULL_LONG_TITLE,
+      exact: true,
+    });
+    expect(
+      await title.evaluate((link) => link.scrollWidth > link.clientWidth),
+    ).toBe(true);
     await title.hover();
     await expect(
       page
-        .getByText(FULL_LONG_TITLE, { exact: true })
+        .getByText(`${FULL_LONG_TITLE} · Continue reading Ch. `)
         .filter({ visible: true }),
     ).toBeVisible();
     await pin(page, 'scan-title-01-long-title-tooltip');
+  });
+
+  test("can't check this site explains itself on keyboard focus", async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    await page
+      .getByRole('link', { name: 'Duke Pendragon', exact: true })
+      .focus();
+    await page.keyboard.press('Tab');
+    await expect(
+      row(page, 'Duke Pendragon').getByText("Can't check this site"),
+    ).toBeFocused();
+    await expect(
+      page
+        .getByText(
+          "This site can't be checked for new chapters. Reading it is still tracked.",
+        )
+        .filter({ visible: true }),
+    ).toBeVisible();
+    await pin(page, 'new-05-cant-check-explained');
   });
 
   test('relative read date shows the exact date in a tooltip', async ({
@@ -526,7 +554,14 @@ test.describe('new chapters', () => {
       'href',
       'https://asuracomic.net/series/the-executioner-472e692a/chapter/47',
     );
-    await expect(row(page, 'Dungeon Odyssey')).toContainText('New · Ch. 119.5');
+    await expect(
+      row(page, 'Dungeon Odyssey').getByRole('link', {
+        name: 'New · Ch. 119.5',
+      }),
+    ).toHaveAttribute(
+      'href',
+      'https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5',
+    );
     await expect(row(page, 'Duke Pendragon')).toContainText(
       "Can't check this site",
     );
@@ -534,8 +569,8 @@ test.describe('new chapters', () => {
       'New',
     );
     await pin(page, 'new-01-chips');
-    await sortButton(page, 'New').click();
-    await expectSortedBy(page, 'New (descending)');
+    await sortButton(page, 'New chapters').click();
+    await expectSortedBy(page, 'New chapters (descending)');
     await expect(titleLinks(page).first()).toHaveText('The Executioner');
     await expect(titleLinks(page).nth(1)).toHaveText('Dungeon Odyssey');
     await pin(page, 'new-02-new-first');

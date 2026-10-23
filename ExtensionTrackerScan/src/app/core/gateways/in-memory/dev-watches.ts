@@ -23,6 +23,7 @@ export const DEV_WATCHES: Readonly<Record<string, ChapterWatch>> = {
       kind: 'new',
       site: SITE,
       latest: 119.5,
+      url: 'https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5',
       foundAt: new Date('2025-03-09T21:00:00Z'),
       checkedAt: new Date('2025-03-09T21:00:00Z'),
     },

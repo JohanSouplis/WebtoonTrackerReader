@@ -24,12 +24,11 @@ Exemples tirés de l'extension :
 | Composant | Niveau | Raison |
 |---|---|---|
 | `bell-toggle` | atom | Un `<button>` `aria-pressed` avec une cloche (`notification_add`, pleine quand cochée), `input()` `checked`, `label` et `hint` (l'infobulle), `output()` `toggled`. Ne sait pas ce qu'est un favori. |
-| `truncated-text` | atom | Coupe un texte au-delà d'une longueur et pose `matTooltip` avec le texte entier. |
 | `monogram` | atom | Tire d'un texte ses initiales et une teinte stable. Décoratif, `aria-hidden`. |
 | `cover` | atom | La vignette d'une couverture à la taille du monogramme, qui apparaît en fondu. Décorative, `alt` vide : le titre est à côté. |
 | `relative-date` | atom | Affiche « 3 mo ago » depuis une date et `now`, et pose `matTooltip` avec la date exacte. |
 | `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
-| `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), avec le lien du nouveau chapitre d'un favori ou l'indication d'un site impossible à vérifier, émet suppression, favori, note, effacement de la note, page. La note s'ouvre dans un menu (1 à 10 et « Clear rating ») : un sélecteur natif changerait la note aux flèches du clavier. Après une suppression, il pose le focus sur le titre voisin et ignore un second clic de suppression pendant 300 ms : la ligne suivante glisse sous le pointeur. |
+| `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), avec le lien du nouveau chapitre d'un favori (« New · Ch. N », vers ce chapitre) ou l'indication, focalisable et expliquée dans son infobulle, d'un site impossible à vérifier ; le titre mène au dernier chapitre lu (« Continue reading Ch. N »), émet suppression, favori, note, effacement de la note, page. La note s'ouvre dans un menu (1 à 10 et « Clear rating ») : un sélecteur natif changerait la note aux flèches du clavier. Après une suppression, il pose le focus sur le titre voisin et ignore un second clic de suppression pendant 300 ms : la ligne suivante glisse sous le pointeur. |
 | `new-chapter-settings` | organism | Un bouton dont le texte visible, qui est aussi son nom, dit la fréquence et l'état des alertes (« Checks every 6 hours · Alerts off »). Il ouvre un menu : fréquence (`1h`, `6h`, `24h`, `off`), alertes du bureau, et une note sur la pastille de l'icône. Émet le choix, la page l'applique et explique un refus de la permission. |
 | `scan-filters` | organism | Champ de recherche et bascules « Following only », « Rated only ». Émet un `ScanFilters`. |
 | `about-sections` | organism | Ce que l'extension suit et comment, la veille des chapitres, la confidentialité avec l'interrupteur des rapports, le contact et la version. Émet le choix des rapports. |
@@ -82,8 +81,8 @@ s'écrivent en balises dans le composant qui les affiche.
 <a [matTooltip]="truncateTitle(scan.title).isTruncated ? scan.title : ''">
   {{ truncateTitle(scan.title).truncated }}
 </a>
-<!-- ✅ l'atom porte la troncature, la date est formatée par un pipe -->
-<ds-truncated-text [text]="row.title" [maxLength]="100" />
+<!-- ✅ le CSS coupe le titre, l'infobulle est un champ du ViewModel, la date est formatée par un pipe -->
+<a class="title" [matTooltip]="row.readingHint">{{ row.title }}</a>
 {{ row.readAt | date: "dd/MM/yyyy" }}
 ```
 

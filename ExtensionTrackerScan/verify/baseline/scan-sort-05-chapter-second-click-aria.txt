@@ -10,7 +10,7 @@
   - text: 20 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read"
     - button "Title"
     - button "Chapter (ascending)" [pressed]
@@ -20,7 +20,7 @@
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
         - /url: https://asuracomic.net/series/the-heavenly-demon-wants-a-quiet-life-71be586c/chapter/16
-      - text: Ch. 16
+      - text: Ch. 16 read
       - time: 12 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
@@ -29,7 +29,7 @@
     - listitem:
       - link "A Dragonslayer's Peerless Regression":
         - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
-      - text: Ch. 23
+      - text: Ch. 23 read
       - time: 7 mo ago
       - text: asuracomic.net
       - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
@@ -38,7 +38,7 @@
     - listitem:
       - 'link "Solo Leveling: Ragnarok"':
         - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
-      - text: Ch. 38
+      - text: Ch. 38 read
       - time: 8 mo ago
       - text: asuracomic.net
       - 'button "Rating for Solo Leveling: Ragnarok: not rated"'
@@ -50,6 +50,7 @@
       - text: Ch. 46
       - link "New · Ch. 47":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+      - text: read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Executioner: 7/10"'
@@ -58,7 +59,7 @@
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
         - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
-      - text: Ch. 50
+      - text: Ch. 50 read
       - time: 9 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Reincarnated Assassin is a Genius Swordsman: 8/10"'
@@ -67,7 +68,7 @@
     - listitem:
       - link "Worthless Regression":
         - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
-      - text: Ch. 68
+      - text: Ch. 68 read
       - time: 7 mo ago
       - text: asuracomic.net
       - 'button "Rating for Worthless Regression: 6/10"'
@@ -76,16 +77,16 @@
     - listitem:
       - link "The Priest of Corruption":
         - /url: https://asuracomic.net/series/the-priest-of-corruption-7e4b6868/chapter/72
-      - text: Ch. 72
+      - text: Ch. 72 read
       - time: 8 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Priest of Corruption: 6/10"'
       - button "Follow The Priest of Corruption"
       - button "Delete The Priest of Corruption"
     - listitem:
-      - link "My School Life Pretending To Be a Worthless Person - My...":
+      - link "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person":
         - /url: https://asuracomic.net/series/my-school-life-pretending-to-be-a-worthless-person-4fbaf58c/chapter/96
-      - text: Ch. 96
+      - text: Ch. 96 read
       - time: 9 mo ago
       - text: asuracomic.net
       - 'button "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person: 6/10"'
@@ -94,7 +95,7 @@
     - listitem:
       - link "Return of the Disaster-Class Hero":
         - /url: https://asuracomic.net/series/return-of-the-disaster-class-hero-a31a2306/chapter/110
-      - text: Ch. 110
+      - text: Ch. 110 read
       - time: 1.1 yr ago
       - text: asuracomic.net
       - 'button "Rating for Return of the Disaster-Class Hero: not rated"'
@@ -103,7 +104,7 @@
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
-      - text: Ch. 115
+      - text: Ch. 115 read
       - time: 5 mo ago
       - text: asuracomic.net
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
@@ -112,7 +113,7 @@
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
-      - text: Ch. 117
+      - text: Ch. 117 read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for Absolute Sword Sense: 7/10"'
@@ -123,7 +124,8 @@
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
       - text: Ch. 118
       - link "New · Ch. 119.5":
-        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5
+      - text: read
       - time: 6 mo ago
       - text: asuracomic.net
       - 'button "Rating for Dungeon Odyssey: 10/10"'
@@ -132,7 +134,7 @@
     - listitem:
       - link "Duke Pendragon":
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
-      - text: Ch. 120
+      - text: Ch. 120 read
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
       - 'button "Rating for Duke Pendragon: not rated"'
@@ -141,7 +143,7 @@
     - listitem:
       - link "SSS-Class Suicide Hunter":
         - /url: https://asuracomic.net/series/sss-class-suicide-hunter-c35bcf93/chapter/124
-      - text: Ch. 124
+      - text: Ch. 124 read
       - time: 1.1 yr ago
       - text: asuracomic.net
       - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'
@@ -150,7 +152,7 @@
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
         - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
-      - text: Ch. 132
+      - text: Ch. 132 read
       - time: 11 mo ago
       - text: asuracomic.net
       - 'button "Rating for Pick Me Up, Infinite Gacha: 10/10"'
@@ -159,7 +161,7 @@
     - listitem:
       - link "Trash of the Count’s Family":
         - /url: https://asuracomic.net/series/trash-of-the-counts-family-38493e56/chapter/136
-      - text: Ch. 136
+      - text: Ch. 136 read
       - time: 12 mo ago
       - text: asuracomic.net
       - 'button "Rating for Trash of the Count’s Family: not rated"'
@@ -168,7 +170,7 @@
     - listitem:
       - link "Return of the SSS-Class Ranker":
         - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
-      - text: Ch. 141
+      - text: Ch. 141 read
       - time: 10 mo ago
       - text: asuracomic.net
       - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
@@ -177,7 +179,7 @@
     - listitem:
       - link "The Heavenly Demon Can't Live a Normal Life":
         - /url: https://asuracomic.net/series/the-heavenly-demon-cant-live-a-normal-life-f04530a5/chapter/139
-      - text: Ch. 142
+      - text: Ch. 142 read
       - time: 1.1 yr ago
       - text: asuracomic.net
       - 'button "Rating for The Heavenly Demon Can''t Live a Normal Life: 9/10"'
@@ -186,7 +188,7 @@
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
         - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
-      - text: Ch. 246
+      - text: Ch. 246 read
       - time: 3 mo ago
       - text: asuracomic.net
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
@@ -195,7 +197,7 @@
     - listitem:
       - link "Local":
         - /url: Localhost:4200
-      - text: Ch. 9999
+      - text: Ch. 9999 read
       - time: 1 mo ago
       - text: localhost:4200
       - 'button "Rating for Local: not rated"'

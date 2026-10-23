@@ -10,7 +10,7 @@
   - text: 20 series
   - button "Checks every 6 hours · Alerts off" [expanded]
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"
@@ -20,7 +20,7 @@
     - listitem:
       - link "Local":
         - /url: Localhost:4200
-      - text: Ch. 9999
+      - text: Ch. 9999 read
       - time: 1 mo ago
       - text: localhost:4200
       - 'button "Rating for Local: not rated"'
@@ -29,7 +29,7 @@
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
         - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
-      - text: Ch. 246
+      - text: Ch. 246 read
       - time: 3 mo ago
       - text: asuracomic.net
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
@@ -41,6 +41,7 @@
       - text: Ch. 46
       - link "New · Ch. 47":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+      - text: read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for The Executioner: 7/10"'
@@ -49,7 +50,7 @@
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
-      - text: Ch. 117
+      - text: Ch. 117 read
       - time: 4 mo ago
       - text: asuracomic.net
       - 'button "Rating for Absolute Sword Sense: 7/10"'
@@ -58,7 +59,7 @@
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
-      - text: Ch. 115
+      - text: Ch. 115 read
       - time: 5 mo ago
       - text: asuracomic.net
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
@@ -69,7 +70,8 @@
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
       - text: Ch. 118
       - link "New · Ch. 119.5":
-        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5
+      - text: read
       - time: 6 mo ago
       - text: asuracomic.net
       - 'button "Rating for Dungeon Odyssey: 10/10"'
@@ -78,7 +80,7 @@
     - listitem:
       - link "A Dragonslayer's Peerless Regression":
         - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
-      - text: Ch. 23
+      - text: Ch. 23 read
       - time: 7 mo ago
       - text: asuracomic.net
       - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
@@ -87,7 +89,7 @@
     - listitem:
       - link "Worthless Regression":
         - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
-      - text: Ch. 68
+      - text: Ch. 68 read
       - time: 7 mo ago
       - text: asuracomic.net
       - 'button "Rating for Worthless Regression: 6/10"'
@@ -96,7 +98,7 @@
     - listitem:
       - link "Duke Pendragon":
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
-      - text: Ch. 120
+      - text: Ch. 120 read
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
       - 'button "Rating for Duke Pendragon: not rated"'
@@ -105,7 +107,7 @@
     - listitem:
       - 'link "Solo Leveling: Ragnarok"':
         - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
-      - text: Ch. 38
+      - text: Ch. 38 read
       - time: 8 mo ago
       - text: asuracomic.net
       - 'button "Rating for Solo Leveling: Ragnarok: not rated"'

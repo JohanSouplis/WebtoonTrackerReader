@@ -122,10 +122,12 @@ est paru pour chaque favori. Une fausse alerte coûte plus cher qu'une alerte ma
 Les numéros ne se comparent qu'entre pages d'un même site : un autre site numérote autrement.
 
 - `ChapterWatch` (`chapter-watch.ts`) est l'état connu de la veille d'un favori, sur le site de sa dernière
-  lecture : `up-to-date` (le plus haut chapitre vu, la date), `new` (le chapitre, son adresse si connue, la date de
+  lecture : `up-to-date` (le plus haut chapitre vu, la date), `new` (le chapitre, son adresse, la date de
   la découverte), `unsupported` (la raison, la date) ou `failing` (depuis quand, le nombre d'essais, le prochain
   essai, le dernier état connu). Une série sans état n'a jamais été vérifiée. Un état d'un autre site que la
-  dernière lecture ne compte pas.
+  dernière lecture ne compte pas. Toute stratégie qui trouve un chapitre trouve aussi son adresse : la ligne et
+  la notification ouvrent ce chapitre, jamais le chapitre déjà lu. Un état `new` stocké sans adresse est oublié, et
+  la série est vérifiée à nouveau.
 - Le statut affiché (`watchStatusOf`) vaut `new` si le scan est un favori et si le chapitre trouvé dépasse le
   chapitre lu. Lire ce chapitre efface donc l'alerte sans rien écrire. Un scan qui n'est plus favori n'est plus
   vérifié ni signalé.

@@ -16,7 +16,6 @@ describe('ChromeStorageChapterWatchRepository', () => {
       foundAt: AT,
       checkedAt: AT,
     },
-    { kind: 'new', site: 'scans.org', latest: 13, foundAt: AT, checkedAt: AT },
     {
       kind: 'unsupported',
       site: 'scans.org',
@@ -50,6 +49,24 @@ describe('ChromeStorageChapterWatchRepository', () => {
       expect(Object.keys(storage.items)).toEqual(['watch:solo leveling']);
     },
   );
+
+  it('should forget a stored new chapter without its address, so the series is checked again', async () => {
+    useStorage({
+      'watch:solo leveling': {
+        kind: 'new',
+        site: 'scans.org',
+        latest: 13,
+        foundAt: AT.toISOString(),
+        checkedAt: AT.toISOString(),
+      },
+    });
+
+    expect(
+      await new ChromeStorageChapterWatchRepository().find([
+        ScanTitle.of('Solo Leveling'),
+      ]),
+    ).toEqual(new Map());
+  });
 
   it('should delete the watch of a series and keep the others', async () => {
     const storage = useStorage({});

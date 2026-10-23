@@ -37,8 +37,8 @@ installés. La première spec de composant les ajoute.
   on assert ce qui est affiché ou ce qui est émis.
 - **Interdit** : `componentInstance`, appel direct d'une méthode du composant, lecture d'un `FormControl`,
   assertion sur une classe CSS ou un sélecteur de structure, `fireEvent`.
-- **Atom** : la spec cible sa logique propre. `truncated-text` affiche le texte coupé et le texte entier dans
-  l'infobulle au-delà de la longueur, le texte intact en deçà.
+- **Atom** : la spec cible sa logique propre. `relative-date` affiche « 3 mo ago » depuis une date et `now`, et
+  la date exacte dans l'infobulle.
 - **Molecule** : la spec décrit ce qu'elle affiche à partir de ses inputs et ce qu'elle émet quand
   l'utilisateur agit. Ses interactions se testent ici une fois, pas dans chaque organism.
 - **Organism** : enfants réels, le ViewModel en input. On assert l'affichage et les `output()` émis.

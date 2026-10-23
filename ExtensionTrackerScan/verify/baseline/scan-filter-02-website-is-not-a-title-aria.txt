@@ -11,7 +11,7 @@
   - text: 0 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"

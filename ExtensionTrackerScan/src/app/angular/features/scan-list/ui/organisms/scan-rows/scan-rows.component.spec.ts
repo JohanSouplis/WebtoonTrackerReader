@@ -19,12 +19,20 @@ describe('ScanRowsComponent', () => {
     );
   });
 
+  it('should describe the title link as a way to continue reading', async () => {
+    await renderRows(SHOWN_SCANS);
+
+    expect(
+      screen.getByRole('link', { name: 'Solo Leveling' }),
+    ).toHaveAccessibleDescription('Continue reading Ch. 38');
+  });
+
   it('should show the chapter, the time since the reading and the website of a scan', async () => {
     await renderRows(SHOWN_SCANS);
 
     const row = rowOf('Solo Leveling');
     expect(row).toHaveTextContent('Ch. 38');
-    expect(row).toHaveTextContent('8 mo ago');
+    expect(row).toHaveTextContent('read 8 mo ago');
     expect(row).toHaveTextContent('asuracomic.net');
   });
 
@@ -90,6 +98,13 @@ describe('ScanRowsComponent', () => {
     });
 
     expect(rowOf('Solo Leveling')).toHaveTextContent("Can't check this site");
+    const note = within(rowOf('Solo Leveling')).getByText(
+      "Can't check this site",
+    );
+    expect(note).toHaveAttribute('tabindex', '0');
+    expect(note).toHaveAccessibleDescription(
+      "This site can't be checked for new chapters. Reading it is still tracked.",
+    );
     expect(
       within(rowOf('Solo Leveling')).queryByRole('link', { name: /^New/ }),
     ).not.toBeInTheDocument();
@@ -244,6 +259,7 @@ const THUMBNAIL = 'data:image/webp;base64,UklGRg==';
 const SOLO_LEVELING = aShownScan({
   title: 'Solo Leveling',
   chapter: 38,
+  readingHint: 'Continue reading Ch. 38',
   url: 'https://asuracomic.net/series/solo-leveling/chapter/37',
   readAt: new Date('2024-07-13T09:45:30Z'),
 });

@@ -10,7 +10,10 @@ export type ScanRow = {
   readonly isFavorite: boolean;
   readonly rating?: number;
   readonly watch: WatchStatus;
+  readonly readingHint: string;
 };
+
+const LONG_TITLE_LENGTH = 45;
 
 const websiteOf = (url: string): string => {
   try {
@@ -24,6 +27,15 @@ export const toScanRow = (
   { rating, ...scan }: ScanSnapshot,
   watch: WatchStatus,
 ): ScanRow => {
-  const row = { ...scan, website: websiteOf(scan.url), watch };
+  const continueReading = `Continue reading Ch. ${scan.chapter}`;
+  const row = {
+    ...scan,
+    website: websiteOf(scan.url),
+    watch,
+    readingHint:
+      scan.title.length > LONG_TITLE_LENGTH
+        ? `${scan.title} · ${continueReading}`
+        : continueReading,
+  };
   return rating === undefined ? row : { ...row, rating };
 };

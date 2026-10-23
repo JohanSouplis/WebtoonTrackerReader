@@ -11,7 +11,7 @@
   - text: 2 series
   - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
-    - button "New"
+    - button "New chapters"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"
@@ -21,7 +21,7 @@
     - listitem:
       - link "Return of the SSS-Class Ranker":
         - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
-      - text: Ch. 141
+      - text: Ch. 141 read
       - time: 10 mo ago
       - text: asuracomic.net
       - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
@@ -30,7 +30,7 @@
     - listitem:
       - link "SSS-Class Suicide Hunter":
         - /url: https://asuracomic.net/series/sss-class-suicide-hunter-c35bcf93/chapter/124
-      - text: Ch. 124
+      - text: Ch. 124 read
       - time: 1.1 yr ago
       - text: asuracomic.net
       - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'

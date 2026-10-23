@@ -9,6 +9,7 @@ export const aRow = (row: Partial<ScanRow>): ScanRow => ({
   readAt: new Date('2024-06-01T13:05:10Z'),
   isFavorite: false,
   watch: { kind: 'quiet' },
+  readingHint: 'Continue reading Ch. 1',
   ...row,
 });
 
