@@ -18,7 +18,7 @@ import {
   WEBSITE_TYPES,
   withoutTitleNoise,
 } from './page-lexicon';
-import { PageLink, PageSignals, StructuredDataItem } from './parsed-page';
+import { PageSignals, StructuredDataItem } from './parsed-page';
 import { Reading } from './reading';
 import { ScanTitle } from './scan-title';
 
@@ -312,23 +312,9 @@ const mentionsReading = (page: PageSignals): boolean =>
   ) ||
   menuOrTextNamesReading(page);
 
-const withoutLinkedNames = (
-  title: string,
-  links: readonly PageLink[],
-): string =>
-  links
-    .map(({ text }) => text.toLowerCase())
-    .filter((name) => /\s/.test(name) && title.includes(name))
-    .reduce((rest, name) => rest.replace(name, ' '), title);
-
-const mentionsOtherMedia = ({
-  pageTitle,
-  url,
-  links,
-}: PageSignals): boolean => {
-  const text = `${withoutLinkedNames(pageTitle.toLowerCase(), links ?? [])} ${
-    isComicHost(url) ? pathOf(url) : url
-  }`.toLowerCase();
+const mentionsOtherMedia = ({ pageTitle, url }: PageSignals): boolean => {
+  const text =
+    `${pageTitle} ${isComicHost(url) ? pathOf(url) : url}`.toLowerCase();
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 

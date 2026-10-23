@@ -294,9 +294,9 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   même texte ne nomme aucun autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
   compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
-  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident, et
-  sauf dans un nom de série du titre que la page reprend en lien (`Transmigrating into a Cultivation Novel to
-  Form a Harem`). Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
+  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Un
+  nom de série qui contient un autre média ne l'excuse pas : `Solo Leveling Light Novel` est aussi un nom de série
+  que le site reprend en lien. Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
   comparent segment par segment.
 - **La page est une lecture, pas un article sur elle.** Un mot d'article (`Review`, `Spoilers`, `Discussion`,
   `Forums`, `News`) dans le titre de l'onglet, `og:title`, `og:site_name`, le `h1` ou le fil d'Ariane désigne une
