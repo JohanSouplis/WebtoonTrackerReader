@@ -12,20 +12,20 @@ export const ERROR_CONTEXTS = [
   'offscreen',
 ] as const;
 
-export type ErrorContext = (typeof ERROR_CONTEXTS)[number];
+type ErrorContext = (typeof ERROR_CONTEXTS)[number];
 
 export const STORAGE_FAILURES = ['quota', 'io', 'corruption'] as const;
 
-export type StorageFailure = (typeof STORAGE_FAILURES)[number];
+type StorageFailure = (typeof STORAGE_FAILURES)[number];
 
-export const CHECK_RESULTS = [
+const CHECK_RESULTS = [
   'new',
   'up-to-date',
   'unsupported',
   'failing',
 ] as const satisfies readonly ChapterWatch['kind'][];
 
-export type CheckResult = ChapterWatch['kind'];
+type CheckResult = ChapterWatch['kind'];
 
 const STRATEGIES = [
   'feed',
@@ -33,13 +33,13 @@ const STRATEGIES = [
   'next-chapter-url',
 ] as const satisfies readonly StrategyKind[];
 
-export const COVER_SEARCH_OUTCOMES = [
+const COVER_SEARCH_OUTCOMES = [
   'found-page',
   'found-series-page',
   'missing',
 ] as const;
 
-export type CoverSearchOutcome = (typeof COVER_SEARCH_OUTCOMES)[number];
+type CoverSearchOutcome = (typeof COVER_SEARCH_OUTCOMES)[number];
 
 export type ErrorEvent =
   | {
@@ -68,9 +68,9 @@ export type TelemetryEvent =
   | { readonly kind: 'cover-search'; readonly outcome: CoverSearchOutcome }
   | { readonly kind: 'proposal-send-failed' };
 
-export type TelemetryEventKind = TelemetryEvent['kind'];
+type TelemetryEventKind = TelemetryEvent['kind'];
 
-export const TELEMETRY_EVENT_KINDS = [
+const TELEMETRY_EVENT_KINDS = [
   'unhandled-error',
   'storage-error',
   'parse-miss',
@@ -107,7 +107,7 @@ export type TelemetryLog = {
 
 export type Count = { readonly key: string; readonly count: number };
 
-export type HostChecks = {
+type HostChecks = {
   readonly host: string;
   readonly total: number;
   readonly outcomes: readonly Count[];
@@ -125,7 +125,7 @@ export type DailyDigest = {
   readonly topErrors: readonly Count[];
 };
 
-export type ErrorReport = { readonly day: string; readonly event: ErrorEvent };
+type ErrorReport = { readonly day: string; readonly event: ErrorEvent };
 
 export type TelemetryReport =
   | ({ readonly kind: 'error-report' } & ErrorReport)
@@ -143,9 +143,9 @@ export type ThrownError = {
   readonly stack?: string;
 };
 
-export const MAX_ERROR_REPORTS_PER_DAY = 5;
+const MAX_ERROR_REPORTS_PER_DAY = 5;
 
-export const TOP_COUNT = 10;
+const TOP_COUNT = 10;
 
 const MAX_KEYS = 100;
 
@@ -260,9 +260,11 @@ const emptyTally = (day: string): DayTally => ({
   reported: [],
 });
 
+const boundedKey = (record: object, key: string): string =>
+  key in record || Object.keys(record).length < MAX_KEYS ? key : OTHER_KEY;
+
 const increment = (counts: Counts, key: string): Counts => {
-  const counted =
-    key in counts || Object.keys(counts).length < MAX_KEYS ? key : OTHER_KEY;
+  const counted = boundedKey(counts, key);
   return { ...counts, [counted]: (counts[counted] ?? 0) + 1 };
 };
 
@@ -281,11 +283,7 @@ const tallyEvent = (tally: DayTally, event: TelemetryEvent): DayTally => {
         parseMisses: increment(counted.parseMisses, event.host),
       };
     case 'chapter-check': {
-      const host =
-        event.host in counted.checks ||
-        Object.keys(counted.checks).length < MAX_KEYS
-          ? event.host
-          : OTHER_KEY;
+      const host = boundedKey(counted.checks, event.host);
       return {
         ...counted,
         checks: {
@@ -308,9 +306,6 @@ const tallyEvent = (tally: DayTally, event: TelemetryEvent): DayTally => {
   }
 };
 
-const isEmptyTally = (tally: DayTally): boolean =>
-  Object.keys(tally.events).length === 0;
-
 const isPaused = (log: TelemetryLog, now: Date): boolean =>
   log.pausedUntil !== undefined && log.pausedUntil > now;
 
@@ -321,8 +316,7 @@ const rollOver = (log: TelemetryLog, now: Date): TelemetryLog => {
   }
   const closed = log.today;
   const isDigestible =
-    !isEmptyTally(closed) &&
-    (log.lastDigestDay === undefined || closed.day > log.lastDigestDay);
+    log.lastDigestDay === undefined || closed.day > log.lastDigestDay;
   return {
     ...log,
     today: undefined,

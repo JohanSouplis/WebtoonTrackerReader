@@ -222,7 +222,8 @@ garde les rapports (`ReportSettings`, le même interrupteur que le signalement d
 - **Discord limite un webhook** (environ 30 messages par minute). Une réponse 429 suspend tout envoi jusqu'à la
   fin du délai qu'elle donne (`retry_after`) ; rien ne se renvoie en boucle. Une erreur pendant la pause est
   comptée dans le résumé, pas envoyée.
-- Lecteur qui coupe les rapports : plus rien n'est compté ni envoyé, et le décompte en cours s'efface.
+- Lecteur qui coupe les rapports : plus rien n'est compté ni envoyé, et le décompte en cours s'efface au
+  réveil horaire suivant.
 - Seul le service worker écrit le `TelemetryLog`. La popup, le document offscreen et le content script lui
   envoient leurs erreurs par message ; il ne retient de ces messages que les erreurs et l'échec d'une demande
   d'ajout, après en avoir revalidé chaque champ.
