@@ -252,11 +252,11 @@ const isChapterConfirmed = (
   chapter: Chapter,
 ): boolean =>
   urlChapters(page.url).includes(chapter.value) ||
-  (display.isHeadline && textConfirms(page.text ?? '', chapter)) ||
   (display.isHeadline &&
-    (chapterWitnesses(page, display.text).some((text) =>
-      displays(text, chapter),
-    ) ||
+    (textConfirms(page.text ?? '', chapter) ||
+      chapterWitnesses(page, display.text).some((text) =>
+        displays(text, chapter),
+      ) ||
       (page.selectedOptions ?? []).some(
         (option) => Number(option) === chapter.value,
       )));
@@ -300,20 +300,16 @@ const menuOrTextNamesReading = ({ links, text }: PageSignals): boolean =>
   namesOnlyReading((links ?? []).map(({ text: linkText }) => linkText)) ||
   namesOnlyReading(text ? [text] : []);
 
-const mentionsReading = (page: PageSignals): boolean => {
-  const host = hostOf(page.url);
-  return (
-    READING_WORDS.some((word) => host.includes(word)) ||
-    namesReading(textWords(page)) ||
-    (page.structuredData ?? []).some(({ types }) =>
-      types.some((type) => READING_TYPES.includes(type)),
-    ) ||
-    menuOrTextNamesReading(page)
-  );
-};
-
 const isComicHost = (url: string): boolean =>
   READING_WORDS.some((word) => hostOf(url).includes(word));
+
+const mentionsReading = (page: PageSignals): boolean =>
+  isComicHost(page.url) ||
+  namesReading(textWords(page)) ||
+  (page.structuredData ?? []).some(({ types }) =>
+    types.some((type) => READING_TYPES.includes(type)),
+  ) ||
+  menuOrTextNamesReading(page);
 
 const withoutLinkedNames = (
   title: string,
@@ -331,8 +327,8 @@ const mentionsOtherMedia = ({
 }: PageSignals): boolean => {
   const text = `${withoutLinkedNames(pageTitle.toLowerCase(), links ?? [])} ${
     isComicHost(url) ? pathOf(url) : url
-  }`;
-  return OTHER_MEDIA_WORDS.some((word) => text.toLowerCase().includes(word));
+  }`.toLowerCase();
+  return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
 const isReadingPage = (page: PageSignals): boolean =>
@@ -412,10 +408,16 @@ const beforeCandidates = (
 };
 
 const CLOSING_BRACKET = /^\s*[\]】」)]\s*/;
+const PIECE_SEPARATOR = /\s*[|｜]\s*/;
+
+const titleAfterMention = (mentionPiece: string): string =>
+  CLOSING_BRACKET.test(mentionPiece)
+    ? mentionPiece.replace(CLOSING_BRACKET, '')
+    : mentionPiece.split(SEPARATED).slice(1).join('');
 
 const afterCandidates = (after: string, website: Website): string[] => {
   const connected = CONNECTOR.exec(after);
-  const [mentionPiece, ...pieces] = after.split(/\s*[|｜]\s*/);
+  const [mentionPiece, ...pieces] = after.split(PIECE_SEPARATOR);
   const isWebsiteAtEnd = (segment: string, { isLast }: SegmentPlace) =>
     isLast && isWebsiteName(segment, website);
   const nextTitles = titleSpan(
@@ -431,12 +433,7 @@ const afterCandidates = (after: string, website: Website): string[] => {
     ...(connected ? titleSpan(connected[1], isWebsiteAtEnd) : []),
     ...(nextTitles.length > 0
       ? nextTitles
-      : titleSpan(
-          CLOSING_BRACKET.test(mentionPiece)
-            ? mentionPiece.replace(CLOSING_BRACKET, '')
-            : mentionPiece.split(SEPARATED).slice(1).join(''),
-          isWebsiteAtEnd,
-        )),
+      : titleSpan(titleAfterMention(mentionPiece), isWebsiteAtEnd)),
   ].filter((candidate) => !isExactWebsiteName(candidate, website));
 };
 
@@ -458,10 +455,8 @@ const titleWitnesses = (page: PageSignals, displaying: string): string[] => [
 ];
 
 const titleTextsOf = ({ before, after }: ChapterMention): string[] => {
-  const mentionPiece = after.split(/\s*[|｜]\s*/)[0];
-  return CLOSING_BRACKET.test(after)
-    ? [mentionPiece.replace(CLOSING_BRACKET, '')]
-    : [before, mentionPiece.split(SEPARATED).slice(1).join('')];
+  const title = titleAfterMention(after.split(PIECE_SEPARATOR)[0]);
+  return CLOSING_BRACKET.test(after) ? [title] : [before, title];
 };
 
 const segmentCandidates = (
