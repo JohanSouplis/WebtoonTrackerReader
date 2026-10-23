@@ -7,7 +7,11 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
-import { FULL_PAGE_NAVIGATOR } from '../../../../injection-tokens';
+import { AnswerRatePromptUseCase } from '../../../../../core/use-cases/answer-rate-prompt.use-case';
+import {
+  FULL_PAGE_NAVIGATOR,
+  STORE_LISTING,
+} from '../../../../injection-tokens';
 import { NavBarComponent } from '../../organisms/nav-bar/nav-bar.component';
 
 @Component({
@@ -20,6 +24,8 @@ import { NavBarComponent } from '../../organisms/nav-bar/nav-bar.component';
 export class AppShellPage {
   private readonly router = inject(Router);
   private readonly fullPageNavigator = inject(FULL_PAGE_NAVIGATOR);
+  private readonly storeListing = inject(STORE_LISTING);
+  private readonly answerRatePrompt = inject(AnswerRatePromptUseCase);
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -39,5 +45,10 @@ export class AppShellPage {
 
   protected openFullPage(): void {
     this.fullPageNavigator.openFullPage();
+  }
+
+  protected async openReviews(): Promise<void> {
+    await this.answerRatePrompt.execute('rate');
+    this.storeListing.openReviews();
   }
 }

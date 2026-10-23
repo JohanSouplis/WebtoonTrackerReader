@@ -33,13 +33,28 @@ describe('NavBarComponent', () => {
     );
   });
 
-  it('should ask for the full page when Informations is clicked', async () => {
+  it('should ask for the full page when Informations is chosen in its menu', async () => {
     const fullPageRequested = jest.fn();
     await renderNavBar('', { fullPageRequested });
 
     await userEvent.click(screen.getByRole('button', { name: 'Informations' }));
+    await userEvent.click(
+      await screen.findByRole('menuitem', { name: /Informations/ }),
+    );
 
     expect(fullPageRequested).toHaveBeenCalled();
+  });
+
+  it('should ask for the reviews when Rate the extension is chosen in the Informations menu', async () => {
+    const reviewsRequested = jest.fn();
+    await renderNavBar('', { reviewsRequested });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Informations' }));
+    await userEvent.click(
+      await screen.findByRole('menuitem', { name: /Rate the extension/ }),
+    );
+
+    expect(reviewsRequested).toHaveBeenCalled();
   });
 });
 

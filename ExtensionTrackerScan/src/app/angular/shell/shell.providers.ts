@@ -1,8 +1,24 @@
-import { Provider } from '@angular/core';
+import { inject, Provider } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { FULL_PAGE_NAVIGATOR } from '../injection-tokens';
+import { ChromeStorageRatePromptRepository } from '../../core/gateways/chrome-storage-rate-prompt-repository.gateway';
+import { DEV_DUE_RATE_PROMPT } from '../../core/gateways/in-memory/dev-rate-prompt';
+import { InMemoryRatePromptRepository } from '../../core/gateways/in-memory/in-memory-rate-prompt-repository.gateway';
+import { SystemClock } from '../../core/gateways/system-clock.gateway';
+import { AnswerRatePromptUseCase } from '../../core/use-cases/answer-rate-prompt.use-case';
+import {
+  FULL_PAGE_NAVIGATOR,
+  RATE_PROMPT_REPOSITORY,
+  STORE_LISTING,
+} from '../injection-tokens';
 import { ChromeFullPageNavigator } from './gateways/chrome-full-page-navigator.gateway';
+import { ChromeStoreListing } from './gateways/chrome-store-listing.gateway';
 import { InMemoryFullPageNavigator } from './gateways/in-memory-full-page-navigator.gateway';
+import { InMemoryStoreListing } from './gateways/in-memory-store-listing.gateway';
+
+const devRatePrompt = () =>
+  new URLSearchParams(location.search).has('rate-prompt-due')
+    ? DEV_DUE_RATE_PROMPT
+    : undefined;
 
 export const SHELL_PROVIDERS: Provider[] = [
   {
@@ -11,5 +27,27 @@ export const SHELL_PROVIDERS: Provider[] = [
       environment.production
         ? new ChromeFullPageNavigator()
         : new InMemoryFullPageNavigator(),
+  },
+  {
+    provide: STORE_LISTING,
+    useFactory: () =>
+      environment.production
+        ? new ChromeStoreListing()
+        : new InMemoryStoreListing(),
+  },
+  {
+    provide: RATE_PROMPT_REPOSITORY,
+    useFactory: () =>
+      environment.production
+        ? new ChromeStorageRatePromptRepository()
+        : new InMemoryRatePromptRepository(devRatePrompt()),
+  },
+  {
+    provide: AnswerRatePromptUseCase,
+    useFactory: () =>
+      new AnswerRatePromptUseCase(
+        inject(RATE_PROMPT_REPOSITORY),
+        new SystemClock(),
+      ),
   },
 ];

@@ -95,3 +95,7 @@ nav button[aria-current="page"] mat-icon {
   color: var(--app-text);
   background: var(--app-surface-2);
 }
+
+.mat-mdc-menu-item mat-icon.mat-icon {
+  color: var(--app-accent);
+}

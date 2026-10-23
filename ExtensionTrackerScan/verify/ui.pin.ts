@@ -133,6 +133,8 @@ test.describe('navbar', () => {
   }) => {
     await openLibrary(page);
     await page.getByRole('button', { name: 'Informations' }).click();
+    await page.getByRole('menuitem', { name: 'Informations' }).click();
+    await expect(page.getByRole('menu')).toBeHidden();
     await expect
       .poll(() => events.some((e) => e.includes('open page mocked')))
       .toBe(true);

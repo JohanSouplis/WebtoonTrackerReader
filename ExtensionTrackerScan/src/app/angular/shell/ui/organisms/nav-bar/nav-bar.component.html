@@ -19,7 +19,17 @@
   class="informations"
   aria-label="Informations"
   matTooltip="Informations"
-  (click)="fullPageRequested.emit()"
+  [matMenuTriggerFor]="menu"
 >
   <mat-icon>info</mat-icon>
 </button>
+<mat-menu #menu="matMenu" xPosition="before">
+  <button mat-menu-item (click)="fullPageRequested.emit()">
+    <mat-icon>info</mat-icon>
+    Informations
+  </button>
+  <button mat-menu-item (click)="reviewsRequested.emit()">
+    <mat-icon>grade</mat-icon>
+    Rate the extension
+  </button>
+</mat-menu>
