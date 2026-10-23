@@ -372,6 +372,19 @@ const segmentsOf = (text: string): string[] =>
     .split(SEPARATED)
     .filter((part, index) => index % 2 === 0 && withoutTitleNoise(part) !== '');
 
+const wordCount = (text: string): number =>
+  text.split(/[^\p{L}\p{N}]+/u).filter((word) => word !== '').length;
+
+const withoutRepetition = (title: string): string => {
+  const repeated = [...title.matchAll(/\s+/g)]
+    .map(({ index }) => [title.substring(0, index), title.substring(index)])
+    .find(
+      ([first, second]) =>
+        wordCount(first) >= 2 && folded(first) === folded(second),
+    );
+  return repeated ? repeated[1].trim() : title;
+};
+
 const titleSpan = (
   text: string,
   isDropped: (segment: string, place: SegmentPlace) => boolean,
@@ -393,8 +406,8 @@ const titleSpan = (
   if (kept.length === 0) {
     return [];
   }
-  const span = withoutTitleNoise(
-    parts.slice(kept[0], kept[kept.length - 1] + 1).join(''),
+  const span = withoutRepetition(
+    withoutTitleNoise(parts.slice(kept[0], kept[kept.length - 1] + 1).join('')),
   );
   return isTitle(span) ? [span] : [];
 };

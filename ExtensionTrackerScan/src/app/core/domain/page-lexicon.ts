@@ -196,7 +196,6 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /(?<!\p{L})(?:vol(?:ume)?|том|часть)[.:]?\s*\d+\.?\s*$/iu,
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
   /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online|онлайн|бесплатно)\.?)+$/iu,
-  /^(.+?)\s*[:\-–—]\s*(?=\1$)/iu,
 ];
 
 export const withoutTitleNoise = (text: string): string =>
