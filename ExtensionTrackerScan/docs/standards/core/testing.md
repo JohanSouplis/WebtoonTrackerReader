@@ -82,7 +82,10 @@ option de chapitre sélectionnée, et la série et le chapitre lus sur la page. 
 titre et URL seuls (l'import de l'historique), puis tous les signaux (le content script). Le titre se compare
 par `SeriesKey.match()`, le chapitre par sa valeur. Une lecture fausse (mauvaise série ou mauvais chapitre) est
 le pire résultat, avant la lecture manquée. Les pages de roman et les épisodes sans numéro doivent rester
-ignorés.
+ignorés. Les pages capturées sur des sites absents de toute autre capture (`adversarial-*.json`) et le
+premier jeu scellé (`sealed-1.json`, jugé une fois puis versé au corpus) passent aussi dans les deux modes. Une
+tranche affichée seulement en total (`held-out`, `adversarial-blind`) se compare aussi page par page avant
+d'accepter une modification : un total inchangé peut cacher une page devenue fausse et une autre devenue juste.
 
 ## La couverture d'une série se teste sur des pages réelles
 
