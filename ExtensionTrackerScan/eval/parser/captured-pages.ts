@@ -1,5 +1,6 @@
 import enAggregators from './captures/en-aggregators.json';
 import heldOut from './captures/held-out.json';
+import negatives from './captures/negatives.json';
 import nonEnglish from './captures/non-english.json';
 import official from './captures/official.json';
 import { PageImage, PageLink } from '../../src/app/core/domain/parsed-page';
@@ -110,6 +111,7 @@ const CAPTURE_FILES: readonly CaptureFile[] = [
   },
   { partition: 'official', capturedOn: '2026-10-22', captures: official },
   { partition: 'non-english', capturedOn: '2026-10-22', captures: nonEnglish },
+  { partition: 'negatives', capturedOn: '2026-10-23', captures: negatives },
 ];
 
 const datedCapturesOf = (files: readonly CaptureFile[]): DatedCapture[] =>
