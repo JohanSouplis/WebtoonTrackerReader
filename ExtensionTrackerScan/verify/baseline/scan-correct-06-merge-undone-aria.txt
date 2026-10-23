@@ -1,0 +1,234 @@
+- button "Skip to content"
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Request a site"
+- button "About"
+- main:
+  - searchbox "Filter by title"
+  - button "Following only"
+  - button "Rated only"
+  - text: 20 series
+  - button "Checks every 6 hours · Alerts off"
+  - group "Sort by":
+    - button "New chapters"
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Following"
+  - list "Library":
+    - listitem:
+      - link "Local":
+        - /url: Localhost:4200
+      - text: Ch. 9999 read
+      - time: 1 mo ago
+      - text: localhost:4200
+      - 'button "Rating for Local: not rated"'
+      - button "Follow Local" [pressed]
+      - button "Delete Local"
+      - button "More actions for Local"
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246 read
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+      - button "More actions for Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "The Executioner":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
+      - text: Ch. 46
+      - link "New · Ch. 47":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+      - text: read
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for The Executioner: 7/10"'
+      - button "Follow The Executioner" [pressed]
+      - button "Delete The Executioner"
+      - button "More actions for The Executioner"
+    - listitem:
+      - link "Absolute Sword Sense":
+        - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
+      - text: Ch. 117 read
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Absolute Sword Sense: 7/10"'
+      - button "Follow Absolute Sword Sense"
+      - button "Delete Absolute Sword Sense"
+      - button "More actions for Absolute Sword Sense"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115 read
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for I Obtained a Mythic Item: 9/10"'
+      - button "Follow I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+      - button "More actions for I Obtained a Mythic Item"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - link "New · Ch. 119.5":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5
+      - text: read
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Dungeon Odyssey: 10/10"'
+      - button "Follow Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+      - button "More actions for Dungeon Odyssey"
+    - listitem:
+      - link "A Dragonslayer's Peerless Regression":
+        - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
+      - text: Ch. 23 read
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
+      - button "Follow A Dragonslayer's Peerless Regression"
+      - button "Delete A Dragonslayer's Peerless Regression"
+      - button "More actions for A Dragonslayer's Peerless Regression"
+    - listitem:
+      - link "Worthless Regression":
+        - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
+      - text: Ch. 68 read
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Worthless Regression: 6/10"'
+      - button "Follow Worthless Regression"
+      - button "Delete Worthless Regression"
+      - button "More actions for Worthless Regression"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120 read
+      - time: 8 mo ago
+      - text: asuracomic.net Can't check this site
+      - 'button "Rating for Duke Pendragon: not rated"'
+      - button "Follow Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+      - button "More actions for Duke Pendragon"
+    - listitem:
+      - 'link "Solo Leveling: Ragnarok"':
+        - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
+      - text: Ch. 38 read
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Solo Leveling: Ragnarok: not rated"'
+      - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Delete Solo Leveling: Ragnarok"'
+      - 'button "More actions for Solo Leveling: Ragnarok"'
+    - listitem:
+      - link "The Priest of Corruption":
+        - /url: https://asuracomic.net/series/the-priest-of-corruption-7e4b6868/chapter/72
+      - text: Ch. 72 read
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for The Priest of Corruption: 6/10"'
+      - button "Follow The Priest of Corruption"
+      - button "Delete The Priest of Corruption"
+      - button "More actions for The Priest of Corruption"
+    - listitem:
+      - link "The Reincarnated Assassin is a Genius Swordsman":
+        - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
+      - text: Ch. 50 read
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for The Reincarnated Assassin is a Genius Swordsman: 8/10"'
+      - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+      - button "More actions for The Reincarnated Assassin is a Genius Swordsman"
+    - listitem:
+      - link "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person":
+        - /url: https://asuracomic.net/series/my-school-life-pretending-to-be-a-worthless-person-4fbaf58c/chapter/96
+      - text: Ch. 96 read
+      - time: 9 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person: 6/10"'
+      - button "Follow My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "Delete My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "More actions for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+    - listitem:
+      - link "Return of the SSS-Class Ranker":
+        - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
+      - text: Ch. 141 read
+      - time: 10 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
+      - button "Follow Return of the SSS-Class Ranker"
+      - button "Delete Return of the SSS-Class Ranker"
+      - button "More actions for Return of the SSS-Class Ranker"
+    - listitem:
+      - link "Pick Me Up, Infinite Gacha":
+        - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
+      - text: Ch. 132 read
+      - time: 11 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Pick Me Up, Infinite Gacha: 10/10"'
+      - button "Follow Pick Me Up, Infinite Gacha" [pressed]
+      - button "Delete Pick Me Up, Infinite Gacha"
+      - button "More actions for Pick Me Up, Infinite Gacha"
+    - listitem:
+      - link "Trash of the Count’s Family":
+        - /url: https://asuracomic.net/series/trash-of-the-counts-family-38493e56/chapter/136
+      - text: Ch. 136 read
+      - time: 12 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Trash of the Count’s Family: not rated"'
+      - button "Follow Trash of the Count’s Family" [pressed]
+      - button "Delete Trash of the Count’s Family"
+      - button "More actions for Trash of the Count’s Family"
+    - listitem:
+      - link "The Heavenly Demon Wants a Quiet Life":
+        - /url: https://asuracomic.net/series/the-heavenly-demon-wants-a-quiet-life-71be586c/chapter/16
+      - text: Ch. 16 read
+      - time: 12 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
+      - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
+      - button "Delete The Heavenly Demon Wants a Quiet Life"
+      - button "More actions for The Heavenly Demon Wants a Quiet Life"
+    - listitem:
+      - link "Return of the Disaster-Class Hero":
+        - /url: https://asuracomic.net/series/return-of-the-disaster-class-hero-a31a2306/chapter/110
+      - text: Ch. 110 read
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - 'button "Rating for Return of the Disaster-Class Hero: not rated"'
+      - button "Follow Return of the Disaster-Class Hero"
+      - button "Delete Return of the Disaster-Class Hero"
+      - button "More actions for Return of the Disaster-Class Hero"
+    - listitem:
+      - link "SSS-Class Suicide Hunter":
+        - /url: https://asuracomic.net/series/sss-class-suicide-hunter-c35bcf93/chapter/124
+      - text: Ch. 124 read
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'
+      - button "Follow SSS-Class Suicide Hunter"
+      - button "Delete SSS-Class Suicide Hunter"
+      - button "More actions for SSS-Class Suicide Hunter"
+    - listitem:
+      - link "The Heavenly Demon Can't Live a Normal Life":
+        - /url: https://asuracomic.net/series/the-heavenly-demon-cant-live-a-normal-life-f04530a5/chapter/139
+      - text: Ch. 142 read
+      - time: 1.1 yr ago
+      - text: asuracomic.net
+      - 'button "Rating for The Heavenly Demon Can''t Live a Normal Life: 9/10"'
+      - button "Follow The Heavenly Demon Can't Live a Normal Life"
+      - button "Delete The Heavenly Demon Can't Live a Normal Life"
+      - button "More actions for The Heavenly Demon Can't Live a Normal Life"
+  - group:
+    - text: Rows per page
+    - combobox "50 Rows per page": "50"
+    - text: 1–20 of 20
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page" [disabled]
+    - button "Last page" [disabled]

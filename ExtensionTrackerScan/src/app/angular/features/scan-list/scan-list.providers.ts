@@ -18,10 +18,13 @@ import { AskForRatingUseCase } from '../../../core/use-cases/ask-for-rating.use-
 import { ChangeCheckIntervalUseCase } from '../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../core/use-cases/clear-rating.use-case';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
+import { MergeScansUseCase } from '../../../core/use-cases/merge-scans.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../core/use-cases/record-new-chapter-opened.use-case';
+import { RenameScanUseCase } from '../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../core/use-cases/restore-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
+import { UnmergeScansUseCase } from '../../../core/use-cases/unmerge-scans.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
   CLOCK,
@@ -108,6 +111,33 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
     useFactory: () =>
       new RestoreScanUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is restored'),
+        inject(COVER_REPOSITORY),
+        inject(CHAPTER_WATCH_REPOSITORY),
+      ),
+  },
+  {
+    provide: RenameScanUseCase,
+    useFactory: () =>
+      new RenameScanUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'scan is renamed'),
+        inject(COVER_REPOSITORY),
+        inject(CHAPTER_WATCH_REPOSITORY),
+      ),
+  },
+  {
+    provide: MergeScansUseCase,
+    useFactory: () =>
+      new MergeScansUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'scans are merged'),
+        inject(COVER_REPOSITORY),
+        inject(CHAPTER_WATCH_REPOSITORY),
+      ),
+  },
+  {
+    provide: UnmergeScansUseCase,
+    useFactory: () =>
+      new UnmergeScansUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'scans are unmerged'),
         inject(COVER_REPOSITORY),
         inject(CHAPTER_WATCH_REPOSITORY),
       ),

@@ -452,6 +452,80 @@ test.describe('scan list', () => {
     await pin(page, 'scan-delete-08-undone');
   });
 
+  test('rename a row from its menu', async ({ page }) => {
+    await openLibrary(page);
+    await row(page, 'Local')
+      .getByRole('button', { name: 'More actions for Local' })
+      .click();
+    await expect(page.getByRole('menuitem', { name: 'Rename' })).toBeVisible();
+    await pin(page, 'scan-correct-01-more-actions-menu');
+    await page.getByRole('menuitem', { name: 'Rename' }).click();
+    const field = page.getByRole('textbox', { name: 'New title for Local' });
+    await expect(field).toBeFocused();
+    await page.keyboard.type('Local Development');
+    await pin(page, 'scan-correct-02-renaming');
+    await page.keyboard.press('Enter');
+    await expect(
+      page.getByRole('link', { name: 'Local Development', exact: true }),
+    ).toBeFocused();
+    await expect(
+      page.getByText('Renamed to “Local Development”'),
+    ).toBeVisible();
+    await pin(page, 'scan-correct-03-renamed');
+  });
+
+  test('escape cancels a rename', async ({ page }) => {
+    await openLibrary(page);
+    await row(page, 'Local')
+      .getByRole('button', { name: 'More actions for Local' })
+      .click();
+    await page.getByRole('menuitem', { name: 'Rename' }).click();
+    await page.keyboard.type('Something else');
+    await page.keyboard.press('Escape');
+    await expect(
+      page.getByRole('link', { name: 'Local', exact: true }),
+    ).toBeFocused();
+    await expect(page.getByRole('textbox')).toHaveCount(0);
+  });
+
+  test('merge a row into another and undo it', async ({ page }) => {
+    await openLibrary(page);
+    await showAllRows(page);
+    const source = 'The Heavenly Demon Wants a Quiet Life';
+    const target = "The Heavenly Demon Can't Live a Normal Life";
+    await row(page, source)
+      .getByRole('button', { name: `More actions for ${source}` })
+      .click();
+    await page.getByRole('menuitem', { name: 'Merge with…' }).click();
+    const picker = page.getByRole('dialog', {
+      name: `Merge “${source}” into…`,
+    });
+    await expect(
+      picker.getByRole('searchbox', { name: 'Find a series' }),
+    ).toBeFocused();
+    await page.keyboard.type('heavenly');
+    await expect(
+      picker
+        .getByRole('list', { name: 'Series to merge into' })
+        .getByRole('button'),
+    ).toHaveText([target]);
+    await pin(page, 'scan-correct-04-merge-picker');
+    await page.keyboard.press('Enter');
+    await expect(picker).toHaveCount(0);
+    await expect(row(page, source)).toHaveCount(0);
+    await expect(page.getByText('19 series')).toBeVisible();
+    await expect(page.getByText(`Merged into “${target}”`)).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: target, exact: true }),
+    ).toBeFocused();
+    await expectAnnounced(page, 'Undo');
+    await pin(page, 'scan-correct-05-merged');
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await expect(row(page, source)).toHaveCount(1);
+    await expect(page.getByText('20 series')).toBeVisible();
+    await pin(page, 'scan-correct-06-merge-undone');
+  });
+
   test('double click on delete removes a single row', async ({ page }) => {
     await openLibrary(page);
     await row(page, 'Local')

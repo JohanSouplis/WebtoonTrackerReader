@@ -28,6 +28,7 @@
       - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
+      - button "More actions for The Heavenly Demon Wants a Quiet Life"
     - listitem:
       - link "The Heavenly Demon Can't Live a Normal Life":
         - /url: https://asuracomic.net/series/the-heavenly-demon-cant-live-a-normal-life-f04530a5/chapter/139
@@ -37,6 +38,7 @@
       - 'button "Rating for The Heavenly Demon Can''t Live a Normal Life: 9/10"'
       - button "Follow The Heavenly Demon Can't Live a Normal Life"
       - button "Delete The Heavenly Demon Can't Live a Normal Life"
+      - button "More actions for The Heavenly Demon Can't Live a Normal Life"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"

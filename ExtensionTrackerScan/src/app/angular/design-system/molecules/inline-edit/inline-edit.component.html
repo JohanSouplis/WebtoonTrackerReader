@@ -1,0 +1,22 @@
+<form (submit)="save($event)">
+  <input
+    type="text"
+    [attr.aria-label]="label()"
+    [value]="value()"
+    autocomplete="off"
+    spellcheck="false"
+    (keydown.escape)="cancelled.emit()"
+    #field
+  />
+  <button type="submit" class="save" aria-label="Save">
+    <mat-icon>check</mat-icon>
+  </button>
+  <button
+    type="button"
+    class="cancel"
+    aria-label="Cancel"
+    (click)="cancelled.emit()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</form>

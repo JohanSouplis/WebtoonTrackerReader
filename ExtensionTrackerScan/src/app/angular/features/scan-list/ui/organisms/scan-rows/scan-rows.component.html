@@ -17,15 +17,24 @@
               }
             }
             <div class="body">
-              <a
-                class="title"
-                [href]="row.url"
-                target="_blank"
-                rel="noopener"
-                [matTooltip]="row.readingHint"
-                #titleLink
-                >{{ row.title }}</a
-              >
+              @if (renamingTitle() === row.title) {
+                <ds-inline-edit
+                  label="New title for {{ row.title }}"
+                  [value]="row.title"
+                  (saved)="rename(row, $event)"
+                  (cancelled)="stopRenaming(row)"
+                />
+              } @else {
+                <a
+                  class="title"
+                  [href]="row.url"
+                  target="_blank"
+                  rel="noopener"
+                  [matTooltip]="row.readingHint"
+                  #titleLink
+                  >{{ row.title }}</a
+                >
+              }
               <div class="meta">
                 <span class="chapter">Ch. {{ row.chapter }}</span>
                 @if (row.watch.kind === "new") {
@@ -90,6 +99,15 @@
               >
                 <mat-icon>delete</mat-icon>
               </button>
+              <button
+                type="button"
+                class="more"
+                attr.aria-label="More actions for {{ row.title }}"
+                [matMenuTriggerFor]="moreMenu"
+                [matMenuTriggerData]="{ row }"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
             </div>
           </li>
         }
@@ -116,6 +134,16 @@
             Clear rating
           </button>
         }
+      </ng-template>
+    </mat-menu>
+    <mat-menu #moreMenu="matMenu" xPosition="before">
+      <ng-template matMenuContent let-row="row">
+        <button mat-menu-item (click)="startRenaming(row)">
+          <mat-icon>edit</mat-icon>Rename
+        </button>
+        <button mat-menu-item (click)="mergeRequested.emit(row)">
+          <mat-icon>merge</mat-icon>Merge with…
+        </button>
       </ng-template>
     </mat-menu>
     <ng-content />

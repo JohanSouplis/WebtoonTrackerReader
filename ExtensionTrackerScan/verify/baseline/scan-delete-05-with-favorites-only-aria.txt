@@ -27,6 +27,7 @@
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
       - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
+      - button "More actions for Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
@@ -39,6 +40,7 @@
       - 'button "Rating for The Executioner: 7/10"'
       - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
+      - button "More actions for The Executioner"
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
@@ -48,6 +50,7 @@
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
+      - button "More actions for I Obtained a Mythic Item"
     - listitem:
       - link "Dungeon Odyssey":
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
@@ -60,6 +63,7 @@
       - 'button "Rating for Dungeon Odyssey: 10/10"'
       - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
+      - button "More actions for Dungeon Odyssey"
     - listitem:
       - link "Duke Pendragon":
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
@@ -69,6 +73,7 @@
       - 'button "Rating for Duke Pendragon: not rated"'
       - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
+      - button "More actions for Duke Pendragon"
     - listitem:
       - 'link "Solo Leveling: Ragnarok"':
         - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
@@ -78,6 +83,7 @@
       - 'button "Rating for Solo Leveling: Ragnarok: not rated"'
       - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
       - 'button "Delete Solo Leveling: Ragnarok"'
+      - 'button "More actions for Solo Leveling: Ragnarok"'
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
         - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
@@ -87,6 +93,7 @@
       - 'button "Rating for The Reincarnated Assassin is a Genius Swordsman: 8/10"'
       - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+      - button "More actions for The Reincarnated Assassin is a Genius Swordsman"
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
         - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
@@ -96,6 +103,7 @@
       - 'button "Rating for Pick Me Up, Infinite Gacha: 10/10"'
       - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
+      - button "More actions for Pick Me Up, Infinite Gacha"
     - listitem:
       - link "Trash of the Count’s Family":
         - /url: https://asuracomic.net/series/trash-of-the-counts-family-38493e56/chapter/136
@@ -105,6 +113,7 @@
       - 'button "Rating for Trash of the Count’s Family: not rated"'
       - button "Follow Trash of the Count’s Family" [pressed]
       - button "Delete Trash of the Count’s Family"
+      - button "More actions for Trash of the Count’s Family"
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
         - /url: https://asuracomic.net/series/the-heavenly-demon-wants-a-quiet-life-71be586c/chapter/16
@@ -114,6 +123,7 @@
       - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
+      - button "More actions for The Heavenly Demon Wants a Quiet Life"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"

@@ -52,7 +52,7 @@ src/app/angular/
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
     atoms/      bell-toggle/ · monogram/ · cover/ · relative-date/
-    molecules/  search-field/ · banner/
+    molecules/  search-field/ · banner/ · inline-edit/
   features/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
@@ -63,6 +63,7 @@ src/app/angular/
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
         organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/ · rate-prompt/
+                    merge-picker/
     add-website-pattern/             onglet « Request a site », route 'add_website_pattern'
       add-website-pattern.providers.ts
       service/  site-request.rules.ts

@@ -28,6 +28,7 @@
       - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
       - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
+      - button "More actions for Return of the SSS-Class Ranker"
     - listitem:
       - link "SSS-Class Suicide Hunter":
         - /url: https://asuracomic.net/series/sss-class-suicide-hunter-c35bcf93/chapter/124
@@ -37,6 +38,7 @@
       - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'
       - button "Follow SSS-Class Suicide Hunter"
       - button "Delete SSS-Class Suicide Hunter"
+      - button "More actions for SSS-Class Suicide Hunter"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"

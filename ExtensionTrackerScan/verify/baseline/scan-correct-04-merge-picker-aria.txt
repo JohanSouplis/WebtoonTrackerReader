@@ -1,0 +1,9 @@
+- dialog "Merge “The Heavenly Demon Wants a Quiet Life” into…":
+  - heading "Merge “The Heavenly Demon Wants a Quiet Life” into…" [level=2]
+  - paragraph: The series you pick keeps its title and takes the latest chapter. Readings under either title land on it.
+  - searchbox "Find a series": heavenly
+  - button "Clear Find a series"
+  - list "Series to merge into":
+    - listitem:
+      - button "The Heavenly Demon Can't Live a Normal Life"
+  - button "Cancel"

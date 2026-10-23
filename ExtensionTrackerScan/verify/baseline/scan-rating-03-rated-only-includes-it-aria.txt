@@ -27,6 +27,7 @@
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
       - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
+      - button "More actions for Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
@@ -39,6 +40,7 @@
       - 'button "Rating for The Executioner: 7/10"'
       - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
+      - button "More actions for The Executioner"
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
@@ -48,6 +50,7 @@
       - 'button "Rating for Absolute Sword Sense: 7/10"'
       - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
+      - button "More actions for Absolute Sword Sense"
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
@@ -57,6 +60,7 @@
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
+      - button "More actions for I Obtained a Mythic Item"
     - listitem:
       - link "Dungeon Odyssey":
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
@@ -69,6 +73,7 @@
       - 'button "Rating for Dungeon Odyssey: 10/10"'
       - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
+      - button "More actions for Dungeon Odyssey"
     - listitem:
       - link "A Dragonslayer's Peerless Regression":
         - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
@@ -78,6 +83,7 @@
       - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
       - button "Follow A Dragonslayer's Peerless Regression"
       - button "Delete A Dragonslayer's Peerless Regression"
+      - button "More actions for A Dragonslayer's Peerless Regression"
     - listitem:
       - link "Worthless Regression":
         - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
@@ -87,6 +93,7 @@
       - 'button "Rating for Worthless Regression: 6/10"'
       - button "Follow Worthless Regression"
       - button "Delete Worthless Regression"
+      - button "More actions for Worthless Regression"
     - listitem:
       - link "Duke Pendragon":
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
@@ -96,6 +103,7 @@
       - 'button "Rating for Duke Pendragon: 3/10"'
       - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
+      - button "More actions for Duke Pendragon"
     - listitem:
       - link "The Priest of Corruption":
         - /url: https://asuracomic.net/series/the-priest-of-corruption-7e4b6868/chapter/72
@@ -105,6 +113,7 @@
       - 'button "Rating for The Priest of Corruption: 6/10"'
       - button "Follow The Priest of Corruption"
       - button "Delete The Priest of Corruption"
+      - button "More actions for The Priest of Corruption"
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
         - /url: https://asuracomic.net/series/the-reincarnated-assassin-is-a-genius-swordsman-983c6d17/chapter/50
@@ -114,6 +123,7 @@
       - 'button "Rating for The Reincarnated Assassin is a Genius Swordsman: 8/10"'
       - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
+      - button "More actions for The Reincarnated Assassin is a Genius Swordsman"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"
