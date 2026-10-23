@@ -174,12 +174,12 @@ describe('CheckNewChaptersUseCase', () => {
     });
   });
 
-  it('should read the category feed of a WordPress series before its series page', async () => {
+  it('should read the category feed of a WordPress series before its series page, without its tracking parameters', async () => {
     const { checkNewChapters, web, watchOf } = setUp({
       scans: [aFavorite('Solo Leveling', 200, SLUG_SERIES)],
       pages: {
         'https://themesia.org/category/solo-leveling/feed/': page(
-          '<rss><item><title>Solo Leveling Chapter 201</title><link>https://themesia.org/solo-leveling-chapter-201/</link></item></rss>',
+          '<rss><item><title>Solo Leveling Chapter 201</title><link>https://themesia.org/solo-leveling-chapter-201/?utm_source=rss&amp;utm_medium=rss</link></item></rss>',
         ),
       },
     });
@@ -192,6 +192,7 @@ describe('CheckNewChaptersUseCase', () => {
     expect(await watchOf('Solo Leveling')).toMatchObject({
       kind: 'new',
       latest: 201,
+      url: 'https://themesia.org/solo-leveling-chapter-201/',
     });
   });
 

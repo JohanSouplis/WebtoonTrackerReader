@@ -221,6 +221,16 @@ const tagText = (xml: string, tag: string): string =>
 export const isFeed = (text: string): boolean =>
   /<rss\b|<feed\b/i.test(text.slice(0, 3000));
 
+const withoutTracking = (url: URL): string => {
+  const clean = new URL(url.href);
+  clean.search = url.search
+    .slice(1)
+    .split('&')
+    .filter((parameter) => !parameter.startsWith('utm_'))
+    .join('&');
+  return clean.href;
+};
+
 export const chaptersInFeed = (
   page: { readonly url: string; readonly text: string },
   isOfSeries: (url: URL) => boolean,
@@ -235,6 +245,6 @@ export const chaptersInFeed = (
       const url = urlOf(link, page.url);
       return chapter === undefined || !url || !isOfSeries(url)
         ? []
-        : [{ chapter, url: url.href }];
+        : [{ chapter, url: withoutTracking(url) }];
     },
   );

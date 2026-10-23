@@ -40,6 +40,7 @@ export const watchNewChapters = (
     if (name === CHECK_NEW_CHAPTERS_ALARM) {
       sweep ??= checkNewChapters.execute().finally(() => {
         sweep = undefined;
+        void scheduleChecks();
       });
     }
   });
