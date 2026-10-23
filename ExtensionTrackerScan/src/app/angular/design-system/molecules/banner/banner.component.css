@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--app-accent-line);
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, var(--app-accent-soft), rgba(155, 140, 255, 0) 70%),
+    var(--app-surface);
+}
+
+section > mat-icon.mat-icon {
+  margin-top: 1px;
+  font-size: 20px;
+  color: var(--app-star);
+}
+
+.heading {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.message {
+  margin-top: 2px;
+  color: var(--app-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.actions {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
