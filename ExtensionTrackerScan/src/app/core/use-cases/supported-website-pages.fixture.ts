@@ -90,5 +90,6 @@ export const SUPPORTED_WEBSITE_PAGES: readonly SupportedWebsitePage[] = [
   ["Ch. 1 (en) - Lord Blackwood Promised Me Death - EVA-SCANS | ComicK", "https://comick.dev/comic/lord-blackwood-promised-me-death/QUkHI7Dl-chapter-1-en", "Lord Blackwood Promised Me Death", 1],
   ["EP 81 - 81 | Catastrophic Necromancer", "https://www.webtoons.com/es/fantasy/catastrophic-necromancer/ep-81/viewer?title_no=8467&episode_no=81", "Catastrophic Necromancer", 81],
   ["第109話 - 109 | 絕對回歸", "https://www.webtoons.com/zh-hant/martial-arts/absolute-regression/%E7%AC%AC109%E8%A9%B1/viewer?title_no=6876&episode_no=109", "絕對回歸", 109],
+  ["Nanbaka Capitulo 135 | LeerCapitulo", "https://www.leercapitulo.co/leer/tat8y9xgji/nanbaka/135/", "Nanbaka", 135],
   ["Ep.128 - 129 | Operation: True Love", "https://www.webtoons.com/de/romance/operation-true-love/ep128/viewer?title_no=6126&episode_no=129", "Operation: True Love", 128],
 ];
