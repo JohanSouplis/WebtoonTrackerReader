@@ -1,8 +1,10 @@
 :host {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin: 18px 2px 8px;
+  gap: 6px;
+  margin: 14px 2px 8px;
 }
 
 .summary {
@@ -21,6 +23,7 @@
 
 .sorts {
   display: flex;
+  flex-wrap: wrap;
   gap: 2px;
 }
 

@@ -19,6 +19,8 @@
 
 header {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
@@ -121,4 +123,18 @@ mat-paginator {
 .empty mat-icon.mat-icon {
   font-size: 40px;
   color: var(--app-accent);
+}
+
+@media (max-width: 560px) {
+  :host {
+    padding: 16px;
+  }
+
+  ds-search-field {
+    flex-basis: 100%;
+  }
+
+  ul {
+    grid-template-columns: 1fr;
+  }
 }

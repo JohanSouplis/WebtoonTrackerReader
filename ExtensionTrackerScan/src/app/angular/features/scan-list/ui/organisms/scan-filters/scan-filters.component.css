@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
@@ -45,4 +46,15 @@ mat-button-toggle mat-icon {
 
 mat-button-toggle.mat-button-toggle-checked mat-icon {
   color: var(--app-star);
+}
+
+@media (max-width: 560px) {
+  ds-search-field {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+
+  mat-button-toggle {
+    flex: 1;
+  }
 }

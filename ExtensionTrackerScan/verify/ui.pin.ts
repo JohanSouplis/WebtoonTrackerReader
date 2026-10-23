@@ -117,13 +117,13 @@ test.describe('navbar', () => {
     );
     await pin(page, 'nav-01-library-selected');
     await goToAddWebsite(page);
-    await expect(page).toHaveURL(/\/add_website_pattern$/);
+    await expect(page).toHaveURL(/#\/add_website_pattern$/);
     await expect(
       page.getByRole('button', { name: 'Add website' }),
     ).toHaveAttribute('aria-current', 'page');
     await pin(page, 'nav-02-add-website-selected');
     await page.getByRole('button', { name: 'Library' }).click();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/#\/$/);
     await expectSortedBy(page, 'Last read (descending)');
     await pin(page, 'nav-03-back-to-library');
   });
@@ -142,7 +142,7 @@ test.describe('navbar', () => {
   test('deep link to add website route highlights its tab', async ({
     page,
   }) => {
-    await page.goto('/add_website_pattern');
+    await page.goto('/#/add_website_pattern');
     await expect(
       page.getByRole('heading', { name: 'Propose a website' }),
     ).toBeVisible();
@@ -153,6 +153,39 @@ test.describe('navbar', () => {
       page.getByRole('button', { name: 'Library' }),
     ).not.toHaveAttribute('aria-current');
     await pin(page, 'nav-05-deep-link-add-website');
+  });
+});
+
+test.describe('popup size', () => {
+  test('the library fits the popup with its pagination in view', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    const paginator = await page.locator('mat-paginator').boundingBox();
+    expect(paginator && paginator.y + paginator.height).toBeLessThanOrEqual(
+      600,
+    );
+    await library(page).getByRole('listitem').last().scrollIntoViewIfNeeded();
+    await expect(
+      page.getByRole('searchbox', { name: 'Filter by title' }),
+    ).toBeInViewport();
+    await pin(page, 'popup-01-scrolled-list-keeps-header-and-pagination');
+  });
+
+  test('a narrow popup reflows without scrolling sideways', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 400, height: 600 });
+    await openLibrary(page);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBe(400);
+    await pin(page, 'popup-02-narrow-library');
+    await goToAddWebsite(page);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBe(400);
+    await pin(page, 'popup-03-narrow-add-website');
   });
 });
 

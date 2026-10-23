@@ -1,5 +1,15 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0 -6px;
+  padding: 2px 6px 12px;
 }
 
 @keyframes rise {
@@ -207,7 +217,9 @@ li:focus-within .delete {
 }
 
 mat-paginator {
-  margin-top: 12px;
+  flex: none;
+  padding-bottom: 6px;
+  border-top: 1px solid var(--app-line);
   background: transparent;
   --mat-paginator-container-background-color: transparent;
   --mat-paginator-container-text-color: var(--app-muted);
@@ -252,6 +264,7 @@ mat-paginator {
 }
 
 .empty {
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -296,4 +309,25 @@ mat-paginator {
 
 .clear:active {
   transform: scale(0.98);
+}
+
+@media (max-width: 560px) {
+  li {
+    gap: 10px;
+    padding: 0 8px;
+  }
+
+  .meta {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .website,
+  .dot:has(+ .website) {
+    display: none;
+  }
+
+  :host ::ng-deep .mat-mdc-paginator-page-size {
+    display: none;
+  }
 }

@@ -7,7 +7,7 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
 import { SHELL_PROVIDERS } from './shell/shell.providers';
 
@@ -24,7 +24,7 @@ const rowsPaginatorIntl = (): MatPaginatorIntl => {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withHashLocation()),
     provideAnimationsAsync(
       matchMedia('(prefers-reduced-motion: reduce)').matches
         ? 'noop'

@@ -19,12 +19,13 @@ h2 {
 
 form {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 16px;
 }
 
 .field {
-  flex: 1;
+  flex: 1 1 260px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -106,4 +107,10 @@ button mat-icon.mat-icon {
   color: var(--app-text);
   font-style: normal;
   font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  :host {
+    padding: 16px;
+  }
 }

@@ -1,7 +1,25 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+app-nav-bar {
+  flex: none;
 }
 
 main {
-  padding: 4px 24px 72px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 24px 0;
+}
+
+@media (max-width: 560px) {
+  main {
+    padding: 4px 12px 0;
+  }
 }

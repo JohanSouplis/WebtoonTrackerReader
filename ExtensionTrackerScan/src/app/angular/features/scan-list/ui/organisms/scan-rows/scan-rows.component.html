@@ -1,93 +1,95 @@
 @let shown = view();
 @switch (shown.kind) {
   @case ("scans") {
-    <ul aria-label="Library" tabindex="-1" #list>
-      @for (row of shown.rows; track row.title; let index = $index) {
-        <li [style.--index]="index" @row>
-          @switch (row.cover.kind) {
-            @case ("thumbnail") {
-              <ds-cover [src]="row.cover.src" />
-            }
-            @case ("monogram") {
-              <ds-monogram [text]="row.title" />
-            }
-            @default {
-              <span class="pending-cover"></span>
-            }
-          }
-          <div class="body">
-            <a
-              class="title"
-              [href]="row.url"
-              target="_blank"
-              rel="noopener"
-              #titleLink
-            >
-              <ds-truncated-text [text]="row.title" [maxLength]="55" />
-            </a>
-            <div class="meta">
-              <span class="chapter">Ch. {{ row.chapter }}</span>
-              @if (row.watch.kind === "new") {
-                <a
-                  class="new-chapter"
-                  [href]="row.watch.url"
-                  target="_blank"
-                  rel="noopener"
-                  >New · Ch. {{ row.watch.chapter }}</a
-                >
+    <div class="scroll">
+      <ul aria-label="Library" tabindex="-1" #list>
+        @for (row of shown.rows; track row.title; let index = $index) {
+          <li [style.--index]="index" @row>
+            @switch (row.cover.kind) {
+              @case ("thumbnail") {
+                <ds-cover [src]="row.cover.src" />
               }
-              <span class="dot"></span>
-              <ds-relative-date [date]="row.readAt" [now]="now()" />
-              <span class="dot"></span>
-              <span class="website">{{ row.website }}</span>
-              @if (row.watch.kind === "unsupported") {
-                <span class="dot"></span>
-                <span
-                  class="unchecked"
-                  matTooltip="New chapters on this site can't be checked from your browser"
-                  >Can't check this site</span
-                >
+              @case ("monogram") {
+                <ds-monogram [text]="row.title" />
               }
-            </div>
-          </div>
-          <div class="actions">
-            <div class="rating" [class.is-rated]="row.rating !== undefined">
-              <mat-icon [class.is-filled]="row.rating !== undefined"
-                >star</mat-icon
+              @default {
+                <span class="pending-cover"></span>
+              }
+            }
+            <div class="body">
+              <a
+                class="title"
+                [href]="row.url"
+                target="_blank"
+                rel="noopener"
+                #titleLink
               >
-              <mat-select
-                [value]="row.rating"
-                placeholder="–"
-                panelClass="rating-panel"
-                [panelWidth]="null"
-                hideSingleSelectionIndicator
-                aria-label="Rating for {{ row.title }}"
-                (selectionChange)="
-                  rated.emit({ scan: row, rating: $event.value })
-                "
-              >
-                @for (rating of ratings; track rating) {
-                  <mat-option [value]="rating">{{ rating }}</mat-option>
+                <ds-truncated-text [text]="row.title" [maxLength]="55" />
+              </a>
+              <div class="meta">
+                <span class="chapter">Ch. {{ row.chapter }}</span>
+                @if (row.watch.kind === "new") {
+                  <a
+                    class="new-chapter"
+                    [href]="row.watch.url"
+                    target="_blank"
+                    rel="noopener"
+                    >New · Ch. {{ row.watch.chapter }}</a
+                  >
                 }
-              </mat-select>
+                <span class="dot"></span>
+                <ds-relative-date [date]="row.readAt" [now]="now()" />
+                <span class="dot"></span>
+                <span class="website">{{ row.website }}</span>
+                @if (row.watch.kind === "unsupported") {
+                  <span class="dot"></span>
+                  <span
+                    class="unchecked"
+                    matTooltip="New chapters on this site can't be checked from your browser"
+                    >Can't check this site</span
+                  >
+                }
+              </div>
             </div>
-            <ds-star-toggle
-              [checked]="row.isFavorite"
-              label="Favorite {{ row.title }}"
-              (toggled)="favoriteToggled.emit(row)"
-            />
-            <button
-              type="button"
-              class="delete"
-              attr.aria-label="Delete {{ row.title }}"
-              (click)="delete(row, index, $event)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </li>
-      }
-    </ul>
+            <div class="actions">
+              <div class="rating" [class.is-rated]="row.rating !== undefined">
+                <mat-icon [class.is-filled]="row.rating !== undefined"
+                  >star</mat-icon
+                >
+                <mat-select
+                  [value]="row.rating"
+                  placeholder="–"
+                  panelClass="rating-panel"
+                  [panelWidth]="null"
+                  hideSingleSelectionIndicator
+                  aria-label="Rating for {{ row.title }}"
+                  (selectionChange)="
+                    rated.emit({ scan: row, rating: $event.value })
+                  "
+                >
+                  @for (rating of ratings; track rating) {
+                    <mat-option [value]="rating">{{ rating }}</mat-option>
+                  }
+                </mat-select>
+              </div>
+              <ds-star-toggle
+                [checked]="row.isFavorite"
+                label="Favorite {{ row.title }}"
+                (toggled)="favoriteToggled.emit(row)"
+              />
+              <button
+                type="button"
+                class="delete"
+                attr.aria-label="Delete {{ row.title }}"
+                (click)="delete(row, index, $event)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
     <mat-paginator
       [length]="shown.length"
       [pageIndex]="shown.page.index"

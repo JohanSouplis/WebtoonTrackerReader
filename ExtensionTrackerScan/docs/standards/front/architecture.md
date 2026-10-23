@@ -10,6 +10,13 @@ Angular 19 en composants standalone, avec Angular Material. Une seule applicatio
 l'extension (`index.html`) et sa page complète. Elle consomme le core (`src/app/core/`) : ses use-cases pour
 écrire, ses ports pour lire, ses types pour afficher.
 
+**La popup et l'onglet partagent une mise en page.** Chrome plafonne une popup à 800 × 600 px et la dimensionne
+d'après son contenu : la popup s'ouvre sur `index.html?popup`, et `main.ts` pose alors la classe `is-popup` qui
+fixe le document à 750 × 600 px. Hors popup (un onglet), l'application occupe la fenêtre, centrée. Dans les deux
+cas, la navigation, les filtres et le tri restent en place, seule la liste défile, et la pagination reste visible.
+Sous 560 px de large, les composants passent à la ligne au lieu de déborder. Le routeur lit le hash
+(`index.html#/`) : recharger un onglet de l'extension retrouve toujours `index.html`.
+
 **Le front a son propre métier d'écran, il ne vole pas celui du core.** Filtrer les favoris, tronquer un
 titre trop long ou trier par date de lecture sont des règles d'écran. Fusionner une lecture, valider une note
 ou reconnaître un site appartiennent au core : le front en affiche le résultat.

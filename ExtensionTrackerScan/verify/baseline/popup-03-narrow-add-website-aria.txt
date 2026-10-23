@@ -1,0 +1,34 @@
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "Informations"
+- main:
+  - heading "Propose a website" [level=2]
+  - paragraph: Reading somewhere we don't track yet? Send it for the next update.
+  - textbox "Website name":
+    - /placeholder: e.g. mangadex.org
+  - button "Propose" [disabled]
+  - paragraph:
+    - text: Use the URL of the page where you
+    - emphasis: read
+    - text: a chapter, not the series list. Some sites redirect to another domain.
+  - heading "Verified websites 134" [level=2]
+  - searchbox "Filter by website"
+  - paragraph: Most reading sites are recognized automatically. These were checked on a real chapter page.
+  - list "Verified websites":
+    - listitem: 09.ikiru.wtf
+    - listitem: 3asq.online
+    - listitem: akazascans.org
+    - listitem: arenascan.com
+    - listitem: arvenscans.net
+    - listitem: asmotoon.com
+    - listitem: asurascans.com
+    - listitem: athreascans.com
+    - listitem: azorafly.com
+    - listitem: bacakomik.my
+  - group:
+    - text: 1–10 of 134
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"

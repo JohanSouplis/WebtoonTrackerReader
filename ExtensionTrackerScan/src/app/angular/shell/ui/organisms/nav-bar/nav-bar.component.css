@@ -95,3 +95,18 @@ nav button[aria-current="page"] mat-icon {
   color: var(--app-text);
   background: var(--app-surface-2);
 }
+
+@media (max-width: 560px) {
+  :host {
+    gap: 8px;
+    padding: 12px 12px 10px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  nav button {
+    padding: 7px 10px;
+  }
+}

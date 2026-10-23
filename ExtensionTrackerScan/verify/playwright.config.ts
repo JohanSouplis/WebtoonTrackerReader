@@ -23,7 +23,7 @@ export default defineConfig({
   },
   use: {
     baseURL: `http://127.0.0.1:${port}`,
-    viewport: { width: 750, height: 1000 },
+    viewport: { width: 750, height: 600 },
     deviceScaleFactor: 1,
     locale: 'en-US',
     timezoneId: 'Europe/Paris',

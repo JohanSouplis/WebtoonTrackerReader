@@ -50,6 +50,7 @@ const UNDO_DURATION_MS = 6000;
     ScanRowsComponent,
   ],
   templateUrl: './scan-list.page.html',
+  styleUrl: './scan-list.page.css',
   providers: [ScanListStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
