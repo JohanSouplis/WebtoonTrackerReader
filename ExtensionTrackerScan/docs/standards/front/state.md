@@ -64,8 +64,9 @@ async deleteScan(title: string): Promise<void> {
 
 ## Ports propres à Angular
 
-- Un port propre à Angular est une interface de `service/*.port.ts`, sans import Angular. Aujourd'hui, trois
-  en ont besoin : `FullPageNavigatorPort`, qui ouvre `news.html` dans un onglet, `NotificationPermissionPort`,
+- Un port propre à Angular est une interface de `service/*.port.ts`, sans import Angular. Aujourd'hui, quatre
+  en ont besoin : `FullPageNavigatorPort`, qui ouvre `news.html` dans un onglet, `StoreListingPort`, qui ouvre
+  les avis de l'extension sur le Chrome Web Store dans un onglet, `NotificationPermissionPort`,
   qui demande ou rend la permission des notifications (elle seule dit si les notifications sont actives : aucun
   réglage ne la double), et `CoverBackfillPort`, qui
   demande au service worker de chercher les couvertures des lignes affichées sans couverture. Le use-case
@@ -73,6 +74,13 @@ async deleteScan(title: string): Promise<void> {
   le demander, puis relit les couvertures par `CoverRepository` chaque fois que le port lui signale une couverture
   enregistrée.
 - Son gateway Chrome et sa variante in-memory vivent dans `gateways/` de la même feature ou de `shell/`.
+- Un port que le shell et une feature partagent (`StoreListingPort`, `RatePromptRepository`) se câble une fois,
+  dans `shell.providers.ts`, et la feature l'injecte : une seconde instance in-memory ne verrait pas les écritures
+  de la première.
+- Ouvrir un onglet ferme la popup sur-le-champ. Une écriture qui charge avant d'enregistrer, lancée par le clic
+  d'un lien `<a target="_blank">`, n'aboutit jamais : la page attend la fin de l'écriture, puis ouvre l'onglet par
+  un port. Un lien qui doit le rester (le nouveau chapitre d'un favori) n'écrit qu'un fait, sans rien charger :
+  l'écriture part avant que la popup se ferme.
 - Un port qui lit ou écrit des scans n'est jamais un port Angular : c'est `ScanRepository` du core.
 - Un port s'injecte par une `InjectionToken`. Toutes les `InjectionToken` vivent dans
   `angular/injection-tokens.ts`, car ni le core ni `service/` n'importent Angular. Un use-case n'a pas de

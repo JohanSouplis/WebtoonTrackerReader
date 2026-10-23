@@ -37,13 +37,14 @@ src/app/angular/
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
     shell.providers.ts
-    service/   full-page-navigator.port.ts
+    service/   full-page-navigator.port.ts · store-listing.port.ts
     gateways/  chrome-full-page-navigator.gateway.ts · in-memory-full-page-navigator.gateway.ts
+               chrome-store-listing.gateway.ts · in-memory-store-listing.gateway.ts
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
     atoms/      star-toggle/ · truncated-text/ · monogram/ · cover/ · relative-date/
-    molecules/  search-field/
+    molecules/  search-field/ · banner/
   features/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
@@ -53,7 +54,7 @@ src/app/angular/
                 chrome-notification-permission.gateway.ts · in-memory-notification-permission.gateway.ts
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
-        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/
+        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/ · rate-prompt/
     add-website-pattern/             onglet « Add website », route 'add_website_pattern'
       add-website-pattern.providers.ts
       ui/

@@ -29,8 +29,10 @@ Exemples tirés de l'extension :
 | `cover` | atom | La vignette d'une couverture à la taille du monogramme, qui apparaît en fondu. Décorative, `alt` vide : le titre est à côté. |
 | `relative-date` | atom | Affiche « 3 mo ago » depuis une date et `now`, et pose `matTooltip` avec la date exacte. |
 | `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
+| `banner` | molecule | Un encart dans le flux de la page : icône, titre, message et les actions passées en contenu. Il ne recouvre rien. |
 | `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), avec le lien du nouveau chapitre d'un favori ou l'indication d'un site impossible à vérifier, émet suppression, favori, note, page. |
 | `new-chapter-settings` | organism | Un bouton qui annonce la fréquence et ouvre un menu : fréquence (`1h`, `6h`, `24h`) et notifications. Émet le choix, la page l'applique. |
+| `rate-prompt` | organism | La demande de note dans un `banner` : « Rate it », « Not now », « Don't ask again ». Émet la réponse, la page l'enregistre. |
 | `scan-filters` | organism | Champ de recherche et bascules « Favorites only », « Rated only ». Émet un `ScanFilters`. |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 

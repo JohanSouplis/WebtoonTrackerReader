@@ -174,6 +174,34 @@ Les numéros ne se comparent qu'entre pages d'un même site : un autre site num�
 - Supprimer un scan supprime son `ChapterWatch` (`DeleteScanUseCase`).
 - Toute modification d'une stratégie se mesure avec `npm run eval:new-chapters` ([`testing.md`](testing.md)).
 
+## La demande de note
+
+La popup propose au lecteur de noter l'extension sur le Chrome Web Store, une fois qu'elle lui a servi. Une demande
+trop tôt ou trop souvent coûte plus cher qu'une note manquée : **dans le doute, on ne demande pas.**
+
+- `RatePrompt` (`rate-prompt.ts`) est l'état de la demande : la date du premier usage (`firstUsedAt`), si le lecteur
+  a déjà ouvert un nouveau chapitre signalé, et où en est la demande (`RatePromptState`) : `never-shown`,
+  `snoozed` (jusqu'à quand, combien de fois elle a été montrée), `rated` ou `declined`. `rated` et `declined` sont
+  définitifs.
+- Le premier usage est la date d'installation (`chrome.runtime.onInstalled`, raison `install`). Un lecteur installé
+  avant cette règle n'en a pas : sa première ouverture de la popup le fixe, et il attend comme un nouveau lecteur.
+  Un premier usage déjà connu ne change jamais.
+- **La demande est due** (`shouldAskForRating`) si l'extension a servi, soit un nouveau chapitre signalé ouvert, soit
+  assez de scans depuis assez longtemps, et si la demande n'est ni définitive, ni en attente, ni épuisée.
+- Montrer la demande compte une fois et la met en attente : une demande ignorée ne revient pas à la prochaine
+  ouverture. « Not now » la remet en attente à partir du clic. « Rate it » ouvre les avis du Chrome Web Store et
+  ne redemande plus, comme l'entrée permanente « Rate the extension ». « Don't ask again » ne redemande plus.
+- Pas de tri des avis (« vous aimez ? oui : le store, non : un formulaire »), pas de contrepartie.
+
+| Seuil | Valeur | Pourquoi |
+|---|---|---|
+| Scans suivis | 10 | Une première page entière de la bibliothèque : le suivi a reconnu des lectures, plusieurs fois |
+| Jours depuis le premier usage | 7 | Un cycle de parution hebdomadaire : le lecteur est revenu au moins une fois à un nouveau chapitre |
+| Attente après une demande | 30 jours | Une demande par mois au plus, loin de la précédente |
+| Demandes au total | 3 | La limite qu'Apple impose aux demandes de note d'une app (3 par an) : au-delà, c'est du harcèlement |
+
+Les valeurs vivent dans une seule table du code, `RATE_PROMPT_RULES`.
+
 ## Tell-Don't-Ask
 
 Un use-case dit à l'agrégat quoi faire. Il ne lit pas son état pour décider à sa place.
