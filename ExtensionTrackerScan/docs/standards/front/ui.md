@@ -23,7 +23,7 @@ Exemples tirés de l'extension :
 
 | Composant | Niveau | Raison |
 |---|---|---|
-| `star-toggle` | atom | Un `<button>` `aria-pressed` avec une étoile, `input()` `checked` et `label`, `output()` `toggled`. Ne sait pas ce qu'est un favori. |
+| `bell-toggle` | atom | Un `<button>` `aria-pressed` avec une cloche (`notification_add`, pleine quand cochée), `input()` `checked`, `label` et `hint` (l'infobulle), `output()` `toggled`. Ne sait pas ce qu'est un favori. |
 | `truncated-text` | atom | Coupe un texte au-delà d'une longueur et pose `matTooltip` avec le texte entier. |
 | `monogram` | atom | Tire d'un texte ses initiales et une teinte stable. Décoratif, `aria-hidden`. |
 | `cover` | atom | La vignette d'une couverture à la taille du monogramme, qui apparaît en fondu. Décorative, `alt` vide : le titre est à côté. |
@@ -31,7 +31,7 @@ Exemples tirés de l'extension :
 | `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
 | `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), avec le lien du nouveau chapitre d'un favori ou l'indication d'un site impossible à vérifier, émet suppression, favori, note, page. Après une suppression, il pose le focus sur le titre voisin et ignore un second clic de suppression pendant 300 ms : la ligne suivante glisse sous le pointeur. |
 | `new-chapter-settings` | organism | Un bouton qui annonce la fréquence et ouvre un menu : fréquence (`1h`, `6h`, `24h`) et notifications. Émet le choix, la page l'applique. |
-| `scan-filters` | organism | Champ de recherche et bascules « Favorites only », « Rated only ». Émet un `ScanFilters`. |
+| `scan-filters` | organism | Champ de recherche et bascules « Following only », « Rated only ». Émet un `ScanFilters`. |
 | `about-sections` | organism | Ce que l'extension suit et comment, la veille des chapitres, la confidentialité avec l'interrupteur des rapports, le contact et la version. Émet le choix des rapports. |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 

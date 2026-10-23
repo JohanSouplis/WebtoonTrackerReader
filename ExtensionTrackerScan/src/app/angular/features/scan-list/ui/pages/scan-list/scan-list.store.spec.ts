@@ -44,7 +44,7 @@ describe('ScanListStore', () => {
     );
   });
 
-  it('should hide a scan from Favorites only when it is unfavorited', () => {
+  it('should hide a scan from Following only when it is unfavorited', () => {
     const store = new ScanListStore();
     store.showLibrary([
       aScan({ title: 'Solo Leveling', isFavorite: true }),
@@ -116,7 +116,7 @@ describe('ScanListStore', () => {
     expect(store.count()).toBe(0);
   });
 
-  it('should keep the typed title when Favorites only is pressed', () => {
+  it('should keep the typed title when Following only is pressed', () => {
     const store = new ScanListStore();
     store.showLibrary(TWELVE_SCANS);
     store.filter({ title: 'zzzz' });

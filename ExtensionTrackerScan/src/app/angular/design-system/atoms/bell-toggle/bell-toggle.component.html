@@ -2,7 +2,10 @@
   type="button"
   [attr.aria-label]="label()"
   [attr.aria-pressed]="checked()"
+  [matTooltip]="hint()"
   (click)="toggled.emit()"
 >
-  <mat-icon [class.is-filled]="checked()" [@pop]="checked()">star</mat-icon>
+  <mat-icon [class.is-filled]="checked()" [@ring]="checked()">{{
+    icon()
+  }}</mat-icon>
 </button>

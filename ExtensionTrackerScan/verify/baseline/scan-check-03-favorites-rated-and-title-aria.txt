@@ -6,7 +6,7 @@
 - main:
   - searchbox "Filter by title": heavenly
   - button "Clear Filter by title"
-  - button "Favorites only" [pressed]
+  - button "Following only" [pressed]
   - button "Rated only" [pressed]
   - text: 1 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -16,7 +16,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
@@ -25,7 +25,7 @@
       - time: 12 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
-      - button "Favorite The Heavenly Demon Wants a Quiet Life" [pressed]
+      - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
   - group:
     - text: Rows

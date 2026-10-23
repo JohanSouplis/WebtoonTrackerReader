@@ -6,7 +6,7 @@
 - main:
   - searchbox "Filter by title": sss
   - button "Clear Filter by title"
-  - button "Favorites only"
+  - button "Following only"
   - button "Rated only"
   - text: 1 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -16,7 +16,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "Return of the SSS-Class Ranker":
@@ -25,7 +25,7 @@
       - time: 10 mo ago
       - text: asuracomic.net
       - combobox "Rating for Return of the SSS-Class Ranker": "9"
-      - button "Favorite Return of the SSS-Class Ranker"
+      - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
   - group:
     - text: Rows

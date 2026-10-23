@@ -46,7 +46,7 @@ src/app/angular/
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
-    atoms/      star-toggle/ · truncated-text/ · monogram/ · cover/ · relative-date/
+    atoms/      bell-toggle/ · truncated-text/ · monogram/ · cover/ · relative-date/
     molecules/  search-field/
   features/
     scan-list/                       onglet « Library », route ''

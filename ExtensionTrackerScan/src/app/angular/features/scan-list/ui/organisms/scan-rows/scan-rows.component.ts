@@ -13,9 +13,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CoverComponent } from '../../../../../design-system/atoms/cover/cover.component';
+import { BellToggleComponent } from '../../../../../design-system/atoms/bell-toggle/bell-toggle.component';
 import { MonogramComponent } from '../../../../../design-system/atoms/monogram/monogram.component';
 import { RelativeDateComponent } from '../../../../../design-system/atoms/relative-date/relative-date.component';
-import { StarToggleComponent } from '../../../../../design-system/atoms/star-toggle/star-toggle.component';
 import { TruncatedTextComponent } from '../../../../../design-system/atoms/truncated-text/truncated-text.component';
 import { ScanListView, ScanPage } from '../../../service/scan-list-view.vm';
 import { ScanRow } from '../../../service/scan-row.vm';
@@ -26,6 +26,7 @@ const SHIFTED_ROW_GUARD_MS = 300;
 @Component({
   selector: 'app-scan-rows',
   imports: [
+    BellToggleComponent,
     CoverComponent,
     MatIconModule,
     MatPaginatorModule,
@@ -33,7 +34,6 @@ const SHIFTED_ROW_GUARD_MS = 300;
     MatTooltipModule,
     MonogramComponent,
     RelativeDateComponent,
-    StarToggleComponent,
     TruncatedTextComponent,
   ],
   templateUrl: './scan-rows.component.html',

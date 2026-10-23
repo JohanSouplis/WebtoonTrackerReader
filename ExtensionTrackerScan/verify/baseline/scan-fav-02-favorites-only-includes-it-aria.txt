@@ -5,7 +5,7 @@
 - button "About"
 - main:
   - searchbox "Filter by title"
-  - button "Favorites only" [pressed]
+  - button "Following only" [pressed]
   - button "Rated only"
   - text: 12 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -15,7 +15,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "Local":
@@ -24,7 +24,7 @@
       - time: 1 mo ago
       - text: localhost:4200
       - combobox "Rating for Local": –
-      - button "Favorite Local" [pressed]
+      - button "Follow Local" [pressed]
       - button "Delete Local"
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
@@ -33,7 +33,7 @@
       - time: 3 mo ago
       - text: asuracomic.net
       - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
-      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
@@ -44,7 +44,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
-      - button "Favorite The Executioner" [pressed]
+      - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
       - link "I Obtained a Mythic Item":
@@ -53,7 +53,7 @@
       - time: 5 mo ago
       - text: asuracomic.net
       - combobox "Rating for I Obtained a Mythic Item": "9"
-      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
     - listitem:
       - link "Dungeon Odyssey":
@@ -64,7 +64,7 @@
       - time: 6 mo ago
       - text: asuracomic.net
       - combobox "Rating for Dungeon Odyssey": "10"
-      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
     - listitem:
       - link "Worthless Regression":
@@ -73,7 +73,7 @@
       - time: 7 mo ago
       - text: asuracomic.net
       - combobox "Rating for Worthless Regression": "6"
-      - button "Favorite Worthless Regression" [pressed]
+      - button "Follow Worthless Regression" [pressed]
       - button "Delete Worthless Regression"
     - listitem:
       - link "Duke Pendragon":
@@ -82,7 +82,7 @@
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
       - combobox "Rating for Duke Pendragon": –
-      - button "Favorite Duke Pendragon" [pressed]
+      - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
     - listitem:
       - 'link "Solo Leveling: Ragnarok"':
@@ -91,7 +91,7 @@
       - time: 8 mo ago
       - text: asuracomic.net
       - 'combobox "Rating for Solo Leveling: Ragnarok"': –
-      - 'button "Favorite Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
       - 'button "Delete Solo Leveling: Ragnarok"'
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
@@ -100,7 +100,7 @@
       - time: 9 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
-      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
@@ -109,7 +109,7 @@
       - time: 11 mo ago
       - text: asuracomic.net
       - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
-      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
   - group:
     - text: Rows
@@ -119,3 +119,4 @@
     - button "Previous page" [disabled]
     - button "Next page"
     - button "Last page"
+- text: Following “Worthless Regression”. We'll check for new chapters.

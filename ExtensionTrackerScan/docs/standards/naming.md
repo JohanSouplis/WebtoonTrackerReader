@@ -23,7 +23,7 @@ pas un synonyme.
 | `Chapter` | Le numéro du dernier chapitre lu, un nombre | un `chapter` en `string` |
 | `Reading` | La lecture d'un chapitre d'un scan à une date | `newScan`, `scanVisited` |
 | `readAt` | La date de la dernière lecture | `whenWasItRead`, `wasRead`, `dateReading` |
-| `Favorite` | Un scan marqué par le lecteur | `fav`, `isFavorited` |
+| `Favorite` | Un scan que le lecteur suit : seuls les favoris sont vérifiés pour de nouveaux chapitres. L'interface dit « Follow » (bouton cloche, « Following only », tri « Following ») ; le code et le stockage gardent `Favorite`. L'étoile est réservée à la note. | `fav`, `isFavorited` |
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
 | `RemovedScan` | Un scan supprimé, avec sa couverture et sa veille, gardé le temps de l'annulation | `deletedItem`, `trash`, `backup` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |

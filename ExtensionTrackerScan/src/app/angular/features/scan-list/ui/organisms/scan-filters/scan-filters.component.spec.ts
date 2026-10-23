@@ -4,7 +4,7 @@ import { NO_FILTERS, ScanFilters } from '../../../service/scan-filters.rules';
 import { ScanFiltersComponent } from './scan-filters.component';
 
 describe('ScanFiltersComponent', () => {
-  it('should ask for favorites only when Favorites only is pressed', async () => {
+  it('should ask for favorites only when Following only is pressed', async () => {
     const filtersChanged = jest.fn();
     await renderFilters(
       { title: 'solo', favoritesOnly: false, ratedOnly: true },
@@ -12,7 +12,7 @@ describe('ScanFiltersComponent', () => {
     );
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Favorites only' }),
+      screen.getByRole('button', { name: 'Following only' }),
     );
 
     expect(filtersChanged).toHaveBeenCalledWith({ favoritesOnly: true });
@@ -31,7 +31,7 @@ describe('ScanFiltersComponent', () => {
     await renderFilters({ ...NO_FILTERS, favoritesOnly: true });
 
     expect(
-      screen.getByRole('button', { name: 'Favorites only' }),
+      screen.getByRole('button', { name: 'Following only' }),
     ).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('button', { name: 'Rated only' })).toHaveAttribute(
       'aria-pressed',

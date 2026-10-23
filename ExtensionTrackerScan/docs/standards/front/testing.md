@@ -43,7 +43,7 @@ installés. La première spec de composant les ajoute.
   l'utilisateur agit. Ses interactions se testent ici une fois, pas dans chaque organism.
 - **Organism** : enfants réels, le ViewModel en input. On assert l'affichage et les `output()` émis.
 - **Page** : la spec fournit les providers de la feature avec les gateways in-memory du core, puis vérifie un
-  parcours. Exemple : cliquer sur l'étoile d'un scan le fait apparaître sous « Favorites only ».
+  parcours. Exemple : cliquer sur la cloche d'un scan le fait apparaître sous « Following only ».
 
 ## Ne pas tester
 

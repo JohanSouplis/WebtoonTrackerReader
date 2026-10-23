@@ -5,7 +5,7 @@
 - button "About"
 - main:
   - searchbox "Filter by title"
-  - button "Favorites only"
+  - button "Following only"
   - button "Rated only"
   - text: 20 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -15,7 +15,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "The Heavenly Demon Can't Live a Normal Life":
@@ -24,7 +24,7 @@
       - time: 1.1 yr ago
       - text: asuracomic.net
       - combobox "Rating for The Heavenly Demon Can't Live a Normal Life": "9"
-      - button "Favorite The Heavenly Demon Can't Live a Normal Life"
+      - button "Follow The Heavenly Demon Can't Live a Normal Life"
       - button "Delete The Heavenly Demon Can't Live a Normal Life"
     - listitem:
       - link "SSS-Class Suicide Hunter":
@@ -33,7 +33,7 @@
       - time: 1.1 yr ago
       - text: asuracomic.net
       - combobox "Rating for SSS-Class Suicide Hunter": "10"
-      - button "Favorite SSS-Class Suicide Hunter"
+      - button "Follow SSS-Class Suicide Hunter"
       - button "Delete SSS-Class Suicide Hunter"
     - listitem:
       - link "Return of the Disaster-Class Hero":
@@ -42,7 +42,7 @@
       - time: 1.1 yr ago
       - text: asuracomic.net
       - combobox "Rating for Return of the Disaster-Class Hero": –
-      - button "Favorite Return of the Disaster-Class Hero"
+      - button "Follow Return of the Disaster-Class Hero"
       - button "Delete Return of the Disaster-Class Hero"
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
@@ -51,7 +51,7 @@
       - time: 12 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
-      - button "Favorite The Heavenly Demon Wants a Quiet Life" [pressed]
+      - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
     - listitem:
       - link "Trash of the Count’s Family":
@@ -60,7 +60,7 @@
       - time: 12 mo ago
       - text: asuracomic.net
       - combobox "Rating for Trash of the Count’s Family": –
-      - button "Favorite Trash of the Count’s Family" [pressed]
+      - button "Follow Trash of the Count’s Family" [pressed]
       - button "Delete Trash of the Count’s Family"
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
@@ -69,7 +69,7 @@
       - time: 11 mo ago
       - text: asuracomic.net
       - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
-      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
     - listitem:
       - link "Return of the SSS-Class Ranker":
@@ -78,7 +78,7 @@
       - time: 10 mo ago
       - text: asuracomic.net
       - combobox "Rating for Return of the SSS-Class Ranker": "9"
-      - button "Favorite Return of the SSS-Class Ranker"
+      - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
     - listitem:
       - link "My School Life Pretending To Be a Worthless Person - My...":
@@ -87,7 +87,7 @@
       - time: 9 mo ago
       - text: asuracomic.net
       - combobox "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person": "6"
-      - button "Favorite My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "Follow My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
       - button "Delete My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
@@ -96,7 +96,7 @@
       - time: 9 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
-      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
     - listitem:
       - link "The Priest of Corruption":
@@ -105,7 +105,7 @@
       - time: 8 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Priest of Corruption": "6"
-      - button "Favorite The Priest of Corruption"
+      - button "Follow The Priest of Corruption"
       - button "Delete The Priest of Corruption"
     - listitem:
       - 'link "Solo Leveling: Ragnarok"':
@@ -114,7 +114,7 @@
       - time: 8 mo ago
       - text: asuracomic.net
       - 'combobox "Rating for Solo Leveling: Ragnarok"': –
-      - 'button "Favorite Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
       - 'button "Delete Solo Leveling: Ragnarok"'
     - listitem:
       - link "Duke Pendragon":
@@ -123,7 +123,7 @@
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
       - combobox "Rating for Duke Pendragon": –
-      - button "Favorite Duke Pendragon" [pressed]
+      - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
     - listitem:
       - link "Worthless Regression":
@@ -132,7 +132,7 @@
       - time: 7 mo ago
       - text: asuracomic.net
       - combobox "Rating for Worthless Regression": "6"
-      - button "Favorite Worthless Regression"
+      - button "Follow Worthless Regression"
       - button "Delete Worthless Regression"
     - listitem:
       - link "A Dragonslayer's Peerless Regression":
@@ -141,7 +141,7 @@
       - time: 7 mo ago
       - text: asuracomic.net
       - combobox "Rating for A Dragonslayer's Peerless Regression": "5"
-      - button "Favorite A Dragonslayer's Peerless Regression"
+      - button "Follow A Dragonslayer's Peerless Regression"
       - button "Delete A Dragonslayer's Peerless Regression"
     - listitem:
       - link "Dungeon Odyssey":
@@ -152,7 +152,7 @@
       - time: 6 mo ago
       - text: asuracomic.net
       - combobox "Rating for Dungeon Odyssey": "10"
-      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
     - listitem:
       - link "I Obtained a Mythic Item":
@@ -161,7 +161,7 @@
       - time: 5 mo ago
       - text: asuracomic.net
       - combobox "Rating for I Obtained a Mythic Item": "9"
-      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
     - listitem:
       - link "Absolute Sword Sense":
@@ -170,7 +170,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for Absolute Sword Sense": "7"
-      - button "Favorite Absolute Sword Sense"
+      - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
     - listitem:
       - link "The Executioner":
@@ -181,7 +181,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
-      - button "Favorite The Executioner" [pressed]
+      - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
@@ -190,7 +190,7 @@
       - time: 3 mo ago
       - text: asuracomic.net
       - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
-      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
       - link "Local":
@@ -199,7 +199,7 @@
       - time: 1 mo ago
       - text: localhost:4200
       - combobox "Rating for Local": –
-      - button "Favorite Local" [pressed]
+      - button "Follow Local" [pressed]
       - button "Delete Local"
   - group:
     - text: Rows

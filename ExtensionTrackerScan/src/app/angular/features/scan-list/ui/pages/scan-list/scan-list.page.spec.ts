@@ -181,7 +181,7 @@ describe('ScanListPage', () => {
     expect(await notificationPermission.isGranted()).toBe(false);
   });
 
-  it('should show a scan under Favorites only and save it when its star is clicked', async () => {
+  it('should show a scan under Following only and save it when its bell is clicked', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
       aScan({ title: 'Omniscient Reader' }),
@@ -189,10 +189,10 @@ describe('ScanListPage', () => {
     await renderPage(scanRepository);
 
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Favorite Solo Leveling' }),
+      await screen.findByRole('button', { name: 'Follow Solo Leveling' }),
     );
     await userEvent.click(
-      screen.getByRole('button', { name: 'Favorites only' }),
+      screen.getByRole('button', { name: 'Following only' }),
     );
 
     expect(
@@ -239,6 +239,29 @@ describe('ScanListPage', () => {
       aScan({ title: 'Return of the SSS-Class Ranker' }),
       aScan({ title: 'Omniscient Reader' }),
     ]);
+  });
+
+  it('should confirm what following and unfollowing a series does', async () => {
+    await renderPage(
+      new InMemoryScanRepository([aScan({ title: 'Solo Leveling' })]),
+    );
+    const follow = await screen.findByRole('button', {
+      name: 'Follow Solo Leveling',
+    });
+
+    await userEvent.click(follow);
+    expect(
+      await screen.findByText(
+        "Following “Solo Leveling”. We'll check for new chapters.",
+      ),
+    ).toBeInTheDocument();
+    await userEvent.click(follow);
+
+    expect(
+      await screen.findByText(
+        'Stopped checking “Solo Leveling” for new chapters.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('should bring a deleted scan back with its favorite when Undo is clicked', async () => {

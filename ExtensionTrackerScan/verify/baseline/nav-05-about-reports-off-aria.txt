@@ -10,7 +10,7 @@
     - paragraph: Removing a series deletes it from your library. Reading it again adds it back.
   - region "New chapters":
     - heading "New chapters" [level=2]
-    - paragraph: Favorite series are checked for new chapters from your browser, without any server, as often as you choose in the library. A new chapter shows on its row and as a count on the toolbar icon. Desktop alerts are optional.
+    - paragraph: Follow a series with its bell and Scan Tracker checks it for new chapters from your browser, without any server, as often as you choose in the library. A new chapter shows on its row and as a count on the toolbar icon. Desktop alerts are optional.
   - region "Privacy":
     - heading "Privacy" [level=2]
     - paragraph: Your library stays in your browser. When a page of a supported site can't be read, the extension sends that page's address and title to the developer so the site can be fixed. Nothing else about you is sent.

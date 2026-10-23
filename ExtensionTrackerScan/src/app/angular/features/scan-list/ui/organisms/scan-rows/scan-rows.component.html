@@ -72,9 +72,10 @@
                   }
                 </mat-select>
               </div>
-              <ds-star-toggle
+              <ds-bell-toggle
                 [checked]="row.isFavorite"
-                label="Favorite {{ row.title }}"
+                label="Follow {{ row.title }}"
+                hint="Follow · check for new chapters"
                 (toggled)="favoriteToggled.emit(row)"
               />
               <button

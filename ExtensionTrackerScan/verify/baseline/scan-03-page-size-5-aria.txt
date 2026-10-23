@@ -5,7 +5,7 @@
 - button "About"
 - main:
   - searchbox "Filter by title"
-  - button "Favorites only"
+  - button "Following only"
   - button "Rated only"
   - text: 20 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -15,7 +15,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "Local":
@@ -24,7 +24,7 @@
       - time: 1 mo ago
       - text: localhost:4200
       - combobox "Rating for Local": –
-      - button "Favorite Local" [pressed]
+      - button "Follow Local" [pressed]
       - button "Delete Local"
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
@@ -33,7 +33,7 @@
       - time: 3 mo ago
       - text: asuracomic.net
       - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
-      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
@@ -44,7 +44,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
-      - button "Favorite The Executioner" [pressed]
+      - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
       - link "Absolute Sword Sense":
@@ -53,7 +53,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for Absolute Sword Sense": "7"
-      - button "Favorite Absolute Sword Sense"
+      - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
     - listitem:
       - link "I Obtained a Mythic Item":
@@ -62,7 +62,7 @@
       - time: 5 mo ago
       - text: asuracomic.net
       - combobox "Rating for I Obtained a Mythic Item": "9"
-      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
   - group:
     - text: Rows

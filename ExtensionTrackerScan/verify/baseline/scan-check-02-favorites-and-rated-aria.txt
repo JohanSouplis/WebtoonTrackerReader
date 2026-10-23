@@ -5,7 +5,7 @@
 - button "About"
 - main:
   - searchbox "Filter by title"
-  - button "Favorites only" [pressed]
+  - button "Following only" [pressed]
   - button "Rated only" [pressed]
   - text: 7 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -15,7 +15,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
@@ -24,7 +24,7 @@
       - time: 3 mo ago
       - text: asuracomic.net
       - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
-      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
@@ -35,7 +35,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
-      - button "Favorite The Executioner" [pressed]
+      - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
       - link "I Obtained a Mythic Item":
@@ -44,7 +44,7 @@
       - time: 5 mo ago
       - text: asuracomic.net
       - combobox "Rating for I Obtained a Mythic Item": "9"
-      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
     - listitem:
       - link "Dungeon Odyssey":
@@ -55,7 +55,7 @@
       - time: 6 mo ago
       - text: asuracomic.net
       - combobox "Rating for Dungeon Odyssey": "10"
-      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
@@ -64,7 +64,7 @@
       - time: 9 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
-      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
@@ -73,7 +73,7 @@
       - time: 11 mo ago
       - text: asuracomic.net
       - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
-      - button "Favorite Pick Me Up, Infinite Gacha" [pressed]
+      - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
     - listitem:
       - link "The Heavenly Demon Wants a Quiet Life":
@@ -82,7 +82,7 @@
       - time: 12 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
-      - button "Favorite The Heavenly Demon Wants a Quiet Life" [pressed]
+      - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
   - group:
     - text: Rows

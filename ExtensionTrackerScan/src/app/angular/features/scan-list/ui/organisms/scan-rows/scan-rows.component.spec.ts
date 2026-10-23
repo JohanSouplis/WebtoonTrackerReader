@@ -139,12 +139,12 @@ describe('ScanRowsComponent', () => {
     expect(screen.getByRole('link', { name: 'Solo Leveling' })).toHaveFocus();
   });
 
-  it('should ask to toggle the favorite when the star of a scan is clicked', async () => {
+  it('should ask to toggle the favorite when the bell of a scan is clicked', async () => {
     const favoriteToggled = jest.fn();
     await renderRows(SHOWN_SCANS, { favoriteToggled });
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Favorite Solo Leveling' }),
+      screen.getByRole('button', { name: 'Follow Solo Leveling' }),
     );
 
     expect(favoriteToggled).toHaveBeenCalledWith(SOLO_LEVELING);

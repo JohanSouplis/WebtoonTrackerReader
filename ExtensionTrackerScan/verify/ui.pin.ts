@@ -240,8 +240,8 @@ test.describe('scan list', () => {
     await sortButton(page, 'Chapter').click();
     await expectSortedBy(page, 'Chapter (ascending)');
     await pin(page, 'scan-sort-05-chapter-second-click');
-    await sortButton(page, 'Favorite').click();
-    await expectSortedBy(page, 'Favorite (descending)');
+    await sortButton(page, 'Following').click();
+    await expectSortedBy(page, 'Following (descending)');
     await pin(page, 'scan-sort-06-favorite-first-click');
     await sortButton(page, 'Rating').click();
     await expectSortedBy(page, 'Rating (descending)');
@@ -270,7 +270,7 @@ test.describe('scan list', () => {
   test('empty state clears the filters', async ({ page }) => {
     await openLibrary(page);
     await searchTitle(page, 'zzzz');
-    await toggle(page, 'Favorites only').click();
+    await toggle(page, 'Following only').click();
     await expect(
       page.getByRole('heading', { name: 'No reads match' }),
     ).toBeVisible();
@@ -284,7 +284,7 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('searchbox', { name: 'Filter by title' }),
     ).toHaveValue('');
-    await expect(toggle(page, 'Favorites only')).toHaveAttribute(
+    await expect(toggle(page, 'Following only')).toHaveAttribute(
       'aria-pressed',
       'false',
     );
@@ -293,7 +293,7 @@ test.describe('scan list', () => {
 
   test('favorites, rated and title filters compose', async ({ page }) => {
     await openLibrary(page);
-    await toggle(page, 'Favorites only').click();
+    await toggle(page, 'Following only').click();
     await expect(page.getByText('11 series')).toBeVisible();
     await pin(page, 'scan-check-01-favorites-only');
     await toggle(page, 'Rated only').click();
@@ -302,7 +302,7 @@ test.describe('scan list', () => {
     await searchTitle(page, 'heavenly');
     await expectShownTitles(page, ['The Heavenly Demon Wants a Quiet Life']);
     await pin(page, 'scan-check-03-favorites-rated-and-title');
-    await toggle(page, 'Favorites only').click();
+    await toggle(page, 'Following only').click();
     await expectShownTitles(page, [
       'The Heavenly Demon Wants a Quiet Life',
       "The Heavenly Demon Can't Live a Normal Life",
@@ -319,16 +319,21 @@ test.describe('scan list', () => {
   }) => {
     await openLibrary(page);
     const star = row(page, 'Worthless Regression').getByRole('button', {
-      name: 'Favorite Worthless Regression',
+      name: 'Follow Worthless Regression',
     });
     await star.click();
     await expect(star).toHaveAttribute('aria-pressed', 'true');
+    await expect(
+      page.getByText(
+        "Following “Worthless Regression”. We'll check for new chapters.",
+      ),
+    ).toBeVisible();
     await pin(page, 'scan-fav-01-worthless-regression-favorited');
-    await toggle(page, 'Favorites only').click();
+    await toggle(page, 'Following only').click();
     await expect(row(page, 'Worthless Regression')).toHaveCount(1);
     await pin(page, 'scan-fav-02-favorites-only-includes-it');
     await row(page, 'Worthless Regression')
-      .getByRole('button', { name: 'Favorite Worthless Regression' })
+      .getByRole('button', { name: 'Follow Worthless Regression' })
       .click();
     await expect(row(page, 'Worthless Regression')).toHaveCount(0);
     await expect(page.getByText('11 series')).toBeVisible();
@@ -381,7 +386,7 @@ test.describe('scan list', () => {
     await expect(row(page, 'Local')).toHaveCount(1);
     await expect(page.getByText('20 series')).toBeVisible();
     await expect(
-      row(page, 'Local').getByRole('button', { name: 'Favorite Local' }),
+      row(page, 'Local').getByRole('button', { name: 'Follow Local' }),
     ).toHaveAttribute('aria-pressed', 'true');
     await pin(page, 'scan-delete-08-undone');
   });
@@ -399,7 +404,7 @@ test.describe('scan list', () => {
   test('delete is reachable from the keyboard', async ({ page }) => {
     await openLibrary(page);
     await row(page, 'Local')
-      .getByRole('button', { name: 'Favorite Local' })
+      .getByRole('button', { name: 'Follow Local' })
       .focus();
     await page.keyboard.press('Tab');
     const remove = row(page, 'Local').getByRole('button', {
@@ -425,13 +430,13 @@ test.describe('scan list', () => {
 
   test('delete keeps favorites only', async ({ page }) => {
     await openLibrary(page);
-    await toggle(page, 'Favorites only').click();
+    await toggle(page, 'Following only').click();
     await row(page, 'Local')
       .getByRole('button', { name: 'Delete Local' })
       .click();
     await expect(row(page, 'Local')).toHaveCount(0);
     await expect(page.getByText('10 series')).toBeVisible();
-    await expect(toggle(page, 'Favorites only')).toHaveAttribute(
+    await expect(toggle(page, 'Following only')).toHaveAttribute(
       'aria-pressed',
       'true',
     );

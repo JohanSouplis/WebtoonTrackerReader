@@ -18,7 +18,7 @@ const SORT_LABELS: readonly { key: ScanSortKey; label: string }[] = [
   { key: 'title', label: 'Title' },
   { key: 'chapter', label: 'Chapter' },
   { key: 'rating', label: 'Rating' },
-  { key: 'favorite', label: 'Favorite' },
+  { key: 'favorite', label: 'Following' },
 ];
 
 const DIRECTIONS: Record<SortDirection, { arrow: string; name: string }> = {

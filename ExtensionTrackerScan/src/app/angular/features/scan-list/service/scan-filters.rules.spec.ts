@@ -6,7 +6,7 @@ describe('filterScans', () => {
     expect(filterScans(SCANS, NO_FILTERS)).toEqual(SCANS);
   });
 
-  it('should keep only favorite scans when Favorites only is on', () => {
+  it('should keep only favorite scans when Following only is on', () => {
     expect(filterScans(SCANS, { ...NO_FILTERS, favoritesOnly: true })).toEqual([
       SOLO_LEVELING,
       DUKE_PENDRAGON,

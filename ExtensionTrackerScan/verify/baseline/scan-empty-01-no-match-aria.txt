@@ -6,7 +6,7 @@
 - main:
   - searchbox "Filter by title": zzzz
   - button "Clear Filter by title"
-  - button "Favorites only" [pressed]
+  - button "Following only" [pressed]
   - button "Rated only"
   - text: 0 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -16,7 +16,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - heading "No reads match" [level=2]
   - paragraph: Nothing in your library for “zzzz”.
   - button "Clear filters"

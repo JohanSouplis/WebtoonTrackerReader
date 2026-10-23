@@ -5,7 +5,7 @@
 - button "About"
 - main:
   - searchbox "Filter by title"
-  - button "Favorites only"
+  - button "Following only"
   - button "Rated only" [pressed]
   - text: 16 series
   - 'button "New chapter checks: Every 6h"': Every 6h
@@ -15,7 +15,7 @@
     - button "Title"
     - button "Chapter"
     - button "Rating"
-    - button "Favorite"
+    - button "Following"
   - list "Library":
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
@@ -24,7 +24,7 @@
       - time: 3 mo ago
       - text: asuracomic.net
       - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
-      - button "Favorite Omniscient Reader’s Viewpoint" [pressed]
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
@@ -35,7 +35,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
-      - button "Favorite The Executioner" [pressed]
+      - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
       - link "Absolute Sword Sense":
@@ -44,7 +44,7 @@
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for Absolute Sword Sense": "7"
-      - button "Favorite Absolute Sword Sense"
+      - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
     - listitem:
       - link "I Obtained a Mythic Item":
@@ -53,7 +53,7 @@
       - time: 5 mo ago
       - text: asuracomic.net
       - combobox "Rating for I Obtained a Mythic Item": "9"
-      - button "Favorite I Obtained a Mythic Item" [pressed]
+      - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
     - listitem:
       - link "Dungeon Odyssey":
@@ -64,7 +64,7 @@
       - time: 6 mo ago
       - text: asuracomic.net
       - combobox "Rating for Dungeon Odyssey": "10"
-      - button "Favorite Dungeon Odyssey" [pressed]
+      - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
     - listitem:
       - link "A Dragonslayer's Peerless Regression":
@@ -73,7 +73,7 @@
       - time: 7 mo ago
       - text: asuracomic.net
       - combobox "Rating for A Dragonslayer's Peerless Regression": "5"
-      - button "Favorite A Dragonslayer's Peerless Regression"
+      - button "Follow A Dragonslayer's Peerless Regression"
       - button "Delete A Dragonslayer's Peerless Regression"
     - listitem:
       - link "Worthless Regression":
@@ -82,7 +82,7 @@
       - time: 7 mo ago
       - text: asuracomic.net
       - combobox "Rating for Worthless Regression": "6"
-      - button "Favorite Worthless Regression"
+      - button "Follow Worthless Regression"
       - button "Delete Worthless Regression"
     - listitem:
       - link "Duke Pendragon":
@@ -91,7 +91,7 @@
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
       - combobox "Rating for Duke Pendragon": "3"
-      - button "Favorite Duke Pendragon" [pressed]
+      - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
     - listitem:
       - link "The Priest of Corruption":
@@ -100,7 +100,7 @@
       - time: 8 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Priest of Corruption": "6"
-      - button "Favorite The Priest of Corruption"
+      - button "Follow The Priest of Corruption"
       - button "Delete The Priest of Corruption"
     - listitem:
       - link "The Reincarnated Assassin is a Genius Swordsman":
@@ -109,7 +109,7 @@
       - time: 9 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
-      - button "Favorite The Reincarnated Assassin is a Genius Swordsman" [pressed]
+      - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
   - group:
     - text: Rows

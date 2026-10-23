@@ -41,6 +41,8 @@ import { ScanListStore } from './scan-list.store';
 
 const UNDO_DURATION_MS = 6000;
 
+const FOLLOW_FEEDBACK_DURATION_MS = 3000;
+
 @Component({
   selector: 'app-scan-list',
   imports: [
@@ -117,9 +119,19 @@ export class ScanListPage implements OnInit {
   }
 
   protected toggleFavorite(scan: ScanRow): Promise<void> {
-    return this.update(() =>
-      this.toggleFavoriteScan.execute(ScanTitle.of(scan.title)),
-    );
+    return this.update(async () => {
+      const library = await this.toggleFavoriteScan.execute(
+        ScanTitle.of(scan.title),
+      );
+      this.snackBar.open(
+        scan.isFavorite
+          ? `Stopped checking “${scan.title}” for new chapters.`
+          : `Following “${scan.title}”. We'll check for new chapters.`,
+        undefined,
+        { duration: FOLLOW_FEEDBACK_DURATION_MS },
+      );
+      return library;
+    });
   }
 
   protected rate({ scan, rating }: ScanRating): Promise<void> {

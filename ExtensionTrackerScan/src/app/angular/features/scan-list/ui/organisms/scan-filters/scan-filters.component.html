@@ -7,8 +7,10 @@
   [checked]="filters().favoritesOnly"
   (change)="filtersChanged.emit({ favoritesOnly: $event.source.checked })"
 >
-  <mat-icon [class.is-filled]="filters().favoritesOnly">star</mat-icon>
-  Favorites only
+  <mat-icon [class.is-filled]="filters().favoritesOnly"
+    >notifications_active</mat-icon
+  >
+  Following only
 </mat-button-toggle>
 <mat-button-toggle
   [checked]="filters().ratedOnly"
