@@ -16,11 +16,14 @@ import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-ra
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
+import { MergeScansUseCase } from '../../../../../../core/use-cases/merge-scans.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
+import { RenameScanUseCase } from '../../../../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
+import { UnmergeScansUseCase } from '../../../../../../core/use-cases/unmerge-scans.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
   CLOCK,
@@ -390,6 +393,129 @@ describe('ScanListPage', () => {
     ]);
   });
 
+  it('should show and save the new title, and confirm it, when a scan is renamed', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Punch', chapter: 200 }),
+      aScan({ title: 'Eleceed' }),
+    ]);
+    await renderPage(scanRepository);
+
+    await chooseMoreAction('Punch', 'Rename');
+    await userEvent.keyboard('One Punch-Man{Enter}');
+
+    expect(
+      await screen.findByText('Renamed to “One Punch-Man”'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'One Punch-Man' })).toHaveFocus();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({ title: 'One Punch-Man', chapter: 200, aliases: ['Punch'] }),
+      aScan({ title: 'Eleceed' }),
+    ]);
+  });
+
+  it('should offer to merge, and merge on request, when the new title is already in the library', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Punch', chapter: 200, readAt: LATER }),
+      aScan({ title: 'One Punch-Man', chapter: 150 }),
+    ]);
+    await renderPage(scanRepository);
+
+    await chooseMoreAction('Punch', 'Rename');
+    await userEvent.keyboard('One Punch Man{Enter}');
+    expect(
+      await screen.findByText('“One Punch-Man” is already in your library'),
+    ).toBeInTheDocument();
+    await userEvent.click(screen.getByText('Merge'));
+
+    expect(
+      await screen.findByText('Merged into “One Punch-Man”'),
+    ).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({
+        title: 'One Punch-Man',
+        chapter: 200,
+        readAt: LATER,
+        aliases: ['Punch'],
+      }),
+    ]);
+  });
+
+  it('should merge a scan into the series picked in Merge with, then bring both back on Undo', async () => {
+    const lookism = aScan({ title: 'Lookism', chapter: 10, rating: 8 });
+    const makine = aScan({
+      title: 'Lookism ( Makine)',
+      chapter: 12,
+      readAt: LATER,
+    });
+    const eleceed = aScan({ title: 'Eleceed' });
+    const scanRepository = new InMemoryScanRepository([
+      lookism,
+      makine,
+      eleceed,
+    ]);
+    await renderPage(scanRepository);
+
+    await chooseMoreAction('Lookism ( Makine)', 'Merge with…');
+    const picker = await screen.findByRole('dialog', {
+      name: 'Merge “Lookism ( Makine)” into…',
+    });
+    await userEvent.type(
+      within(picker).getByRole('searchbox', { name: 'Find a series' }),
+      'look',
+    );
+    await userEvent.click(
+      within(picker).getByRole('button', { name: 'Lookism' }),
+    );
+
+    expect(
+      await screen.findByText('Merged into “Lookism”'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Lookism ( Makine)' }),
+    ).not.toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({
+        title: 'Lookism',
+        chapter: 12,
+        readAt: LATER,
+        rating: 8,
+        aliases: ['Lookism ( Makine)'],
+      }),
+      eleceed,
+    ]);
+    await userEvent.click(screen.getByText('Undo'));
+
+    expect(
+      await screen.findByRole('link', { name: 'Lookism ( Makine)' }),
+    ).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      lookism,
+      eleceed,
+      makine,
+    ]);
+  });
+
+  it('should leave both scans and focus the title again when the merge is cancelled', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Lookism' }),
+      aScan({ title: 'Eleceed' }),
+    ]);
+    await renderPage(scanRepository);
+
+    await chooseMoreAction('Eleceed', 'Merge with…');
+    await userEvent.click(
+      within(await screen.findByRole('dialog')).getByRole('button', {
+        name: 'Cancel',
+      }),
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'Eleceed' })).toHaveFocus(),
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toHaveLength(2);
+  });
+
   it('should save a scan unrated when its rating is cleared', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling', rating: 9 }),
@@ -503,6 +629,17 @@ const FOUND: Cover = {
   at: new Date('2025-03-10T12:00:00Z'),
 };
 
+const LATER = new Date('2025-03-01T12:00:00Z');
+
+const chooseMoreAction = async (title: string, action: string) => {
+  await userEvent.click(
+    within(await rowOf(title)).getByRole('button', {
+      name: `More actions for ${title}`,
+    }),
+  );
+  await userEvent.click(screen.getByRole('menuitem', { name: action }));
+};
+
 const rowOf = async (title: string): Promise<HTMLElement> => {
   const link = await screen.findByRole('link', { name: title });
   const row = link.closest('li');
@@ -557,6 +694,30 @@ const renderPage = (
       {
         provide: RestoreScanUseCase,
         useValue: new RestoreScanUseCase(
+          scanRepository,
+          coverRepository,
+          watchRepository,
+        ),
+      },
+      {
+        provide: RenameScanUseCase,
+        useValue: new RenameScanUseCase(
+          scanRepository,
+          coverRepository,
+          watchRepository,
+        ),
+      },
+      {
+        provide: MergeScansUseCase,
+        useValue: new MergeScansUseCase(
+          scanRepository,
+          coverRepository,
+          watchRepository,
+        ),
+      },
+      {
+        provide: UnmergeScansUseCase,
+        useValue: new UnmergeScansUseCase(
           scanRepository,
           coverRepository,
           watchRepository,

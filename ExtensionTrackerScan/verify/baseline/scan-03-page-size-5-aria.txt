@@ -27,6 +27,7 @@
       - 'button "Rating for Local: not rated"'
       - button "Follow Local" [pressed]
       - button "Delete Local"
+      - button "More actions for Local"
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
         - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
@@ -36,6 +37,7 @@
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
       - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
+      - button "More actions for Omniscient Reader’s Viewpoint"
     - listitem:
       - link "The Executioner":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
@@ -48,6 +50,7 @@
       - 'button "Rating for The Executioner: 7/10"'
       - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
+      - button "More actions for The Executioner"
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
@@ -57,6 +60,7 @@
       - 'button "Rating for Absolute Sword Sense: 7/10"'
       - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
+      - button "More actions for Absolute Sword Sense"
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
@@ -66,6 +70,7 @@
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
+      - button "More actions for I Obtained a Mythic Item"
   - group:
     - text: Rows per page
     - combobox "5 Rows per page": "5"

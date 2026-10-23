@@ -27,6 +27,7 @@
       - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
       - button "Follow A Dragonslayer's Peerless Regression"
       - button "Delete A Dragonslayer's Peerless Regression"
+      - button "More actions for A Dragonslayer's Peerless Regression"
     - listitem:
       - link "Absolute Sword Sense":
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
@@ -36,6 +37,7 @@
       - 'button "Rating for Absolute Sword Sense: 7/10"'
       - button "Follow Absolute Sword Sense"
       - button "Delete Absolute Sword Sense"
+      - button "More actions for Absolute Sword Sense"
     - listitem:
       - link "Duke Pendragon":
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
@@ -45,6 +47,7 @@
       - 'button "Rating for Duke Pendragon: not rated"'
       - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
+      - button "More actions for Duke Pendragon"
     - listitem:
       - link "Dungeon Odyssey":
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
@@ -57,6 +60,7 @@
       - 'button "Rating for Dungeon Odyssey: 10/10"'
       - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
+      - button "More actions for Dungeon Odyssey"
     - listitem:
       - link "I Obtained a Mythic Item":
         - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
@@ -66,6 +70,7 @@
       - 'button "Rating for I Obtained a Mythic Item: 9/10"'
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
+      - button "More actions for I Obtained a Mythic Item"
     - listitem:
       - link "My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person":
         - /url: https://asuracomic.net/series/my-school-life-pretending-to-be-a-worthless-person-4fbaf58c/chapter/96
@@ -75,6 +80,7 @@
       - 'button "Rating for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person: 6/10"'
       - button "Follow My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
       - button "Delete My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
+      - button "More actions for My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person - My School Life Pretending To Be a Worthless Person"
     - listitem:
       - link "Omniscient Reader’s Viewpoint":
         - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
@@ -84,6 +90,7 @@
       - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
       - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
+      - button "More actions for Omniscient Reader’s Viewpoint"
     - listitem:
       - link "Pick Me Up, Infinite Gacha":
         - /url: https://asuracomic.net/series/pick-me-up-infinite-gacha-5803ee65/chapter/132
@@ -93,6 +100,7 @@
       - 'button "Rating for Pick Me Up, Infinite Gacha: 10/10"'
       - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
+      - button "More actions for Pick Me Up, Infinite Gacha"
     - listitem:
       - link "Return of the Disaster-Class Hero":
         - /url: https://asuracomic.net/series/return-of-the-disaster-class-hero-a31a2306/chapter/110
@@ -102,6 +110,7 @@
       - 'button "Rating for Return of the Disaster-Class Hero: not rated"'
       - button "Follow Return of the Disaster-Class Hero"
       - button "Delete Return of the Disaster-Class Hero"
+      - button "More actions for Return of the Disaster-Class Hero"
     - listitem:
       - link "Return of the SSS-Class Ranker":
         - /url: https://asuracomic.net/series/return-of-the-sss-class-ranker-d51a3031/chapter/141
@@ -111,6 +120,7 @@
       - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
       - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
+      - button "More actions for Return of the SSS-Class Ranker"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"

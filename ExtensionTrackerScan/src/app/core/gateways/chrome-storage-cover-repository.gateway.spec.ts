@@ -51,6 +51,24 @@ describe('ChromeStorageCoverRepository', () => {
     expect(Object.keys(storage.items)).toEqual(['cover:nano machine']);
   });
 
+  it('should move the cover of a series to its new title and keep it when the key does not change', async () => {
+    const storage = useStorage({});
+    const repository = new ChromeStorageCoverRepository();
+    await repository.update(ScanTitle.of('Punch'), () => FOUND);
+
+    await repository.move(ScanTitle.of('Punch'), ScanTitle.of('One Punch-Man'));
+    await repository.move(
+      ScanTitle.of('One Punch-Man'),
+      ScanTitle.of('ONE PUNCH MAN'),
+    );
+    await repository.move(ScanTitle.of('Punch'), ScanTitle.of('Eleceed'));
+
+    expect(Object.keys(storage.items)).toEqual(['cover:one punch man']);
+    expect(await repository.find([ScanTitle.of('One Punch-Man')])).toEqual(
+      new Map([['One Punch-Man', FOUND]]),
+    );
+  });
+
   it('should apply each update to the cover the previous one stored, across repositories', async () => {
     useStorage({});
     const title = ScanTitle.of('Solo Leveling');

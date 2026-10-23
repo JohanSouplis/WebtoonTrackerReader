@@ -83,6 +83,20 @@ export class ChromeStorageCoverRepository implements CoverRepository {
     return update;
   }
 
+  move(from: ScanTitle, to: ScanTitle): Promise<void> {
+    const [fromKey, toKey] = [keyOf(from), keyOf(to)];
+    const move = ChromeStorageCoverRepository.updates.then(async () => {
+      const stored = (await chrome.storage.local.get([fromKey]))[fromKey];
+      if (fromKey === toKey || stored === undefined) {
+        return;
+      }
+      await chrome.storage.local.set({ [toKey]: stored });
+      await chrome.storage.local.remove(fromKey);
+    });
+    ChromeStorageCoverRepository.updates = move.catch(() => undefined);
+    return move;
+  }
+
   async remove(title: ScanTitle): Promise<void> {
     await chrome.storage.local.remove(keyOf(title));
   }

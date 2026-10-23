@@ -91,6 +91,16 @@ export class ChromeStorageChapterWatchRepository implements ChapterWatchReposito
     });
   }
 
+  async move(from: ScanTitle, to: ScanTitle): Promise<void> {
+    const [fromKey, toKey] = [keyOf(from), keyOf(to)];
+    const stored = (await chrome.storage.local.get([fromKey]))[fromKey];
+    if (fromKey === toKey || stored === undefined) {
+      return;
+    }
+    await chrome.storage.local.set({ [toKey]: stored });
+    await chrome.storage.local.remove(fromKey);
+  }
+
   async remove(title: ScanTitle): Promise<void> {
     await chrome.storage.local.remove(keyOf(title));
   }

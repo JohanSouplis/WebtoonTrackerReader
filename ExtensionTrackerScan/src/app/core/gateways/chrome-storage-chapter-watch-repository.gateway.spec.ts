@@ -79,6 +79,24 @@ describe('ChromeStorageChapterWatchRepository', () => {
     expect(Object.keys(storage.items)).toEqual(['watch:nano machine']);
   });
 
+  it('should move the watch of a series to its new title and keep it when the key does not change', async () => {
+    const storage = useStorage({});
+    const repository = new ChromeStorageChapterWatchRepository();
+    await repository.save(ScanTitle.of('Punch'), UP_TO_DATE);
+
+    await repository.move(ScanTitle.of('Punch'), ScanTitle.of('One Punch-Man'));
+    await repository.move(
+      ScanTitle.of('One Punch-Man'),
+      ScanTitle.of('ONE PUNCH MAN'),
+    );
+    await repository.move(ScanTitle.of('Punch'), ScanTitle.of('Eleceed'));
+
+    expect(Object.keys(storage.items)).toEqual(['watch:one punch man']);
+    expect(await repository.find([ScanTitle.of('One Punch-Man')])).toEqual(
+      new Map([['One Punch-Man', UP_TO_DATE]]),
+    );
+  });
+
   it.each`
     stored
     ${'new'}

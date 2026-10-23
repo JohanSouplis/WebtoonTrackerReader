@@ -7,5 +7,6 @@ export interface CoverRepository {
     title: ScanTitle,
     change: (stored: Cover | undefined) => Cover,
   ): Promise<void>;
+  move(from: ScanTitle, to: ScanTitle): Promise<void>;
   remove(title: ScanTitle): Promise<void>;
 }

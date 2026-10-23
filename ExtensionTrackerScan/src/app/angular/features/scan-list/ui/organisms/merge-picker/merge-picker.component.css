@@ -1,0 +1,82 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  color: var(--app-text);
+}
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.hint {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 12.5px;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 260px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+li button {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--app-text);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+li button:hover,
+li button:focus-visible {
+  background: var(--app-surface-2);
+}
+
+.none {
+  margin: 0;
+  padding: 12px;
+  color: var(--app-muted);
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancel {
+  height: 36px;
+  padding: 0 18px;
+  border: 1px solid var(--app-line-strong);
+  border-radius: 12px;
+  background: none;
+  color: var(--app-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cancel:hover {
+  background: var(--app-surface-2);
+}

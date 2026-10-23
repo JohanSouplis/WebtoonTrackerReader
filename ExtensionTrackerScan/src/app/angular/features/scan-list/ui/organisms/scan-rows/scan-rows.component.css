@@ -197,7 +197,8 @@ li:hover {
   font-weight: 600;
 }
 
-.delete {
+.delete,
+.more {
   width: 34px;
   height: 34px;
   display: grid;
@@ -216,8 +217,16 @@ li:hover {
 }
 
 li:hover .delete,
-li:focus-within .delete {
+li:focus-within .delete,
+li:hover .more,
+li:focus-within .more,
+.more[aria-expanded="true"] {
   opacity: 1;
+}
+
+.more:hover {
+  color: var(--app-text);
+  background: var(--app-surface-3);
 }
 
 .delete:hover {

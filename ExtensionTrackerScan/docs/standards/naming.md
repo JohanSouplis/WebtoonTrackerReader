@@ -24,6 +24,8 @@ pas un synonyme.
 | `ScanLibrary` | Tous les scans suivis par le lecteur | `scansList`, `scanList`, `scansTab` |
 | `ScanTitle` | Le titre d'un scan, normalisé | `titleWebpage` pour ce sens |
 | `SeriesKey` | La forme normalisée d'un `ScanTitle` qui reconnaît la même série sous un titre un peu différent | `normalizedTitle`, `slug`, `fuzzyTitle` |
+| `aliases` | Les autres titres sous lesquels un scan a été lu, gardés après un renommage ou une fusion pour reconnaître ses lectures | `otherTitles`, `formerTitles`, `synonyms` |
+| `MergedScans` | Les deux scans d'une fusion tels qu'avant elle, avec leur couverture et leur veille, gardés le temps de l'annulation | `mergeBackup`, `undoData` |
 | `SeriesMatch` | Le verdict de deux `SeriesKey` : `same`, `different` ou `ambiguous` | `similarity`, `score` |
 | `Chapter` | Le numéro du dernier chapitre lu, un nombre | un `chapter` en `string` |
 | `Reading` | La lecture d'un chapitre d'un scan à une date | `newScan`, `scanVisited` |

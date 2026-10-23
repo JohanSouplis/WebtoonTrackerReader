@@ -1,12 +1,16 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   effect,
   inject,
+  Injector,
   OnInit,
+  TemplateRef,
   untracked,
   viewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CheckFrequency } from '../../../../../../core/domain/chapter-watch';
 import { RatePromptAnswer } from '../../../../../../core/domain/rate-prompt';
@@ -14,7 +18,9 @@ import { Rating } from '../../../../../../core/domain/rating';
 import {
   ScanNotFound,
   ScanSnapshot,
+  SeriesAlreadyTracked,
 } from '../../../../../../core/domain/scan-library';
+import { MergedScans } from '../../../../../../core/domain/scan-merge';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
 import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-rating.use-case';
@@ -24,10 +30,13 @@ import {
   DeleteScanUseCase,
   RemovedScan,
 } from '../../../../../../core/use-cases/delete-scan.use-case';
+import { MergeScansUseCase } from '../../../../../../core/use-cases/merge-scans.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
+import { RenameScanUseCase } from '../../../../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
+import { UnmergeScansUseCase } from '../../../../../../core/use-cases/unmerge-scans.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
   CLOCK,
@@ -39,23 +48,31 @@ import {
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
 import { ScanRow } from '../../../service/scan-row.vm';
+import {
+  MERGE_PICKER_HEADING_ID,
+  MergePickerComponent,
+} from '../../organisms/merge-picker/merge-picker.component';
 import { NewChapterSettingsComponent } from '../../organisms/new-chapter-settings/new-chapter-settings.component';
 import { RatePromptComponent } from '../../organisms/rate-prompt/rate-prompt.component';
 import { ScanFiltersComponent } from '../../organisms/scan-filters/scan-filters.component';
 import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component';
-import { ScanRating } from '../../organisms/scan-rows/scan-rows.types';
+import {
+  ScanRating,
+  ScanRename,
+} from '../../organisms/scan-rows/scan-rows.types';
 import { ScanSortBarComponent } from '../../organisms/scan-sort-bar/scan-sort-bar.component';
 import { ScanListStore } from './scan-list.store';
 
 const UNDO_DURATION_MS = 6000;
 
-const FOLLOW_FEEDBACK_DURATION_MS = 3000;
+const FEEDBACK_DURATION_MS = 3000;
 
 const REFUSED_ALERTS_DURATION_MS = 12000;
 
 @Component({
   selector: 'app-scan-list',
   imports: [
+    MergePickerComponent,
     NewChapterSettingsComponent,
     RatePromptComponent,
     ScanFiltersComponent,
@@ -77,6 +94,9 @@ export class ScanListPage implements OnInit {
   private readonly changeCheckInterval = inject(ChangeCheckIntervalUseCase);
   private readonly deleteScan = inject(DeleteScanUseCase);
   private readonly restoreScan = inject(RestoreScanUseCase);
+  private readonly renameScan = inject(RenameScanUseCase);
+  private readonly mergeScans = inject(MergeScansUseCase);
+  private readonly unmergeScans = inject(UnmergeScansUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
   private readonly clearScanRating = inject(ClearRatingUseCase);
@@ -87,7 +107,11 @@ export class ScanListPage implements OnInit {
   );
   private readonly storeListing = inject(STORE_LISTING);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
+  private readonly injector = inject(Injector);
   private readonly rows = viewChild.required(ScanRowsComponent);
+  private readonly mergePicker =
+    viewChild.required<TemplateRef<unknown>>('mergePicker');
   protected readonly store = inject(ScanListStore);
   protected readonly now = inject(CLOCK).now();
 
@@ -170,7 +194,7 @@ export class ScanListPage implements OnInit {
           ? `Stopped checking “${scan.title}” for new chapters.`
           : `Following “${scan.title}”. We'll check for new chapters.`,
         undefined,
-        { duration: FOLLOW_FEEDBACK_DURATION_MS },
+        { duration: FEEDBACK_DURATION_MS },
       );
       return library;
     });
@@ -186,6 +210,101 @@ export class ScanListPage implements OnInit {
     return this.update(() =>
       this.clearScanRating.execute(ScanTitle.of(scan.title)),
     );
+  }
+
+  protected async rename({ scan, title }: ScanRename): Promise<void> {
+    try {
+      this.store.showLibrary(
+        await this.renameScan.execute(
+          ScanTitle.of(scan.title),
+          ScanTitle.of(title),
+        ),
+      );
+    } catch (error: unknown) {
+      if (!(error instanceof SeriesAlreadyTracked)) {
+        await this.showFailure(error);
+        return;
+      }
+      this.offerMergeInto(scan.title, error.trackedTitle.value);
+      this.rows().focusTitle(scan.title);
+      return;
+    }
+    this.snackBar.open(`Renamed to “${title}”`, undefined, {
+      duration: FEEDBACK_DURATION_MS,
+    });
+    this.focusTitleOnceShown(title);
+    await this.showWatches();
+  }
+
+  protected openMergePicker(scan: ScanRow): void {
+    this.dialog
+      .open<unknown, string, string>(this.mergePicker(), {
+        data: scan.title,
+        ariaLabelledBy: MERGE_PICKER_HEADING_ID,
+        restoreFocus: false,
+        width: '440px',
+        maxWidth: 'calc(100vw - 32px)',
+      })
+      .afterClosed()
+      .subscribe((target) => {
+        if (target === undefined) {
+          this.rows().focusTitle(scan.title);
+          return;
+        }
+        this.merge(scan.title, target).catch((error: unknown) =>
+          console.error('Error merging the scans:', error),
+        );
+      });
+  }
+
+  private async merge(source: string, target: string): Promise<void> {
+    await this.update(async () => {
+      const { library, merged } = await this.mergeScans.execute(
+        ScanTitle.of(source),
+        ScanTitle.of(target),
+      );
+      this.offerUnmerge(merged);
+      return library;
+    });
+    this.focusTitleOnceShown(target);
+    await this.showWatches();
+  }
+
+  private focusTitleOnceShown(title: string): void {
+    afterNextRender(() => this.rows().focusTitle(title), {
+      injector: this.injector,
+    });
+  }
+
+  private offerMergeInto(source: string, target: string): void {
+    this.snackBar
+      .open(`“${target}” is already in your library`, 'Merge', {
+        duration: UNDO_DURATION_MS,
+      })
+      .onAction()
+      .subscribe(() => {
+        this.merge(source, target).catch((error: unknown) =>
+          console.error('Error merging the scans:', error),
+        );
+      });
+  }
+
+  private offerUnmerge(merged: MergedScans): void {
+    this.snackBar
+      .open(`Merged into “${merged.target.scan.title}”`, 'Undo', {
+        duration: UNDO_DURATION_MS,
+      })
+      .onAction()
+      .subscribe(() => {
+        this.unmerge(merged).catch((error: unknown) =>
+          console.error('Error undoing the merge:', error),
+        );
+      });
+  }
+
+  private async unmerge(merged: MergedScans): Promise<void> {
+    await this.update(() => this.unmergeScans.execute(merged));
+    await this.showWatches();
   }
 
   private offerUndo(removed: RemovedScan): void {
@@ -210,15 +329,19 @@ export class ScanListPage implements OnInit {
     try {
       this.store.showLibrary(await command());
     } catch (error: unknown) {
-      this.snackBar.open(
-        error instanceof ScanNotFound
-          ? 'This series is no longer in your library. The list is up to date.'
-          : "Couldn't save your change. Please try again.",
-        'Dismiss',
-        { duration: 5000 },
-      );
-      await this.loadLibrary();
+      await this.showFailure(error);
     }
+  }
+
+  private async showFailure(error: unknown): Promise<void> {
+    this.snackBar.open(
+      error instanceof ScanNotFound
+        ? 'This series is no longer in your library. The list is up to date.'
+        : "Couldn't save your change. Please try again.",
+      'Dismiss',
+      { duration: 5000 },
+    );
+    await this.loadLibrary();
   }
 
   private async showCovers(titles: readonly string[]): Promise<void> {

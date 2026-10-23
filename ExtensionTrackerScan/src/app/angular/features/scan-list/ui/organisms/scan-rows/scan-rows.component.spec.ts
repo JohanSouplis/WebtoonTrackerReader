@@ -182,6 +182,48 @@ describe('ScanRowsComponent', () => {
     expect(screen.getByRole('link', { name: 'Solo Leveling' })).toHaveFocus();
   });
 
+  it('should rename the scan with the typed title when Rename is chosen in its menu and Enter is pressed', async () => {
+    const renamed = jest.fn();
+    await renderRows(SHOWN_SCANS, { renamed });
+
+    await openMoreActions('Solo Leveling');
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Rename' }));
+    await userEvent.keyboard('Solo Leveling: Ragnarok{Enter}');
+
+    expect(renamed).toHaveBeenCalledWith({
+      scan: SOLO_LEVELING,
+      title: 'Solo Leveling: Ragnarok',
+    });
+  });
+
+  it('should show the title again and focus it when the rename is cancelled with Escape', async () => {
+    const renamed = jest.fn();
+    await renderRows(SHOWN_SCANS, { renamed });
+
+    await openMoreActions('Solo Leveling');
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Rename' }));
+    expect(
+      screen.getByRole('textbox', { name: 'New title for Solo Leveling' }),
+    ).toHaveFocus();
+    await userEvent.keyboard('Something else{Escape}');
+
+    expect(screen.getByRole('link', { name: 'Solo Leveling' })).toHaveFocus();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(renamed).not.toHaveBeenCalled();
+  });
+
+  it('should ask to merge the scan when Merge with is chosen in its menu', async () => {
+    const mergeRequested = jest.fn();
+    await renderRows(SHOWN_SCANS, { mergeRequested });
+
+    await openMoreActions('Omniscient Reader');
+    await userEvent.click(
+      screen.getByRole('menuitem', { name: 'Merge with…' }),
+    );
+
+    expect(mergeRequested).toHaveBeenCalledWith(OMNISCIENT_READER);
+  });
+
   it('should ask to toggle the favorite when the bell of a scan is clicked', async () => {
     const favoriteToggled = jest.fn();
     await renderRows(SHOWN_SCANS, { favoriteToggled });
@@ -338,6 +380,13 @@ const rowOf = (title: string): HTMLElement => {
     .filter((item) => within(item).queryByRole('link', { name: title }));
   return row;
 };
+
+const openMoreActions = (title: string): Promise<void> =>
+  userEvent.click(
+    within(rowOf(title)).getByRole('button', {
+      name: `More actions for ${title}`,
+    }),
+  );
 
 const renderRows = (
   view: ScanListView,

@@ -28,6 +28,7 @@
       - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
+      - button "More actions for The Heavenly Demon Wants a Quiet Life"
   - group:
     - text: Rows per page
     - combobox "10 Rows per page": "10"

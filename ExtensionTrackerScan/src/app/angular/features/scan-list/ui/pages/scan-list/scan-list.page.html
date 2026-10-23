@@ -22,6 +22,8 @@
   (favoriteToggled)="toggleFavorite($event)"
   (rated)="rate($event)"
   (ratingCleared)="clearRating($event)"
+  (renamed)="rename($event)"
+  (mergeRequested)="openMergePicker($event)"
   (newChapterOpened)="recordNewChapterOpened()"
   (pageTurned)="store.turnPage($event)"
   (filtersCleared)="store.clearFilters()"
@@ -31,3 +33,11 @@
   <app-rate-prompt (answered)="answerRatePrompt($event)" />
   }
 </app-scan-rows>
+<ng-template #mergePicker let-source let-dialogRef="dialogRef">
+  <app-merge-picker
+    [source]="source"
+    [titles]="store.titles()"
+    (picked)="dialogRef.close($event)"
+    (cancelled)="dialogRef.close()"
+  />
+</ng-template>

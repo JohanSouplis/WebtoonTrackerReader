@@ -31,6 +31,14 @@ export class InMemoryCoverRepository implements CoverRepository {
     this.covers.set(key, change(this.covers.get(key)));
   }
 
+  async move(from: ScanTitle, to: ScanTitle): Promise<void> {
+    const cover = this.covers.get(from.seriesKey.value);
+    if (cover) {
+      this.covers.delete(from.seriesKey.value);
+      this.covers.set(to.seriesKey.value, cover);
+    }
+  }
+
   async remove(title: ScanTitle): Promise<void> {
     this.covers.delete(title.seriesKey.value);
   }

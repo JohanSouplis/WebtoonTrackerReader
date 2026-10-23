@@ -26,8 +26,8 @@ comparaison) est un Value Object.
 
 `ScanLibrary` est l'unique agrégat. Ses invariants :
 
-- une lecture enrichit le scan de la même série, reconnue par sa `SeriesKey` (voir plus bas) ; le scan garde
-  son titre affiché, la lecture ne le renomme pas ;
+- une lecture enrichit le scan de la même série, reconnue par la `SeriesKey` de son titre affiché ou d'un de ses
+  alias (voir plus bas) ; le scan garde son titre affiché, la lecture ne le renomme pas ;
 - supprimer, noter ou mettre en favori vise le titre affiché, comparé par `ScanTitle.equals()` (casse
   ignorée) ;
 - une lecture plus ancienne que la lecture enregistrée ne remplace pas celle-ci ;
@@ -46,10 +46,35 @@ l'annulation d'une suppression. La couverture remise ne remplace pas une couvert
 
 Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enregistre par `snapshot()`.
 
-`restore()` fusionne les scans dont la `SeriesKey` est égale (`SeriesKey.equals()`, jamais `match()`) : une
-bibliothèque enregistrée avant la règle d'identité peut contenir deux lignes pour une série. Le scan fusionné
-garde la place du premier, la lecture la plus récente (titre compris), le favori si l'un l'était, et la note de
-la lecture la plus récente, sinon celle de l'autre. Fusionner une bibliothèque déjà fusionnée ne change rien.
+`restore()` fusionne les scans dont un titre (affiché ou alias) a une `SeriesKey` égale à un titre de l'autre
+(`SeriesKey.equals()`, jamais `match()`) : une bibliothèque enregistrée avant la règle d'identité peut contenir
+deux lignes pour une série. Le scan fusionné garde la place du premier, la lecture la plus récente (titre
+compris), tous les autres titres des deux scans en alias, le favori si l'un l'était, et la note de la lecture la
+plus récente, sinon celle de l'autre. Fusionner une bibliothèque déjà fusionnée ne change rien.
+
+## Corriger la bibliothèque
+
+La reconnaissance d'un site hors catalogue se trompe parfois sur le titre (`Classmate - Capítulo`,
+`Lookism ( Makine)`, `Punch` pour `One Punch-Man`). Le lecteur corrige sa bibliothèque lui-même, et ses lectures
+suivantes doivent retomber sur la ligne corrigée.
+
+- Un scan porte, en plus de son titre affiché, ses **alias** (`aliases`) : les autres titres sous lesquels la série
+  a été lue. Une lecture se reconnaît par la `SeriesKey` du titre affiché ou d'un alias, d'abord à l'égalité, puis
+  par `SeriesKey.match()`. Un alias n'a jamais la `SeriesKey` du titre affiché ni d'un autre alias du scan.
+- **Renommer** (`rename`, `RenameScanUseCase`) : le titre choisi devient le titre affiché, l'ancien titre
+  affiché devient un alias. Le favori, la note et la lecture ne changent pas. Si une lecture du titre choisi
+  irait sur un autre scan, le renommage échoue par `SeriesAlreadyTracked`, qui nomme ce scan : la page propose
+  alors de fusionner.
+- **Fusionner** (`merge`, `MergeScansUseCase`) une source dans une cible : la cible garde son titre affiché et
+  prend la lecture la plus récente des deux (chapitre, adresse, date, page de la série), le favori si l'un l'était,
+  sa note, sinon celle de la source. Le titre et les alias de la source deviennent des alias de la cible, et la
+  source disparaît. Fusionner un scan avec lui-même échoue par `MergeIntoItself`.
+- La couverture fusionnée est celle de la lecture la plus récente, sauf si seule l'autre a une image ; la veille
+  est celle de la lecture la plus récente, sinon l'autre (`mergedCoverAndWatchOf`).
+- Une fusion s'annule comme une suppression : `MergeScansUseCase` rend les deux scans tels qu'avant
+  (`MergedScans` : chaque scan, sa couverture et sa veille), et `UnmergeScansUseCase` remet la cible à sa place
+  dans cet état, ramène la source, et rend à chacune sa couverture et sa veille.
+- Supprimer un scan supprime ses alias avec lui : une lecture sous un ancien alias crée un nouveau scan.
 
 ## L'identité d'une série
 
@@ -113,6 +138,11 @@ bannière) coûte plus cher que pas d'image : **dans le doute, le monogramme res
   dernière page lue.
 - Supprimer un scan supprime la couverture de sa série (`DeleteScanUseCase`). Aucun autre scan ne la partage : la
   bibliothèque ne garde qu'un scan par `SeriesKey`, `restore()` et `recordReading()` fusionnent les autres.
+- La couverture et la veille vivent sous le titre affiché. Renommer les déplace sous le nouveau titre
+  (`CoverRepository.move`, `ChapterWatchRepository.move`) après l'enregistrement de la bibliothèque ; fusionner
+  écrit celles retenues sous la cible et supprime celles de la source. Un déplacement interrompu laisse la ligne
+  sans état connu : la recherche de couverture et la veille la traitent alors comme jamais cherchée, et la
+  rattrapent d'elles-mêmes.
 
 ## Les nouveaux chapitres d'un favori
 
@@ -280,7 +310,7 @@ library.recordReading(reading);
 Chaque méthode du domaine est soit une commande, soit une requête, jamais les deux.
 
 - **Commande** : change l'état, retourne `void`. `recordReading`, `remove`, `toggleFavorite`, `rate`,
-  `clearRating`.
+  `clearRating`, `rename`, `merge`, `unmerge`.
 - **Requête** : retourne une donnée, ne mute rien. `snapshot`, `equals`.
 
 `updateScansWithNewVisitedScan` mute la liste reçue et la retourne : c'est les deux à la fois. Le code neuf ne

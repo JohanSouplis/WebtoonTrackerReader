@@ -87,9 +87,8 @@ export class ScanListStore {
   readonly sort = this.shownSort.asReadonly();
   readonly settings = this.shownSettings.asReadonly();
   readonly count = computed(() => this.matchingScans().length);
-  readonly libraryTitles = computed(() =>
-    this.snapshots().map(({ title }) => ScanTitle.of(title)),
-  );
+  readonly titles = computed(() => this.snapshots().map(({ title }) => title));
+  readonly libraryTitles = computed(() => this.titles().map(ScanTitle.of));
   readonly hasLibraryTools = computed(
     () =>
       this.load().kind === 'loading' ||

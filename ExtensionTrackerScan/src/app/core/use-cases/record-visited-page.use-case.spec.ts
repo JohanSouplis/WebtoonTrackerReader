@@ -528,6 +528,57 @@ describe('RecordVisitedPageUseCase', () => {
     expect(await scans()).toEqual([latest, eleceed]);
   });
 
+  it('should update the renamed scan and keep its title when the page names one of its aliases', async () => {
+    const { recordVisitedPage, scans } = setUp([
+      aScan({ title: 'Eleceed' }),
+      aScan({ title: 'One Punch-Man', chapter: 1, aliases: ['Punch'] }),
+    ]);
+
+    await recordVisitedPage.execute(catalogPage('Punch', '2'));
+
+    expect(await scans()).toEqual([
+      aScan({ title: 'Eleceed' }),
+      aScan({
+        title: 'One Punch-Man',
+        chapter: 2,
+        url: catalogUrl('2'),
+        readAt: NOW,
+        aliases: ['Punch'],
+      }),
+    ]);
+  });
+
+  it('should merge on load a scan whose title is an alias of another scan, with every title of both', async () => {
+    const latest = aScan({
+      title: 'One Punch-Man',
+      chapter: 200,
+      readAt: new Date('2024-12-01T00:00:00Z'),
+      aliases: ['Punch'],
+    });
+    const { recordVisitedPage, scans } = setUp([
+      latest,
+      aScan({
+        title: 'Punch',
+        chapter: 150,
+        readAt: new Date('2024-06-01T00:00:00Z'),
+        isFavorite: true,
+        aliases: ['Onepunch'],
+      }),
+    ]);
+
+    await recordVisitedPage.execute(catalogPage('Eleceed', '2'));
+
+    expect(await scans()).toEqual([
+      { ...latest, isFavorite: true, aliases: ['Punch', 'Onepunch'] },
+      aScan({
+        title: 'Eleceed',
+        chapter: 2,
+        url: catalogUrl('2'),
+        readAt: NOW,
+      }),
+    ]);
+  });
+
   it('should update the scan whose title matches exactly when several followed scans are the same series', async () => {
     const spaced = aScan({ title: 'Nano Machine', chapter: 1 });
     const joined = aScan({ title: 'Nanomachine', chapter: 1 });

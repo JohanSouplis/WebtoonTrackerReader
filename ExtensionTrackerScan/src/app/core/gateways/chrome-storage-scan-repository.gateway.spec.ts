@@ -100,6 +100,98 @@ describe('ChromeStorageScanRepository', () => {
       },
     ]);
   });
+  it('should keep the aliases of a scan through a save and a load', async () => {
+    const storage = useStorage({});
+    const repository = new ChromeStorageScanRepository();
+    const renamed = ScanLibrary.restore([
+      {
+        title: 'One Punch-Man',
+        chapter: 200,
+        url: 'url.com',
+        readAt: new Date(STORED_DATE),
+        isFavorite: false,
+        aliases: ['Punch', 'Onepunch'],
+      },
+    ]);
+
+    await repository.save(renamed);
+
+    expect(storage.items['scans']).toEqual([
+      {
+        title: 'One Punch-Man',
+        chapter: '200',
+        url: 'url.com',
+        whenWasItRead: new Date(STORED_DATE).toString(),
+        isFavorite: false,
+        aliases: ['Punch', 'Onepunch'],
+      },
+    ]);
+    expect((await repository.load()).snapshot()).toEqual(renamed.snapshot());
+  });
+
+  it('should ignore the stored aliases it cannot read', async () => {
+    useStorage({
+      scans: [
+        {
+          title: 'One Punch-Man',
+          chapter: '200',
+          url: 'url.com',
+          whenWasItRead: STORED_DATE,
+          isFavorite: false,
+          aliases: ['Punch', 7, null],
+        },
+        {
+          title: 'Eleceed',
+          chapter: '2',
+          url: 'url.com',
+          whenWasItRead: STORED_DATE,
+          isFavorite: false,
+          aliases: 'Eleceed!',
+        },
+      ],
+    });
+
+    const library = await new ChromeStorageScanRepository().load();
+
+    expect(library.snapshot()).toMatchObject([
+      { title: 'One Punch-Man', aliases: ['Punch'] },
+      { title: 'Eleceed', aliases: undefined },
+    ]);
+  });
+
+  it('should merge on load two stored scans when one was stored under an alias of the other', async () => {
+    useStorage({
+      scans: [
+        {
+          title: 'One Punch-Man',
+          chapter: '200',
+          url: 'url.com',
+          whenWasItRead: STORED_DATE,
+          isFavorite: false,
+          aliases: ['Punch'],
+        },
+        {
+          title: 'Punch',
+          chapter: '150',
+          url: 'url.com',
+          whenWasItRead: 'Sat Jun 01 2023 14:05:10 GMT+0200',
+          isFavorite: true,
+        },
+      ],
+    });
+
+    const library = await new ChromeStorageScanRepository().load();
+
+    expect(library.snapshot()).toMatchObject([
+      {
+        title: 'One Punch-Man',
+        chapter: 200,
+        isFavorite: true,
+        aliases: ['Punch'],
+      },
+    ]);
+  });
+
   it('should keep the series page of a scan through a save and a load', async () => {
     useStorage({});
     const repository = new ChromeStorageScanRepository();

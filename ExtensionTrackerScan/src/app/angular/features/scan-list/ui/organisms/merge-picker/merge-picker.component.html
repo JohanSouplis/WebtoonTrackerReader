@@ -1,0 +1,27 @@
+<h2 [id]="headingId">Merge “{{ source() }}” into…</h2>
+<p class="hint">
+  The series you pick keeps its title and takes the latest chapter. Readings
+  under either title land on it.
+</p>
+<ds-search-field
+  label="Find a series"
+  [value]="query()"
+  (searched)="query.set($event)"
+  (keydown.enter)="pickFirst()"
+/>
+@if (targets().length > 0) {
+  <ul aria-label="Series to merge into">
+    @for (title of targets(); track title) {
+      <li>
+        <button type="button" (click)="picked.emit(title)">{{ title }}</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="none" role="status">No other series match.</p>
+}
+<div class="actions">
+  <button type="button" class="cancel" (click)="cancelled.emit()">
+    Cancel
+  </button>
+</div>
