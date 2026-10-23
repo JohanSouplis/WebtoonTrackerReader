@@ -5,7 +5,12 @@ import { ScanTitle } from '../domain/scan-title';
 import { InMemoryChapterWatchRepository } from '../gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
+import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
+import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { DeleteScanUseCase } from './delete-scan.use-case';
+import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
 import { aScan } from './scans.fixture';
 
 describe('DeleteScanUseCase', () => {
@@ -24,6 +29,33 @@ describe('DeleteScanUseCase', () => {
 
     expect(library).toEqual([kept]);
     expect((await scanRepository.load()).snapshot()).toEqual([kept]);
+  });
+
+  it('should forget the aliases of the deleted scan so a later reading under one starts a new scan', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'One Punch-Man', aliases: ['Punch'] }),
+    ]);
+    await new DeleteScanUseCase(
+      scanRepository,
+      new InMemoryCoverRepository(),
+      new InMemoryChapterWatchRepository(),
+    ).execute(ScanTitle.of('One Punch-Man'));
+    const page = {
+      pageTitle: 'Episode 2 | Punch',
+      url: 'https://www.webtoons.com/en/action/punch/episode-2/viewer?title_no=1&episode_no=2',
+    };
+
+    await new RecordVisitedPageUseCase(
+      scanRepository,
+      new InMemoryCrashReporter(),
+      new InMemoryReportSettingsRepository(),
+      new FixedClock(NOW),
+      new InMemoryTelemetryRecorder(),
+    ).execute(page);
+
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({ title: 'Punch', chapter: 2, url: page.url, readAt: NOW }),
+    ]);
   });
 
   it('should delete the cover of the series of the deleted scan and keep the others', async () => {
@@ -115,6 +147,8 @@ describe('DeleteScanUseCase', () => {
     );
   });
 });
+
+const NOW = new Date('2025-03-10T12:00:00Z');
 
 const MISSING: Cover = {
   kind: 'missing',

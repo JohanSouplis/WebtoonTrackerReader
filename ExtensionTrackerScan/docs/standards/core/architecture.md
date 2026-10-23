@@ -65,9 +65,10 @@ src/
                            unsupported-website-page-parser.ts · page-lexicon.ts
                            cover.ts · cover-search.ts · series-page.ts · site.ts
                            chapter-watch.ts · chapter-check.ts · fetched-page.ts · report-settings.ts
-                           rate-prompt.ts · telemetry.ts
+                           rate-prompt.ts · telemetry.ts · scan-merge.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · restore-scan.use-case.ts
+                           rename-scan.use-case.ts · merge-scans.use-case.ts · unmerge-scans.use-case.ts
                            toggle-favorite.use-case.ts · rate-scan.use-case.ts · clear-rating.use-case.ts
                            propose-website.use-case.ts · record-cover.use-case.ts
                            backfill-covers.use-case.ts · check-new-chapters.use-case.ts
@@ -178,9 +179,9 @@ scan qu'elle supprime.
 
 - Un gateway implémente un port et ne connaît que deux mondes : la technologie et le domaine.
 - **L'anti-corruption est dans le gateway.** Le gateway Chrome relit le format déjà stocké chez les
-  utilisateurs : clé `scans`, dates au format `Date.toString()`, `rating` absent. Il le traduit en objets
+  utilisateurs : clé `scans`, dates au format `Date.toString()`, `rating` et `aliases` absents. Il le traduit en objets
   du domaine. Le domaine ne se défend jamais contre une donnée sale.
-- **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey>`, hors de la clé `scans` : un
+- **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey du titre affiché>`, hors de la clé `scans` : un
   enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
   La veille des chapitres suit la même règle : `watch:<SeriesKey>` pour un `ChapterWatch`, `host:<site>` pour un
   `HostProfile`, `watch-settings` pour la fréquence, `report-settings` pour le choix des rapports,

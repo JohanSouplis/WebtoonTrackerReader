@@ -13,11 +13,24 @@ export type ScanSnapshot = {
   readonly isFavorite: boolean;
   readonly rating?: number;
   readonly seriesUrl?: string;
+  readonly aliases?: readonly string[];
 };
 
 export class ScanNotFound extends Error {
   constructor(title: ScanTitle) {
     super(`No scan is titled ${title.value}`);
+  }
+}
+
+export class SeriesAlreadyTracked extends Error {
+  constructor(readonly trackedTitle: ScanTitle) {
+    super(`The series is already tracked as ${trackedTitle.value}`);
+  }
+}
+
+export class MergeIntoItself extends Error {
+  constructor(title: ScanTitle) {
+    super(`${title.value} cannot be merged into itself`);
   }
 }
 
@@ -31,25 +44,53 @@ const seriesUrlOnSameSite = (
 
 type TrackedScan = {
   reading: Reading;
+  aliases: readonly ScanTitle[];
   isFavorite: boolean;
   rating?: Rating;
 };
 
-const trackedScanOf = (snapshot: ScanSnapshot): TrackedScan => ({
-  reading: {
-    title: ScanTitle.of(snapshot.title),
-    chapter: Chapter.of(snapshot.chapter),
-    url: snapshot.url,
-    readAt: snapshot.readAt,
-    seriesUrl: snapshot.seriesUrl,
-  },
-  isFavorite: snapshot.isFavorite,
-  rating:
-    snapshot.rating === undefined ? undefined : Rating.of(snapshot.rating),
-});
+const titlesOf = (scan: TrackedScan): readonly ScanTitle[] => [
+  scan.reading.title,
+  ...scan.aliases,
+];
+
+const isTitleOf = (scan: TrackedScan, key: SeriesKey): boolean =>
+  titlesOf(scan).some((title) => title.seriesKey.equals(key));
+
+const aliasesOf = (
+  title: ScanTitle,
+  titles: readonly ScanTitle[],
+): ScanTitle[] =>
+  titles.reduce<ScanTitle[]>(
+    (aliases, alias) =>
+      [title, ...aliases].some((known) =>
+        known.seriesKey.equals(alias.seriesKey),
+      )
+        ? aliases
+        : [...aliases, alias],
+    [],
+  );
+
+const trackedScanOf = (snapshot: ScanSnapshot): TrackedScan => {
+  const title = ScanTitle.of(snapshot.title);
+  return {
+    reading: {
+      title,
+      chapter: Chapter.of(snapshot.chapter),
+      url: snapshot.url,
+      readAt: snapshot.readAt,
+      seriesUrl: snapshot.seriesUrl,
+    },
+    aliases: aliasesOf(title, (snapshot.aliases ?? []).map(ScanTitle.of)),
+    isFavorite: snapshot.isFavorite,
+    rating:
+      snapshot.rating === undefined ? undefined : Rating.of(snapshot.rating),
+  };
+};
 
 const snapshotOf = ({
   reading,
+  aliases,
   isFavorite,
   rating,
 }: TrackedScan): ScanSnapshot => ({
@@ -60,6 +101,8 @@ const snapshotOf = ({
   isFavorite,
   rating: rating?.value,
   seriesUrl: reading.seriesUrl,
+  aliases:
+    aliases.length === 0 ? undefined : aliases.map((alias) => alias.value),
 });
 
 export class ScanLibrary {
@@ -76,7 +119,7 @@ export class ScanLibrary {
   recordReading(reading: Reading): void {
     const scan = this.findSeries(reading.title.seriesKey);
     if (!scan) {
-      this.scans.push({ reading, isFavorite: false });
+      this.scans.push({ reading, aliases: [], isFavorite: false });
       return;
     }
     if (scan.reading.readAt > reading.readAt) {
@@ -92,16 +135,61 @@ export class ScanLibrary {
 
   reinstate(snapshot: ScanSnapshot): void {
     const scan = trackedScanOf(snapshot);
-    const twin = this.findSeriesKey(scan.reading.title.seriesKey);
+    const twin = this.scans.find((tracked) =>
+      titlesOf(scan).some((title) => isTitleOf(tracked, title.seriesKey)),
+    );
     if (!twin) {
       this.scans.push(scan);
       return;
     }
     const [latest, earliest] =
       scan.reading.readAt > twin.reading.readAt ? [scan, twin] : [twin, scan];
+    twin.aliases = aliasesOf(latest.reading.title, [
+      ...titlesOf(twin),
+      ...titlesOf(scan),
+    ]);
     twin.reading = latest.reading;
     twin.isFavorite = twin.isFavorite || scan.isFavorite;
     twin.rating = latest.rating ?? earliest.rating;
+  }
+
+  rename(title: ScanTitle, newTitle: ScanTitle): void {
+    const scan = this.get(title);
+    const tracked = this.findSeries(newTitle.seriesKey);
+    if (tracked && tracked !== scan) {
+      throw new SeriesAlreadyTracked(tracked.reading.title);
+    }
+    scan.aliases = aliasesOf(newTitle, [...scan.aliases, scan.reading.title]);
+    scan.reading = { ...scan.reading, title: newTitle };
+  }
+
+  merge(source: ScanTitle, target: ScanTitle): void {
+    const from = this.get(source);
+    const into = this.get(target);
+    if (from === into) {
+      throw new MergeIntoItself(target);
+    }
+    const latest = from.reading.readAt > into.reading.readAt ? from : into;
+    into.aliases = aliasesOf(into.reading.title, [
+      ...into.aliases,
+      ...titlesOf(from),
+    ]);
+    into.reading = { ...latest.reading, title: into.reading.title };
+    into.isFavorite = into.isFavorite || from.isFavorite;
+    into.rating = into.rating ?? from.rating;
+    this.scans = this.scans.filter((scan) => scan !== from);
+  }
+
+  unmerge(target: ScanSnapshot, source: ScanSnapshot): void {
+    const index = this.scans.findIndex((scan) =>
+      scan.reading.title.equals(ScanTitle.of(target.title)),
+    );
+    if (index === -1) {
+      this.reinstate(target);
+    } else {
+      this.scans[index] = trackedScanOf(target);
+    }
+    this.reinstate(source);
   }
 
   remove(title: ScanTitle): void {
@@ -139,15 +227,11 @@ export class ScanLibrary {
     return this.scans.map(snapshotOf);
   }
 
-  private findSeriesKey(key: SeriesKey): TrackedScan | undefined {
-    return this.scans.find((scan) => scan.reading.title.seriesKey.equals(key));
-  }
-
   private findSeries(key: SeriesKey): TrackedScan | undefined {
     return (
-      this.findSeriesKey(key) ??
-      this.scans.find(
-        (scan) => scan.reading.title.seriesKey.match(key) === 'same',
+      this.scans.find((scan) => isTitleOf(scan, key)) ??
+      this.scans.find((scan) =>
+        titlesOf(scan).some((title) => title.seriesKey.match(key) === 'same'),
       )
     );
   }

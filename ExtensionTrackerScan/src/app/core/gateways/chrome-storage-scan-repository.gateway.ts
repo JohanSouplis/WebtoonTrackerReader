@@ -9,10 +9,18 @@ type StoredScan = {
   readonly isFavorite: boolean;
   readonly rating?: number;
   readonly seriesUrl?: string;
+  readonly aliases?: readonly string[];
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
+
+const aliasesOf = (stored: unknown): string[] | undefined => {
+  const aliases = Array.isArray(stored)
+    ? stored.filter((alias): alias is string => typeof alias === 'string')
+    : [];
+  return aliases.length === 0 ? undefined : aliases;
+};
 
 const toSnapshot = (stored: Record<string, unknown>): ScanSnapshot => ({
   title: String(stored['title']),
@@ -23,6 +31,7 @@ const toSnapshot = (stored: Record<string, unknown>): ScanSnapshot => ({
   rating: typeof stored['rating'] === 'number' ? stored['rating'] : undefined,
   seriesUrl:
     typeof stored['seriesUrl'] === 'string' ? stored['seriesUrl'] : undefined,
+  aliases: aliasesOf(stored['aliases']),
 });
 
 const toStored = (snapshot: ScanSnapshot): StoredScan => ({
@@ -35,6 +44,7 @@ const toStored = (snapshot: ScanSnapshot): StoredScan => ({
   isFavorite: snapshot.isFavorite,
   rating: snapshot.rating,
   seriesUrl: snapshot.seriesUrl,
+  aliases: snapshot.aliases,
 });
 
 export class ChromeStorageScanRepository implements ScanRepository {

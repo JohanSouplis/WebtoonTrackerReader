@@ -27,6 +27,14 @@ export class InMemoryChapterWatchRepository implements ChapterWatchRepository {
     this.watches.set(title.seriesKey.value, watch);
   }
 
+  async move(from: ScanTitle, to: ScanTitle): Promise<void> {
+    const watch = this.watches.get(from.seriesKey.value);
+    if (watch) {
+      this.watches.delete(from.seriesKey.value);
+      this.watches.set(to.seriesKey.value, watch);
+    }
+  }
+
   async remove(title: ScanTitle): Promise<void> {
     this.watches.delete(title.seriesKey.value);
   }
