@@ -15,6 +15,7 @@ import { InMemoryScanRepository } from '../../../core/gateways/in-memory/in-memo
 import { InMemoryWatchSettingsRepository } from '../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
 import { ScanRepository } from '../../../core/ports/scan-repository.port';
 import { ChangeCheckIntervalUseCase } from '../../../core/use-cases/change-check-interval.use-case';
+import { ClearRatingUseCase } from '../../../core/use-cases/clear-rating.use-case';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
 import { RestoreScanUseCase } from '../../../core/use-cases/restore-scan.use-case';
@@ -112,6 +113,13 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
     provide: ToggleFavoriteUseCase,
     useFactory: () =>
       new ToggleFavoriteUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'scan is updated'),
+      ),
+  },
+  {
+    provide: ClearRatingUseCase,
+    useFactory: () =>
+      new ClearRatingUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is updated'),
       ),
   },

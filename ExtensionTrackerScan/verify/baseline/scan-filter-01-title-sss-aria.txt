@@ -24,7 +24,7 @@
       - text: Ch. 141
       - time: 10 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Return of the SSS-Class Ranker": "9"
+      - 'button "Rating for Return of the SSS-Class Ranker: 9/10"'
       - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
     - listitem:
@@ -33,7 +33,7 @@
       - text: Ch. 124
       - time: 1.1 yr ago
       - text: asuracomic.net
-      - combobox "Rating for SSS-Class Suicide Hunter": "10"
+      - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'
       - button "Follow SSS-Class Suicide Hunter"
       - button "Delete SSS-Class Suicide Hunter"
   - group:

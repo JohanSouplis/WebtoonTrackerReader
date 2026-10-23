@@ -23,7 +23,7 @@
       - text: Ch. 136
       - time: 12 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Trash of the Count’s Family": –
+      - 'button "Rating for Trash of the Count’s Family: not rated"'
       - button "Follow Trash of the Count’s Family" [pressed]
       - button "Delete Trash of the Count’s Family"
     - listitem:
@@ -32,7 +32,7 @@
       - text: Ch. 16
       - time: 12 mo ago
       - text: asuracomic.net
-      - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
+      - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
     - listitem:
@@ -41,7 +41,7 @@
       - text: Ch. 110
       - time: 1.1 yr ago
       - text: asuracomic.net
-      - combobox "Rating for Return of the Disaster-Class Hero": –
+      - 'button "Rating for Return of the Disaster-Class Hero: not rated"'
       - button "Follow Return of the Disaster-Class Hero"
       - button "Delete Return of the Disaster-Class Hero"
     - listitem:
@@ -50,7 +50,7 @@
       - text: Ch. 124
       - time: 1.1 yr ago
       - text: asuracomic.net
-      - combobox "Rating for SSS-Class Suicide Hunter": "10"
+      - 'button "Rating for SSS-Class Suicide Hunter: 10/10"'
       - button "Follow SSS-Class Suicide Hunter"
       - button "Delete SSS-Class Suicide Hunter"
     - listitem:
@@ -59,7 +59,7 @@
       - text: Ch. 142
       - time: 1.1 yr ago
       - text: asuracomic.net
-      - combobox "Rating for The Heavenly Demon Can't Live a Normal Life": "9"
+      - 'button "Rating for The Heavenly Demon Can''t Live a Normal Life: 9/10"'
       - button "Follow The Heavenly Demon Can't Live a Normal Life"
       - button "Delete The Heavenly Demon Can't Live a Normal Life"
   - group:

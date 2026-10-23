@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CoverComponent } from '../../../../../design-system/atoms/cover/cover.component';
 import { BellToggleComponent } from '../../../../../design-system/atoms/bell-toggle/bell-toggle.component';
@@ -30,7 +30,7 @@ const SHIFTED_ROW_GUARD_MS = 300;
     CoverComponent,
     MatIconModule,
     MatPaginatorModule,
-    MatSelectModule,
+    MatMenuModule,
     MatTooltipModule,
     MonogramComponent,
     RelativeDateComponent,
@@ -61,6 +61,7 @@ export class ScanRowsComponent {
   readonly deleted = output<ScanRow>();
   readonly favoriteToggled = output<ScanRow>();
   readonly rated = output<ScanRating>();
+  readonly ratingCleared = output<ScanRow>();
   readonly pageTurned = output<ScanPage>();
   readonly filtersCleared = output<void>();
   protected readonly ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

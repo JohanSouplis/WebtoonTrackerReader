@@ -31,7 +31,7 @@ comparaison) est un Value Object.
 - supprimer, noter ou mettre en favori vise le titre affiché, comparé par `ScanTitle.equals()` (casse
   ignorée) ;
 - une lecture plus ancienne que la lecture enregistrée ne remplace pas celle-ci ;
-- une note est un entier de 1 à 10 ;
+- une note est un entier de 1 à 10, que le lecteur peut effacer (`clearRating`, `ClearRatingUseCase`) ;
 - un scan garde l'adresse de la page de sa série (`seriesUrl`) que la lecture la plus récente a lue ; une
   lecture sans cette adresse (l'import de l'historique) garde l'adresse connue si elle vient du même site,
   l'oublie sinon ;
@@ -201,7 +201,8 @@ library.recordReading(reading);
 
 Chaque méthode du domaine est soit une commande, soit une requête, jamais les deux.
 
-- **Commande** : change l'état, retourne `void`. `recordReading`, `remove`, `toggleFavorite`, `rate`.
+- **Commande** : change l'état, retourne `void`. `recordReading`, `remove`, `toggleFavorite`, `rate`,
+  `clearRating`.
 - **Requête** : retourne une donnée, ne mute rien. `snapshot`, `equals`.
 
 `updateScansWithNewVisitedScan` mute la liste reçue et la retourne : c'est les deux à la fois. Le code neuf ne

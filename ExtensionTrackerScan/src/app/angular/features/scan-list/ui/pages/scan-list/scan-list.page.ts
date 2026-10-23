@@ -15,6 +15,7 @@ import {
 } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
+import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
 import {
   DeleteScanUseCase,
   RemovedScan,
@@ -68,6 +69,7 @@ export class ScanListPage implements OnInit {
   private readonly restoreScan = inject(RestoreScanUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
+  private readonly clearScanRating = inject(ClearRatingUseCase);
   private readonly snackBar = inject(MatSnackBar);
   protected readonly store = inject(ScanListStore);
   protected readonly now = inject(CLOCK).now();
@@ -137,6 +139,12 @@ export class ScanListPage implements OnInit {
   protected rate({ scan, rating }: ScanRating): Promise<void> {
     return this.update(() =>
       this.rateScan.execute(ScanTitle.of(scan.title), Rating.of(rating)),
+    );
+  }
+
+  protected clearRating(scan: ScanRow): Promise<void> {
+    return this.update(() =>
+      this.clearScanRating.execute(ScanTitle.of(scan.title)),
     );
   }
 

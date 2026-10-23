@@ -23,7 +23,7 @@
       - text: Ch. 246
       - time: 3 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Omniscient Reader’s Viewpoint": "9"
+      - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
       - button "Follow Omniscient Reader’s Viewpoint" [pressed]
       - button "Delete Omniscient Reader’s Viewpoint"
     - listitem:
@@ -34,7 +34,7 @@
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
       - time: 4 mo ago
       - text: asuracomic.net
-      - combobox "Rating for The Executioner": "7"
+      - 'button "Rating for The Executioner: 7/10"'
       - button "Follow The Executioner" [pressed]
       - button "Delete The Executioner"
     - listitem:
@@ -43,7 +43,7 @@
       - text: Ch. 115
       - time: 5 mo ago
       - text: asuracomic.net
-      - combobox "Rating for I Obtained a Mythic Item": "9"
+      - 'button "Rating for I Obtained a Mythic Item: 9/10"'
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
     - listitem:
@@ -54,7 +54,7 @@
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
       - time: 6 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Dungeon Odyssey": "10"
+      - 'button "Rating for Dungeon Odyssey: 10/10"'
       - button "Follow Dungeon Odyssey" [pressed]
       - button "Delete Dungeon Odyssey"
     - listitem:
@@ -63,7 +63,7 @@
       - text: Ch. 120
       - time: 8 mo ago
       - text: asuracomic.net Can't check this site
-      - combobox "Rating for Duke Pendragon": –
+      - 'button "Rating for Duke Pendragon: not rated"'
       - button "Follow Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"
     - listitem:
@@ -72,7 +72,7 @@
       - text: Ch. 38
       - time: 8 mo ago
       - text: asuracomic.net
-      - 'combobox "Rating for Solo Leveling: Ragnarok"': –
+      - 'button "Rating for Solo Leveling: Ragnarok: not rated"'
       - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
       - 'button "Delete Solo Leveling: Ragnarok"'
     - listitem:
@@ -81,7 +81,7 @@
       - text: Ch. 50
       - time: 9 mo ago
       - text: asuracomic.net
-      - combobox "Rating for The Reincarnated Assassin is a Genius Swordsman": "8"
+      - 'button "Rating for The Reincarnated Assassin is a Genius Swordsman: 8/10"'
       - button "Follow The Reincarnated Assassin is a Genius Swordsman" [pressed]
       - button "Delete The Reincarnated Assassin is a Genius Swordsman"
     - listitem:
@@ -90,7 +90,7 @@
       - text: Ch. 132
       - time: 11 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Pick Me Up, Infinite Gacha": "10"
+      - 'button "Rating for Pick Me Up, Infinite Gacha: 10/10"'
       - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
     - listitem:
@@ -99,7 +99,7 @@
       - text: Ch. 136
       - time: 12 mo ago
       - text: asuracomic.net
-      - combobox "Rating for Trash of the Count’s Family": –
+      - 'button "Rating for Trash of the Count’s Family: not rated"'
       - button "Follow Trash of the Count’s Family" [pressed]
       - button "Delete Trash of the Count’s Family"
     - listitem:
@@ -108,7 +108,7 @@
       - text: Ch. 16
       - time: 12 mo ago
       - text: asuracomic.net
-      - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
+      - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
   - group:

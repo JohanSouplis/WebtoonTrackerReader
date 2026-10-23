@@ -10,6 +10,7 @@ import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memo
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { InMemoryWatchSettingsRepository } from '../../../../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
+import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
@@ -291,6 +292,29 @@ describe('ScanListPage', () => {
     ]);
   });
 
+  it('should save a scan unrated when its rating is cleared', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Solo Leveling', rating: 9 }),
+    ]);
+    await renderPage(scanRepository);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /^Rating for Solo Leveling/ }),
+    );
+    await userEvent.click(
+      await screen.findByRole('menuitem', { name: 'Clear rating' }),
+    );
+
+    expect(
+      await screen.findByRole('button', {
+        name: 'Rating for Solo Leveling: not rated',
+      }),
+    ).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({ title: 'Solo Leveling' }),
+    ]);
+  });
+
   it('should tell the reader and refresh the list when the scan was already removed elsewhere', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
@@ -392,6 +416,10 @@ const renderPage = (
       {
         provide: ToggleFavoriteUseCase,
         useValue: new ToggleFavoriteUseCase(scanRepository),
+      },
+      {
+        provide: ClearRatingUseCase,
+        useValue: new ClearRatingUseCase(scanRepository),
       },
       {
         provide: RateScanUseCase,

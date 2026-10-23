@@ -150,18 +150,51 @@ describe('ScanRowsComponent', () => {
     expect(favoriteToggled).toHaveBeenCalledWith(SOLO_LEVELING);
   });
 
-  it('should rate the scan with the picked rating when a rating is selected', async () => {
+  it('should rate the scan with the picked rating when a rating is chosen in its menu', async () => {
     const rated = jest.fn();
     await renderRows(SHOWN_SCANS, { rated });
 
     await userEvent.click(
-      within(
-        screen.getByRole('combobox', { name: 'Rating for Solo Leveling' }),
-      ).getByText('–'),
+      screen.getByRole('button', {
+        name: 'Rating for Solo Leveling: not rated',
+      }),
     );
-    await userEvent.click(screen.getByRole('option', { name: '3' }));
+    await userEvent.click(
+      await screen.findByRole('menuitemradio', { name: '3' }),
+    );
 
     expect(rated).toHaveBeenCalledWith({ scan: SOLO_LEVELING, rating: 3 });
+  });
+
+  it('should show a rating out of 10 and offer to clear it', async () => {
+    const ratingCleared = jest.fn();
+    await renderRows(SHOWN_SCANS, { ratingCleared });
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: /^Rating for Omniscient Reader: 9 ?\/10$/,
+      }),
+    );
+    expect(
+      await screen.findByRole('menuitemradio', { name: '9' }),
+    ).toHaveAttribute('aria-checked', 'true');
+    await userEvent.click(
+      screen.getByRole('menuitem', { name: 'Clear rating' }),
+    );
+
+    expect(ratingCleared).toHaveBeenCalledWith(OMNISCIENT_READER);
+  });
+
+  it('should keep the rating when the arrow keys are pressed on the closed rating button', async () => {
+    const rated = jest.fn();
+    await renderRows(SHOWN_SCANS, { rated });
+
+    screen
+      .getByRole('button', { name: 'Rating for Solo Leveling: not rated' })
+      .focus();
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+
+    expect(rated).not.toHaveBeenCalled();
   });
 
   it('should ask for the next page when Next page is clicked', async () => {

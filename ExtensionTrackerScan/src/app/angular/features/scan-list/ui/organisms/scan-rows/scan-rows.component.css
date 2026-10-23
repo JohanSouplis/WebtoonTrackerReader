@@ -144,19 +144,20 @@ li:hover {
 .rating {
   display: flex;
   align-items: center;
+  gap: 4px;
+  min-width: 70px;
   height: 32px;
-  padding-left: 8px;
+  padding: 0 10px 0 8px;
+  border: 0;
   border-radius: 9px;
   background: var(--app-surface-3);
+  color: var(--app-text);
+  cursor: pointer;
   transition: box-shadow 0.15s;
 }
 
 .rating:hover {
   box-shadow: 0 0 0 1px var(--app-line-strong);
-}
-
-.rating:focus-within {
-  box-shadow: 0 0 0 2px var(--app-accent);
 }
 
 .rating mat-icon.mat-icon {
@@ -168,24 +169,19 @@ li:hover {
   color: var(--app-star);
 }
 
-mat-select {
-  width: 38px;
-  padding: 0 8px 0 4px;
-  text-align: center;
-  --mat-select-trigger-text-weight: 700;
-  --mat-select-trigger-text-size: 14px;
-  --mat-select-trigger-text-font: inherit;
-  --mat-select-enabled-trigger-text-color: var(--app-text);
-  --mat-select-placeholder-text-color: var(--app-faint);
+.score {
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
-mat-select:focus {
-  outline: none;
+.rating:not(.is-rated) .score {
+  color: var(--app-muted);
 }
 
-:host ::ng-deep .mat-mdc-select-arrow-wrapper {
-  display: none;
+.out-of {
+  color: var(--app-muted);
+  font-size: 11.5px;
+  font-weight: 600;
 }
 
 .delete {

@@ -123,6 +123,10 @@ export class ScanLibrary {
     this.get(title).rating = rating;
   }
 
+  clearRating(title: ScanTitle): void {
+    this.get(title).rating = undefined;
+  }
+
   trackedTitleOf(title: ScanTitle): ScanTitle | undefined {
     return this.findSeries(title.seriesKey)?.reading.title;
   }

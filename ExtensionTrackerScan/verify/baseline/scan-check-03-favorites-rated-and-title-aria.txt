@@ -24,7 +24,7 @@
       - text: Ch. 16
       - time: 12 mo ago
       - text: asuracomic.net
-      - combobox "Rating for The Heavenly Demon Wants a Quiet Life": "8"
+      - 'button "Rating for The Heavenly Demon Wants a Quiet Life: 8/10"'
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
   - group:

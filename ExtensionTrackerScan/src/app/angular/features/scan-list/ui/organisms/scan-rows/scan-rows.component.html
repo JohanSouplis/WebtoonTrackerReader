@@ -52,26 +52,26 @@
               </div>
             </div>
             <div class="actions">
-              <div class="rating" [class.is-rated]="row.rating !== undefined">
+              <button
+                type="button"
+                class="rating"
+                [class.is-rated]="row.rating !== undefined"
+                [matMenuTriggerFor]="ratingMenu"
+                [matMenuTriggerData]="{ row }"
+              >
+                <span class="visually-hidden">Rating for {{ row.title }}:</span>
                 <mat-icon [class.is-filled]="row.rating !== undefined"
                   >star</mat-icon
                 >
-                <mat-select
-                  [value]="row.rating"
-                  placeholder="–"
-                  panelClass="rating-panel"
-                  [panelWidth]="null"
-                  hideSingleSelectionIndicator
-                  aria-label="Rating for {{ row.title }}"
-                  (selectionChange)="
-                    rated.emit({ scan: row, rating: $event.value })
-                  "
-                >
-                  @for (rating of ratings; track rating) {
-                    <mat-option [value]="rating">{{ rating }}</mat-option>
-                  }
-                </mat-select>
-              </div>
+                @if (row.rating !== undefined) {
+                  <span class="score"
+                    >{{ row.rating }}<span class="out-of">/10</span></span
+                  >
+                } @else {
+                  <span class="score" aria-hidden="true">–</span>
+                  <span class="visually-hidden">not rated</span>
+                }
+              </button>
               <ds-bell-toggle
                 [checked]="row.isFavorite"
                 label="Follow {{ row.title }}"
@@ -91,6 +91,29 @@
         }
       </ul>
     </div>
+    <mat-menu #ratingMenu="matMenu" class="rating-menu">
+      <ng-template matMenuContent let-row="row">
+        @for (rating of ratings; track rating) {
+          <button
+            mat-menu-item
+            role="menuitemradio"
+            [attr.aria-checked]="row.rating === rating"
+            (click)="rated.emit({ scan: row, rating })"
+          >
+            {{ rating }}
+          </button>
+        }
+        @if (row.rating !== undefined) {
+          <button
+            mat-menu-item
+            class="clear-rating"
+            (click)="ratingCleared.emit(row)"
+          >
+            Clear rating
+          </button>
+        }
+      </ng-template>
+    </mat-menu>
     <mat-paginator
       [length]="shown.length"
       [pageIndex]="shown.page.index"

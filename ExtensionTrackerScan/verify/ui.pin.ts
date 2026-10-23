@@ -343,20 +343,41 @@ test.describe('scan list', () => {
       .toBe(2);
   });
 
-  test('change rating on a row', async ({ page }) => {
+  test('change and clear the rating on a row', async ({ page }) => {
     await openLibrary(page);
-    await row(page, 'Duke Pendragon')
-      .getByRole('combobox', { name: 'Rating for Duke Pendragon' })
-      .click();
-    await pin(page, 'scan-rating-01-select-open');
-    await page.getByRole('option', { name: '3', exact: true }).click();
-    await expect(row(page, 'Duke Pendragon').getByRole('combobox')).toHaveText(
-      '3',
+    const rating = row(page, 'Duke Pendragon').getByRole('button', {
+      name: /^Rating for Duke Pendragon/,
+    });
+    await expect(rating).toHaveAccessibleName(
+      'Rating for Duke Pendragon: not rated',
+    );
+    await rating.click();
+    await pin(page, 'scan-rating-01-menu-open');
+    await page.getByRole('menuitemradio', { name: '3', exact: true }).click();
+    await expect(rating).toHaveAccessibleName(
+      'Rating for Duke Pendragon: 3/10',
     );
     await pin(page, 'scan-rating-02-duke-pendragon-rated-3');
     await toggle(page, 'Rated only').click();
     await expect(row(page, 'Duke Pendragon')).toHaveCount(1);
     await pin(page, 'scan-rating-03-rated-only-includes-it');
+    await rating.click();
+    await page.getByRole('menuitem', { name: 'Clear rating' }).click();
+    await expect(row(page, 'Duke Pendragon')).toHaveCount(0);
+    await pin(page, 'scan-rating-04-cleared-leaves-rated-only');
+  });
+
+  test('arrow keys on a closed rating do not rate', async ({ page }) => {
+    await openLibrary(page);
+    const rating = row(page, 'Duke Pendragon').getByRole('button', {
+      name: /^Rating for Duke Pendragon/,
+    });
+    await rating.focus();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Escape');
+    await expect(rating).toHaveAccessibleName(
+      'Rating for Duke Pendragon: not rated',
+    );
   });
 
   test('delete a row', async ({ page }) => {
@@ -460,7 +481,7 @@ test.describe('scan list', () => {
   test('long title is truncated with tooltip', async ({ page }) => {
     await openLibrary(page);
     await showAllRows(page);
-    const title = library(page).getByText(LONG_TITLE_START);
+    const title = library(page).getByRole('link').getByText(LONG_TITLE_START);
     await expect(title).toHaveText(/\.\.\.$/);
     await title.hover();
     await expect(
