@@ -227,10 +227,13 @@ const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
     ...(page.selectedOptions ?? []),
   ].flatMap((text) => (text && text !== displaying ? [text] : []));
 
-const textConfirms = (text: string, chapter: Chapter): boolean => {
-  const shown = new Set(
-    chapterMentionsIn(text).map((mention) => mention.chapter.value),
+const chapterNumbersIn = (text: string): number[] =>
+  [...withAsciiDigits(text).matchAll(MENTION)].flatMap(
+    (match) => Chapter.parse(match[1] ?? match[2] ?? match[3])?.value ?? [],
   );
+
+const textConfirms = (text: string, chapter: Chapter): boolean => {
+  const shown = new Set(chapterNumbersIn(text));
   return (
     shown.has(chapter.value) &&
     [...shown].every((value) => Math.abs(value - chapter.value) <= 1)

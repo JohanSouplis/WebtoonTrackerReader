@@ -14,7 +14,7 @@
     - text: Use the address of a page where you
     - emphasis: read
     - text: "a chapter, not the series list. Sites missing from the list below may still work: most reading sites are recognized automatically."
-  - heading "Verified websites 162" [level=2]
+  - heading "Verified websites 163" [level=2]
   - searchbox "Filter by website or address"
   - paragraph: These were checked on a real chapter page. Most other reading sites are recognized automatically, so they may still work.
   - list "Verified websites":
@@ -29,7 +29,7 @@
     - listitem: asmotoon.com
     - listitem: asurascans.com
   - group:
-    - text: 1–10 of 162
+    - text: 1–10 of 163
     - button "First page" [disabled]
     - button "Previous page" [disabled]
     - button "Next page"
