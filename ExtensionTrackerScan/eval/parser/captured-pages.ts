@@ -1,6 +1,7 @@
 import enAggregators from './captures/en-aggregators.json';
 import nonEnglish from './captures/non-english.json';
 import official from './captures/official.json';
+import { PageImage, PageLink } from '../../src/app/core/domain/parsed-page';
 import { PageSignalsMessage } from '../../src/page-signals-message';
 
 type StructuredDataCapture = {
@@ -30,6 +31,10 @@ export type Capture = {
   readonly chapterSelectSelected: string | readonly string[] | null;
   readonly notes: string | null;
   readonly capturedAt?: string;
+  readonly headings?: readonly string[];
+  readonly links?: readonly PageLink[];
+  readonly images?: readonly PageImage[];
+  readonly bodyText?: string;
 };
 
 export type Expected =
@@ -155,6 +160,8 @@ export const messagesOf = (capture: Capture): PageSignalsMessage[] =>
                 }),
               ),
               selectedOptions: selectedOptionsOf(capture),
+              images: capture.images,
+              links: capture.links,
             },
           ]
         : [],
