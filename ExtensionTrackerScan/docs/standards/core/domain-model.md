@@ -323,8 +323,9 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
      `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une partie du titre
      (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ;
   5. un titre de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors
-     du premier, sans les numéros ni les mots de chapitre qui l'entourent (`O Caçador de Destinos Rank F` pour
-     `/comics/o-cacador-de-destinos-rank-f/capitulo/95`) ;
+     du premier, sans les numéros, les identifiants (`r2311170`) ni les mots de chapitre qui l'entourent
+     (`O Caçador de Destinos Rank F` pour `/comics/o-cacador-de-destinos-rank-f/capitulo/95`, `NANBA MG5` pour
+     `/read/nanba-mg5/fr/16/136`) ;
   6. à défaut, un texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`).
 - **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans extension
   (`natsu` pour `natsu.one`), son `og:site_name`, le début de celui-ci avant un slogan

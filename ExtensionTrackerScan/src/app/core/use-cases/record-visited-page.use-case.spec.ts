@@ -561,33 +561,31 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
   });
-  it('should read the series from the link to its page when the tab title shows only the chapter', async () => {
-    const { recordVisitedPage, scans } = setUp();
-    const url = 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/';
-    const seriesUrl = 'https://scanreader.net/mangas/the-abyssal-seed/';
-
-    await recordVisitedPage.execute(
-      signalsOf(
+  // prettier-ignore
+  it.each<[string, object, string, number, string]>([
+    ['the tab title shows only the chapter', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader' }, 'The Abyssal seed', 41, 'https://scanreader.net/mangas/the-abyssal-seed/'],
+    ['the series name holds a number', { pageTitle: 'Page 1 | NANBA MG5 Vol.16 Ch.136', url: 'https://www.furyosociety.com/read/nanba-mg5/fr/16/136/', headings: ['Paramètres'] }, 'NANBA MG5', 136, 'https://www.furyosociety.com/series/nanba-mg5/'],
+  ])(
+    'should read the series from the link to its page when %s',
+    async (_, message, title, chapter, seriesUrl) => {
+      const { recordVisitedPage, scans } = setUp();
+      const page = signalsOf(
         contentScriptMessage({
-          pageTitle: 'Chapitre 41',
-          url,
-          ogTitle: 'Chapitre 41',
-          ogSiteName: 'Scan Reader',
-          links: [{ href: seriesUrl, text: 'The Abyssal seed' }],
+          ...message,
+          links: [
+            { href: seriesUrl, text: title },
+            { href: new URL('/mangas', seriesUrl).href, text: 'Mangas' },
+          ],
         }),
-      ),
-    );
+      );
 
-    expect(await scans()).toEqual([
-      aScan({
-        title: 'The Abyssal seed',
-        chapter: 41,
-        url,
-        readAt: NOW,
-        seriesUrl,
-      }),
-    ]);
-  });
+      await recordVisitedPage.execute(page);
+
+      expect(await scans()).toEqual([
+        aScan({ title, chapter, url: page.url, readAt: NOW, seriesUrl }),
+      ]);
+    },
+  );
 
   it('should keep the series page the chapter page links to', async () => {
     const { recordVisitedPage, scans } = setUp();

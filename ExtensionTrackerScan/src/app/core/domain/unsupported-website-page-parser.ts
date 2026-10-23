@@ -424,7 +424,9 @@ const segmentCandidates = (
     .flatMap((segment) => titleSpan(segment, () => false));
 
 const isSlugNoise = (token: string): boolean =>
-  /\d/.test(token) || URL_CHAPTER_WORDS.includes(token.toLowerCase());
+  /^\d+$/.test(token) ||
+  (token.length >= 5 && /\d/.test(token)) ||
+  URL_CHAPTER_WORDS.includes(token.toLowerCase());
 
 const slugOf = (segment: string): string => {
   const tokens = segment.split(/[-_.~+]+/).filter((token) => token !== '');
