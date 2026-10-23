@@ -279,14 +279,17 @@ const namesReading = (words: readonly string[]): boolean => {
   );
 };
 
-const navigationNamesReading = ({ links }: PageSignals): boolean => {
-  const texts = (links ?? []).map(({ text }) => text);
-  const navigation = texts.join(' ').toLowerCase();
+const namesOnlyReading = (texts: readonly string[]): boolean => {
+  const text = texts.join(' ').toLowerCase();
   return (
     namesReading(wordsOf(texts)) &&
-    !OTHER_MEDIA_WORDS.some((word) => navigation.includes(word))
+    !OTHER_MEDIA_WORDS.some((word) => text.includes(word))
   );
 };
+
+const menuOrTextNamesReading = ({ links, text }: PageSignals): boolean =>
+  namesOnlyReading((links ?? []).map(({ text: linkText }) => linkText)) ||
+  namesOnlyReading(text ? [text] : []);
 
 const mentionsReading = (page: PageSignals): boolean => {
   const host = hostOf(page.url);
@@ -296,7 +299,7 @@ const mentionsReading = (page: PageSignals): boolean => {
     (page.structuredData ?? []).some(({ types }) =>
       types.some((type) => READING_TYPES.includes(type)),
     ) ||
-    navigationNamesReading(page)
+    menuOrTextNamesReading(page)
   );
 };
 
