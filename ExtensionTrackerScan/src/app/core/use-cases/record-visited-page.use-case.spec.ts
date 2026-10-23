@@ -159,6 +159,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a page of a list whose url repeats the page number', 'Manhwa List - Page 12 - ManhwaClan', 'https://manhwaclan.com/manga/page/12/'],
     ['a volume whose url repeats the volume number', 'Berserk Vol. 3 - Manga Reader', 'https://mangareader.example/manga/berserk/3'],
     ['a review of a chapter', 'Lookism Chapter 500: The fight we waited for — Manhwa Review Blog', 'https://manhwareviews.blog/lookism-chapter-500/'],
+    ['a chapter whose two names before the chapter only the series and chapter parts of its url repeat together', 'The strongest player - The Necromancer Family’s Young Heir - Chapter 33 - Mangaowl', 'https://mangaowl.io/read-1/the-strongest-player/the-necromancer-familys-young-heir-chapter-33/'],
     ['a forum thread about a chapter', 'Futari Bus - Ch. 50 - Throwing the Curveball | MangaDex Forums', 'https://forums.mangadex.org/threads/futari-bus-ch-50-throwing-the-curveball.2755728/'],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',

@@ -446,8 +446,8 @@ const textWitnesses = (page: PageSignals, displaying: string): string[] =>
   ].flatMap((text) => (text && text !== displaying ? [folded(text)] : []));
 
 const titleWitnesses = (page: PageSignals, displaying: string): string[] => [
-  ...[pathOf(page.url), page.canonicalUrl && pathOf(page.canonicalUrl)].flatMap(
-    (path) => (path ? [folded(path)] : []),
+  ...[page.url, page.canonicalUrl].flatMap((url) =>
+    url ? pathSegments(url).map(folded) : [],
   ),
   ...textWitnesses(page, displaying),
 ];
