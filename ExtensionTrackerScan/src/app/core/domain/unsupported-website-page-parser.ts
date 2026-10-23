@@ -325,6 +325,9 @@ const mentionsReading = (page: PageSignals): boolean =>
   ) ||
   menuOrTextNamesReading(page);
 
+const filesUnderReading = (url: string): boolean =>
+  READING_WORDS.includes((pathSegments(url)[1] ?? '').toLowerCase());
+
 const mentionsOtherMedia = (page: PageSignals): boolean => {
   const website = websiteOf(page);
   const segments = page.pageTitle.split(TITLE_SEPARATOR);
@@ -336,7 +339,7 @@ const mentionsOtherMedia = (page: PageSignals): boolean => {
     .filter((segment) => !isWebsiteName(segment, website))
     .join(' ');
   const text =
-    `${title} ${isComicHost(page.url) ? pathOf(page.url) : page.url}`.toLowerCase();
+    `${title} ${isComicHost(page.url) || filesUnderReading(page.url) ? pathOf(page.url) : page.url}`.toLowerCase();
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
