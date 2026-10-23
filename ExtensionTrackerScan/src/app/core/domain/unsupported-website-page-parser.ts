@@ -80,13 +80,20 @@ const isBoundary = (after: string): boolean => {
   return !word || QUALIFIERS.includes(word[1].toLowerCase());
 };
 
+const SEGMENT_END = new RegExp(`(?:${TITLE_SEPARATOR.source})$`, 'u');
+
+const opensSegment = (before: string): boolean =>
+  before.trim() === '' || SEGMENT_END.test(before);
+
 const chapterMentionsIn = (text: string): ChapterMention[] =>
   [...withAsciiDigits(text).matchAll(MENTION)].flatMap((match) => {
     const source = match.input;
+    const before = source.substring(0, match.index);
     const after = source.substring(match.index + match[0].length);
     const chapter = Chapter.parse(match[1] ?? match[2] ?? match[3]);
-    return chapter && (match[1] === undefined || isBoundary(after))
-      ? [{ chapter, before: source.substring(0, match.index), after }]
+    return chapter &&
+      (match[1] === undefined || isBoundary(after) || opensSegment(before))
+      ? [{ chapter, before, after }]
       : [];
   });
 
