@@ -37,6 +37,14 @@ async function pin(page: Page, name: string) {
     .toMatchSnapshot(`${name}.aria.txt`);
 }
 
+async function expectAnnounced(page: Page, text: string) {
+  await expect
+    .poll(async () =>
+      (await page.locator('body').ariaSnapshot()).includes(text),
+    )
+    .toBe(true);
+}
+
 function library(page: Page): Locator {
   return page.getByRole('list', { name: 'Library' });
 }
@@ -356,6 +364,7 @@ test.describe('scan list', () => {
         "Following “Worthless Regression”. We'll check for new chapters.",
       ),
     ).toBeVisible();
+    await expectAnnounced(page, 'Following “Worthless Regression”');
     await pin(page, 'scan-fav-01-worthless-regression-favorited');
     await toggle(page, 'Following only').click();
     await expect(row(page, 'Worthless Regression')).toHaveCount(1);
@@ -417,6 +426,7 @@ test.describe('scan list', () => {
       .click();
     await expect(row(page, 'Local')).toHaveCount(0);
     await expect(page.getByText('19 series')).toBeVisible();
+    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-02-local-removed');
   });
 
@@ -430,6 +440,7 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('link', { name: 'Omniscient Reader’s Viewpoint' }),
     ).toBeFocused();
+    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-07-undo-offered');
     await page.getByRole('button', { name: 'Undo' }).click();
     await expect(row(page, 'Local')).toHaveCount(1);
@@ -494,6 +505,7 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('searchbox', { name: 'Filter by title' }),
     ).toHaveValue('sss');
+    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-04-with-title-filter');
   });
 
@@ -509,6 +521,7 @@ test.describe('scan list', () => {
       'aria-pressed',
       'true',
     );
+    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-05-with-favorites-only');
   });
 
@@ -523,6 +536,7 @@ test.describe('scan list', () => {
     await expect(titleLinks(page).first()).toHaveText(
       "A Dragonslayer's Peerless Regression",
     );
+    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-06-after-title-sort');
   });
 

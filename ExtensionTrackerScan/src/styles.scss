@@ -204,6 +204,10 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+.rating-menu .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  flex: none;
+}
+
 .rating-menu .mat-mdc-menu-item[aria-checked="true"] {
   background: var(--app-accent-soft);
   color: var(--app-accent);

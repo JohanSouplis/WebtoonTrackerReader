@@ -28,7 +28,7 @@ export default defineConfig({
     locale: 'en-US',
     timezoneId: 'Europe/Paris',
     colorScheme: 'light',
-    reducedMotion: 'reduce',
+    contextOptions: { reducedMotion: 'reduce' },
     launchOptions: {
       executablePath: process.env['PW_CHROMIUM_PATH'] || undefined,
     },
