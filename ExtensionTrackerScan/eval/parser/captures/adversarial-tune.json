@@ -446,7 +446,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 7
     }
    ]
   },
@@ -895,7 +897,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 9
     }
    ]
   },
@@ -1263,7 +1267,9 @@
        "type": "VideoObject",
        "name": "When Do New Jujutsu Kaisen Chapters Come Out? Manga Release Schedule"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 7
     }
    ]
   },
@@ -1620,7 +1626,9 @@
        "name": "Anime",
        "position": "2"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -1960,7 +1968,9 @@
        "type": "WebPage",
        "name": "Overlord: New World Manga Chapter 24 Release Delayed Following Artist Matsuki&#039;s Hospitalization - Animehunch"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 8
     }
    ]
   },
@@ -2322,7 +2332,9 @@
        "name": "One Piece Chapter 1162 Preview: Rocks D. Xebec Unleashes His Full Power",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 5,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -2686,7 +2698,9 @@
        "name": "Jujutsu Kaisen Modulo Chapter 23 Review: Maru’s Cursed Technique Saves The Day",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 5,
+     "longParagraphCount": 13
     }
    ]
   },
@@ -3061,7 +3075,9 @@
        "name": "Chainsaw Man’s New Era Officially Begins Today",
        "position": "4"
       }
-     ]
+     ],
+     "largeImageCount": 6,
+     "longParagraphCount": 19
     }
    ]
   },
@@ -3425,7 +3441,9 @@
        "name": "Review: Jujutsu Kaisen Modulo Chapter 22 Marks The Beginning Of The End",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 4,
+     "longParagraphCount": 12
     }
    ]
   },
@@ -3804,7 +3822,9 @@
        "name": "JJK Modulo Chapter 23 Proves Gege Akutami Still Has No Idea How to End a Manga",
        "position": "4"
       }
-     ]
+     ],
+     "largeImageCount": 6,
+     "longParagraphCount": 18
     }
    ]
   },
@@ -4175,7 +4195,9 @@
        "name": "Chainsaw Man's Ending Is Actually Perfect",
        "position": "4"
       }
-     ]
+     ],
+     "largeImageCount": 7,
+     "longParagraphCount": 37
     }
    ]
   },
@@ -4491,7 +4513,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -4773,7 +4797,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -5137,7 +5163,9 @@
        "name": "One Piece Episode 1140 Release Date & Where To Watch",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 4,
+     "longParagraphCount": 9
     }
    ]
   },
@@ -5460,7 +5488,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -5706,7 +5736,9 @@
        "name": "Frieren: Beyond Journey's End",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -5838,7 +5870,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 1,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -5970,7 +6004,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 1,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -6118,7 +6154,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 1,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -6419,7 +6457,9 @@
       {
        "type": "WebPage"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -6702,7 +6742,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 2,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -6889,7 +6931,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7237,7 +7281,9 @@
        "name": "Chapters",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 41
     }
    ]
   },
@@ -7529,7 +7575,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7619,7 +7667,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 47,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7709,7 +7759,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 6,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7829,7 +7881,9 @@
        "name": "Light Novel Volume I Chapter 1",
        "headline": "Light Novel Volume I Chapter 1"
       }
-     ]
+     ],
+     "largeImageCount": 24,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7976,7 +8030,9 @@
        "name": "Chapter 2500",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -8263,7 +8319,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 2,
+     "longParagraphCount": 21
     }
    ]
   },
@@ -8520,7 +8578,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 18
     }
    ]
   },
@@ -8809,7 +8869,9 @@
        "type": "Person",
        "name": "Cocooned Cow (蚕茧里的牛)"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 61
     }
    ]
   },
@@ -8952,7 +9014,9 @@
       {
        "type": "ContactPoint"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 10
     }
    ]
   },
@@ -9292,7 +9356,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 10
     }
    ]
   },
@@ -9649,7 +9715,9 @@
       {
        "type": "SearchAction"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -9943,7 +10011,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -10130,7 +10200,9 @@
        "name": "Anime Session 1",
        "headline": "Anime Session 1"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -10411,7 +10483,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -10716,7 +10790,9 @@
        "name": "Chainsaw Man, Vol. 22 (Chainsaw Man)",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -11021,7 +11097,9 @@
        "name": "Jujutsu Kaisen Vol. 30 Kinokuniya Exclusive Edition",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -11326,7 +11404,9 @@
        "name": "Omniscient Reader's Viewpoint (Novel), Vol. 1 Kinokuniya Exclusive edition",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -11802,7 +11882,9 @@
        "type": "Person",
        "name": "Tatsuki Fujimoto"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -12099,7 +12181,9 @@
        "type": "Organization",
        "name": "VIZ Media"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 7
     }
    ]
   },
@@ -12405,7 +12489,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -12706,7 +12792,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -12982,7 +13070,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -13267,7 +13357,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -13594,7 +13686,9 @@
        "name": "Sakamoto Days",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -14414,7 +14508,9 @@
       {
        "type": "AggregateRating"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -14707,7 +14803,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -15027,7 +15125,9 @@
       {
        "type": "BroadcastEvent"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -15344,7 +15444,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -15661,7 +15763,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -15978,7 +16082,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -15999,7 +16105,9 @@
      "text": "Skip navigation Sign in This video isn't available anymore GO TO HOME",
      "selectedOptions": [],
      "links": [],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -16316,7 +16424,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -16497,7 +16607,9 @@
        "type": "Person",
        "name": "Nigel Pickles"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -16678,7 +16790,9 @@
        "type": "Person",
        "name": "Nigel Pickles"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -16931,7 +17045,9 @@
        "type": "Person",
        "name": "Nigel Pickles"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -17154,7 +17270,9 @@
        "type": "Person",
        "name": "Nigel Pickles"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -17410,7 +17528,9 @@
       {
        "type": "PropertyValueSpecification"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -17600,7 +17720,9 @@
        "name": "Chapter 320",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 17,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -17830,7 +17952,9 @@
       {
        "type": "EntryPoint"
       }
-     ]
+     ],
+     "largeImageCount": 44,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -17906,7 +18030,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 17,
+     "longParagraphCount": 15
     }
    ]
   },
@@ -18197,7 +18323,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 21,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -18293,7 +18421,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 17,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -18485,7 +18615,9 @@
        "type": "ComicSeries",
        "name": "Sakamoto Days"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -18715,7 +18847,9 @@
        "name": "Lire Sakamoto Days : Chapitre 256 VF | Scan Manga en Ligne",
        "headline": "Lire Sakamoto Days : Chapitre 256 VF | Scan Manga en Ligne"
       }
-     ]
+     ],
+     "largeImageCount": 18,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -18849,7 +18983,9 @@
        "name": "Omniscient Reader’s Viewpoint Manhwa Chapter 310 - Omniscient Reader&#039;s Viewpoint Manhwa",
        "headline": "Omniscient Reader’s Viewpoint Manhwa Chapter 310 - Omniscient Reader&#039;s Viewpoint Manhwa"
       }
-     ]
+     ],
+     "largeImageCount": 13,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -18988,7 +19124,9 @@
        "name": "Sakamoto Days - Chapter 279 - English",
        "headline": "Sakamoto Days - Chapter 279 - English"
       }
-     ]
+     ],
+     "largeImageCount": 11,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -19130,7 +19268,9 @@
        "name": "Frieren - Beyond Journey&#039;s End - Chapter 147 - English",
        "headline": "Frieren - Beyond Journey&#039;s End - Chapter 147 - English"
       }
-     ]
+     ],
+     "largeImageCount": 17,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -19294,7 +19434,9 @@
       {
        "type": "EntryPoint"
       }
-     ]
+     ],
+     "largeImageCount": 13,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -19443,7 +19585,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 45,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -19760,7 +19904,9 @@
        ],
        "name": "Solo Leveling : Ragnarok"
       }
-     ]
+     ],
+     "largeImageCount": 6,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -20038,7 +20184,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -20403,7 +20551,9 @@
        "name": "One Piece Officially Unveils New Straw Hat Death Plotline",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 5,
+     "longParagraphCount": 16
     }
    ]
   },
@@ -20775,7 +20925,9 @@
        "type": "Organization",
        "name": "ComicBook.com"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -21069,7 +21221,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -21256,7 +21410,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -21578,7 +21734,9 @@
        "type": "WebSite",
        "name": "ComicBookRoundup.com"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 20
     }
    ]
   },
@@ -21910,7 +22068,9 @@
       {
        "type": "AggregateRating"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 8
     }
    ]
   },
@@ -22281,7 +22441,9 @@
        "name": "The 10 best fights in Jujutsu Kaisen history, ranked",
        "position": "3"
       }
-     ]
+     ],
+     "largeImageCount": 11,
+     "longParagraphCount": 23
     }
    ]
   },
@@ -22603,7 +22765,9 @@
        "type": "WebSite",
        "name": "ComicBookRoundup.com"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 19
     }
    ]
   },
@@ -22820,7 +22984,9 @@
        "name": "Amazing Spider-Man #1003",
        "position": 4
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -23140,7 +23306,9 @@
        "type": "ListItem",
        "position": 5
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -23443,7 +23611,9 @@
        "type": "ListItem",
        "position": 5
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 8
     }
    ]
   },
@@ -23746,7 +23916,9 @@
        "type": "ListItem",
        "position": 5
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -24062,7 +24234,9 @@
        "type": "ListItem",
        "position": 5
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -24347,7 +24521,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -24644,7 +24820,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -24890,7 +25068,9 @@
        "type": "WebSite",
        "name": "Boswell Book Company"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -25074,7 +25254,9 @@
        "type": "ComicSeries",
        "name": "Absolute Batman DC Go! Edition"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -25356,7 +25538,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -25649,7 +25833,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -25966,7 +26152,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -26286,7 +26474,9 @@
       {
        "type": "BroadcastEvent"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -26608,7 +26798,9 @@
        "name": "Omniscient Reader&#039;s Viewpoint Manga Online - All Chapters",
        "headline": "Omniscient Reader&#039;s Viewpoint Manga Online - All Chapters"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 4
     }
    ]
   }

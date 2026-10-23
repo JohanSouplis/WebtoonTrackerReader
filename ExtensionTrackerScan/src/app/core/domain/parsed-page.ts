@@ -38,6 +38,8 @@ export type PageSignals = VisitedPage & {
   readonly metaImages?: readonly string[];
   readonly images?: readonly PageImage[];
   readonly links?: readonly PageLink[];
+  readonly largeImageCount?: number;
+  readonly longParagraphCount?: number;
 };
 
 export type ParsedPage =

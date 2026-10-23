@@ -318,7 +318,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 4,
+     "longParagraphCount": 7
     }
    ]
   },
@@ -639,7 +641,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 6,
+     "longParagraphCount": 11
     }
    ]
   },
@@ -958,7 +962,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 4,
+     "longParagraphCount": 11
     }
    ]
   },
@@ -1276,7 +1282,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 10
     }
    ]
   },
@@ -1597,7 +1605,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 11
     }
    ]
   },
@@ -1918,7 +1928,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 10
     }
    ]
   },
@@ -2210,7 +2222,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 14,
+     "longParagraphCount": 25
     }
    ]
   },
@@ -2404,7 +2418,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -2734,7 +2750,9 @@
        "name": "One Piece Chapter 1162 – Spoilers, Pics &#038; Summary [UPDATE]",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 16,
+     "longParagraphCount": 12
     }
    ]
   },
@@ -3053,7 +3071,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -3374,7 +3394,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 5,
+     "longParagraphCount": 13
     }
    ]
   },
@@ -3693,7 +3715,9 @@
        "type": "ListItem",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 3,
+     "longParagraphCount": 7
     }
    ]
   },
@@ -3940,7 +3964,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 8
     }
    ]
   },
@@ -4128,7 +4154,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -4390,7 +4418,9 @@
        "name": "Kagurabachi",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -4577,7 +4607,9 @@
        "type": "Organization",
        "name": "TakumiForm"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 10
     }
    ]
   },
@@ -4853,7 +4885,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -5150,7 +5184,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 26
     }
    ]
   },
@@ -5445,7 +5481,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -5741,7 +5779,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -6037,7 +6077,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -6334,7 +6376,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -6534,7 +6578,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -6697,7 +6743,9 @@
        "name": "Chapter 2500 - 2500: Her Reflection",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 13
     }
    ]
   },
@@ -6861,7 +6909,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 9
     }
    ]
   },
@@ -7162,7 +7212,9 @@
        "name": "Shadow Slave Novel Chapters",
        "position": 3
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7405,7 +7457,9 @@
        "type": "TVSeries",
        "name": "Sakamoto Days"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -7737,7 +7791,9 @@
        "type": "Person",
        "name": "Kazutaka Yamanaka"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 8
     }
    ]
   },
@@ -8066,7 +8122,9 @@
        "type": "Organization",
        "name": "Barnes & Noble"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -8396,7 +8454,9 @@
       {
        "type": "Offer"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -8707,7 +8767,9 @@
       {
        "type": "AggregateRating"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 2
     }
    ]
   },
@@ -8902,7 +8964,9 @@
        "type": "Thing",
        "name": "Comics N.E."
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -9001,7 +9065,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 17,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -9038,7 +9104,9 @@
      "text": "Skip to content BLUE LOCK MANGA ONLINE Read Blue Lock Manga Online in High Quality Primary Menu BLUE LOCK PRIVACY POLICY RETURN POLICY TERMS AND CONDITIONS BREADCRUMBS HOMECOMICSBLUE LOCK CHAPTER 320 BLUE LOCK CHAPTER 320 Facebook WhatsApp Twitter Reddit Pinterest Tagged Blue, Blue Lock, blue lock manga, Chapter, Chapters, Gin Gagamaru, Hyoma Chigiri, Jingo Raichi, Kunigami, Lock, Manga, Meguru Bachira, Original, read, read blue lock manga, read manga, Rensuke, Rensuke Kunigami, Volume, Volumes, Wataru Kuon, Webcomic, Yoichi Isagi, Yudai Imamura Post navigation PREVIOUS Previous: Blue Lock Chapter 321 NEXT Next: Blue Lock Chapter 319 Subsidiary Sidebar About Blue Lock (Japanese: ep ル ー ロ ッ ク Hepburn: Burū Rokku) is a Japanese shōnen manga series written by Muneyuki Kaneshiro and illustrated by Yūsuke Nomura. This manga began to be published in Weekly Shōnen Magazine published by Kodansha since August 2018, and has been bundled into seven tankōbon volumes. Latest Chapters Blue Lock Chapter 365 Blue Lock Chapter 364b Blue Lock Chapter 364 Blue Lock Chapter 363 Blue Lock Chapter 362 Blue Lock Chapter 361 Blue Lock Chapter 360 Blue Lock Chapter 359 Blue Lock Chapter 358 Blue Lock Chapter 357 Search for: © 2021 blue-lock-manga.com. All rights reserved. | Privacy Policy | Terms and Conditions | Return Policy",
      "selectedOptions": [],
      "links": [],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 20,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -9103,7 +9171,9 @@
        "type": "CreativeWork",
        "name": "Solo Leveling: Ragnarok"
       }
-     ]
+     ],
+     "largeImageCount": 19,
+     "longParagraphCount": 3
     }
    ]
   },
@@ -9423,7 +9493,9 @@
       {
        "type": "InteractionCounter"
       }
-     ]
+     ],
+     "largeImageCount": 11,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -9539,7 +9611,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 19,
+     "longParagraphCount": 14
     }
    ]
   },
@@ -9887,7 +9961,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -10138,7 +10214,9 @@
       {
        "type": "PropertyValueSpecification"
       }
-     ]
+     ],
+     "largeImageCount": 23,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -10220,7 +10298,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 9,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -10307,7 +10387,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -10662,7 +10744,9 @@
        "type": "Person",
        "name": "Joel Payne"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -11017,7 +11101,9 @@
        "type": "Person",
        "name": "Henry Davis"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 4
     }
    ]
   },
@@ -11383,7 +11469,9 @@
        "type": "Thing",
        "name": "Gintama"
       }
-     ]
+     ],
+     "largeImageCount": 2,
+     "longParagraphCount": 15
     }
    ]
   },
@@ -11663,7 +11751,9 @@
        "isBreadcrumb": false
       }
      ],
-     "structuredData": []
+     "structuredData": [],
+     "largeImageCount": 0,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -11902,7 +11992,9 @@
       {
        "type": "DefinedRegion"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -12141,7 +12233,9 @@
       {
        "type": "DefinedRegion"
       }
-     ]
+     ],
+     "largeImageCount": 1,
+     "longParagraphCount": 1
     }
    ]
   },
@@ -12444,7 +12538,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 0
     }
    ]
   },
@@ -12744,7 +12840,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 6
     }
    ]
   },
@@ -13052,7 +13150,9 @@
       {
        "type": "ImageObject"
       }
-     ]
+     ],
+     "largeImageCount": 0,
+     "longParagraphCount": 5
     }
    ]
   },
@@ -13206,7 +13306,9 @@
        "type": "ListItem",
        "position": 2
       }
-     ]
+     ],
+     "largeImageCount": 21,
+     "longParagraphCount": 12
     }
    ]
   }

@@ -327,10 +327,19 @@ const isArticle = (page: PageSignals): boolean =>
     page.breadcrumb,
   ]).some((word) => ARTICLE_WORDS.includes(word));
 
+const PROSE_PARAGRAPH_COUNT = 3;
+
+const isProse = ({
+  largeImageCount,
+  longParagraphCount,
+}: PageSignals): boolean =>
+  largeImageCount === 0 && (longParagraphCount ?? 0) >= PROSE_PARAGRAPH_COUNT;
+
 const isReadingPage = (page: PageSignals): boolean =>
   mentionsReading(page) &&
   !mentionsOtherMedia(page) &&
   !isArticle(page) &&
+  !isProse(page) &&
   !pathSegments(page.url).some((segment) =>
     NON_READING_PATHS.includes(segment.toLowerCase()),
   );

@@ -37,6 +37,8 @@ export type Capture = {
   readonly links?: readonly PageLink[];
   readonly images?: readonly PageImage[];
   readonly bodyText?: string;
+  readonly largeImageCount?: number;
+  readonly longParagraphCount?: number;
 };
 
 export type Expected =
@@ -181,6 +183,8 @@ export const messagesOf = (capture: Capture): PageSignalsMessage[] =>
               selectedOptions: selectedOptionsOf(capture),
               images: capture.images,
               links: capture.links,
+              largeImageCount: capture.largeImageCount,
+              longParagraphCount: capture.longParagraphCount,
             },
           ]
         : [],

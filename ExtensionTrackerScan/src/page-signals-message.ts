@@ -29,6 +29,8 @@ export type PageSignalsMessage = {
   readonly metaImages?: readonly string[];
   readonly images?: readonly PageImage[];
   readonly links?: readonly PageLink[];
+  readonly largeImageCount?: number;
+  readonly longParagraphCount?: number;
 };
 
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
@@ -84,6 +86,11 @@ const positionOf = (value: unknown): number | undefined => {
     ? position
     : undefined;
 };
+
+const countOf = (value: unknown): number | undefined =>
+  typeof value === 'number' && Number.isInteger(value) && value >= 0
+    ? value
+    : undefined;
 
 const linkedUrlOf = (value: unknown): string | undefined => {
   if (Array.isArray(value)) {
@@ -186,5 +193,7 @@ export const parsePageSignals = (message: unknown): PageSignals | undefined => {
     ),
     images: listOf(message['images']).flatMap(pageImageOf(url)),
     links: listOf(message['links']).flatMap(pageLinkOf(url)),
+    largeImageCount: countOf(message['largeImageCount']),
+    longParagraphCount: countOf(message['longParagraphCount']),
   };
 };
