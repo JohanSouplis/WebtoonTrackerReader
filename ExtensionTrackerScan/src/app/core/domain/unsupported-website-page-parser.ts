@@ -1,11 +1,13 @@
 import { Chapter } from './chapter';
 import {
+  ARTICLE_PATHS,
   ARTICLE_WORDS,
   CHAPTER_SUFFIXES,
   CHAPTER_WORDS,
   NON_READING_PATHS,
   OTHER_MEDIA_WORDS,
   OTHER_NUMBER_WORDS,
+  OTHER_PAGE_TYPES,
   QUALIFIERS,
   READING_MARKS,
   READING_TYPES,
@@ -35,7 +37,7 @@ const NUMBER = '(\\d+(?:[.,]\\d+)?)';
 
 const MENTION = new RegExp(
   [
-    `(?<![\\p{L}\\d])(?:${byLength(CHAPTER_WORDS).join('|')})\\.?\\s*(?:رقم\\s*)?[-:]?\\s*${NUMBER}(?!\\d)`,
+    `(?<![\\p{L}\\d])(?:${byLength(CHAPTER_WORDS).join('|')})\\.?\\s*(?:رقم\\s*)?[-:#]?\\s*${NUMBER}(?!\\d)`,
     `第\\s*${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}]`,
     `(?<![\\p{L}\\d+])${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}](?!\\p{L})`,
   ].join('|'),
@@ -52,10 +54,12 @@ const CONNECTOR = new RegExp(
   'iu',
 );
 
-const withAsciiDigits = (text: string): string =>
-  text.replace(/[０-９．]/g, (character) =>
-    String.fromCharCode(character.charCodeAt(0) - 0xfee0),
-  );
+const normalizedText = (text: string): string =>
+  text
+    .normalize('NFC')
+    .replace(/[０-９．]/g, (character) =>
+      String.fromCharCode(character.charCodeAt(0) - 0xfee0),
+    );
 
 const decoded = (url: string): string => {
   try {
@@ -77,8 +81,13 @@ const isBoundary = (after: string): boolean => {
   if (CONNECTOR.test(after)) {
     return true;
   }
-  const word = /^\s*([\p{L}]+)/u.exec(after);
-  return !word || QUALIFIERS.includes(word[1].toLowerCase());
+  const word = /^\s*([\p{L}]+)(\.?\s*\d)?/u.exec(after);
+  return (
+    !word ||
+    QUALIFIERS.includes(word[1].toLowerCase()) ||
+    (word[2] !== undefined &&
+      OTHER_NUMBER_WORDS.includes(word[1].toLowerCase()))
+  );
 };
 
 const SEGMENT_END = new RegExp(`(?:${TITLE_SEPARATOR.source})$`, 'u');
@@ -87,7 +96,7 @@ const opensSegment = (before: string): boolean =>
   before.trim() === '' || SEGMENT_END.test(before);
 
 const chapterMentionsIn = (text: string): ChapterMention[] =>
-  [...withAsciiDigits(text).matchAll(MENTION)].flatMap((match) => {
+  [...normalizedText(text).matchAll(MENTION)].flatMap((match) => {
     const source = match.input;
     const before = source.substring(0, match.index);
     const after = source.substring(match.index + match[0].length);
@@ -113,13 +122,17 @@ const hostOf = (url: string): string => folded(hostnameOf(url));
 
 const pathSegments = (url: string): string[] => pathOf(url).split(/[/?#&]/);
 
+const numbersOf = (whole: string, decimal?: string): number[] =>
+  decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)];
+
 const urlChapters = (url: string): number[] => [
   ...[...pathOf(url).matchAll(URL_MENTION)].flatMap(([, whole, decimal]) =>
-    decimal ? [Number(whole), Number(`${whole}.${decimal}`)] : [Number(whole)],
+    numbersOf(whole, decimal),
   ),
-  ...pathSegments(url)
-    .filter((segment) => /^\d+$/.test(segment))
-    .map(Number),
+  ...pathSegments(url).flatMap((segment) => {
+    const number = /^(\d+)(?:[.-](\d+))?$/.exec(segment);
+    return number ? numbersOf(number[1], number[2]) : [];
+  }),
 ];
 
 const BARE_NUMBER = new RegExp(
@@ -133,9 +146,9 @@ const isNumberOfSomethingElse = (before: string): boolean => {
 };
 
 const bareNumbersIn = (text: string): ChapterMention[] =>
-  withAsciiDigits(text).search(MENTION) >= 0
+  normalizedText(text).search(MENTION) >= 0
     ? []
-    : [...withAsciiDigits(text).matchAll(BARE_NUMBER)].flatMap((match) => {
+    : [...normalizedText(text).matchAll(BARE_NUMBER)].flatMap((match) => {
         const chapter = Chapter.parse(match[1]);
         return chapter &&
           !isNumberOfSomethingElse(match.input.substring(0, match.index))
@@ -235,7 +248,7 @@ const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
   ].flatMap((text) => (text && text !== displaying ? [text] : []));
 
 const chapterNumbersIn = (text: string): number[] =>
-  [...withAsciiDigits(text).matchAll(MENTION)].flatMap(
+  [...normalizedText(text).matchAll(MENTION)].flatMap(
     (match) => Chapter.parse(match[1] ?? match[2] ?? match[3])?.value ?? [],
   );
 
@@ -312,20 +325,42 @@ const mentionsReading = (page: PageSignals): boolean =>
   ) ||
   menuOrTextNamesReading(page);
 
-const mentionsOtherMedia = ({ pageTitle, url }: PageSignals): boolean => {
+const filesUnderReading = (url: string): boolean =>
+  READING_WORDS.includes((pathSegments(url)[1] ?? '').toLowerCase());
+
+const mentionsOtherMedia = (page: PageSignals): boolean => {
+  const website = websiteOf(page);
+  const segments = page.pageTitle.split(TITLE_SEPARATOR);
+  const websiteAt = segments.findIndex(
+    (segment, index) => index > 0 && isWebsiteName(segment, website),
+  );
+  const title = segments
+    .slice(0, websiteAt > 0 ? websiteAt : segments.length)
+    .filter((segment) => !isWebsiteName(segment, website))
+    .join(' ');
   const text =
-    `${pageTitle} ${isComicHost(url) ? pathOf(url) : url}`.toLowerCase();
+    `${title} ${isComicHost(page.url) || filesUnderReading(page.url) ? pathOf(page.url) : page.url}`.toLowerCase();
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
-const isArticle = (page: PageSignals): boolean =>
-  wordsOf([
+const isArticle = (page: PageSignals): boolean => {
+  const words = ` ${wordsOf([
     page.pageTitle,
     page.ogTitle,
-    page.ogSiteName,
     page.heading,
     page.breadcrumb,
-  ]).some((word) => ARTICLE_WORDS.includes(word));
+  ]).join(' ')} `;
+  const pathWords = wordsOf([pathOf(page.url)]);
+  return (
+    ARTICLE_WORDS.some((word) => words.includes(` ${word} `)) ||
+    pathWords.some((word) => ARTICLE_PATHS.includes(word))
+  );
+};
+
+const isOtherPageKind = ({ structuredData }: PageSignals): boolean =>
+  (structuredData ?? []).some(({ types }) =>
+    types.some((type) => OTHER_PAGE_TYPES.includes(type)),
+  );
 
 const PROSE_PARAGRAPH_COUNT = 3;
 
@@ -339,6 +374,7 @@ const isReadingPage = (page: PageSignals): boolean =>
   mentionsReading(page) &&
   !mentionsOtherMedia(page) &&
   !isArticle(page) &&
+  !isOtherPageKind(page) &&
   !isProse(page) &&
   !pathSegments(page.url).some((segment) =>
     NON_READING_PATHS.includes(segment.toLowerCase()),
@@ -364,6 +400,19 @@ const segmentsOf = (text: string): string[] =>
     .split(SEPARATED)
     .filter((part, index) => index % 2 === 0 && withoutTitleNoise(part) !== '');
 
+const wordCount = (text: string): number =>
+  text.split(/[^\p{L}\p{N}]+/u).filter((word) => word !== '').length;
+
+const withoutRepetition = (title: string): string => {
+  const repeated = [...title.matchAll(/\s+/g)]
+    .map(({ index }) => [title.substring(0, index), title.substring(index)])
+    .find(
+      ([first, second]) =>
+        wordCount(first) >= 2 && folded(first) === folded(second),
+    );
+  return repeated ? repeated[1].trim() : title;
+};
+
 const titleSpan = (
   text: string,
   isDropped: (segment: string, place: SegmentPlace) => boolean,
@@ -385,8 +434,8 @@ const titleSpan = (
   if (kept.length === 0) {
     return [];
   }
-  const span = withoutTitleNoise(
-    parts.slice(kept[0], kept[kept.length - 1] + 1).join(''),
+  const span = withoutRepetition(
+    withoutTitleNoise(parts.slice(kept[0], kept[kept.length - 1] + 1).join('')),
   );
   return isTitle(span) ? [span] : [];
 };
@@ -439,7 +488,7 @@ const afterCandidates = (after: string, website: Website): string[] => {
   return [
     ...(connected ? titleSpan(connected[1], isWebsiteAtEnd) : []),
     ...(nextTitles.length > 0
-      ? nextTitles
+      ? [...nextTitles, ...titleSpan(pieces[0], () => false)]
       : titleSpan(titleAfterMention(mentionPiece), isWebsiteAtEnd)),
   ].filter((candidate) => !isExactWebsiteName(candidate, website));
 };
@@ -543,8 +592,12 @@ const titleOf = (
   }
   const witnesses = titleWitnesses(page, display.text);
   const before = beforeCandidates(mention, website);
+  const surrounding = [...before, ...afterCandidates(mention.after, website)];
   const confirmed =
-    [...before, ...afterCandidates(mention.after, website)].find((candidate) =>
+    surrounding.find((candidate) =>
+      [...witnesses, ...seriesSlugsOf(page)].includes(folded(candidate)),
+    ) ??
+    surrounding.find((candidate) =>
       witnesses.some((witness) => witness.includes(folded(candidate))),
     ) ??
     (display.text === page.pageTitle

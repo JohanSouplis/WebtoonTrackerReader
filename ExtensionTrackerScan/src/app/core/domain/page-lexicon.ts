@@ -12,6 +12,7 @@ export const CHAPTER_WORDS = [
   'bölüm',
   'bolum',
   'глава',
+  'розділ',
   'الفصل',
   'فصل',
   'chap',
@@ -32,6 +33,8 @@ export const URL_CHAPTER_WORDS = [
   'chuong',
   'kapitel',
   'bolum',
+  'glava',
+  'rozdil',
   'chap',
   'cap',
   'ch',
@@ -61,6 +64,7 @@ export const QUALIFIERS = [
   'manga',
   'scan',
   'ita',
+  'مترجم',
 ];
 
 export const OTHER_NUMBER_WORDS = [
@@ -114,6 +118,20 @@ export const READING_MARKS = [
 
 export const READING_TYPES = ['ComicSeries', 'ComicIssue', 'ComicStory'];
 
+export const OTHER_PAGE_TYPES = [
+  'NewsArticle',
+  'ReportageNewsArticle',
+  'AnalysisNewsArticle',
+  'Review',
+  'DiscussionForumPosting',
+  'TVEpisode',
+  'TVSeries',
+  'Movie',
+  'VideoObject',
+  'Product',
+  'SearchResultsPage',
+];
+
 export const SERIES_TYPES = [
   'ComicSeries',
   'CreativeWorkSeries',
@@ -150,6 +168,31 @@ export const ARTICLE_WORDS = [
   'forum',
   'forums',
   'news',
+  'release date',
+  'recap',
+  'summary',
+  'preview',
+  'reaction',
+  'analysis',
+  'explained',
+  'predictions',
+  'theory',
+  'theories',
+  'leaks',
+  'delayed',
+  'price guide',
+];
+
+export const ARTICLE_PATHS = [
+  'news',
+  'article',
+  'articles',
+  'review',
+  'reviews',
+  'spoilers',
+  'forum',
+  'forums',
+  'threads',
 ];
 
 export const NON_READING_PATHS = ['course'];
@@ -168,15 +211,15 @@ export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»】」]\s*|\s
 export const TITLE_NOISE: readonly RegExp[] = [
   /^.*(?:^|[-|–:]\s*)(?:free\s+)?read(?:ing)?\s+/i,
   /^.*مترجم للعربي\s*/,
-  /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon):?\s+)+/iu,
+  /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon|مانجا|مانها|مانهوا):?\s+)+/iu,
   /^(?:その\d+)?[\s\]】」)]+/,
-  /\s*\((?:manga|manhwa|manhua|webtoon|comic)\)\s*$/i,
+  /\s*\(\s*(?:manga|manhwa|manhua|webtoon|comic|raw|mtl|makine)\s*\)\s*$/i,
   /\[official\]|\(official\)/gi,
   /\s+(?:scans?\s+)?(?:fr|vf|vostfr)$/i,
   /^\s*\([^)]*\)/,
   /^(?:page|pagina|página|seite)\s*\d+(?:\s*\/\s*\d+)?\s*$/iu,
   /\(?\bs\d+\)?\s*$/i,
-  /(?<!\p{L})(?:vol(?:ume)?|том|часть)\.?\s*\d+\.?\s*$/iu,
+  /(?<!\p{L})(?:vol(?:ume)?|том|часть)[.:]?\s*\d+\.?\s*$/iu,
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
   /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online|онлайн|бесплатно)\.?)+$/iu,
 ];

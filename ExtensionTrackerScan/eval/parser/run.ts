@@ -36,6 +36,7 @@ import {
   ADVERSARIAL_BLIND_PAGES,
   ADVERSARIAL_TUNE_PAGES,
   AdversarialPage,
+  SEALED_1_PAGES,
 } from './adversarial-pages';
 
 type Outcome =
@@ -424,22 +425,35 @@ const withNeutralUrl = (message: unknown): unknown =>
       )
     : message;
 
+const lastMessageOf = (page: AdversarialPage): VisitedPage | undefined => {
+  const message = parsePageSignals(page.messages[page.messages.length - 1]);
+  return message && { pageTitle: message.pageTitle, url: message.url };
+};
+
+const ADVERSARIAL_MODES: readonly {
+  readonly name: string;
+  readonly record: (page: AdversarialPage) => readonly Recorded[];
+}[] = [
+  {
+    name: 'history import (title and url)',
+    record: (page) => {
+      const visited = lastMessageOf(page);
+      const recorded = visited && recordedBy(visited);
+      return recorded ? [recorded] : [];
+    },
+  },
+  {
+    name: 'content script (page signals)',
+    record: (page) => page.messages.flatMap(recordedFromMessage),
+  },
+];
+
 const reportAdversarial = (
   name: string,
   pages: readonly AdversarialPage[],
   listsPages: boolean,
 ): void => {
   console.log(`\n### ${name}`);
-  const outcomes = pages.map((page) => {
-    const recorded = page.messages.flatMap(recordedFromMessage);
-    return {
-      page,
-      recorded,
-      outcome: capturedOutcomeOf(page.expected, recorded),
-    };
-  });
-  const count = (outcome: CapturedOutcome): number =>
-    outcomes.filter((entry) => entry.outcome === outcome).length;
   const chapterPageCount = pages.filter(
     ({ expected }) => expected.kind === 'reading',
   ).length;
@@ -449,18 +463,36 @@ const reportAdversarial = (
       neutralUrlOf(page.url) !== page.url &&
       page.messages.map(withNeutralUrl).flatMap(recordedFromMessage).length > 0,
   );
+  for (const mode of ADVERSARIAL_MODES) {
+    const outcomes = pages.map((page) => {
+      const recorded = mode.record(page);
+      return {
+        page,
+        recorded,
+        outcome: capturedOutcomeOf(page.expected, recorded),
+      };
+    });
+    const count = (outcome: CapturedOutcome): number =>
+      outcomes.filter((entry) => entry.outcome === outcome).length;
+    console.log(
+      `${mode.name}: chapter pages ${chapterPageCount}: exact ${count('exact')}, wrong ${count('wrong')}, missed ${count('missed')}; other pages ${pages.length - chapterPageCount}: recorded ${count('false-positive')}`,
+    );
+    if (!listsPages) {
+      continue;
+    }
+    for (const { page, recorded, outcome } of outcomes) {
+      if (outcome !== 'exact' && outcome !== 'ignored') {
+        console.log(
+          `  ${outcome.toUpperCase()} [${page.category}] ${recorded.map(describe).join(', ')} expected ${expectedText(page.expected)} | ${page.url}`,
+        );
+      }
+    }
+  }
   console.log(
-    `content script (page signals): chapter pages ${chapterPageCount}: exact ${count('exact')}, wrong ${count('wrong')}, missed ${count('missed')}; other pages ${pages.length - chapterPageCount}: recorded ${count('false-positive')}; other pages recorded once the other medium leaves their URL ${exposed.length}`,
+    `other pages recorded once the other medium leaves their URL ${exposed.length}`,
   );
   if (!listsPages) {
     return;
-  }
-  for (const { page, recorded, outcome } of outcomes) {
-    if (outcome !== 'exact' && outcome !== 'ignored') {
-      console.log(
-        `  ${outcome.toUpperCase()} [${page.category}] ${recorded.map(describe).join(', ')} expected ${expectedText(page.expected)} | ${page.url}`,
-      );
-    }
   }
   for (const page of exposed) {
     console.log(
@@ -477,6 +509,11 @@ reportAdversarial(
   'adversarial-blind (never listed page by page)',
   ADVERSARIAL_BLIND_PAGES,
   false,
+);
+reportAdversarial(
+  'sealed-1 (judged once on unseen hosts, then tuned on)',
+  SEALED_1_PAGES,
+  true,
 );
 
 const verified = verifiedWebsites();
