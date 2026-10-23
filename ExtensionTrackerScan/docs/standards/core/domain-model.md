@@ -386,7 +386,7 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
   `Глава 12`, `Розділ 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`, `Capítulo #12`. Une lettre accentuée se lit composée, même si la page l'écrit
   en deux caractères (`i` suivi de l'accent aigu dans `Capítulo`). Après un mot de chapitre vient un séparateur, un
-  qualificatif (`VF`, `Online`, `Next`, `مترجم`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
+  qualificatif (`VF`, `Online`, `Next`, `مترجم`), un mot de liaison (`de`, `манги`) ou le numéro d'un volume (`Глава 129 Том 4`), jamais un mot de phrase
   (`Chapter 11 bankruptcy`), sauf si le mot de chapitre ouvre le texte ou un de ses segments : le nom du
   chapitre suit alors son numéro (`Shangri-La Frontier | CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?`). Un numéro seul dans un texte d'en-tête (`Scan One Piece 1196`,
   `Sonic The Hedgehog #88`) est le chapitre si l'URL ou un autre élément de la page

@@ -79,8 +79,13 @@ const isBoundary = (after: string): boolean => {
   if (CONNECTOR.test(after)) {
     return true;
   }
-  const word = /^\s*([\p{L}]+)/u.exec(after);
-  return !word || QUALIFIERS.includes(word[1].toLowerCase());
+  const word = /^\s*([\p{L}]+)(\.?\s*\d)?/u.exec(after);
+  return (
+    !word ||
+    QUALIFIERS.includes(word[1].toLowerCase()) ||
+    (word[2] !== undefined &&
+      OTHER_NUMBER_WORDS.includes(word[1].toLowerCase()))
+  );
 };
 
 const SEGMENT_END = new RegExp(`(?:${TITLE_SEPARATOR.source})$`, 'u');
