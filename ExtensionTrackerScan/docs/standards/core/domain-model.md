@@ -308,9 +308,11 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   qualificatif (`VF`, `Online`, `Next`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
   (`Chapter 11 bankruptcy`), sauf si le mot de chapitre ouvre le texte ou un de ses segments : le nom du
   chapitre suit alors son numéro (`Shangri-La Frontier | CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?`). Un numéro seul dans un texte d'en-tête (`Scan One Piece 1196`,
-  `Sonic The Hedgehog #88`) est le chapitre si l'URL, le début du texte visible ou un autre élément de la page
+  `Sonic The Hedgehog #88`) est le chapitre si l'URL ou un autre élément de la page
   (`Issue 1` en JSON-LD pour `Knull (2026) #1 (of 5)`) porte le même numéro, si le texte n'a aucun mot de
-  chapitre et si aucun mot ne le rattache à autre chose (`Page 2`, `Vol. 3`, `Saison 1`, `часть 2`) ; une option sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
+  chapitre et si aucun mot ne le rattache à autre chose (`Page 2`, `Vol. 3`, `Saison 1`, `часть 2`). Le texte
+  visible ne confirme pas un numéro seul : le résumé de la fiche d'un numéro le cite aussi
+  (`Absolute Batman DC Go! Edition #12` et `Episode 12 - Batman and Alfred...`) ; une option sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
   comme chapitre : c'est souvent un index (`episode_no=653` pour l'épisode 235) ou un identifiant collé
   (`chapter-58.826511`).
 - **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un

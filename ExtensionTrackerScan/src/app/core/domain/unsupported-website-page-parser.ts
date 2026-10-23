@@ -598,7 +598,6 @@ export const parseUnsupportedWebsitePage = (
         ? bareNumbersIn(display.text).find(
             ({ chapter }) =>
               urlChapters(page.url).includes(chapter.value) ||
-              textConfirms(page.text ?? '', chapter) ||
               chapterWitnesses(page, display.text).some((witness) =>
                 displays(witness, chapter),
               ),
