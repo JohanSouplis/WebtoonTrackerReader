@@ -72,7 +72,7 @@ async function expectShownTitles(page: Page, titles: string[]) {
 }
 
 function settingsButton(page: Page): Locator {
-  return page.getByRole('button', { name: /^New chapter checks/ });
+  return page.getByRole('button', { name: /^Checks / });
 }
 
 async function openLibrary(page: Page) {
@@ -541,29 +541,36 @@ test.describe('new chapters', () => {
     await pin(page, 'new-02-new-first');
   });
 
-  test('new chapter checks interval and notifications', async ({ page }) => {
+  test('new chapter checks frequency, off and alerts', async ({ page }) => {
     await openLibrary(page);
     await expect(settingsButton(page)).toHaveAccessibleName(
-      'New chapter checks: Every 6h',
+      'Checks every 6 hours · Alerts off',
     );
     await settingsButton(page).click();
     await expect(
       page.getByRole('menuitemradio', { name: 'Every 6 hours' }),
     ).toHaveAttribute('aria-checked', 'true');
+    await expect(
+      page.getByText('New chapters also show as a count on the toolbar icon.'),
+    ).toBeVisible();
     await pin(page, 'new-03-settings-menu');
     await page.getByRole('menuitemradio', { name: 'Once a day' }).click();
     await expect(settingsButton(page)).toHaveAccessibleName(
-      'New chapter checks: Daily',
+      'Checks once a day · Alerts off',
     );
     await settingsButton(page).click();
     await page
-      .getByRole('menuitemcheckbox', { name: 'Desktop notifications' })
+      .getByRole('menuitemcheckbox', { name: 'Desktop alerts' })
       .click();
+    await expect(settingsButton(page)).toHaveAccessibleName(
+      'Checks once a day · Alerts on',
+    );
     await settingsButton(page).click();
-    await expect(
-      page.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
-    ).toHaveAttribute('aria-checked', 'true');
-    await pin(page, 'new-04-notifications-on');
+    await page.getByRole('menuitemradio', { name: 'Off' }).click();
+    await expect(settingsButton(page)).toHaveAccessibleName(
+      'Checks off · Alerts on',
+    );
+    await pin(page, 'new-04-checks-off-alerts-on');
   });
 
   test('clicking a new chapter opens it in a new tab', async ({ page }) => {

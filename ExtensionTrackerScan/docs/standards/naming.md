@@ -45,7 +45,7 @@ pas un synonyme.
 | `NewChapter` | Un chapitre paru après le dernier lu, sur le même site | `update`, `release` |
 | `HostProfile` | Ce que l'extension a appris d'un site pour vérifier ses chapitres, et sa pause en cours | `siteConfig`, `hostInfo` |
 | `ReportSettings` | Le choix du lecteur d'envoyer ou non au développeur les pages qu'un site supporté n'a pas permis de lire (`sendsParseReports`, oui par défaut) | `telemetry`, `consent`, `privacy` pour ce sens |
-| `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckInterval`) | `preferences`, `options` |
+| `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckFrequency` : un `CheckInterval` ou `off`) | `preferences`, `options` |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.
 

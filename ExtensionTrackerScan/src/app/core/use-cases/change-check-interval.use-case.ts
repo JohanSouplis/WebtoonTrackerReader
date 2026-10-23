@@ -1,10 +1,10 @@
-import { CheckInterval, WatchSettings } from '../domain/chapter-watch';
+import { CheckFrequency, WatchSettings } from '../domain/chapter-watch';
 import { WatchSettingsRepository } from '../ports/watch-settings-repository.port';
 
 export class ChangeCheckIntervalUseCase {
   constructor(private readonly settingsRepository: WatchSettingsRepository) {}
 
-  async execute(checkEvery: CheckInterval): Promise<WatchSettings> {
+  async execute(checkEvery: CheckFrequency): Promise<WatchSettings> {
     const settings: WatchSettings = {
       ...(await this.settingsRepository.load()),
       checkEvery,

@@ -1,4 +1,8 @@
-import { ChapterWatch, HostProfile } from '../domain/chapter-watch';
+import {
+  ChapterWatch,
+  HostProfile,
+  WatchSettings,
+} from '../domain/chapter-watch';
 import { FetchedPage } from '../domain/fetched-page';
 import { ScanSnapshot } from '../domain/scan-library';
 import { ScanTitle } from '../domain/scan-title';
@@ -370,6 +374,20 @@ describe('CheckNewChaptersUseCase', () => {
     expect(web.fetchedUrls).toEqual([FEED, SERIES, SERIES]);
   });
 
+  it('should check nothing while the reader turned checks off', async () => {
+    const { web, runAt, watchOf } = setUp({
+      scans: [aFavorite('Solo Leveling', 100)],
+      pages: { [SERIES]: seriesPage([99, 100, 101]) },
+      settings: { checkEvery: 'off' },
+    });
+
+    await runAt(NOW);
+    await runAt(new Date(NOW.getTime() + 30 * 24 * HOUR));
+
+    expect(web.fetchedUrls).toEqual([]);
+    expect(await watchOf('Solo Leveling')).toBeUndefined();
+  });
+
   it('should announce a chapter once, and a later chapter again', async () => {
     const { alerts, runAt, web } = setUp({
       scans: [aFavorite('Solo Leveling', 100)],
@@ -535,7 +553,7 @@ const setUp = ({
   pages?: Readonly<Record<string, FetchedPage>>;
   watches?: Readonly<Record<string, ChapterWatch>>;
   hosts?: Readonly<Record<string, HostProfile>>;
-  settings?: { checkEvery: '1h' | '6h' | '24h' };
+  settings?: WatchSettings;
 }) => {
   const scanRepository = new InMemoryScanRepository(scans);
   const watchRepository = new InMemoryChapterWatchRepository(watches);

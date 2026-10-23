@@ -8,7 +8,7 @@
   - button "Following only"
   - button "Rated only"
   - text: 20 series
-  - 'button "New chapter checks: Every 6h" [expanded]': Every 6h
+  - button "Checks every 6 hours · Alerts off" [expanded]
   - group "Sort by":
     - button "New"
     - button "Last read (descending)" [pressed]
@@ -124,4 +124,6 @@
   - menuitemradio "Every hour"
   - menuitemradio "Every 6 hours" [checked]
   - menuitemradio "Once a day"
-  - menuitemcheckbox "Desktop notifications"
+  - menuitemradio "Off"
+  - menuitemcheckbox "Desktop alerts"
+  - paragraph: New chapters also show as a count on the toolbar icon.

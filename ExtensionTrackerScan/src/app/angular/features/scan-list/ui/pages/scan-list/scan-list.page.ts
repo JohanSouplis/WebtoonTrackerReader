@@ -7,7 +7,7 @@ import {
   untracked,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CheckInterval } from '../../../../../../core/domain/chapter-watch';
+import { CheckFrequency } from '../../../../../../core/domain/chapter-watch';
 import { Rating } from '../../../../../../core/domain/rating';
 import {
   ScanNotFound,
@@ -43,6 +43,8 @@ import { ScanListStore } from './scan-list.store';
 const UNDO_DURATION_MS = 6000;
 
 const FOLLOW_FEEDBACK_DURATION_MS = 3000;
+
+const REFUSED_ALERTS_DURATION_MS = 12000;
 
 @Component({
   selector: 'app-scan-list',
@@ -94,15 +96,21 @@ export class ScanListPage implements OnInit {
     );
   }
 
-  protected async chooseInterval(checkEvery: CheckInterval): Promise<void> {
+  protected async chooseInterval(checkEvery: CheckFrequency): Promise<void> {
     this.store.showSettings(await this.changeCheckInterval.execute(checkEvery));
   }
 
   protected async toggleNotifications(isWanted: boolean): Promise<void> {
     if (isWanted) {
-      this.store.showSettings({
-        areNotificationsOn: await this.notificationPermission.request(),
-      });
+      const isGranted = await this.notificationPermission.request();
+      this.store.showSettings({ areNotificationsOn: isGranted });
+      if (!isGranted) {
+        this.snackBar.open(
+          "Chrome didn't allow notifications, so alerts stay off. Turn them on again and choose Allow. If Chrome doesn't ask, allow notifications for Chrome in your system settings.",
+          'Dismiss',
+          { duration: REFUSED_ALERTS_DURATION_MS },
+        );
+      }
       return;
     }
     await this.notificationPermission.remove();

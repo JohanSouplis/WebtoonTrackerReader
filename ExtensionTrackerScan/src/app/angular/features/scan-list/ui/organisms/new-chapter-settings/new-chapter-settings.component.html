@@ -1,22 +1,17 @@
-<button
-  type="button"
-  class="trigger"
-  [matMenuTriggerFor]="menu"
-  attr.aria-label="New chapter checks: {{ summary() }}"
->
-  <mat-icon [class.is-filled]="settings().areNotificationsOn"
-    >notifications</mat-icon
-  >
+<button type="button" class="trigger" [matMenuTriggerFor]="menu">
+  <mat-icon [class.is-filled]="settings().areNotificationsOn">{{
+    icon()
+  }}</mat-icon>
   {{ summary() }}
 </button>
 <mat-menu #menu="matMenu" class="new-chapter-settings-panel">
   <p class="heading">Check followed series for new chapters</p>
-  @for (option of intervals(); track option.interval) {
+  @for (option of frequencies(); track option.frequency) {
     <button
       mat-menu-item
       role="menuitemradio"
       [attr.aria-checked]="option.isChosen"
-      (click)="intervalChosen.emit(option.interval)"
+      (click)="intervalChosen.emit(option.frequency)"
     >
       <mat-icon>{{ option.isChosen ? "check" : "" }}</mat-icon>
       {{ option.name }}
@@ -30,6 +25,7 @@
     (click)="notificationsToggled.emit(!settings().areNotificationsOn)"
   >
     <mat-icon>{{ settings().areNotificationsOn ? "check" : "" }}</mat-icon>
-    Desktop notifications
+    Desktop alerts
   </button>
+  <p class="note">New chapters also show as a count on the toolbar icon.</p>
 </mat-menu>

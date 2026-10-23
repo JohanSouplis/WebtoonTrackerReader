@@ -1,5 +1,5 @@
 import {
-  CHECK_INTERVALS,
+  CHECK_FREQUENCIES,
   DEFAULT_WATCH_SETTINGS,
   WatchSettings,
 } from '../domain/chapter-watch';
@@ -12,7 +12,7 @@ export class ChromeStorageWatchSettingsRepository implements WatchSettingsReposi
     const stored: unknown = (
       await chrome.storage.local.get([WATCH_SETTINGS_KEY])
     )[WATCH_SETTINGS_KEY];
-    const checkEvery = CHECK_INTERVALS.find(
+    const checkEvery = CHECK_FREQUENCIES.find(
       (interval) =>
         typeof stored === 'object' &&
         stored !== null &&

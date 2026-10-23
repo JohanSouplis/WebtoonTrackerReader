@@ -19,6 +19,15 @@ describe('ChromeStorageWatchSettingsRepository', () => {
     },
   );
 
+  it('should keep checks off when the reader turned them off', async () => {
+    installChrome({ storage: { local: new FakeChromeStorage() } });
+    const repository = new ChromeStorageWatchSettingsRepository();
+
+    await repository.save({ checkEvery: 'off' });
+
+    expect(await repository.load()).toEqual({ checkEvery: 'off' });
+  });
+
   it('should keep the interval the reader chose', async () => {
     installChrome({ storage: { local: new FakeChromeStorage() } });
     const repository = new ChromeStorageWatchSettingsRepository();

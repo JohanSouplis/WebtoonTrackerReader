@@ -41,6 +41,15 @@
   text-transform: uppercase;
 }
 
+.note {
+  max-width: 220px;
+  margin: 0;
+  padding: 6px 16px 8px;
+  color: var(--app-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .separator {
   height: 1px;
   margin: 6px 0;

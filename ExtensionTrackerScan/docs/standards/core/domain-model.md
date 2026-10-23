@@ -162,6 +162,8 @@ Les numéros ne se comparent qu'entre pages d'un même site : un autre site num�
 - Une alarme réveille le service worker toutes les 30 minutes. Un favori est dû quand sa dernière vérification
   date de l'intervalle choisi (`1h`, `6h` par défaut, `24h`, dans `WatchSettings`) ; un favori `unsupported` se
   revérifie après 7 jours ; un favori `failing` réessaie après 15 minutes, puis le double, jusqu'à l'intervalle.
+- Le lecteur peut arrêter la veille (`off`) : aucun favori n'est alors vérifié, et la pastille garde les
+  chapitres déjà trouvés.
 - Une passe vérifie 50 favoris au plus, les plus en retard d'abord. Les sites se vérifient en parallèle, mais
   une seule requête à la fois par site, à 3 secondes d'écart au moins, plus 0 à 2 secondes au hasard.
 - Un site qui répond 403, 429, 503 ou une page de vérification anti-robot arrête sa file et se met en pause une

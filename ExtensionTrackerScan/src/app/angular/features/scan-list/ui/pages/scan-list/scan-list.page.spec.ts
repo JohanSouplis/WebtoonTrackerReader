@@ -143,7 +143,7 @@ describe('ScanListPage', () => {
 
     await userEvent.click(
       await screen.findByRole('button', {
-        name: 'New chapter checks: Every 6h',
+        name: 'Checks every 6 hours · Alerts off',
       }),
     );
     await userEvent.click(
@@ -151,12 +151,14 @@ describe('ScanListPage', () => {
     );
 
     expect(
-      await screen.findByRole('button', { name: 'New chapter checks: Daily' }),
+      await screen.findByRole('button', {
+        name: 'Checks once a day · Alerts off',
+      }),
     ).toBeInTheDocument();
     expect(await settingsRepository.load()).toEqual({ checkEvery: '24h' });
   });
 
-  it('should turn desktop notifications on only when the browser grants them', async () => {
+  it('should turn alerts on only when the browser grants them, and explain a refusal', async () => {
     const notificationPermission = new InMemoryNotificationPermission(
       false,
       false,
@@ -167,19 +169,20 @@ describe('ScanListPage', () => {
     );
 
     await userEvent.click(
-      await screen.findByRole('button', { name: /New chapter checks/ }),
+      await screen.findByRole('button', { name: /^Checks / }),
     );
     await userEvent.click(
-      screen.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
+      screen.getByRole('menuitemcheckbox', { name: 'Desktop alerts' }),
     );
-    await userEvent.click(
-      screen.getByRole('button', { name: /New chapter checks/ }),
-    );
+    await userEvent.click(screen.getByRole('button', { name: /^Checks / }));
 
     expect(
-      screen.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
+      screen.getByRole('menuitemcheckbox', { name: 'Desktop alerts' }),
     ).toHaveAttribute('aria-checked', 'false');
     expect(await notificationPermission.isGranted()).toBe(false);
+    expect(
+      await screen.findByText(/^Chrome didn't allow notifications/),
+    ).toBeInTheDocument();
   });
 
   it('should show a scan under Following only and save it when its bell is clicked', async () => {

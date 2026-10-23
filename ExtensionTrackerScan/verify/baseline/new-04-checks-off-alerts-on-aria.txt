@@ -8,7 +8,7 @@
   - button "Following only"
   - button "Rated only"
   - text: 20 series
-  - 'button "New chapter checks: Daily" [expanded]': Daily
+  - button "Checks off · Alerts on"
   - group "Sort by":
     - button "New"
     - button "Last read (descending)" [pressed]
@@ -119,9 +119,3 @@
     - button "Previous page" [disabled]
     - button "Next page"
     - button "Last page"
-- menu:
-  - paragraph: Check followed series for new chapters
-  - menuitemradio "Every hour"
-  - menuitemradio "Every 6 hours"
-  - menuitemradio "Once a day" [checked]
-  - menuitemcheckbox "Desktop notifications" [checked]

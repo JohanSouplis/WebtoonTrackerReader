@@ -56,8 +56,10 @@ export type HostProfiles = ReadonlyMap<string, HostProfile>;
 
 export type CheckInterval = '1h' | '6h' | '24h';
 
+export type CheckFrequency = CheckInterval | 'off';
+
 export type WatchSettings = {
-  readonly checkEvery: CheckInterval;
+  readonly checkEvery: CheckFrequency;
 };
 
 export type NewChapter = {
@@ -79,7 +81,12 @@ export type PlannedCheck = {
 
 export const DEFAULT_WATCH_SETTINGS: WatchSettings = { checkEvery: '6h' };
 
-export const CHECK_INTERVALS: readonly CheckInterval[] = ['1h', '6h', '24h'];
+export const CHECK_FREQUENCIES: readonly CheckFrequency[] = [
+  '1h',
+  '6h',
+  '24h',
+  'off',
+];
 
 const CHECKS_PER_SWEEP = 50;
 
@@ -87,10 +94,11 @@ export const REQUEST_SPACING = { atLeastMs: 3000, jitterMs: 2000 };
 
 const HOUR_MS = 60 * 60 * 1000;
 
-const INTERVAL_MS: Readonly<Record<CheckInterval, number>> = {
+const INTERVAL_MS: Readonly<Record<CheckFrequency, number>> = {
   '1h': HOUR_MS,
   '6h': 6 * HOUR_MS,
   '24h': 24 * HOUR_MS,
+  off: Number.POSITIVE_INFINITY,
 };
 
 const UNSUPPORTED_RECHECK_MS = 7 * 24 * HOUR_MS;
@@ -182,6 +190,9 @@ export const planChapterChecks = (
   settings: WatchSettings,
   now: Date,
 ): PlannedCheck[][] => {
+  if (settings.checkEvery === 'off') {
+    return [];
+  }
   const lanes = new Map<string, PlannedCheck[]>();
   scans
     .flatMap((scan) => {

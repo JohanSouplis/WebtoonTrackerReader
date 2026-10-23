@@ -8,17 +8,18 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import {
-  CHECK_INTERVALS,
-  CheckInterval,
+  CHECK_FREQUENCIES,
+  CheckFrequency,
 } from '../../../../../../core/domain/chapter-watch';
 import { NewChapterSettings } from '../../../service/new-chapter-settings.vm';
 
-const INTERVAL_NAMES: Readonly<
-  Record<CheckInterval, { short: string; long: string }>
+const FREQUENCY_NAMES: Readonly<
+  Record<CheckFrequency, { option: string; summary: string }>
 > = {
-  '1h': { short: 'Every hour', long: 'Every hour' },
-  '6h': { short: 'Every 6h', long: 'Every 6 hours' },
-  '24h': { short: 'Daily', long: 'Once a day' },
+  '1h': { option: 'Every hour', summary: 'Checks every hour' },
+  '6h': { option: 'Every 6 hours', summary: 'Checks every 6 hours' },
+  '24h': { option: 'Once a day', summary: 'Checks once a day' },
+  off: { option: 'Off', summary: 'Checks off' },
 };
 
 @Component({
@@ -30,16 +31,24 @@ const INTERVAL_NAMES: Readonly<
 })
 export class NewChapterSettingsComponent {
   readonly settings = input.required<NewChapterSettings>();
-  readonly intervalChosen = output<CheckInterval>();
+  readonly intervalChosen = output<CheckFrequency>();
   readonly notificationsToggled = output<boolean>();
   protected readonly summary = computed(
-    () => INTERVAL_NAMES[this.settings().checkEvery].short,
+    () =>
+      `${FREQUENCY_NAMES[this.settings().checkEvery].summary} · Alerts ${
+        this.settings().areNotificationsOn ? 'on' : 'off'
+      }`,
   );
-  protected readonly intervals = computed(() =>
-    CHECK_INTERVALS.map((interval) => ({
-      interval,
-      name: INTERVAL_NAMES[interval].long,
-      isChosen: interval === this.settings().checkEvery,
+  protected readonly icon = computed(() =>
+    this.settings().checkEvery === 'off'
+      ? 'notifications_off'
+      : 'notifications',
+  );
+  protected readonly frequencies = computed(() =>
+    CHECK_FREQUENCIES.map((frequency) => ({
+      frequency,
+      name: FREQUENCY_NAMES[frequency].option,
+      isChosen: frequency === this.settings().checkEvery,
     })),
   );
 }

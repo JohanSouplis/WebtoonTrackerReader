@@ -7,7 +7,7 @@
   - button "Following only"
   - button "Rated only"
   - text: 20 series
-  - 'button "New chapter checks: Every 6h"': Every 6h
+  - button "Checks every 6 hours · Alerts off"
   - group "Sort by":
     - button "New"
     - button "Last read (descending)" [pressed]

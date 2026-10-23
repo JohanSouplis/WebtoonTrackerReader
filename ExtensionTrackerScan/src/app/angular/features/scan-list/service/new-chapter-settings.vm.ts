@@ -1,10 +1,10 @@
 import {
-  CheckInterval,
+  CheckFrequency,
   DEFAULT_WATCH_SETTINGS,
 } from '../../../../core/domain/chapter-watch';
 
 export type NewChapterSettings = {
-  readonly checkEvery: CheckInterval;
+  readonly checkEvery: CheckFrequency;
   readonly areNotificationsOn: boolean;
 };
 
