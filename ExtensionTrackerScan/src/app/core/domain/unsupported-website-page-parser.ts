@@ -124,13 +124,12 @@ const isNumberOfSomethingElse = (before: string): boolean => {
   return word !== null && OTHER_NUMBER_WORDS.includes(word[1].toLowerCase());
 };
 
-const urlConfirmedNumbersIn = (text: string, url: string): ChapterMention[] =>
+const bareNumbersIn = (text: string): ChapterMention[] =>
   withAsciiDigits(text).search(MENTION) >= 0
     ? []
     : [...withAsciiDigits(text).matchAll(BARE_NUMBER)].flatMap((match) => {
         const chapter = Chapter.parse(match[1]);
         return chapter &&
-          urlChapters(url).includes(chapter.value) &&
           !isNumberOfSomethingElse(match.input.substring(0, match.index))
           ? [
               {
@@ -567,7 +566,11 @@ export const parseUnsupportedWebsitePage = (
     const mention =
       chapterMentionsIn(display.text)[0] ??
       (display.isHeadline
-        ? urlConfirmedNumbersIn(display.text, page.url)[0]
+        ? bareNumbersIn(display.text).find(
+            ({ chapter }) =>
+              urlChapters(page.url).includes(chapter.value) ||
+              textConfirms(page.text ?? '', chapter),
+          )
         : undefined);
     if (mention && isChapterConfirmed(page, display, mention.chapter)) {
       const title = ScanTitle.parse(titleOf(page, display, mention) ?? '');

@@ -302,9 +302,9 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   `Глава 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`. Après un mot de chapitre vient un séparateur, un
   qualificatif (`VF`, `Online`, `Next`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
   (`Chapter 11 bankruptcy`). Un numéro seul dans un texte d'en-tête (`Scan One Piece 1196`,
-  `Sonic The Hedgehog #88`) est le chapitre si l'URL porte le même numéro, si le texte n'a aucun mot de chapitre
-  et si aucun mot ne le rattache à autre chose (`Page 2`, `Vol. 3`, `Saison 1`, `часть 2`) ; une option
-  sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
+  `Sonic The Hedgehog #88`) est le chapitre si l'URL ou le début du texte visible porte le même numéro, si le
+  texte n'a aucun mot de chapitre et si aucun mot ne le rattache à autre chose (`Page 2`, `Vol. 3`, `Saison 1`,
+  `часть 2`) ; une option sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
   comme chapitre : c'est souvent un index (`episode_no=653` pour l'épisode 235) ou un identifiant collé
   (`chapter-58.826511`).
 - **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un

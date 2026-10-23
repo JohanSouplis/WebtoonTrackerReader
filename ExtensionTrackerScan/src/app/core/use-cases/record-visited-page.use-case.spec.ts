@@ -574,6 +574,7 @@ describe('RecordVisitedPageUseCase', () => {
   it.each<[string, object, string, number, string]>([
     ['the tab title shows only the chapter', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader' }, 'The Abyssal seed', 41, 'https://scanreader.net/mangas/the-abyssal-seed/'],
     ['its url is an opaque id and the tab title names the series before the chapter', { pageTitle: 'Invincible (2015 · Cho-U) — Chapter 39 · Webnex', url: 'https://webnex.cc/read/chapter-mangadex-8160d350-19a9-499c-88a8-c20a1cd7fe8b-643ff11ba99c', heading: 'Chapter 39' }, 'Invincible (2015 · Cho-U)', 39, 'https://webnex.cc/manga/manhwa-invincible-manhwa-db959b80ee3d'],
+    ['its tab title shows the chapter as a lone number its page text repeats', { pageTitle: '1 - 辉夜大小姐想让我告白 ~天才们的恋爱头脑战~ - 漫画全集在线观看 - 哔哩哔哩漫画', url: 'https://manga.bilibili.com/mc26009/300318', text: '? 1 2 28P 第 1 话 当前阅读器翻页方向 从右向左' }, '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', 1, 'https://manga.bilibili.com/detail/mc26009'],
     ['the series name holds a number', { pageTitle: 'Page 1 | NANBA MG5 Vol.16 Ch.136', url: 'https://www.furyosociety.com/read/nanba-mg5/fr/16/136/', headings: ['Paramètres'] }, 'NANBA MG5', 136, 'https://www.furyosociety.com/series/nanba-mg5/'],
   ])(
     'should read the series from the link to its page when %s',
