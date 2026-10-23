@@ -328,7 +328,6 @@ const isArticle = (page: PageSignals): boolean => {
   const words = ` ${wordsOf([
     page.pageTitle,
     page.ogTitle,
-    page.ogSiteName,
     page.heading,
     page.breadcrumb,
   ]).join(' ')} `;
