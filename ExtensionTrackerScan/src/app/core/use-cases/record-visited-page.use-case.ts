@@ -1,10 +1,12 @@
 import { parsePage } from '../domain/page-title-parser';
 import { PageSignals } from '../domain/parsed-page';
 import { seriesPageUrlOf } from '../domain/series-page';
+import { parseMissEvent } from '../domain/telemetry';
 import { ClockPort } from '../ports/clock.port';
 import { CrashReporterPort } from '../ports/crash-reporter.port';
 import { ReportSettingsRepository } from '../ports/report-settings-repository.port';
 import { ScanRepository } from '../ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../ports/telemetry-recorder.port';
 
 export class RecordVisitedPageUseCase {
   constructor(
@@ -12,6 +14,7 @@ export class RecordVisitedPageUseCase {
     private readonly crashReporter: CrashReporterPort,
     private readonly reportSettings: ReportSettingsRepository,
     private readonly clock: ClockPort,
+    private readonly telemetry: TelemetryRecorderPort,
   ) {}
 
   async execute(page: PageSignals): Promise<void> {
@@ -20,6 +23,7 @@ export class RecordVisitedPageUseCase {
       case 'not-a-scan':
         return;
       case 'unparsed':
+        this.telemetry.record(parseMissEvent(parsedPage.page));
         if ((await this.reportSettings.load()).sendsParseReports) {
           this.crashReporter.reportUnparsedPage(parsedPage.page);
         }

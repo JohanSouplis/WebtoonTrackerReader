@@ -5,6 +5,7 @@ import { ScanTitle } from '../domain/scan-title';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import {
   ImageSize,
   InMemoryWeb,
@@ -35,7 +36,7 @@ describe('BackfillCoversUseCase', () => {
   );
 
   it('should start from the series page when the scan knows it', async () => {
-    const { backfillCovers, coverOf, web } = setUp({
+    const { backfillCovers, coverOf, web, telemetry } = setUp({
       scans: [
         aScan({
           title: 'Solo Leveling',
@@ -53,6 +54,9 @@ describe('BackfillCoversUseCase', () => {
     expect(await coverOf('Solo Leveling')).toEqual(
       found(COVER_URL, 'series-page'),
     );
+    expect(telemetry.recordedEvents).toEqual([
+      { kind: 'cover-search', outcome: 'found-series-page' },
+    ]);
   });
 
   it('should follow the series link of the last chapter read when no image of the chapter is a cover', async () => {
@@ -313,8 +317,10 @@ const setUp = ({
     Object.fromEntries(pages.map((page) => [page.url, page])),
     images,
   );
+  const telemetry = new InMemoryTelemetryRecorder();
   return {
     web,
+    telemetry,
     coverOf: async (title: string) =>
       (await coverRepository.find([ScanTitle.of(title)])).get(title),
     backfillCovers: new BackfillCoversUseCase(
@@ -323,6 +329,7 @@ const setUp = ({
       web,
       web,
       new FixedClock(NOW),
+      telemetry,
     ),
   };
 };

@@ -12,6 +12,7 @@ import { InMemoryHostProfileRepository } from '../gateways/in-memory/in-memory-h
 import { InMemoryNewChapterAlerts } from '../gateways/in-memory/in-memory-new-chapter-alerts.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
 import { InMemoryWatchSettingsRepository } from '../gateways/in-memory/in-memory-watch-settings-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { InMemoryWebPages } from '../gateways/in-memory/in-memory-web-pages.gateway';
 import { CheckNewChaptersUseCase } from './check-new-chapters.use-case';
 import { aScan } from './scans.fixture';
@@ -326,6 +327,39 @@ describe('CheckNewChaptersUseCase', () => {
     });
   });
 
+  it('should record the site, outcome, strategy and refusal status of each check', async () => {
+    const { checkNewChapters, telemetry } = setUp({
+      scans: [
+        aFavorite('Solo Leveling', 100),
+        aFavorite('Omniscient Reader', 50, OTHER_SERIES),
+      ],
+      pages: {
+        [SERIES]: seriesPage([99, 100, 101]),
+        [OTHER_SERIES]: page('<title>Just a moment...</title>', 429),
+      },
+    });
+
+    await checkNewChapters();
+
+    expect(telemetry.recordedEvents).toEqual(
+      expect.arrayContaining([
+        {
+          kind: 'chapter-check',
+          host: SITE,
+          outcome: 'new',
+          strategy: 'series-page',
+        },
+        {
+          kind: 'chapter-check',
+          host: 'other-scans.org',
+          outcome: 'failing',
+          httpStatus: 429,
+        },
+      ]),
+    );
+    expect(telemetry.recordedEvents).toHaveLength(2);
+  });
+
   it('should check at most 50 favorites in one run, the longest unchecked first', async () => {
     const scans = Array.from({ length: 52 }, (_, index) =>
       aFavorite(`Series ${index}`, 1, `https://site-${index}.org/series/s`),
@@ -561,6 +595,7 @@ const setUp = ({
   const settingsRepository = new InMemoryWatchSettingsRepository(settings);
   const web = new InMemoryWebPages(pages);
   const alerts = new InMemoryNewChapterAlerts();
+  const telemetry = new InMemoryTelemetryRecorder();
   const runAt = (date: Date): Promise<void> =>
     new CheckNewChaptersUseCase(
       scanRepository,
@@ -571,12 +606,14 @@ const setUp = ({
       web,
       alerts,
       new FixedClock(date),
+      telemetry,
     ).execute();
   return {
     checkNewChapters: () => runAt(NOW),
     runAt,
     web,
     alerts,
+    telemetry,
     watchOf: async (title: string) =>
       (await watchRepository.find([ScanTitle.of(title)])).get(title),
     hostOf: async (site: string) =>

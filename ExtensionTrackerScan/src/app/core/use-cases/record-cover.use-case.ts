@@ -2,11 +2,13 @@ import { isCoverDue, settleCover } from '../domain/cover';
 import { CoverSearch } from '../domain/cover-search';
 import { parsePage } from '../domain/page-title-parser';
 import { PageSignals } from '../domain/parsed-page';
+import { coverSearchEvent } from '../domain/telemetry';
 import { ClockPort } from '../ports/clock.port';
 import { CoverImagePort } from '../ports/cover-image.port';
 import { CoverRepository } from '../ports/cover-repository.port';
 import { PageReaderPort } from '../ports/page-reader.port';
 import { ScanRepository } from '../ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../ports/telemetry-recorder.port';
 
 export class RecordCoverUseCase {
   constructor(
@@ -15,6 +17,7 @@ export class RecordCoverUseCase {
     private readonly pageReader: PageReaderPort,
     private readonly coverImages: CoverImagePort,
     private readonly clock: ClockPort,
+    private readonly telemetry: TelemetryRecorderPort,
   ) {}
 
   async execute(page: PageSignals): Promise<void> {
@@ -43,5 +46,6 @@ export class RecordCoverUseCase {
       step = search.nextStep();
     }
     await this.coverRepository.update(title, settleCover(step.cover));
+    this.telemetry.record(coverSearchEvent(step.cover));
   }
 }

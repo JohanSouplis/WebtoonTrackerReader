@@ -3,6 +3,7 @@ import { InMemoryBrowserHistory } from '../gateways/in-memory/in-memory-browser-
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { HistoryVisit } from '../ports/browser-history.port';
 import { ImportReadingHistoryUseCase } from './import-reading-history.use-case';
 import { aScan } from './scans.fixture';
@@ -79,7 +80,7 @@ describe('ImportReadingHistoryUseCase', () => {
       'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
       LATER,
     );
-    const { importReadingHistory, scans, crashReporter } = setUp([
+    const { importReadingHistory, scans, crashReporter, telemetry } = setUp([
       unparsed,
       visit('Asura Scans', 'https://asuracomic.net/', LATER),
       visit('Search - Google', 'https://www.google.com/search?q=scans', LATER),
@@ -88,6 +89,9 @@ describe('ImportReadingHistoryUseCase', () => {
     await importReadingHistory.execute();
 
     expect(crashReporter.reportedPages).toEqual([unparsed.page]);
+    expect(telemetry.recordedEvents).toEqual([
+      { kind: 'parse-miss', host: 'webtoons.com' },
+    ]);
     expect(await scans()).toEqual([]);
   });
 
@@ -130,14 +134,17 @@ const setUp = (
 ) => {
   const scanRepository = new InMemoryScanRepository(followed);
   const crashReporter = new InMemoryCrashReporter();
+  const telemetry = new InMemoryTelemetryRecorder();
   return {
     crashReporter,
+    telemetry,
     scans: async () => (await scanRepository.load()).snapshot(),
     importReadingHistory: new ImportReadingHistoryUseCase(
       new InMemoryBrowserHistory(visits),
       scanRepository,
       crashReporter,
       reportSettings,
+      telemetry,
     ),
   };
 };

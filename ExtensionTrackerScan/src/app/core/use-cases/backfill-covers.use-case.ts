@@ -1,11 +1,13 @@
 import { settleCover } from '../domain/cover';
 import { planCoverBackfill } from '../domain/cover-search';
 import { ScanTitle } from '../domain/scan-title';
+import { coverSearchEvent } from '../domain/telemetry';
 import { ClockPort } from '../ports/clock.port';
 import { CoverImagePort } from '../ports/cover-image.port';
 import { CoverRepository } from '../ports/cover-repository.port';
 import { PageReaderPort } from '../ports/page-reader.port';
 import { ScanRepository } from '../ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../ports/telemetry-recorder.port';
 
 export class BackfillCoversUseCase {
   constructor(
@@ -14,6 +16,7 @@ export class BackfillCoversUseCase {
     private readonly pageReader: PageReaderPort,
     private readonly coverImages: CoverImagePort,
     private readonly clock: ClockPort,
+    private readonly telemetry: TelemetryRecorderPort,
   ) {}
 
   async execute(titles: readonly ScanTitle[]): Promise<void> {
@@ -39,6 +42,7 @@ export class BackfillCoversUseCase {
             search.title,
             settleCover(step.cover),
           );
+          this.telemetry.record(coverSearchEvent(step.cover));
         }
       }),
     );

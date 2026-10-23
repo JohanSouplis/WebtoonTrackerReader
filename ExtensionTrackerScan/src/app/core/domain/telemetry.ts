@@ -2,6 +2,8 @@ import { CheckOutcome, StrategyKind } from './chapter-check';
 import { ChapterWatch } from './chapter-watch';
 import { Cover } from './cover';
 import { FetchedPage } from './fetched-page';
+import { VisitedPage } from './parsed-page';
+import { siteOf } from './site';
 
 export const ERROR_CONTEXTS = [
   'service-worker',
@@ -226,6 +228,11 @@ export const chapterCheckEvent = (
   ...(watch.kind === 'failing' && lastPage?.kind === 'page'
     ? { httpStatus: lastPage.status }
     : {}),
+});
+
+export const parseMissEvent = (page: VisitedPage): TelemetryEvent => ({
+  kind: 'parse-miss',
+  host: siteOf(page.url) ?? 'unknown',
 });
 
 export const coverSearchEvent = (cover: Cover): TelemetryEvent => ({

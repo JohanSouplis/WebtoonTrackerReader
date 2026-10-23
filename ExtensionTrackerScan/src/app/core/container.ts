@@ -9,19 +9,50 @@ import { ChromeStorageCoverRepository } from './gateways/chrome-storage-cover-re
 import { ChromeStorageHostProfileRepository } from './gateways/chrome-storage-host-profile-repository.gateway';
 import { ChromeStorageReportSettingsRepository } from './gateways/chrome-storage-report-settings-repository.gateway';
 import { ChromeStorageScanRepository } from './gateways/chrome-storage-scan-repository.gateway';
+import { ChromeStorageTelemetryLog } from './gateways/chrome-storage-telemetry-log.gateway';
 import { ChromeStorageWatchSettingsRepository } from './gateways/chrome-storage-watch-settings-repository.gateway';
 import { DiscordCrashReporter } from './gateways/discord-crash-reporter.gateway';
+import { DiscordTelemetry } from './gateways/discord-telemetry.gateway';
 import { FetchWebPages } from './gateways/fetch-web-page.gateway';
+import { InProcessTelemetryRecorder } from './gateways/in-process-telemetry-recorder.gateway';
 import { SystemClock } from './gateways/system-clock.gateway';
 import { SystemTimer } from './gateways/system-timer.gateway';
 import { BackfillCoversUseCase } from './use-cases/backfill-covers.use-case';
 import { CheckNewChaptersUseCase } from './use-cases/check-new-chapters.use-case';
 import { ImportReadingHistoryUseCase } from './use-cases/import-reading-history.use-case';
 import { RecordCoverUseCase } from './use-cases/record-cover.use-case';
+import { RecordTelemetryUseCase } from './use-cases/record-telemetry.use-case';
 import { RecordVisitedPageUseCase } from './use-cases/record-visited-page.use-case';
+import { SendDailyDigestUseCase } from './use-cases/send-daily-digest.use-case';
 import { ShowNewChapterCountUseCase } from './use-cases/show-new-chapter-count.use-case';
 
 const container = new Container();
+container
+  .bind(RecordTelemetryUseCase)
+  .toDynamicValue(
+    () =>
+      new RecordTelemetryUseCase(
+        new ChromeStorageReportSettingsRepository(),
+        new ChromeStorageTelemetryLog(),
+        new DiscordTelemetry(),
+        new SystemClock(),
+      ),
+  );
+container
+  .bind(SendDailyDigestUseCase)
+  .toDynamicValue(
+    () =>
+      new SendDailyDigestUseCase(
+        new ChromeStorageReportSettingsRepository(),
+        new ChromeStorageTelemetryLog(),
+        new DiscordTelemetry(),
+        new SystemClock(),
+      ),
+  );
+const telemetryRecorder = () =>
+  new InProcessTelemetryRecorder((event) =>
+    container.get(RecordTelemetryUseCase).execute(event),
+  );
 container
   .bind(RecordVisitedPageUseCase)
   .toDynamicValue(
@@ -31,6 +62,7 @@ container
         new DiscordCrashReporter(),
         new ChromeStorageReportSettingsRepository(),
         new SystemClock(),
+        telemetryRecorder(),
       ),
   );
 container
@@ -42,6 +74,7 @@ container
         new ChromeStorageScanRepository(),
         new DiscordCrashReporter(),
         new ChromeStorageReportSettingsRepository(),
+        telemetryRecorder(),
       ),
   );
 container
@@ -54,6 +87,7 @@ container
         new ChromeOffscreenPageReader(),
         new ChromeCoverImages(),
         new SystemClock(),
+        telemetryRecorder(),
       ),
   );
 container
@@ -66,6 +100,7 @@ container
         new ChromeOffscreenPageReader(),
         new ChromeCoverImages(),
         new SystemClock(),
+        telemetryRecorder(),
       ),
   );
 
@@ -82,6 +117,7 @@ container
         new SystemTimer(),
         new ChromeNewChapterAlerts(),
         new SystemClock(),
+        telemetryRecorder(),
       ),
   );
 container

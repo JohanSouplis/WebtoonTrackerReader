@@ -8,13 +8,16 @@ import {
   startCheck,
   watchAfter,
 } from '../domain/chapter-watch';
+import { FetchedPage } from '../domain/fetched-page';
 import { ScanTitle } from '../domain/scan-title';
 import { siteOf } from '../domain/site';
+import { chapterCheckEvent } from '../domain/telemetry';
 import { ChapterWatchRepository } from '../ports/chapter-watch-repository.port';
 import { ClockPort } from '../ports/clock.port';
 import { HostProfileRepository } from '../ports/host-profile-repository.port';
 import { NewChapterAlertsPort } from '../ports/new-chapter-alerts.port';
 import { ScanRepository } from '../ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../ports/telemetry-recorder.port';
 import { TimerPort } from '../ports/timer.port';
 import { WatchSettingsRepository } from '../ports/watch-settings-repository.port';
 import { WebPagePort } from '../ports/web-page.port';
@@ -29,6 +32,7 @@ export class CheckNewChaptersUseCase {
     private readonly timer: TimerPort,
     private readonly alerts: NewChapterAlertsPort,
     private readonly clock: ClockPort,
+    private readonly telemetry: TelemetryRecorderPort,
   ) {}
 
   async execute(): Promise<void> {
@@ -54,12 +58,14 @@ export class CheckNewChaptersUseCase {
           const { scan, previous } = planned;
           const check = startCheck(planned, hosts.get(scan.site), now);
           let step = check.nextStep();
+          let lastPage: FetchedPage | undefined;
           while (step.kind === 'fetch') {
             if (hasFetched) {
               await this.timer.waitAround(REQUEST_SPACING);
             }
             hasFetched = true;
-            check.recordPage(await this.web.fetchPage(step.url));
+            lastPage = await this.web.fetchPage(step.url);
+            check.recordPage(lastPage);
             step = check.nextStep();
           }
           const checkedAt = this.clock.now();
@@ -73,6 +79,9 @@ export class CheckNewChaptersUseCase {
           const hostChange = hostAfter(step.outcome, step.lessons, checkedAt);
           await this.watchRepository.save(scan.title, watch);
           await this.hostRepository.update(scan.site, hostChange);
+          this.telemetry.record(
+            chapterCheckEvent(scan.site, step.outcome, watch, lastPage),
+          );
           watches.set(scan.title.value, watch);
           hosts.set(scan.site, hostChange(hosts.get(scan.site)));
           const newChapter = newlyFoundChapter(previous, watch, scan);
