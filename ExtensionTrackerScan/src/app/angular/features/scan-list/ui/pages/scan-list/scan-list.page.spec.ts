@@ -367,7 +367,9 @@ describe('ScanListPage', () => {
     await renderPage(scanRepository);
 
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Delete Solo Leveling' }),
+      within(await rowOf('Solo Leveling')).getByRole('button', {
+        name: 'Delete Solo Leveling',
+      }),
     );
     expect(
       await screen.findByText('Removed “Solo Leveling”'),
@@ -375,7 +377,7 @@ describe('ScanListPage', () => {
     expect(
       screen.queryByRole('link', { name: 'Solo Leveling' }),
     ).not.toBeInTheDocument();
-    await userEvent.click(await screen.findByRole('button', { name: 'Undo' }));
+    await userEvent.click(screen.getByText('Undo'));
 
     expect(
       await screen.findByRole('link', { name: 'Solo Leveling' }),
