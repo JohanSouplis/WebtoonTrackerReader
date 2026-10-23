@@ -338,15 +338,32 @@ const afterCandidates = (after: string, website: Website): string[] => {
   ].filter((candidate) => !isExactWebsiteName(candidate, website));
 };
 
-const titleWitnesses = (page: PageSignals, displaying: string): string[] =>
+const textWitnesses = (page: PageSignals, displaying: string): string[] =>
   [
-    pathOf(page.url),
-    page.canonicalUrl && pathOf(page.canonicalUrl),
     isOgIndependent(page) ? page.ogTitle : undefined,
     page.heading,
     page.breadcrumb,
     ...structuredTexts(page),
   ].flatMap((text) => (text && text !== displaying ? [folded(text)] : []));
+
+const titleWitnesses = (page: PageSignals, displaying: string): string[] => [
+  ...[pathOf(page.url), page.canonicalUrl && pathOf(page.canonicalUrl)].flatMap(
+    (path) => (path ? [folded(path)] : []),
+  ),
+  ...textWitnesses(page, displaying),
+];
+
+const segmentCandidates = (
+  mention: ChapterMention,
+  website: Website,
+): string[] =>
+  segmentsOf(mention.before)
+    .filter(
+      (segment) =>
+        !isWebsiteName(segment, website) &&
+        !containsNumber(segment, mention.chapter),
+    )
+    .flatMap((segment) => titleSpan(segment, () => false));
 
 const pageTitleCandidates = (page: PageSignals, website: Website): string[] =>
   titleSpan(
@@ -380,6 +397,15 @@ const titleOf = (
   );
   if (confirmed) {
     return confirmed;
+  }
+  const confirmedSegment = segmentCandidates(mention, website).find(
+    (candidate) =>
+      textWitnesses(page, display.text).some((witness) =>
+        witness.includes(folded(candidate)),
+      ),
+  );
+  if (confirmedSegment) {
+    return confirmedSegment;
   }
   return display.isHeadline &&
     segmentsOf(mention.before).length === 1 &&

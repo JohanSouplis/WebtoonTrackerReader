@@ -308,7 +308,10 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`
   ou un mot de liaison), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
   dans un autre signal (URL, `h1`, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet, confirmé de même, quand
-  le chapitre est affiché ailleurs. À défaut, un texte d'en-tête d'un seul tenant qui précède la mention
+  le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
+  (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`), s'il figure dans un texte de la page
+  (`h1`, fil d'Ariane, JSON-LD, `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une
+  partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`). À défaut, un texte d'en-tête d'un seul tenant qui précède la mention
   (`Titre Chapter 12 - Site`) est le titre.
 
 L'import de l'historique ne connaît que le titre et l'URL : la même règle s'applique, avec l'URL pour seul second
