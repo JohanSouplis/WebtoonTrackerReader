@@ -306,9 +306,12 @@ const mentionsReading = (page: PageSignals): boolean => {
   );
 };
 
-const mentionsOtherMedia = (page: PageSignals): boolean => {
-  const text = `${page.pageTitle} ${page.url}`.toLowerCase();
-  return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
+const isComicHost = (url: string): boolean =>
+  READING_WORDS.some((word) => hostOf(url).includes(word));
+
+const mentionsOtherMedia = ({ pageTitle, url }: PageSignals): boolean => {
+  const text = `${pageTitle} ${isComicHost(url) ? pathOf(url) : url}`;
+  return OTHER_MEDIA_WORDS.some((word) => text.toLowerCase().includes(word));
 };
 
 const isReadingPage = (page: PageSignals): boolean =>

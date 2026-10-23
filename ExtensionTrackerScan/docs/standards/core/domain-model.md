@@ -293,7 +293,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   le texte des liens du site (`Tous les mangas`) ou dans le texte de la page (`Read the latest manga`), si ce
   même texte ne nomme aucun autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
-  compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée. Aucun
+  compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
+  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Aucun
   segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se comparent segment par
   segment.
 - **Le chapitre est celui que la page affiche.** Il vient d'une `ChapterMention` du titre de l'onglet, de
