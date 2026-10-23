@@ -1,11 +1,9 @@
 import { WebsiteProposalPort } from '../ports/website-proposal.port';
-
-const WEBHOOK_URL =
-  'https://discord.com/api/webhooks/1335709119444811846/vA5rdOv8-CGL9QhgbO95mZUOyToggmpvPjEBSiskvMmfJFn_o0bVODbqjyJ5xBT31Am4';
+import { WEBSITE_PROPOSAL_WEBHOOK_URL } from './discord-webhooks';
 
 export class DiscordWebsiteProposal implements WebsiteProposalPort {
   async propose(chapterUrl: string): Promise<void> {
-    const response = await fetch(WEBHOOK_URL, {
+    const response = await fetch(WEBSITE_PROPOSAL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

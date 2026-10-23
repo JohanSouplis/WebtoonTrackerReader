@@ -40,6 +40,16 @@ mat-slide-toggle {
   --mat-switch-label-text-size: 14px;
 }
 
+.diagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--app-muted);
+  line-height: 1.55;
+}
+
 .links {
   display: flex;
   flex-direction: column;

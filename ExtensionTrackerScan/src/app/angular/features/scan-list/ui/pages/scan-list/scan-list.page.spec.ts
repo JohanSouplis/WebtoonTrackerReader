@@ -180,7 +180,9 @@ describe('ScanListPage', () => {
     });
 
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Not now' }),
+      within(
+        await screen.findByRole('region', { name: 'Enjoying Scan Tracker?' }),
+      ).getByRole('button', { name: 'Not now' }),
     );
 
     expect(

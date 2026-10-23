@@ -5,6 +5,7 @@ import { CoverRepository } from '../core/ports/cover-repository.port';
 import { RatePromptRepository } from '../core/ports/rate-prompt-repository.port';
 import { ReportSettingsRepository } from '../core/ports/report-settings-repository.port';
 import { ScanRepository } from '../core/ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../core/ports/telemetry-recorder.port';
 import { WatchSettingsRepository } from '../core/ports/watch-settings-repository.port';
 import { CoverBackfillPort } from './features/scan-list/service/cover-backfill.port';
 import { NotificationPermissionPort } from './features/scan-list/service/notification-permission.port';
@@ -42,4 +43,8 @@ export const STORE_LISTING = new InjectionToken<StoreListingPort>(
 
 export const RATE_PROMPT_REPOSITORY = new InjectionToken<RatePromptRepository>(
   'RatePromptRepository',
+);
+
+export const TELEMETRY_RECORDER = new InjectionToken<TelemetryRecorderPort>(
+  'TelemetryRecorderPort',
 );

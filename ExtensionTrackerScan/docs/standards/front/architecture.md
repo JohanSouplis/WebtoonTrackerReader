@@ -44,9 +44,10 @@ src/app/angular/
   app.config.ts · app.routes.ts
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
-    shell.providers.ts
-    service/   store-listing.port.ts
-    gateways/  chrome-store-listing.gateway.ts · in-memory-store-listing.gateway.ts
+    shell.providers.ts               la demande de note, le recorder des diagnostics et l'ErrorHandler de l'application
+    service/                         store-listing.port.ts
+    gateways/                        chrome-store-listing.gateway.ts · in-memory-store-listing.gateway.ts
+                                     telemetry-error-handler.gateway.ts (une erreur de la popup devient un diagnostic)
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/

@@ -7,6 +7,7 @@ import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-r
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import {
   ImageSize,
   InMemoryWeb,
@@ -23,7 +24,7 @@ import { aScan } from './scans.fixture';
 describe('RecordCoverUseCase', () => {
   it('should store the cover of the page read when its og:image is a portrait', async () => {
     const { page, images, seriesTitle } = coverPageOf('asurascans.com');
-    const { readPage, coverOf, web } = setUp({ images });
+    const { readPage, coverOf, web, telemetry } = setUp({ images });
 
     await readPage(page);
 
@@ -32,6 +33,9 @@ describe('RecordCoverUseCase', () => {
       from: 'page',
       at: NOW,
     });
+    expect(telemetry.recordedEvents).toEqual([
+      { kind: 'cover-search', outcome: 'found-page' },
+    ]);
     expect(web.requests).toEqual([
       { url: page.metaImages?.[0], referer: page.url },
     ]);
@@ -103,6 +107,7 @@ describe('RecordCoverUseCase', () => {
         web,
         web,
         clock,
+        new InMemoryTelemetryRecorder(),
       ).execute([ScanTitle.of('Nano Machine')]),
       new RecordCoverUseCase(
         scanRepository,
@@ -110,6 +115,7 @@ describe('RecordCoverUseCase', () => {
         web,
         web,
         clock,
+        new InMemoryTelemetryRecorder(),
       ).execute({
         ...catalogPage('Nano Machine', '4'),
         metaImages: [1, 2, 3, 4].map(
@@ -246,11 +252,13 @@ const setUp = ({
     images,
   );
   const clock = new FixedClock(NOW);
+  const telemetry = new InMemoryTelemetryRecorder();
   const recordVisitedPage = new RecordVisitedPageUseCase(
     scanRepository,
     new InMemoryCrashReporter(),
     new InMemoryReportSettingsRepository(),
     clock,
+    new InMemoryTelemetryRecorder(),
   );
   const recordCover = new RecordCoverUseCase(
     scanRepository,
@@ -258,9 +266,11 @@ const setUp = ({
     web,
     web,
     clock,
+    telemetry,
   );
   return {
     web,
+    telemetry,
     coverOf: async (title: string) =>
       (await coverRepository.find([ScanTitle.of(title)])).get(title),
     readPage: async (page: PageSignals) => {

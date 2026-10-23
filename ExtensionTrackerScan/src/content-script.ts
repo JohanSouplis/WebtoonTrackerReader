@@ -1,4 +1,7 @@
+import { errorEventOf } from './app/core/domain/telemetry';
+import { ChromeRuntimeTelemetryRecorder } from './app/core/gateways/chrome-runtime-telemetry-recorder.gateway';
 import { readPageSignals } from './page-signals-reader';
+import { thrownErrorOf } from './thrown-error';
 
 const FIRST_SEND_DELAY_MS = 5000;
 const SETTLE_DELAY_MS = 2000;
@@ -11,9 +14,15 @@ const sendWhenTitleChanged = (): void => {
     return;
   }
   sentTitle = document.title;
-  void chrome.runtime.sendMessage(
-    readPageSignals(document, window.location.href),
-  );
+  try {
+    void chrome.runtime.sendMessage(
+      readPageSignals(document, window.location.href),
+    );
+  } catch (error) {
+    new ChromeRuntimeTelemetryRecorder().record(
+      errorEventOf('content-script', thrownErrorOf(error)),
+    );
+  }
 };
 
 const sendWhenTitleSettles = (): void => {

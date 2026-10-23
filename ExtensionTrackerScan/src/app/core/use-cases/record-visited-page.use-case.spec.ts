@@ -4,6 +4,7 @@ import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
 import { aScan } from './scans.fixture';
 import { SUPPORTED_WEBSITE_PAGES } from './supported-website-pages.fixture';
@@ -667,6 +668,19 @@ describe('RecordVisitedPageUseCase', () => {
       expect(await scans()).toMatchObject([{ chapter: 13, seriesUrl }]);
     },
   );
+
+  it('should count an unreadable page of a supported site by its site only', async () => {
+    const { recordVisitedPage, telemetry } = setUp();
+
+    await recordVisitedPage.execute({
+      pageTitle: 'Lore Olympus | WEBTOON',
+      url: 'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
+    });
+
+    expect(telemetry.recordedEvents).toEqual([
+      { kind: 'parse-miss', host: 'webtoons.com' },
+    ]);
+  });
 });
 
 const NOW = new Date('2025-01-01T09:00:10Z');
@@ -701,14 +715,17 @@ const setUp = (
 ) => {
   const scanRepository = new InMemoryScanRepository(followed);
   const crashReporter = new InMemoryCrashReporter();
+  const telemetry = new InMemoryTelemetryRecorder();
   return {
     crashReporter,
+    telemetry,
     scans: async () => (await scanRepository.load()).snapshot(),
     recordVisitedPage: new RecordVisitedPageUseCase(
       scanRepository,
       crashReporter,
       reportSettings,
       new FixedClock(NOW),
+      telemetry,
     ),
   };
 };

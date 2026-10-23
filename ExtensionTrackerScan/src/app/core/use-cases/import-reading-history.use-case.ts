@@ -1,8 +1,10 @@
 import { parsePage } from '../domain/page-title-parser';
+import { parseMissEvent } from '../domain/telemetry';
 import { BrowserHistoryPort } from '../ports/browser-history.port';
 import { CrashReporterPort } from '../ports/crash-reporter.port';
 import { ReportSettingsRepository } from '../ports/report-settings-repository.port';
 import { ScanRepository } from '../ports/scan-repository.port';
+import { TelemetryRecorderPort } from '../ports/telemetry-recorder.port';
 
 export class ImportReadingHistoryUseCase {
   constructor(
@@ -10,6 +12,7 @@ export class ImportReadingHistoryUseCase {
     private readonly scanRepository: ScanRepository,
     private readonly crashReporter: CrashReporterPort,
     private readonly reportSettings: ReportSettingsRepository,
+    private readonly telemetry: TelemetryRecorderPort,
   ) {}
 
   async execute(): Promise<void> {
@@ -22,6 +25,7 @@ export class ImportReadingHistoryUseCase {
         case 'not-a-scan':
           break;
         case 'unparsed':
+          this.telemetry.record(parseMissEvent(parsedPage.page));
           if (sendsParseReports) {
             this.crashReporter.reportUnparsedPage(parsedPage.page);
           }

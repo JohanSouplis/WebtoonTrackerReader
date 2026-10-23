@@ -27,15 +27,34 @@
 <section aria-labelledby="about-privacy">
   <h2 id="about-privacy"><mat-icon>shield</mat-icon>Privacy</h2>
   <p>
-    Your library stays in your browser. When a page of a supported site can't be
-    read, the extension sends that page's address and title to the developer so
-    the site can be fixed. A site you request is sent to the developer too.
-    Nothing else about you is sent.
+    Your library stays in your browser. With diagnostics on, the extension sends
+    the developer:
+  </p>
+  <ul class="diagnostics">
+    <li>
+      the address and title of a page of a supported site it can't read, so the
+      site can be fixed;
+    </li>
+    <li>
+      once a day, counts: the names of the sites it checked for new chapters and
+      how each check ended, the sites whose pages it couldn't read, the covers
+      it found or missed, and its errors;
+    </li>
+    <li>
+      an error the first time it happens in a day, five a day at most: where it
+      happened, its type and a short code, never its text;
+    </li>
+    <li>with each message, the extension version and the browser version.</li>
+  </ul>
+  <p>
+    Except for the unreadable pages above, diagnostics carry no page address and
+    no series title, and none of them identifies your browser. A site you
+    request is sent to the developer too. Nothing else about you is sent.
   </p>
   <mat-slide-toggle
     [checked]="sendsParseReports()"
     (change)="parseReportsToggled.emit($event.checked)"
-    >Send anonymous parse reports</mat-slide-toggle
+    >Send anonymous diagnostics</mat-slide-toggle
   >
 </section>
 

@@ -1,13 +1,20 @@
-import { inject, Provider } from '@angular/core';
+import { ErrorHandler, inject, Provider } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { ChromeRuntimeTelemetryRecorder } from '../../core/gateways/chrome-runtime-telemetry-recorder.gateway';
 import { ChromeStorageRatePromptRepository } from '../../core/gateways/chrome-storage-rate-prompt-repository.gateway';
 import { DEV_DUE_RATE_PROMPT } from '../../core/gateways/in-memory/dev-rate-prompt';
 import { InMemoryRatePromptRepository } from '../../core/gateways/in-memory/in-memory-rate-prompt-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../../core/gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { SystemClock } from '../../core/gateways/system-clock.gateway';
 import { AnswerRatePromptUseCase } from '../../core/use-cases/answer-rate-prompt.use-case';
-import { RATE_PROMPT_REPOSITORY, STORE_LISTING } from '../injection-tokens';
+import {
+  RATE_PROMPT_REPOSITORY,
+  STORE_LISTING,
+  TELEMETRY_RECORDER,
+} from '../injection-tokens';
 import { ChromeStoreListing } from './gateways/chrome-store-listing.gateway';
 import { InMemoryStoreListing } from './gateways/in-memory-store-listing.gateway';
+import { TelemetryErrorHandler } from './gateways/telemetry-error-handler.gateway';
 
 const devRatePrompt = () =>
   new URLSearchParams(location.search).has('rate-prompt-due')
@@ -37,4 +44,12 @@ export const SHELL_PROVIDERS: Provider[] = [
         new SystemClock(),
       ),
   },
+  {
+    provide: TELEMETRY_RECORDER,
+    useFactory: () =>
+      environment.production
+        ? new ChromeRuntimeTelemetryRecorder()
+        : new InMemoryTelemetryRecorder(),
+  },
+  { provide: ErrorHandler, useClass: TelemetryErrorHandler },
 ];

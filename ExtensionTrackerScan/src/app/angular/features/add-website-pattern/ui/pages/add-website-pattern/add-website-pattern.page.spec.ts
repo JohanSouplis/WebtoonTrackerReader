@@ -1,6 +1,7 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { InMemoryTelemetryRecorder } from '../../../../../../core/gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { InMemoryWebsiteProposal } from '../../../../../../core/gateways/in-memory/in-memory-website-proposal.gateway';
 import { WebsiteProposalPort } from '../../../../../../core/ports/website-proposal.port';
 import { ProposeWebsiteUseCase } from '../../../../../../core/use-cases/propose-website.use-case';
@@ -75,7 +76,10 @@ const renderPage = (websiteProposal: WebsiteProposalPort) =>
       provideNoopAnimations(),
       {
         provide: ProposeWebsiteUseCase,
-        useValue: new ProposeWebsiteUseCase(websiteProposal),
+        useValue: new ProposeWebsiteUseCase(
+          websiteProposal,
+          new InMemoryTelemetryRecorder(),
+        ),
       },
     ],
   });

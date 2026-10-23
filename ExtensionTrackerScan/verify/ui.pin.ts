@@ -153,7 +153,7 @@ test.describe('navbar', () => {
     ).toBeVisible();
     await pin(page, 'nav-04-about');
     const reports = page.getByRole('switch', {
-      name: 'Send anonymous parse reports',
+      name: 'Send anonymous diagnostics',
     });
     await expect(reports).toBeChecked();
     await reports.click();

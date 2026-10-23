@@ -49,7 +49,10 @@ pas un synonyme.
 | `ChapterCheck` | Une vérification des chapitres parus d'un favori, étape par étape | `poll`, `scrape`, `crawl` |
 | `NewChapter` | Un chapitre paru après le dernier lu, sur le même site | `update`, `release` |
 | `HostProfile` | Ce que l'extension a appris d'un site pour vérifier ses chapitres, et sa pause en cours | `siteConfig`, `hostInfo` |
-| `ReportSettings` | Le choix du lecteur d'envoyer ou non au développeur les pages qu'un site supporté n'a pas permis de lire (`sendsParseReports`, oui par défaut) | `telemetry`, `consent`, `privacy` pour ce sens |
+| `ReportSettings` | Le choix du lecteur d'envoyer ou non au développeur les pages qu'un site supporté n'a pas permis de lire et les diagnostics anonymes (`sendsParseReports`, oui par défaut ; l'interface dit « Send anonymous diagnostics ») | `consent`, `privacy` pour ce sens |
+| `TelemetryEvent` | Un fait anonyme observé par l'extension (erreur, vérification, couverture...), compté pour les diagnostics | `metric`, `log`, `analytics` |
+| `TelemetryLog` | Les décomptes de l'installation, jour par jour, et l'état de leurs envois | `stats`, `metrics` |
+| `DailyDigest` | Le résumé d'un jour de décomptes, envoyé une fois au développeur | `report` seul, `summary` |
 | `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckFrequency` : un `CheckInterval` ou `off`) | `preferences`, `options` |
 | `RatePrompt` | La demande faite au lecteur de noter l'extension sur le Chrome Web Store, et où il en est : `never-shown`, `snoozed`, `rated` ou `declined` | `review`, `feedback`, `nag` |
 | `firstUsedAt` | La date du premier usage de l'extension : son installation, ou la première ouverture de la popup d'un lecteur installé avant | `installDate`, `installedAt` |
