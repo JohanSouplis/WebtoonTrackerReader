@@ -140,6 +140,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Touhou Sangetsusei. Touhou Sangetsusei Chapter 18 - Manga Reader', 'https://mangareader.example/touhou-sangetsusei/chapter-18', 'Touhou Sangetsusei', 18],
     ['Hunter × Hunter Chapter 391 - Manga Reader', 'https://mangareader.example/hunter-x-hunter/chapter-391', 'Hunter × Hunter', 391],
     ['Ch.258 | D.Gray-Man | TAM', 'https://tuttoanimemanga.net/read/dgray-man/it/ch/258', 'D.Gray-Man', 258],
+    ['Naruto: Versão Colorida Oficial - VOLUME 21 - Capítulo 189 - Leitor de Mangás & Novels // uma extensão da Boruto Explorer', 'https://leitor.borutoexplorer.com.br/manga/naruto-versao-colorida-oficial/volume-21/capitulo-189/', 'Naruto: Versão Colorida Oficial', 189],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
@@ -173,6 +174,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a volume whose url repeats the volume number', 'Berserk Vol. 3 - Manga Reader', 'https://mangareader.example/manga/berserk/3'],
     ['a review of a chapter', 'Lookism Chapter 500: The fight we waited for — Manhwa Review Blog', 'https://manhwareviews.blog/lookism-chapter-500/'],
     ['a chapter whose two names before the chapter only the series and chapter parts of its url repeat together', 'The strongest player - The Necromancer Family’s Young Heir - Chapter 33 - Mangaowl', 'https://mangaowl.io/read-1/the-strongest-player/the-necromancer-familys-young-heir-chapter-33/'],
+    ['a chapter review on a website named after another medium', 'One Piece Chapter 1196: THE LOVE OF THE SUICIDAL IS WORTHLESS - Comic Watch', 'https://comic-watch.com/comic-book-reviews/one-piece-chapter-1196-the-love-of-the-suicidal-is-worthless/'],
     ['a forum thread about a chapter', 'Futari Bus - Ch. 50 - Throwing the Curveball | MangaDex Forums', 'https://forums.mangadex.org/threads/futari-bus-ch-50-throwing-the-curveball.2755728/'],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',

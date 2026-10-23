@@ -183,6 +183,18 @@ export const ARTICLE_WORDS = [
   'price guide',
 ];
 
+export const ARTICLE_PATHS = [
+  'news',
+  'article',
+  'articles',
+  'review',
+  'reviews',
+  'spoilers',
+  'forum',
+  'forums',
+  'threads',
+];
+
 export const NON_READING_PATHS = ['course'];
 
 export const TITLE_STOP_WORDS = [

@@ -1,5 +1,6 @@
 import { Chapter } from './chapter';
 import {
+  ARTICLE_PATHS,
   ARTICLE_WORDS,
   CHAPTER_SUFFIXES,
   CHAPTER_WORDS,
@@ -324,9 +325,14 @@ const mentionsReading = (page: PageSignals): boolean =>
   ) ||
   menuOrTextNamesReading(page);
 
-const mentionsOtherMedia = ({ pageTitle, url }: PageSignals): boolean => {
+const mentionsOtherMedia = (page: PageSignals): boolean => {
+  const website = websiteOf(page);
+  const title = page.pageTitle
+    .split(TITLE_SEPARATOR)
+    .filter((segment) => !isWebsiteName(segment, website))
+    .join(' ');
   const text =
-    `${pageTitle} ${isComicHost(url) ? pathOf(url) : url}`.toLowerCase();
+    `${title} ${isComicHost(page.url) ? pathOf(page.url) : page.url}`.toLowerCase();
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
@@ -337,7 +343,11 @@ const isArticle = (page: PageSignals): boolean => {
     page.heading,
     page.breadcrumb,
   ]).join(' ')} `;
-  return ARTICLE_WORDS.some((word) => words.includes(` ${word} `));
+  const pathWords = wordsOf([pathOf(page.url)]);
+  return (
+    ARTICLE_WORDS.some((word) => words.includes(` ${word} `)) ||
+    pathWords.some((word) => ARTICLE_PATHS.includes(word))
+  );
 };
 
 const isOtherPageKind = ({ structuredData }: PageSignals): boolean =>

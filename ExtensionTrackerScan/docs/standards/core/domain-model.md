@@ -368,14 +368,17 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   même texte ne nomme aucun autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
   compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
-  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Un
+  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Le
+  segment du titre qui nomme le site ne compte pas non plus (`Leitor de Mangás & Novels` sur
+  `leitor.borutoexplorer.com.br`), mais le nom d'hôte, oui. Un
   nom de série qui contient un autre média ne l'excuse pas : `Solo Leveling Light Novel` est aussi un nom de série
   que le site reprend en lien. Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
   comparent segment par segment.
 - **La page est une lecture, pas un article sur elle.** Un mot d'article (`Review`, `Spoilers`, `Discussion`,
   `Forums`, `News`, `Release Date`, `Recap`, `Summary`, `Preview`, `Reaction`, `Explained`, `Leaks`, `Price Guide`...) dans le titre de l'onglet, `og:title`, le `h1` ou le fil d'Ariane désigne une
   critique, un fil de forum ou une actualité : la page est ignorée, même quand son site parle de manga
-  (`Lookism Chapter 500: The fight we waited for — Manhwa Review Blog`, `Home > News > One Piece Chapter 1166`). Le nom du
+  (`Lookism Chapter 500: The fight we waited for — Manhwa Review Blog`, `Home > News > One Piece Chapter 1166`). Un
+  mot d'article dans le chemin de l'URL aussi (`/news/`, `/comic-book-reviews/`, `/forum/`, `/threads/`). Le nom du
   site (`og:site_name`) ne compte pas : niadd.com se nomme `Manga Reviews` et sert des chapitres. Un nœud JSON-LD
   d'une autre sorte de page (`NewsArticle`, `Review`, `DiscussionForumPosting`, `TVEpisode`, `VideoObject`, `Product`,
   `SearchResultsPage`...) l'écarte aussi. `Article` et `BlogPosting` ne comptent pas : des sites de lecture les posent
