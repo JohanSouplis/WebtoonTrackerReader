@@ -62,6 +62,23 @@ export const QUALIFIERS = [
   'ita',
 ];
 
+export const OTHER_NUMBER_WORDS = [
+  'page',
+  'pagina',
+  'página',
+  'seite',
+  'vol',
+  'volume',
+  'tome',
+  'tomo',
+  'том',
+  'часть',
+  'part',
+  'season',
+  'saison',
+  'temporada',
+];
+
 export const TITLE_CONNECTORS = ['de', 'манги', 'манхвы', 'манхуа', 'من مانجا'];
 
 export const READING_WORDS = [
@@ -146,7 +163,7 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /\s+(?:scans?\s+)?(?:fr|vf|vostfr)$/i,
   /^\s*\([^)]*\)/,
   /\(?\bs\d+\)?\s*$/i,
-  /(?<!\p{L})(?:vol(?:ume)?|том)\.?\s*\d+\.?\s*$/iu,
+  /(?<!\p{L})(?:vol(?:ume)?|том|часть)\.?\s*\d+\.?\s*$/iu,
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
   /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online|онлайн|бесплатно)\.?)+$/iu,
 ];

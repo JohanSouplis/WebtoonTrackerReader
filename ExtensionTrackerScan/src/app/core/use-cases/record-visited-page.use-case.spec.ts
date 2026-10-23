@@ -123,6 +123,8 @@ describe('RecordVisitedPageUseCase', () => {
     ['Berserk Chapter 375 - MangaKatana', 'https://mangakatana.com/manga/berserk.1234/c375', 'Berserk', 375],
     ['Lookism Ep 412 - WebtoonScan', 'https://www.webtoonscan.com/read?series=lookism&ep=412', 'Lookism', 412],
     ['Eleceed Ch. 300 | ReadM', 'https://readm.today/manga/eleceed/300/all-pages', 'Eleceed', 300],
+    ['Scan One Piece 1196', 'https://lelscans.net/scan-one-piece/1196', 'One Piece', 1196],
+    ['Sonic The Hedgehog #88 - ChaosTrad', 'https://chaostrad.fr/comics/sonic-idw/88', 'Sonic The Hedgehog', 88],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
@@ -152,6 +154,8 @@ describe('RecordVisitedPageUseCase', () => {
     ['a discussion of a chapter', '[DISC] Solo Leveling - Chapter 110 : r/manga', 'https://www.reddit.com/r/manga/comments/xyz789/disc_solo_leveling_chapter_110/'],
     ['a lesson of an online course', 'Chapter 3 - Introduction to Manga Drawing | Udemy', 'https://www.udemy.com/course/manga-drawing/learn/lecture/chapter-3'],
     ['a tutorial whose title is missing from its url', 'Chapter 7 - Manga Studio Tutorial: Inking | Clip Studio Tips', 'https://tips.clip-studio.com/en-us/articles/chapter-7'],
+    ['a page of a list whose url repeats the page number', 'Manhwa List - Page 12 - ManhwaClan', 'https://manhwaclan.com/manga/page/12/'],
+    ['a volume whose url repeats the volume number', 'Berserk Vol. 3 - Manga Reader', 'https://mangareader.example/manga/berserk/3'],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
     async (_, pageTitle, url) => {
@@ -196,6 +200,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a novel chapter of a scan website', { pageTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition] | DivaScans', url: 'https://divascans.org/series/novel/crazy-doctor-19-uncensored-edition/chapter/19', ogTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition]', structuredData: [{ type: 'ListItem', name: 'Crazy Doctor [19+ Uncensored Edition]' }, { type: 'ListItem', name: 'Chapter 19' }] }],
     ['a chapter whose tab title is the tagline of the website', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', ogTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', heading: 'Capítulo 95' }],
     ['a chapter whose series is named only in its url', { pageTitle: '99 | Team-X', url: 'https://olympustaff.com/series/the-academys-sashimi-sword-master/99', heading: '99', selectedOptions: ['فصل رقم : 99'] }],
+    ['a list whose selected page number the url repeats', { pageTitle: 'Latest Updates - Manga Corner', url: 'https://mangacorner.example/latest/2/', ogTitle: 'Latest Updates', selectedOptions: ['2'] }],
     ['a chapter whose tab title names the website, not the series, after the chapter', { pageTitle: 'Chapter 12 - Mangaku', url: 'https://mangaku.io/manga/the-tower-keeper/chapter-12/', structuredData: [{ type: 'ListItem', name: 'Mangaku', position: 1 }, { type: 'ListItem', name: 'Chapter 12', position: 2 }] }],
     ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
   ])(

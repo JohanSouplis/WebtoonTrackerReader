@@ -4,6 +4,7 @@ import {
   CHAPTER_WORDS,
   NON_READING_PATHS,
   OTHER_MEDIA_WORDS,
+  OTHER_NUMBER_WORDS,
   QUALIFIERS,
   READING_MARKS,
   READING_TYPES,
@@ -112,6 +113,36 @@ const urlChapters = (url: string): number[] => [
     .filter((segment) => /^\d+$/.test(segment))
     .map(Number),
 ];
+
+const BARE_NUMBER = new RegExp(
+  `(?:^|\\s|#)${NUMBER}(?=$|[\\s|:,)\\-–—])`,
+  'gu',
+);
+
+const isNumberOfSomethingElse = (before: string): boolean => {
+  const word = /(\p{L}+)\.?\s*#?\s*$/u.exec(before);
+  return word !== null && OTHER_NUMBER_WORDS.includes(word[1].toLowerCase());
+};
+
+const urlConfirmedNumbersIn = (text: string, url: string): ChapterMention[] =>
+  withAsciiDigits(text).search(MENTION) >= 0
+    ? []
+    : [...withAsciiDigits(text).matchAll(BARE_NUMBER)].flatMap((match) => {
+        const chapter = Chapter.parse(match[1]);
+        return chapter &&
+          urlChapters(url).includes(chapter.value) &&
+          !isNumberOfSomethingElse(match.input.substring(0, match.index))
+          ? [
+              {
+                chapter,
+                before: match.input
+                  .substring(0, match.index + match[0].indexOf(match[1]))
+                  .replace(/#$/, ''),
+                after: match.input.substring(match.index + match[0].length),
+              },
+            ]
+          : [];
+      });
 
 type Website = {
   readonly host: string;
@@ -425,7 +456,11 @@ export const parseUnsupportedWebsitePage = (
     return undefined;
   }
   for (const display of chapterDisplays(page)) {
-    const mention = chapterMentionsIn(display.text)[0];
+    const mention =
+      chapterMentionsIn(display.text)[0] ??
+      (display.isHeadline
+        ? urlConfirmedNumbersIn(display.text, page.url)[0]
+        : undefined);
     if (mention && isChapterConfirmed(page, display, mention.chapter)) {
       const title = ScanTitle.parse(titleOf(page, display, mention) ?? '');
       return title
