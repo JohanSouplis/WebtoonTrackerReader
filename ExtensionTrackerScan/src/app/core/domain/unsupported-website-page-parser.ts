@@ -551,8 +551,12 @@ const titleOf = (
   }
   const witnesses = titleWitnesses(page, display.text);
   const before = beforeCandidates(mention, website);
+  const surrounding = [...before, ...afterCandidates(mention.after, website)];
   const confirmed =
-    [...before, ...afterCandidates(mention.after, website)].find((candidate) =>
+    surrounding.find((candidate) =>
+      [...witnesses, ...seriesSlugsOf(page)].includes(folded(candidate)),
+    ) ??
+    surrounding.find((candidate) =>
       witnesses.some((witness) => witness.includes(folded(candidate))),
     ) ??
     (display.text === page.pageTitle

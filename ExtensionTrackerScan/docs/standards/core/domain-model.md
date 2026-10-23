@@ -411,7 +411,10 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
      du chemin ne confirment pas ensemble un titre à cheval sur les deux (`/the-strongest-player/` puis
      `/the-necromancer-familys-young-heir-chapter-33/`) ; le texte entier passe avant le texte sans le
      nom du site, car un site nommé d'après sa série commence son titre par la série
-     (`Frieren - Beyond Journey's End - Chapter 147` sur `frierenmangafree.com`) ;
+     (`Frieren - Beyond Journey's End - Chapter 147` sur `frierenmangafree.com`) ; un candidat qu'un signal
+     reprend tel quel (un texte, le slug de la série dans l'URL) passe avant un candidat qu'un signal ne fait que
+     contenir (`Punch 240 : Empereur Sauvage — One Punch-Man` sous `/read/one-punch-man/` : `One Punch-Man`, pas
+     `Punch`) ;
   3. le titre de l'onglet, quand le chapitre est affiché ailleurs, confirmé par un texte qui dit plus que lui : un
      `og:title` ou un `h1` qui le recopie mot pour mot nomme la page, souvent le chapitre lui-même
      (`ملابس السباحة. | Team-X`) ;
