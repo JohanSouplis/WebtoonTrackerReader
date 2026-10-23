@@ -6,6 +6,7 @@ import {
   NON_READING_PATHS,
   OTHER_MEDIA_WORDS,
   OTHER_NUMBER_WORDS,
+  OTHER_PAGE_TYPES,
   QUALIFIERS,
   READING_MARKS,
   READING_TYPES,
@@ -339,6 +340,11 @@ const isArticle = (page: PageSignals): boolean => {
   return ARTICLE_WORDS.some((word) => words.includes(` ${word} `));
 };
 
+const isOtherPageKind = ({ structuredData }: PageSignals): boolean =>
+  (structuredData ?? []).some(({ types }) =>
+    types.some((type) => OTHER_PAGE_TYPES.includes(type)),
+  );
+
 const PROSE_PARAGRAPH_COUNT = 3;
 
 const isProse = ({
@@ -351,6 +357,7 @@ const isReadingPage = (page: PageSignals): boolean =>
   mentionsReading(page) &&
   !mentionsOtherMedia(page) &&
   !isArticle(page) &&
+  !isOtherPageKind(page) &&
   !isProse(page) &&
   !pathSegments(page.url).some((segment) =>
     NON_READING_PATHS.includes(segment.toLowerCase()),

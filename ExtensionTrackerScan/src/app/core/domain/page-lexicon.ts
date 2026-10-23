@@ -118,6 +118,20 @@ export const READING_MARKS = [
 
 export const READING_TYPES = ['ComicSeries', 'ComicIssue', 'ComicStory'];
 
+export const OTHER_PAGE_TYPES = [
+  'NewsArticle',
+  'ReportageNewsArticle',
+  'AnalysisNewsArticle',
+  'Review',
+  'DiscussionForumPosting',
+  'TVEpisode',
+  'TVSeries',
+  'Movie',
+  'VideoObject',
+  'Product',
+  'SearchResultsPage',
+];
+
 export const SERIES_TYPES = [
   'ComicSeries',
   'CreativeWorkSeries',

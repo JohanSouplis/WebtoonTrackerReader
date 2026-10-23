@@ -376,7 +376,10 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   `Forums`, `News`, `Release Date`, `Recap`, `Summary`, `Preview`, `Reaction`, `Explained`, `Leaks`, `Price Guide`...) dans le titre de l'onglet, `og:title`, le `h1` ou le fil d'Ariane désigne une
   critique, un fil de forum ou une actualité : la page est ignorée, même quand son site parle de manga
   (`Lookism Chapter 500: The fight we waited for — Manhwa Review Blog`, `Home > News > One Piece Chapter 1166`). Le nom du
-  site (`og:site_name`) ne compte pas : niadd.com se nomme `Manga Reviews` et sert des chapitres.
+  site (`og:site_name`) ne compte pas : niadd.com se nomme `Manga Reviews` et sert des chapitres. Un nœud JSON-LD
+  d'une autre sorte de page (`NewsArticle`, `Review`, `DiscussionForumPosting`, `TVEpisode`, `VideoObject`, `Product`,
+  `SearchResultsPage`...) l'écarte aussi. `Article` et `BlogPosting` ne comptent pas : des sites de lecture les posent
+  sur leurs chapitres.
 - **La page montre des planches, pas de la prose.** Pour le content script, une page sans aucune grande image
   (`img` ou `canvas` d'au moins 300 × 300 px affichés) qui montre au moins trois longs paragraphes (200 caractères
   et plus) est un chapitre de roman ou un article : elle est ignorée, quel que soit son titre
