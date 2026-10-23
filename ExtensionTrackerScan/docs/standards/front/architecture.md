@@ -44,6 +44,8 @@ src/app/angular/
   app.config.ts · app.routes.ts
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
+    shell.providers.ts               le recorder des diagnostics et l'ErrorHandler de l'application
+    gateways/                        telemetry-error-handler.gateway.ts (une erreur de la popup devient un diagnostic)
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/

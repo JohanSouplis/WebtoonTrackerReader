@@ -3,13 +3,21 @@ import { BackfillCoversUseCase } from './app/core/use-cases/backfill-covers.use-
 import { CheckNewChaptersUseCase } from './app/core/use-cases/check-new-chapters.use-case';
 import { ImportReadingHistoryUseCase } from './app/core/use-cases/import-reading-history.use-case';
 import { RecordCoverUseCase } from './app/core/use-cases/record-cover.use-case';
+import { RecordTelemetryUseCase } from './app/core/use-cases/record-telemetry.use-case';
 import { RecordVisitedPageUseCase } from './app/core/use-cases/record-visited-page.use-case';
+import { SendDailyDigestUseCase } from './app/core/use-cases/send-daily-digest.use-case';
 import { ShowNewChapterCountUseCase } from './app/core/use-cases/show-new-chapter-count.use-case';
 import { parseCoverBackfillMessage } from './cover-backfill-message';
 import { watchNewChapters } from './new-chapters-alarm';
 import { parsePageSignals } from './page-signals-message';
+import { watchTelemetry } from './telemetry-alarm';
 
 const IMPORT_INTERVAL_MS = 3600000;
+
+watchTelemetry(
+  container.get(RecordTelemetryUseCase),
+  container.get(SendDailyDigestUseCase),
+);
 
 const recordVisitedPage = container.get(RecordVisitedPageUseCase);
 const importReadingHistory = container.get(ImportReadingHistoryUseCase);

@@ -1,5 +1,20 @@
+import { errorEventOf } from './app/core/domain/telemetry';
+import { ChromeRuntimeTelemetryRecorder } from './app/core/gateways/chrome-runtime-telemetry-recorder.gateway';
 import { ReadPageMessage } from './app/core/gateways/chrome-offscreen-page-reader.gateway';
 import { readPageSignals } from './page-signals-reader';
+import { thrownErrorOf } from './thrown-error';
+
+const telemetry = new ChromeRuntimeTelemetryRecorder();
+
+const recordError = (reason: unknown): void =>
+  telemetry.record(errorEventOf('offscreen', thrownErrorOf(reason)));
+
+self.addEventListener('error', (event) =>
+  recordError(event.error ?? event.message),
+);
+self.addEventListener('unhandledrejection', (event) =>
+  recordError(event.reason),
+);
 
 const isReadPageMessage = (message: unknown): message is ReadPageMessage =>
   typeof message === 'object' &&
