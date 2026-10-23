@@ -30,6 +30,7 @@ import {
   recordedFromMessage,
 } from './recorded';
 import { verifiedWebsites } from './verified-websites';
+import { isFeasible } from './feasible';
 
 type Outcome =
   | { readonly kind: 'exact' }
@@ -356,6 +357,43 @@ for (const { host } of WEBSITE_PATTERNS) {
       .join(' | '),
   );
 }
+
+const reportClimb = (
+  name: string,
+  pages: readonly CapturedPage[],
+  listsPages: boolean,
+): void => {
+  console.log(`\n### ${name}`);
+  const chapterPages = pages.filter(
+    ({ expected }) => expected.kind === 'reading',
+  );
+  const feasible = chapterPages.filter(isFeasible);
+  for (const mode of INPUT_MODES) {
+    const outcomeOf = (page: CapturedPage): CapturedOutcome =>
+      capturedOutcomeOf(page.expected, mode.record(page));
+    const count = (
+      subset: readonly CapturedPage[],
+      outcome: CapturedOutcome,
+    ): number => subset.filter((page) => outcomeOf(page) === outcome).length;
+    const exact = count(feasible, 'exact');
+    console.log(
+      `${mode.name}: feasible ${feasible.length} of ${chapterPages.length} chapter pages: exact ${exact} (${percent(exact, feasible.length)}), missed ${count(feasible, 'missed')}; all chapter pages: exact ${count(chapterPages, 'exact')}, wrong ${count(chapterPages, 'wrong')}, missed ${count(chapterPages, 'missed')}; other pages ${pages.length - chapterPages.length}: recorded ${count(pages, 'false-positive')}`,
+    );
+  }
+  if (!listsPages) {
+    return;
+  }
+  for (const page of chapterPages.filter((page) => !isFeasible(page))) {
+    console.log(
+      `  INFEASIBLE ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
+    );
+  }
+};
+
+console.log(
+  '\n## climb metric: content script exact on feasible chapter pages',
+);
+reportClimb('train (all real pages)', CAPTURED_PAGES, true);
 
 const verified = verifiedWebsites();
 console.log('\n## verified websites shown on the Add website screen');
