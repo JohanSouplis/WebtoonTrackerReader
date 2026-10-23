@@ -18,11 +18,12 @@ describe('RelativeDateComponent', () => {
     expect(screen.getByText(ago)).toBeInTheDocument();
   });
 
-  it('should describe the relative date with the exact date for its tooltip', async () => {
-    await renderDate(new Date('2024-12-01T19:15:25Z'));
+  it('should describe the relative date with the exact date in the browser language', async () => {
+    const date = new Date('2024-12-01T19:15:25Z');
+    await renderDate(date);
 
     expect(screen.getByText('3 mo ago')).toHaveAccessibleDescription(
-      '01/12/2024',
+      date.toLocaleDateString(navigator.language, { dateStyle: 'medium' }),
     );
   });
 });

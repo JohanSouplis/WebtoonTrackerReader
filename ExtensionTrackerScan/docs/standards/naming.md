@@ -8,6 +8,11 @@ Le produit, son interface et ses utilisateurs sont anglophones. Le code l'est au
 fichiers, libellés de tests. Une seule langue évite les mélanges comme `recupererInformationsWebtoon` à côté
 de `retrieveTitleAndChapter`. La prose des docs reste en français.
 
+Dans l'interface, le produit s'appelle « Scan Tracker » : en-tête, titre de l'onglet (`index.html`), écran About,
+`short_name` et `action.default_title` du manifeste. Le `name` du manifeste reste celui de la fiche du Chrome Web
+Store, que seul le propriétaire change. Les textes d'interface sont en anglais courant (« About », jamais
+« Informations »), et les dates exactes suivent la langue du navigateur (`Intl.DateTimeFormat`).
+
 ## Glossaire
 
 Ces termes sont le langage ubiquitaire. Le code les reprend mot pour mot. **Un concept, un nom** : n'écris

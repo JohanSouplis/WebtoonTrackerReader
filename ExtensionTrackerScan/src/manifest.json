@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tracker Reader Manga Webtoon Manhwa",
+  "short_name": "Scan Tracker",
   "description": "Keep track of where you stop to read your manhwa, webtoon or manga",
   "version": "1.2.1",
   "permissions": [
@@ -21,7 +22,8 @@
   },
   "host_permissions": ["*://*/*"],
   "action": {
-    "default_popup": "index.html?popup"
+    "default_popup": "index.html?popup",
+    "default_title": "Scan Tracker"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self';",

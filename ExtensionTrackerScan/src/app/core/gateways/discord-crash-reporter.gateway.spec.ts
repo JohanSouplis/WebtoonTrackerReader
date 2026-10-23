@@ -35,7 +35,10 @@ describe('DiscordCrashReporter', () => {
 
     expect(errors.mock.calls).toEqual([
       ['Error when sending to discord', 'Server Error'],
-      ['Error while sending to discord :', new Error('Erreur HTTP : 500')],
+      [
+        'Error while sending to discord :',
+        new Error('The crash report webhook answered HTTP 500'),
+      ],
     ]);
     errors.mockRestore();
   });

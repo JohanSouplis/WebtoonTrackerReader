@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 const DAY_IN_MS = 86_400_000;
 const DAYS_IN_MONTH = 30.4;
 const DAYS_IN_YEAR = 365;
+
+const EXACT_DATE = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
 
 const timeAgo = (days: number): string => {
   if (days < 1) {
@@ -38,8 +39,6 @@ export class RelativeDateComponent {
       Math.round((this.now().getTime() - this.date().getTime()) / DAY_IN_MS),
     ),
   );
-  protected readonly exactDate = computed(() =>
-    formatDate(this.date(), 'dd/MM/yyyy', 'en-US'),
-  );
+  protected readonly exactDate = computed(() => EXACT_DATE.format(this.date()));
   protected readonly isoDate = computed(() => this.date().toISOString());
 }

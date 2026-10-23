@@ -17,6 +17,6 @@
     - button "Chapter"
     - button "Rating"
     - button "Following"
-  - heading "No reads match" [level=2]
+  - heading "No series match" [level=2]
   - paragraph: Nothing in your library for “zzzz”.
   - button "Clear filters"

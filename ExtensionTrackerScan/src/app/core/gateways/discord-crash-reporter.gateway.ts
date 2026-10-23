@@ -21,7 +21,9 @@ const post = async (page: VisitedPage): Promise<void> => {
     });
     if (!response.ok) {
       console.error('Error when sending to discord', response.statusText);
-      throw new Error(`Erreur HTTP : ${response.status}`);
+      throw new Error(
+        `The crash report webhook answered HTTP ${response.status}`,
+      );
     }
   } catch (error) {
     console.error('Error while sending to discord :', error);

@@ -111,6 +111,7 @@ async function goToAddWebsite(page: Page) {
 test.describe('navbar', () => {
   test('navbar switches between library and add website', async ({ page }) => {
     await openLibrary(page);
+    await expect(page).toHaveTitle('Scan Tracker');
     await expect(page.getByRole('button', { name: 'Library' })).toHaveAttribute(
       'aria-current',
       'page',
@@ -272,7 +273,7 @@ test.describe('scan list', () => {
     await searchTitle(page, 'zzzz');
     await toggle(page, 'Following only').click();
     await expect(
-      page.getByRole('heading', { name: 'No reads match' }),
+      page.getByRole('heading', { name: 'No series match' }),
     ).toBeVisible();
     await expect(page.getByText('0 series')).toBeVisible();
     await expect(
@@ -553,7 +554,7 @@ test.describe('scan list', () => {
     await openLibrary(page);
     await row(page, 'Local').getByText('1 mo ago').hover();
     await expect(
-      page.getByText('24/01/2025', { exact: true }).filter({ visible: true }),
+      page.getByText('Jan 24, 2025', { exact: true }).filter({ visible: true }),
     ).toBeVisible();
     await pin(page, 'scan-date-01-exact-date-tooltip');
   });
