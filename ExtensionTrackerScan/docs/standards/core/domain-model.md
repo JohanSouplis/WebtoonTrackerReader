@@ -309,8 +309,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   sélectionnée. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
   l'onglet annonce un autre chapitre que la page, le chapitre confirmé gagne.
 - **Le titre est confirmé.** Dans l'ordre : le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le
-  texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`
-  ou un mot de liaison), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
+  texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`,
+  un mot de liaison ou le crochet qui la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
   dans un autre signal (URL, `h1`, titres de section, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet,
   confirmé de même, quand le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
   (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`), s'il figure dans un texte de la page

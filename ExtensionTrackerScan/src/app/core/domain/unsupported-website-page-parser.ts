@@ -346,6 +346,8 @@ const beforeCandidates = (
   ];
 };
 
+const CLOSING_BRACKET = /^\s*[\]】」)]\s*/;
+
 const afterCandidates = (after: string, website: Website): string[] => {
   const connected = CONNECTOR.exec(after);
   const [mentionPiece, ...pieces] = after.split(/\s*[|｜]\s*/);
@@ -365,7 +367,9 @@ const afterCandidates = (after: string, website: Website): string[] => {
     ...(nextTitles.length > 0
       ? nextTitles
       : titleSpan(
-          mentionPiece.split(SEPARATED).slice(1).join(''),
+          CLOSING_BRACKET.test(mentionPiece)
+            ? mentionPiece.replace(CLOSING_BRACKET, '')
+            : mentionPiece.split(SEPARATED).slice(1).join(''),
           isWebsiteAtEnd,
         )),
   ].filter((candidate) => !isExactWebsiteName(candidate, website));
@@ -387,11 +391,16 @@ const titleWitnesses = (page: PageSignals, displaying: string): string[] => [
   ...textWitnesses(page, displaying),
 ];
 
+const titleTextOf = ({ before, after }: ChapterMention): string =>
+  CLOSING_BRACKET.test(after)
+    ? after.replace(CLOSING_BRACKET, '').split(/\s*[|｜]\s*/)[0]
+    : before;
+
 const segmentCandidates = (
   mention: ChapterMention,
   website: Website,
 ): string[] =>
-  segmentsOf(mention.before)
+  segmentsOf(titleTextOf(mention))
     .filter(
       (segment) =>
         !isWebsiteName(segment, website) &&
