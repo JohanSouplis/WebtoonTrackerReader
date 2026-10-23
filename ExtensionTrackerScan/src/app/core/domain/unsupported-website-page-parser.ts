@@ -52,10 +52,12 @@ const CONNECTOR = new RegExp(
   'iu',
 );
 
-const withAsciiDigits = (text: string): string =>
-  text.replace(/[０-９．]/g, (character) =>
-    String.fromCharCode(character.charCodeAt(0) - 0xfee0),
-  );
+const normalizedText = (text: string): string =>
+  text
+    .normalize('NFC')
+    .replace(/[０-９．]/g, (character) =>
+      String.fromCharCode(character.charCodeAt(0) - 0xfee0),
+    );
 
 const decoded = (url: string): string => {
   try {
@@ -87,7 +89,7 @@ const opensSegment = (before: string): boolean =>
   before.trim() === '' || SEGMENT_END.test(before);
 
 const chapterMentionsIn = (text: string): ChapterMention[] =>
-  [...withAsciiDigits(text).matchAll(MENTION)].flatMap((match) => {
+  [...normalizedText(text).matchAll(MENTION)].flatMap((match) => {
     const source = match.input;
     const before = source.substring(0, match.index);
     const after = source.substring(match.index + match[0].length);
@@ -133,9 +135,9 @@ const isNumberOfSomethingElse = (before: string): boolean => {
 };
 
 const bareNumbersIn = (text: string): ChapterMention[] =>
-  withAsciiDigits(text).search(MENTION) >= 0
+  normalizedText(text).search(MENTION) >= 0
     ? []
-    : [...withAsciiDigits(text).matchAll(BARE_NUMBER)].flatMap((match) => {
+    : [...normalizedText(text).matchAll(BARE_NUMBER)].flatMap((match) => {
         const chapter = Chapter.parse(match[1]);
         return chapter &&
           !isNumberOfSomethingElse(match.input.substring(0, match.index))
@@ -235,7 +237,7 @@ const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
   ].flatMap((text) => (text && text !== displaying ? [text] : []));
 
 const chapterNumbersIn = (text: string): number[] =>
-  [...withAsciiDigits(text).matchAll(MENTION)].flatMap(
+  [...normalizedText(text).matchAll(MENTION)].flatMap(
     (match) => Chapter.parse(match[1] ?? match[2] ?? match[3])?.value ?? [],
   );
 
