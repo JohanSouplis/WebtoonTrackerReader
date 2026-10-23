@@ -15,7 +15,8 @@ d'après son contenu : la popup s'ouvre sur `index.html?popup`, et `main.ts` pos
 fixe le document à 750 × 600 px. Hors popup (un onglet), l'application occupe la fenêtre, centrée. Dans les deux
 cas, la navigation, les filtres et le tri restent en place, seule la liste défile, et la pagination reste visible.
 Sous 560 px de large, les composants passent à la ligne au lieu de déborder. Le routeur lit le hash
-(`index.html#/`) : recharger un onglet de l'extension retrouve toujours `index.html`.
+(`index.html#/`) et `index.html` n'a pas de `<base href>` : une navigation garde `index.html` dans l'adresse, et
+recharger un onglet de l'extension retrouve toujours le fichier.
 
 **Le front a son propre métier d'écran, il ne vole pas celui du core.** Filtrer les favoris, tronquer un
 titre trop long ou trier par date de lecture sont des règles d'écran. Fusionner une lecture, valider une note
