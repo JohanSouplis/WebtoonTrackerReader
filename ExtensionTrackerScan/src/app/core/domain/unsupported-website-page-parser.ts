@@ -97,8 +97,10 @@ const displays = (text: string, chapter: Chapter): boolean =>
 const pathOf = (url: string): string =>
   decoded(url.replace(/^\w+:\/\/[^/?#]*/, ''));
 
-const hostOf = (url: string): string =>
-  folded(url.replace(/^\w+:\/\/(www\.)?/, '').split(/[/?#]/)[0]);
+const hostnameOf = (url: string): string =>
+  url.replace(/^\w+:\/\/(www\.)?/, '').split(/[/?#]/)[0];
+
+const hostOf = (url: string): string => folded(hostnameOf(url));
 
 const pathSegments = (url: string): string[] => pathOf(url).split(/[/?#&]/);
 
@@ -113,6 +115,7 @@ const urlChapters = (url: string): number[] => [
 
 type Website = {
   readonly host: string;
+  readonly label: string;
   readonly names: readonly string[];
 };
 
@@ -128,6 +131,7 @@ const structuredTexts = (page: PageSignals): string[] =>
 
 const websiteOf = (page: PageSignals): Website => ({
   host: hostOf(page.url),
+  label: folded(hostnameOf(page.url).split('.')[0]),
   names: [
     page.ogSiteName,
     ...(page.structuredData ?? [])
@@ -135,6 +139,9 @@ const websiteOf = (page: PageSignals): Website => ({
       .map(({ name }) => name),
   ].flatMap((name) => (name ? [folded(name)] : [])),
 });
+
+const isExactWebsiteName = (text: string, website: Website): boolean =>
+  [website.label, ...website.names].includes(folded(text));
 
 const isWebsiteName = (text: string, website: Website): boolean => {
   const name = folded(text);
@@ -328,7 +335,7 @@ const afterCandidates = (after: string, website: Website): string[] => {
           mentionPiece.split(SEPARATED).slice(1).join(''),
           isWebsiteAtEnd,
         )),
-  ];
+  ].filter((candidate) => !isExactWebsiteName(candidate, website));
 };
 
 const titleWitnesses = (page: PageSignals, displaying: string): string[] =>
