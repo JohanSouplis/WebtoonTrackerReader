@@ -7,6 +7,7 @@ import { ChromeOffscreenPageReader } from './gateways/chrome-offscreen-page-read
 import { ChromeStorageChapterWatchRepository } from './gateways/chrome-storage-chapter-watch-repository.gateway';
 import { ChromeStorageCoverRepository } from './gateways/chrome-storage-cover-repository.gateway';
 import { ChromeStorageHostProfileRepository } from './gateways/chrome-storage-host-profile-repository.gateway';
+import { ChromeStorageRatePromptRepository } from './gateways/chrome-storage-rate-prompt-repository.gateway';
 import { ChromeStorageScanRepository } from './gateways/chrome-storage-scan-repository.gateway';
 import { ChromeStorageWatchSettingsRepository } from './gateways/chrome-storage-watch-settings-repository.gateway';
 import { DiscordCrashReporter } from './gateways/discord-crash-reporter.gateway';
@@ -17,6 +18,7 @@ import { BackfillCoversUseCase } from './use-cases/backfill-covers.use-case';
 import { CheckNewChaptersUseCase } from './use-cases/check-new-chapters.use-case';
 import { ImportReadingHistoryUseCase } from './use-cases/import-reading-history.use-case';
 import { RecordCoverUseCase } from './use-cases/record-cover.use-case';
+import { RecordFirstUseUseCase } from './use-cases/record-first-use.use-case';
 import { RecordVisitedPageUseCase } from './use-cases/record-visited-page.use-case';
 import { ShowNewChapterCountUseCase } from './use-cases/show-new-chapter-count.use-case';
 
@@ -89,6 +91,15 @@ container
         new ChromeStorageScanRepository(),
         new ChromeStorageChapterWatchRepository(),
         new ChromeNewChapterAlerts(),
+      ),
+  );
+container
+  .bind(RecordFirstUseUseCase)
+  .toDynamicValue(
+    () =>
+      new RecordFirstUseUseCase(
+        new ChromeStorageRatePromptRepository(),
+        new SystemClock(),
       ),
   );
 

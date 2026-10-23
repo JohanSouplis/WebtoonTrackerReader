@@ -3,6 +3,7 @@ import { BackfillCoversUseCase } from './app/core/use-cases/backfill-covers.use-
 import { CheckNewChaptersUseCase } from './app/core/use-cases/check-new-chapters.use-case';
 import { ImportReadingHistoryUseCase } from './app/core/use-cases/import-reading-history.use-case';
 import { RecordCoverUseCase } from './app/core/use-cases/record-cover.use-case';
+import { RecordFirstUseUseCase } from './app/core/use-cases/record-first-use.use-case';
 import { RecordVisitedPageUseCase } from './app/core/use-cases/record-visited-page.use-case';
 import { ShowNewChapterCountUseCase } from './app/core/use-cases/show-new-chapter-count.use-case';
 import { parseCoverBackfillMessage } from './cover-backfill-message';
@@ -37,6 +38,12 @@ chrome.runtime.onMessage.addListener(
     return false;
   },
 );
+
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+  if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    void container.get(RecordFirstUseUseCase).execute();
+  }
+});
 
 importHistory();
 setInterval(importHistory, IMPORT_INTERVAL_MS);
