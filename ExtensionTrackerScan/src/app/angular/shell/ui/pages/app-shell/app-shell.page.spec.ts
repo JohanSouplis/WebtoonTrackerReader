@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AppShellPage } from './app-shell.page';
 
-@Component({ template: '<h1>Library page</h1>' })
+@Component({
+  template:
+    '<h1>Library page</h1><ul aria-label="Library" tabindex="-1" data-skip-target></ul>',
+})
 class LibraryStubPage {}
 
 @Component({ template: '<h1>Add website page</h1>' })
@@ -36,6 +39,19 @@ describe('AppShellPage', () => {
       'aria-current',
       'page',
     );
+  });
+
+  it('should move the focus to the library list when Skip to content is pressed', async () => {
+    await renderShell('');
+    await screen.findByRole('heading', { name: 'Library page' });
+
+    await userEvent.tab();
+    expect(
+      screen.getByRole('button', { name: 'Skip to content' }),
+    ).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+
+    expect(screen.getByRole('list', { name: 'Library' })).toHaveFocus();
   });
 
   it('should show the about page and mark it current when About is clicked', async () => {

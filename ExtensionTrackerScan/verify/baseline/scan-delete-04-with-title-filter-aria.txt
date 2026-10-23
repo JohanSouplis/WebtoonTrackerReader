@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -28,8 +29,8 @@
       - button "Follow Return of the SSS-Class Ranker"
       - button "Delete Return of the SSS-Class Ranker"
   - group:
-    - text: Rows
-    - combobox "10 Rows": "10"
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
     - text: 1–1 of 1
     - button "First page" [disabled]
     - button "Previous page" [disabled]

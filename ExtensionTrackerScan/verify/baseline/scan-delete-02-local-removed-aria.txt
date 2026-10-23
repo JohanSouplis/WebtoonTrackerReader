@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -114,8 +115,8 @@
       - button "Follow The Priest of Corruption"
       - button "Delete The Priest of Corruption"
   - group:
-    - text: Rows
-    - combobox "10 Rows": "10"
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
     - text: 1–10 of 19
     - button "First page" [disabled]
     - button "Previous page" [disabled]

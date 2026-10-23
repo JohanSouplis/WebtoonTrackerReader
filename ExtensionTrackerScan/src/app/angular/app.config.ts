@@ -12,7 +12,7 @@ import { routes } from './app.routes';
 
 const rowsPaginatorIntl = (): MatPaginatorIntl => {
   const intl = new MatPaginatorIntl();
-  intl.itemsPerPageLabel = 'Rows';
+  intl.itemsPerPageLabel = 'Rows per page';
   intl.getRangeLabel = (page, size, length) =>
     length === 0
       ? '0 of 0'

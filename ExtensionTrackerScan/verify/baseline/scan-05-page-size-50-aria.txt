@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -204,8 +205,8 @@
       - button "Follow The Heavenly Demon Can't Live a Normal Life"
       - button "Delete The Heavenly Demon Can't Live a Normal Life"
   - group:
-    - text: Rows
-    - combobox "50 Rows": "50"
+    - text: Rows per page
+    - combobox "50 Rows per page": "50"
     - text: 1–20 of 20
     - button "First page" [disabled]
     - button "Previous page" [disabled]

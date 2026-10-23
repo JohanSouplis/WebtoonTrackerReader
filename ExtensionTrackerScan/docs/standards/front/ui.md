@@ -95,6 +95,9 @@ en `oklch` à luminosité fixe. Une cible cliquable fait au moins 24 × 24 px.
 {{ row.readAt | date: "dd/MM/yyyy" }}
 ```
 
+- Le premier arrêt du clavier est « Skip to content » (la page d'amorçage). Il pose le focus sur l'élément
+  `data-skip-target` de la page affichée (la liste de la bibliothèque, le champ de la demande de site), sinon
+  sur `<main>`. Une page qui ajoute un contenu principal pose cet attribut.
 - Un élément cliquable est un `<button>` ou un `<a href>`. ❌ `<img (click)="delete(scan)">`,
   ❌ `<div (click)="selectButton('home')">`.
 - Un organism, une molecule et un atom n'accèdent ni au routeur, ni à `window`, ni à un use-case. Ils

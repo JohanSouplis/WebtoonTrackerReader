@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"

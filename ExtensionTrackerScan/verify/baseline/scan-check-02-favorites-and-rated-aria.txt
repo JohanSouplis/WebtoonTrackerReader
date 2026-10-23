@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -87,8 +88,8 @@
       - button "Follow The Heavenly Demon Wants a Quiet Life" [pressed]
       - button "Delete The Heavenly Demon Wants a Quiet Life"
   - group:
-    - text: Rows
-    - combobox "10 Rows": "10"
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
     - text: 1–7 of 7
     - button "First page" [disabled]
     - button "Previous page" [disabled]

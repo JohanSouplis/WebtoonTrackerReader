@@ -82,7 +82,7 @@ async function openLibrary(page: Page) {
 }
 
 async function setPageSize(page: Page, size: string) {
-  await page.getByRole('combobox', { name: 'Rows' }).click();
+  await page.getByRole('combobox', { name: /Rows per page$/ }).click();
   await page.getByRole('option', { name: size, exact: true }).click();
 }
 
@@ -448,6 +448,26 @@ test.describe('scan list', () => {
     await expect(row(page, 'Local')).toHaveCount(0);
     await expect(page.getByText('19 series')).toBeVisible();
     await expect(row(page, 'Omniscient Reader’s Viewpoint')).toHaveCount(1);
+  });
+
+  test('skip link jumps to the list and the rows per page select is named', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    await page.keyboard.press('Tab');
+    const skip = page.getByRole('button', { name: 'Skip to content' });
+    await expect(skip).toBeFocused();
+    await expect(skip).toBeInViewport();
+    await pin(page, 'keyboard-01-skip-link');
+    await page.keyboard.press('Enter');
+    await expect(library(page)).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(
+      page.getByRole('link', { name: 'Local', exact: true }),
+    ).toBeFocused();
+    await expect(
+      page.getByRole('combobox', { name: '10 Rows per page' }),
+    ).toBeVisible();
   });
 
   test('delete is reachable from the keyboard', async ({ page }) => {

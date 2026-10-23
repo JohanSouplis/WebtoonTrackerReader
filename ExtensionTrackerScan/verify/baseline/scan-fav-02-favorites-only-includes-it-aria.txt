@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -114,8 +115,8 @@
       - button "Follow Pick Me Up, Infinite Gacha" [pressed]
       - button "Delete Pick Me Up, Infinite Gacha"
   - group:
-    - text: Rows
-    - combobox "10 Rows": "10"
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
     - text: 1–10 of 12
     - button "First page" [disabled]
     - button "Previous page" [disabled]

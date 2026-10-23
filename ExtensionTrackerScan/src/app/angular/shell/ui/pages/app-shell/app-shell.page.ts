@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   inject,
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
@@ -18,6 +20,7 @@ import { NavBarComponent } from '../../organisms/nav-bar/nav-bar.component';
 })
 export class AppShellPage {
   private readonly router = inject(Router);
+  private readonly main = viewChild.required<ElementRef<HTMLElement>>('main');
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -30,6 +33,11 @@ export class AppShellPage {
       this.router.parseUrl(this.url()).root.children['primary']?.toString() ??
       '',
   );
+
+  protected skipToContent(): void {
+    const main = this.main().nativeElement;
+    (main.querySelector<HTMLElement>('[data-skip-target]') ?? main).focus();
+  }
 
   protected select(path: string): void {
     void this.router.navigate([path]);

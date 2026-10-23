@@ -2,7 +2,7 @@
 @switch (shown.kind) {
   @case ("scans") {
     <div class="scroll">
-      <ul aria-label="Library" tabindex="-1" #list>
+      <ul aria-label="Library" tabindex="-1" data-skip-target #list>
         @for (row of shown.rows; track row.title; let index = $index) {
           <li [style.--index]="index" @row>
             @switch (row.cover.kind) {

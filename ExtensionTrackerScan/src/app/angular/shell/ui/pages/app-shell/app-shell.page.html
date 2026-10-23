@@ -1,4 +1,7 @@
+<button type="button" class="skip-link" (click)="skipToContent()">
+  Skip to content
+</button>
 <app-nav-bar [selectedPath]="selectedPath()" (navigated)="select($event)" />
-<main>
+<main tabindex="-1" #main>
   <router-outlet />
 </main>

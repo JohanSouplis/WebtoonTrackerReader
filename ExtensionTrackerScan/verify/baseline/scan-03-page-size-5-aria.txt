@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -66,8 +67,8 @@
       - button "Follow I Obtained a Mythic Item" [pressed]
       - button "Delete I Obtained a Mythic Item"
   - group:
-    - text: Rows
-    - combobox "5 Rows": "5"
+    - text: Rows per page
+    - combobox "5 Rows per page": "5"
     - text: 1–5 of 20
     - button "First page" [disabled]
     - button "Previous page" [disabled]

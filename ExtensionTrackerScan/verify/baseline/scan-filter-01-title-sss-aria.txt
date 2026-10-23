@@ -1,3 +1,4 @@
+- button "Skip to content"
 - text: Scan Tracker
 - navigation "Main":
   - button "Library"
@@ -37,8 +38,8 @@
       - button "Follow SSS-Class Suicide Hunter"
       - button "Delete SSS-Class Suicide Hunter"
   - group:
-    - text: Rows
-    - combobox "10 Rows": "10"
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
     - text: 1–2 of 2
     - button "First page" [disabled]
     - button "Previous page" [disabled]
