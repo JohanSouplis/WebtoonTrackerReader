@@ -406,16 +406,19 @@ const titleWitnesses = (page: PageSignals, displaying: string): string[] => [
   ...textWitnesses(page, displaying),
 ];
 
-const titleTextOf = ({ before, after }: ChapterMention): string =>
-  CLOSING_BRACKET.test(after)
-    ? after.replace(CLOSING_BRACKET, '').split(/\s*[|｜]\s*/)[0]
-    : before;
+const titleTextsOf = ({ before, after }: ChapterMention): string[] => {
+  const mentionPiece = after.split(/\s*[|｜]\s*/)[0];
+  return CLOSING_BRACKET.test(after)
+    ? [mentionPiece.replace(CLOSING_BRACKET, '')]
+    : [before, mentionPiece.split(SEPARATED).slice(1).join('')];
+};
 
 const segmentCandidates = (
   mention: ChapterMention,
   website: Website,
 ): string[] =>
-  segmentsOf(titleTextOf(mention))
+  titleTextsOf(mention)
+    .flatMap(segmentsOf)
     .filter(
       (segment) =>
         !isWebsiteName(segment, website) &&

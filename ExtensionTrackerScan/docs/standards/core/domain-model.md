@@ -318,8 +318,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   3. le titre de l'onglet, quand le chapitre est affiché ailleurs, confirmé par un texte qui dit plus que lui : un
      `og:title` ou un `h1` qui le recopie mot pour mot nomme la page, souvent le chapitre lui-même
      (`ملابس السباحة. | Team-X`) ;
-  4. un seul des segments qui entourent la mention (`Чёрный Клевер - Black Clover - Black Clover онлайн.
-     Глава 393`), s'il figure dans un texte de la page (`h1`, titres de section, fil d'Ariane, JSON-LD,
+  4. un seul des segments qui précèdent la mention ou qui suivent son propre segment
+     (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`, `第1話 / 押しかけギャルの中村さん - おりはらさちこ`), s'il figure dans un texte de la page (`h1`, titres de section, fil d'Ariane, JSON-LD,
      `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une partie du titre
      (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ;
   5. un titre de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors

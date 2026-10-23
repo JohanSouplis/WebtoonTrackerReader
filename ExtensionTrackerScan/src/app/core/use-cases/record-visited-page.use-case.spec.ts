@@ -183,6 +183,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['its tab title is the tagline of the website and a heading repeats the series of its url', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', heading: 'Capítulo 95', headings: ['Lista de Capítulos', 'Capítulo 95', 'Reportar um problema', 'O Caçador de Destinos Rank F'] }, 'O Caçador de Destinos Rank F', 95],
     ['its tab title puts the chapter in brackets before the series and its author', { pageTitle: '[第12話] 魔王の休日 - 山田太郎 | マンガサイト', url: 'https://manga.example/episode/90210', ogSiteName: 'マンガサイト', headings: ['マンガサイト', '[第12話] 魔王の休日', '魔王の休日', '山田太郎'] }, '魔王の休日', 12],
     ['only the navigation of the website names comics', { pageTitle: 'Ch.183 | Marriage Toxin | Blue Solo', url: 'https://bluesolo.org/read/marriage-toxin/fr/ch/183', ogSiteName: 'Blue Solo', links: [{ href: 'https://bluesolo.org/', text: 'Blue Solo' }, { href: 'https://bluesolo.org/mangas', text: 'Tous les mangas' }] }, 'Marriage Toxin', 183],
+    ['its tab title puts the chapter first, then the series and its author', { pageTitle: '第1話 / 押しかけギャルの中村さん - おりはらさちこ | webアクション', url: 'https://comic-action.com/episode/316112896824970475', ogSiteName: 'webアクション｜双葉社発のマンガサイト', heading: '第1話', headings: ['知りたい世界。webアクション', '第1話', '押しかけギャルの中村さん'] }, '押しかけギャルの中村さん', 1],
   ])(
     'should record the reading its page signals agree on when %s',
     async (_, message, title, chapter) => {
