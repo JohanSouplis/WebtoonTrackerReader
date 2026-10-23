@@ -22,7 +22,12 @@
   (favoriteToggled)="toggleFavorite($event)"
   (rated)="rate($event)"
   (ratingCleared)="clearRating($event)"
+  (newChapterOpened)="recordNewChapterOpened()"
   (pageTurned)="store.turnPage($event)"
   (filtersCleared)="store.clearFilters()"
   (retried)="loadLibrary()"
-/>
+>
+  @if (store.isAskingForRating()) {
+  <app-rate-prompt (answered)="answerRatePrompt($event)" />
+  }
+</app-scan-rows>

@@ -9,6 +9,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
+import { SHELL_PROVIDERS } from './shell/shell.providers';
 
 const rowsPaginatorIntl = (): MatPaginatorIntl => {
   const intl = new MatPaginatorIntl();
@@ -35,5 +36,6 @@ export const appConfig: ApplicationConfig = {
       );
     }),
     { provide: MatPaginatorIntl, useFactory: rowsPaginatorIntl },
+    ...SHELL_PROVIDERS,
   ],
 };

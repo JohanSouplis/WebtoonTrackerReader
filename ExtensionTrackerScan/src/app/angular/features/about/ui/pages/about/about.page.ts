@@ -4,9 +4,13 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
 import { ChangeParseReportsUseCase } from '../../../../../../core/use-cases/change-parse-reports.use-case';
 import manifest from '../../../../../../../manifest.json';
-import { REPORT_SETTINGS_REPOSITORY } from '../../../../../injection-tokens';
+import {
+  REPORT_SETTINGS_REPOSITORY,
+  STORE_LISTING,
+} from '../../../../../injection-tokens';
 import { AboutSectionsComponent } from '../../organisms/about-sections/about-sections.component';
 import { AboutStore } from './about.store';
 
@@ -21,6 +25,8 @@ import { AboutStore } from './about.store';
 export class AboutPage implements OnInit {
   private readonly settingsRepository = inject(REPORT_SETTINGS_REPOSITORY);
   private readonly changeParseReports = inject(ChangeParseReportsUseCase);
+  private readonly answerRatePrompt = inject(AnswerRatePromptUseCase);
+  private readonly storeListing = inject(STORE_LISTING);
   protected readonly store = inject(AboutStore);
   protected readonly version = manifest.version;
 
@@ -37,5 +43,10 @@ export class AboutPage implements OnInit {
     this.store.showReportSettings(
       await this.changeParseReports.execute(isWanted),
     );
+  }
+
+  protected async openReviews(): Promise<void> {
+    await this.answerRatePrompt.execute('rate');
+    this.storeListing.openReviews();
   }
 }

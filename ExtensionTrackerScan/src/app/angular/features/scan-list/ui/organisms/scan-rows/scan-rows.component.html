@@ -34,6 +34,7 @@
                     [href]="row.watch.url"
                     target="_blank"
                     rel="noopener"
+                    (click)="newChapterOpened.emit()"
                     >New · Ch. {{ row.watch.chapter }}</a
                   >
                 }
@@ -117,6 +118,7 @@
         }
       </ng-template>
     </mat-menu>
+    <ng-content />
     <mat-paginator
       [length]="shown.length"
       [pageIndex]="shown.page.index"

@@ -23,4 +23,6 @@
       - listitem:
         - link "Report a problem or ask a question on GitHub":
           - /url: https://github.com/JohanSouplis/WebtoonTrackerReader/issues
+      - listitem:
+        - button "Rate the extension"
   - paragraph: Scan Tracker · version 1.2.1

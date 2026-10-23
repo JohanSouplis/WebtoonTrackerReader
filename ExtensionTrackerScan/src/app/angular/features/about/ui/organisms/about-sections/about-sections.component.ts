@@ -18,6 +18,7 @@ export class AboutSectionsComponent {
   readonly version = input.required<string>();
   readonly sendsParseReports = input.required<boolean>();
   readonly parseReportsToggled = output<boolean>();
+  readonly rateRequested = output<void>();
   protected readonly issuesUrl =
     'https://github.com/JohanSouplis/WebtoonTrackerReader/issues';
 }

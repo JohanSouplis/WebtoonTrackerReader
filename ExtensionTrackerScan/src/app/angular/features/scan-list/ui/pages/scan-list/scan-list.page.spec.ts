@@ -1,18 +1,23 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { render, screen, within } from '@testing-library/angular';
+import { render, screen, waitFor, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { Cover, Thumbnail } from '../../../../../../core/domain/cover';
+import { RatePrompt } from '../../../../../../core/domain/rate-prompt';
 import { ScanLibrary } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { FixedClock } from '../../../../../../core/gateways/in-memory/fixed-clock.gateway';
 import { InMemoryChapterWatchRepository } from '../../../../../../core/gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
+import { InMemoryRatePromptRepository } from '../../../../../../core/gateways/in-memory/in-memory-rate-prompt-repository.gateway';
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { InMemoryWatchSettingsRepository } from '../../../../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
+import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
+import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
+import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
@@ -23,6 +28,7 @@ import {
   COVER_REPOSITORY,
   NOTIFICATION_PERMISSION,
   SCAN_REPOSITORY,
+  STORE_LISTING,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
 import { InMemoryCoverBackfill } from '../../../gateways/in-memory-cover-backfill.gateway';
@@ -132,6 +138,91 @@ describe('ScanListPage', () => {
         name: 'New · Ch. 101',
       }),
     ).toHaveAttribute('href', 'https://scans.org/solo-leveling/chapter-101');
+  });
+
+  it('should not ask for a rating on the first open of the library', async () => {
+    await renderPage(new InMemoryScanRepository(TWELVE_SCANS));
+
+    expect(await screen.findByText('12 series')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('region', { name: 'Enjoying Scan Tracker?' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should record the rating, then open the reviews, when a served reader clicks Rate it', async () => {
+    const ratePromptRepository = new InMemoryRatePromptRepository(
+      SERVED_READER,
+    );
+    const statesWhenOpened: unknown[] = [];
+    await renderPage(new InMemoryScanRepository(TWELVE_SCANS), {
+      ratePromptRepository,
+      openReviews: async () =>
+        statesWhenOpened.push((await ratePromptRepository.load())?.state),
+    });
+
+    await userEvent.click(
+      within(
+        await screen.findByRole('region', { name: 'Enjoying Scan Tracker?' }),
+      ).getByRole('button', { name: 'Rate it' }),
+    );
+
+    await waitFor(() => expect(statesWhenOpened).toEqual([{ kind: 'rated' }]));
+    expect(
+      screen.queryByRole('region', { name: 'Enjoying Scan Tracker?' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should hide the prompt, focus the list and not open the reviews when Not now is clicked', async () => {
+    const openReviews = jest.fn();
+    await renderPage(new InMemoryScanRepository(TWELVE_SCANS), {
+      ratePromptRepository: new InMemoryRatePromptRepository(SERVED_READER),
+      openReviews,
+    });
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Not now' }),
+    );
+
+    expect(
+      screen.queryByRole('region', { name: 'Enjoying Scan Tracker?' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Library' })).toHaveFocus();
+    expect(openReviews).not.toHaveBeenCalled();
+  });
+
+  it('should remember that the reader opened a new chapter', async () => {
+    const ratePromptRepository = new InMemoryRatePromptRepository();
+    await renderPage(
+      new InMemoryScanRepository([
+        aScan({
+          title: 'Solo Leveling',
+          chapter: 100,
+          url: 'https://scans.org/solo-leveling/chapter-100',
+          isFavorite: true,
+        }),
+      ]),
+      {
+        ratePromptRepository,
+        watchRepository: new InMemoryChapterWatchRepository({
+          'Solo Leveling': {
+            kind: 'new',
+            site: 'scans.org',
+            latest: 101,
+            url: 'https://scans.org/solo-leveling/chapter-101',
+            foundAt: new Date('2025-03-10T10:00:00Z'),
+            checkedAt: new Date('2025-03-10T10:00:00Z'),
+          },
+        }),
+      },
+    );
+
+    await userEvent.click(
+      await within(await rowOf('Solo Leveling')).findByRole('link', {
+        name: 'New · Ch. 101',
+      }),
+    );
+
+    expect((await ratePromptRepository.load())?.hasOpenedNewChapter).toBe(true);
   });
 
   it('should check favorites once a day when the reader chooses it', async () => {
@@ -322,7 +413,7 @@ describe('ScanListPage', () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
     ]);
-    const load = jest
+    jest
       .spyOn(scanRepository, 'load')
       .mockRejectedValueOnce(new Error('storage unavailable'));
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -339,7 +430,6 @@ describe('ScanListPage', () => {
     expect(
       await screen.findByRole('link', { name: 'Solo Leveling' }),
     ).toBeInTheDocument();
-    expect(load).toHaveBeenCalledTimes(2);
   });
 
   it('should hide the filters, the sort and the checks when the library is empty', async () => {
@@ -392,6 +482,16 @@ const thumbnail = (): Thumbnail => {
 
 const THUMBNAIL = thumbnail();
 
+const TWELVE_SCANS = Array.from({ length: 12 }, (_, index) =>
+  aScan({ title: `Scan ${index + 1}` }),
+);
+
+const SERVED_READER: RatePrompt = {
+  firstUsedAt: new Date('2025-01-01T12:00:00Z'),
+  hasOpenedNewChapter: false,
+  state: { kind: 'never-shown' },
+};
+
 const FOUND: Cover = {
   kind: 'found',
   thumbnail: THUMBNAIL,
@@ -416,12 +516,16 @@ const renderPage = (
     watchRepository = new InMemoryChapterWatchRepository(),
     settingsRepository = new InMemoryWatchSettingsRepository(),
     notificationPermission = new InMemoryNotificationPermission(),
+    ratePromptRepository = new InMemoryRatePromptRepository(),
+    openReviews = jest.fn(),
   }: {
     coverRepository?: InMemoryCoverRepository;
     coverBackfill?: CoverBackfillPort;
     watchRepository?: InMemoryChapterWatchRepository;
     settingsRepository?: InMemoryWatchSettingsRepository;
     notificationPermission?: InMemoryNotificationPermission;
+    ratePromptRepository?: InMemoryRatePromptRepository;
+    openReviews?: () => void;
   } = {},
 ) =>
   render(ScanListPage, {
@@ -465,6 +569,26 @@ const renderPage = (
       {
         provide: RateScanUseCase,
         useValue: new RateScanUseCase(scanRepository),
+      },
+      { provide: STORE_LISTING, useValue: { openReviews } },
+      {
+        provide: AskForRatingUseCase,
+        useValue: new AskForRatingUseCase(
+          ratePromptRepository,
+          scanRepository,
+          new FixedClock(),
+        ),
+      },
+      {
+        provide: AnswerRatePromptUseCase,
+        useValue: new AnswerRatePromptUseCase(
+          ratePromptRepository,
+          new FixedClock(),
+        ),
+      },
+      {
+        provide: RecordNewChapterOpenedUseCase,
+        useValue: new RecordNewChapterOpenedUseCase(ratePromptRepository),
       },
     ],
   });

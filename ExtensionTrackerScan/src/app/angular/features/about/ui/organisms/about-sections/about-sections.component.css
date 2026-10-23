@@ -49,14 +49,21 @@ mat-slide-toggle {
   list-style: none;
 }
 
-.links a {
+.links a,
+.links button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
   color: var(--app-accent);
   font-weight: 700;
   text-decoration: none;
   border-radius: 4px;
 }
 
-.links a:hover {
+.links a:hover,
+.links button:hover {
   text-decoration: underline;
 }
 

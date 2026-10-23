@@ -34,7 +34,7 @@ ou reconnaître un site appartiennent au core : le front en affiche le résultat
 core. `ui/` n'importe jamais `gateways/`, ni `core/gateways/`.
 
 Un port propre à Angular n'existe que pour une action qui ne touche aucune donnée métier : demander la
-permission des notifications. Toute écriture métier est un use-case du core
+permission des notifications, ouvrir les avis de l'extension dans un onglet. Toute écriture métier est un use-case du core
 ([`../core/use-case.md`](../core/use-case.md)).
 
 ## Arborescence
@@ -44,11 +44,14 @@ src/app/angular/
   app.config.ts · app.routes.ts
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
+    shell.providers.ts
+    service/   store-listing.port.ts
+    gateways/  chrome-store-listing.gateway.ts · in-memory-store-listing.gateway.ts
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
     atoms/      bell-toggle/ · monogram/ · cover/ · relative-date/
-    molecules/  search-field/
+    molecules/  search-field/ · banner/
   features/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
@@ -58,7 +61,7 @@ src/app/angular/
                 chrome-notification-permission.gateway.ts · in-memory-notification-permission.gateway.ts
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
-        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/
+        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/ · rate-prompt/
     add-website-pattern/             onglet « Request a site », route 'add_website_pattern'
       add-website-pattern.providers.ts
       service/  site-request.rules.ts

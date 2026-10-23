@@ -51,6 +51,8 @@ pas un synonyme.
 | `HostProfile` | Ce que l'extension a appris d'un site pour vérifier ses chapitres, et sa pause en cours | `siteConfig`, `hostInfo` |
 | `ReportSettings` | Le choix du lecteur d'envoyer ou non au développeur les pages qu'un site supporté n'a pas permis de lire (`sendsParseReports`, oui par défaut) | `telemetry`, `consent`, `privacy` pour ce sens |
 | `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckFrequency` : un `CheckInterval` ou `off`) | `preferences`, `options` |
+| `RatePrompt` | La demande faite au lecteur de noter l'extension sur le Chrome Web Store, et où il en est : `never-shown`, `snoozed`, `rated` ou `declined` | `review`, `feedback`, `nag` |
+| `firstUsedAt` | La date du premier usage de l'extension : son installation, ou la première ouverture de la popup d'un lecteur installé avant | `installDate`, `installedAt` |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.
 

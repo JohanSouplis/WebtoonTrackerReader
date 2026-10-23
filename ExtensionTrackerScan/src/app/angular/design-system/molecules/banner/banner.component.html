@@ -1,0 +1,9 @@
+<section [attr.aria-label]="heading()">
+  <mat-icon class="is-filled">{{ icon() }}</mat-icon>
+  <p>
+    <span class="heading">{{ heading() }}</span> {{ message() }}
+  </p>
+  <div class="actions">
+    <ng-content />
+  </div>
+</section>

@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 4px;
+  padding: 6px 6px 6px 14px;
+  border: 1px solid var(--app-accent-line);
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, var(--app-accent-soft), rgba(155, 140, 255, 0) 70%),
+    var(--app-surface);
+}
+
+section > mat-icon.mat-icon {
+  flex: none;
+  font-size: 20px;
+  color: var(--app-star);
+}
+
+p {
+  flex: 1;
+  min-width: 0;
+  color: var(--app-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.heading {
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

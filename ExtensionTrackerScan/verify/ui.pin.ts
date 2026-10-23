@@ -683,6 +683,81 @@ test.describe('new chapters', () => {
   });
 });
 
+test.describe('rate prompt', () => {
+  function ratePrompt(page: Page): Locator {
+    return page.getByRole('region', { name: 'Enjoying Scan Tracker?' });
+  }
+
+  async function openServedReaderLibrary(page: Page) {
+    await page.goto('/?rate-prompt-due');
+    await expect(library(page).getByRole('listitem')).toHaveCount(10);
+    await expect(ratePrompt(page)).toBeVisible();
+  }
+
+  test('rate prompt sits on one line between the list and the pagination and rate it opens the reviews', async ({
+    page,
+  }) => {
+    await openServedReaderLibrary(page);
+    const list = await library(page).locator('xpath=..').boundingBox();
+    const banner = await ratePrompt(page).boundingBox();
+    const paginator = await page.locator('mat-paginator').boundingBox();
+    expect(banner && list && banner.y).toBeGreaterThanOrEqual(
+      list ? list.y + list.height : Infinity,
+    );
+    expect(paginator && banner && paginator.y).toBeGreaterThanOrEqual(
+      banner ? banner.y + banner.height : Infinity,
+    );
+    expect(paginator && paginator.y + paginator.height).toBeLessThanOrEqual(
+      600,
+    );
+    const message = await ratePrompt(page)
+      .getByText('A rating helps other readers find it.')
+      .boundingBox();
+    const action = await ratePrompt(page)
+      .getByRole('button', { name: "Don't ask again" })
+      .boundingBox();
+    expect(message && action && message.height).toBeLessThan(
+      action ? action.height : 0,
+    );
+    await pin(page, 'rate-01-prompt');
+    await ratePrompt(page).getByRole('button', { name: 'Rate it' }).click();
+    await expect
+      .poll(() => events.some((e) => e.includes('open reviews mocked')))
+      .toBe(true);
+    await expect(ratePrompt(page)).toBeHidden();
+  });
+
+  test('rate prompt not now focuses the list and hides it for the rest of the visit', async ({
+    page,
+  }) => {
+    await openServedReaderLibrary(page);
+    await ratePrompt(page).getByRole('button', { name: 'Not now' }).click();
+    await expect(ratePrompt(page)).toBeHidden();
+    await expect(library(page)).toBeFocused();
+    await pin(page, 'rate-02-after-not-now');
+    await goToAddWebsite(page);
+    await page.getByRole('button', { name: 'Library' }).click();
+    await expect(library(page).getByRole('listitem')).toHaveCount(10);
+    await expect(ratePrompt(page)).toBeHidden();
+    expect(events.some((e) => e.includes('open reviews mocked'))).toBe(false);
+  });
+
+  test('rate the extension stays in the about feedback section', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    await expect(ratePrompt(page)).toBeHidden();
+    await page.getByRole('button', { name: 'About' }).click();
+    const feedback = page.getByRole('region', { name: 'Feedback' });
+    await feedback.scrollIntoViewIfNeeded();
+    await pin(page, 'rate-03-about-feedback');
+    await feedback.getByRole('button', { name: 'Rate the extension' }).click();
+    await expect
+      .poll(() => events.some((e) => e.includes('open reviews mocked')))
+      .toBe(true);
+  });
+});
+
 test.describe('add website', () => {
   test('request a site', async ({ page }) => {
     await openLibrary(page);

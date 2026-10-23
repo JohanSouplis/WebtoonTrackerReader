@@ -45,6 +45,17 @@ describe('AboutSectionsComponent', () => {
     );
   });
 
+  it('should ask for the reviews when Rate the extension is clicked', async () => {
+    const rateRequested = jest.fn();
+    await renderSections({ rateRequested });
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Rate the extension' }),
+    );
+
+    expect(rateRequested).toHaveBeenCalled();
+  });
+
   it('should show the version of the extension', async () => {
     await renderSections();
 

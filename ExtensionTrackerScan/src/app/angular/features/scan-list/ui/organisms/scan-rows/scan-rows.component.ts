@@ -63,6 +63,7 @@ export class ScanRowsComponent {
   readonly pageTurned = output<ScanPage>();
   readonly filtersCleared = output<void>();
   readonly retried = output<void>();
+  readonly newChapterOpened = output<void>();
   protected readonly skeletonRows = [0, 1, 2, 3, 4];
   protected readonly ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   protected readonly pageSizes = [5, 10, 20, 50, 100];
@@ -70,6 +71,10 @@ export class ScanRowsComponent {
   private readonly titleLinks =
     viewChildren<ElementRef<HTMLElement>>('titleLink');
   private lastDeleteAt = -Infinity;
+
+  focus(): void {
+    this.list()?.nativeElement.focus();
+  }
 
   protected delete(row: ScanRow, index: number, click: MouseEvent): void {
     if (click.timeStamp - this.lastDeleteAt < SHIFTED_ROW_GUARD_MS) {

@@ -1,0 +1,124 @@
+- button "Skip to content"
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Request a site"
+- button "About"
+- main:
+  - searchbox "Filter by title"
+  - button "Following only"
+  - button "Rated only"
+  - text: 20 series
+  - button "Checks every 6 hours · Alerts off"
+  - group "Sort by":
+    - button "New chapters"
+    - button "Last read (descending)" [pressed]
+    - button "Title"
+    - button "Chapter"
+    - button "Rating"
+    - button "Following"
+  - list "Library":
+    - listitem:
+      - link "Local":
+        - /url: Localhost:4200
+      - text: Ch. 9999 read
+      - time: 1 mo ago
+      - text: localhost:4200
+      - 'button "Rating for Local: not rated"'
+      - button "Follow Local" [pressed]
+      - button "Delete Local"
+    - listitem:
+      - link "Omniscient Reader’s Viewpoint":
+        - /url: https://asuracomic.net/series/omniscient-readers-viewpoint-7fc01755/chapter/246
+      - text: Ch. 246 read
+      - time: 3 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Omniscient Reader’s Viewpoint: 9/10"'
+      - button "Follow Omniscient Reader’s Viewpoint" [pressed]
+      - button "Delete Omniscient Reader’s Viewpoint"
+    - listitem:
+      - link "The Executioner":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
+      - text: Ch. 46
+      - link "New · Ch. 47":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+      - text: read
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for The Executioner: 7/10"'
+      - button "Follow The Executioner" [pressed]
+      - button "Delete The Executioner"
+    - listitem:
+      - link "Absolute Sword Sense":
+        - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
+      - text: Ch. 117 read
+      - time: 4 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Absolute Sword Sense: 7/10"'
+      - button "Follow Absolute Sword Sense"
+      - button "Delete Absolute Sword Sense"
+    - listitem:
+      - link "I Obtained a Mythic Item":
+        - /url: https://asuracomic.net/series/i-obtained-a-mythic-item-09437f9f/chapter/115
+      - text: Ch. 115 read
+      - time: 5 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for I Obtained a Mythic Item: 9/10"'
+      - button "Follow I Obtained a Mythic Item" [pressed]
+      - button "Delete I Obtained a Mythic Item"
+    - listitem:
+      - link "Dungeon Odyssey":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
+      - text: Ch. 118
+      - link "New · Ch. 119.5":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/119.5
+      - text: read
+      - time: 6 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Dungeon Odyssey: 10/10"'
+      - button "Follow Dungeon Odyssey" [pressed]
+      - button "Delete Dungeon Odyssey"
+    - listitem:
+      - link "A Dragonslayer's Peerless Regression":
+        - /url: https://asuracomic.net/series/a-dragonslayers-peerless-regression-aaa07236/chapter/23
+      - text: Ch. 23 read
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for A Dragonslayer''s Peerless Regression: 5/10"'
+      - button "Follow A Dragonslayer's Peerless Regression"
+      - button "Delete A Dragonslayer's Peerless Regression"
+    - listitem:
+      - link "Worthless Regression":
+        - /url: https://asuracomic.net/series/worthless-regression-50201282/chapter/68
+      - text: Ch. 68 read
+      - time: 7 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Worthless Regression: 6/10"'
+      - button "Follow Worthless Regression"
+      - button "Delete Worthless Regression"
+    - listitem:
+      - link "Duke Pendragon":
+        - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
+      - text: Ch. 120 read
+      - time: 8 mo ago
+      - text: asuracomic.net Can't check this site
+      - 'button "Rating for Duke Pendragon: not rated"'
+      - button "Follow Duke Pendragon" [pressed]
+      - button "Delete Duke Pendragon"
+    - listitem:
+      - 'link "Solo Leveling: Ragnarok"':
+        - /url: https://asuracomic.net/series/solo-leveling-ragnarok-29d48e23/chapter/37
+      - text: Ch. 38 read
+      - time: 8 mo ago
+      - text: asuracomic.net
+      - 'button "Rating for Solo Leveling: Ragnarok: not rated"'
+      - 'button "Follow Solo Leveling: Ragnarok" [pressed]'
+      - 'button "Delete Solo Leveling: Ragnarok"'
+  - group:
+    - text: Rows per page
+    - combobox "10 Rows per page": "10"
+    - text: 1–10 of 20
+    - button "First page" [disabled]
+    - button "Previous page" [disabled]
+    - button "Next page"
+    - button "Last page"
