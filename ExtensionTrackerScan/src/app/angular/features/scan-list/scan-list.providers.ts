@@ -14,9 +14,11 @@ import { InMemoryCoverRepository } from '../../../core/gateways/in-memory/in-mem
 import { InMemoryScanRepository } from '../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { InMemoryWatchSettingsRepository } from '../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
 import { ScanRepository } from '../../../core/ports/scan-repository.port';
+import { AskForRatingUseCase } from '../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../core/use-cases/change-check-interval.use-case';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
+import { RecordNewChapterOpenedUseCase } from '../../../core/use-cases/record-new-chapter-opened.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
@@ -24,6 +26,7 @@ import {
   COVER_BACKFILL,
   COVER_REPOSITORY,
   NOTIFICATION_PERMISSION,
+  RATE_PROMPT_REPOSITORY,
   SCAN_REPOSITORY,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../injection-tokens';
@@ -111,5 +114,19 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
       new RateScanUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is updated'),
       ),
+  },
+  {
+    provide: AskForRatingUseCase,
+    useFactory: () =>
+      new AskForRatingUseCase(
+        inject(RATE_PROMPT_REPOSITORY),
+        inject(SCAN_REPOSITORY),
+        inject(CLOCK),
+      ),
+  },
+  {
+    provide: RecordNewChapterOpenedUseCase,
+    useFactory: () =>
+      new RecordNewChapterOpenedUseCase(inject(RATE_PROMPT_REPOSITORY)),
   },
 ];

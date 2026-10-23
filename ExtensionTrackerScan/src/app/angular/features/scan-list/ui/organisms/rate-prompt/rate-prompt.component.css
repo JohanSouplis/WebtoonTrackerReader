@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  margin-bottom: 14px;
+}
+
+button {
+  --mdc-filled-button-container-shape: 10px;
+  --mdc-filled-button-container-height: 32px;
+  --mdc-filled-button-container-color: var(--app-accent);
+  --mdc-filled-button-label-text-color: var(--app-accent-ink);
+  --mdc-filled-button-label-text-weight: 700;
+  --mdc-filled-button-label-text-size: 13px;
+  --mdc-filled-button-label-text-font: inherit;
+  --mat-filled-button-horizontal-padding: 14px;
+  --mdc-text-button-container-shape: 10px;
+  --mdc-text-button-container-height: 32px;
+  --mdc-text-button-label-text-color: var(--app-muted);
+  --mdc-text-button-label-text-weight: 600;
+  --mdc-text-button-label-text-size: 13px;
+  --mdc-text-button-label-text-font: inherit;
+  --mat-text-button-horizontal-padding: 10px;
+}
+
+.rate:hover {
+  filter: brightness(1.08);
+}

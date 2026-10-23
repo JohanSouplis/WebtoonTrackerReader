@@ -8,15 +8,19 @@ import {
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CheckInterval } from '../../../../../../core/domain/chapter-watch';
+import { RatePromptAnswer } from '../../../../../../core/domain/rate-prompt';
 import { Rating } from '../../../../../../core/domain/rating';
 import {
   ScanNotFound,
   ScanSnapshot,
 } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
+import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
+import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
+import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
@@ -25,10 +29,12 @@ import {
   COVER_REPOSITORY,
   NOTIFICATION_PERMISSION,
   SCAN_REPOSITORY,
+  STORE_LISTING,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
 import { ScanRow } from '../../../service/scan-row.vm';
 import { NewChapterSettingsComponent } from '../../organisms/new-chapter-settings/new-chapter-settings.component';
+import { RatePromptComponent } from '../../organisms/rate-prompt/rate-prompt.component';
 import { ScanFiltersComponent } from '../../organisms/scan-filters/scan-filters.component';
 import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component';
 import { ScanRating } from '../../organisms/scan-rows/scan-rows.types';
@@ -39,6 +45,7 @@ import { ScanListStore } from './scan-list.store';
   selector: 'app-scan-list',
   imports: [
     NewChapterSettingsComponent,
+    RatePromptComponent,
     ScanFiltersComponent,
     ScanSortBarComponent,
     ScanRowsComponent,
@@ -58,6 +65,12 @@ export class ScanListPage implements OnInit {
   private readonly deleteScan = inject(DeleteScanUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
+  private readonly askForRating = inject(AskForRatingUseCase);
+  private readonly answerRatePromptUseCase = inject(AnswerRatePromptUseCase);
+  private readonly recordNewChapterOpenedUseCase = inject(
+    RecordNewChapterOpenedUseCase,
+  );
+  private readonly storeListing = inject(STORE_LISTING);
   private readonly snackBar = inject(MatSnackBar);
   protected readonly store = inject(ScanListStore);
   protected readonly now = inject(CLOCK).now();
@@ -80,6 +93,24 @@ export class ScanListPage implements OnInit {
     this.showSettings().catch((error: unknown) =>
       console.error('Error retrieving the new chapter settings:', error),
     );
+    this.askForRating
+      .execute()
+      .then((request) => this.store.showRatingRequest(request))
+      .catch((error: unknown) =>
+        console.error('Error asking for a rating:', error),
+      );
+  }
+
+  protected async answerRatePrompt(answer: RatePromptAnswer): Promise<void> {
+    this.store.closeRatePrompt();
+    await this.answerRatePromptUseCase.execute(answer);
+    if (answer === 'rate') {
+      this.storeListing.openReviews();
+    }
+  }
+
+  protected recordNewChapterOpened(): void {
+    void this.recordNewChapterOpenedUseCase.execute();
   }
 
   protected async chooseInterval(checkEvery: CheckInterval): Promise<void> {

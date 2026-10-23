@@ -27,6 +27,7 @@
                   [href]="row.watch.url"
                   target="_blank"
                   rel="noopener"
+                  (click)="newChapterOpened.emit()"
                   >New · Ch. {{ row.watch.chapter }}</a
                 >
               }

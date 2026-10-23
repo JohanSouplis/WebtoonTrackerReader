@@ -4,6 +4,7 @@ import {
   watchStatusOf,
 } from '../../../../../../core/domain/chapter-watch';
 import { Covers } from '../../../../../../core/domain/cover';
+import { RatingRequest } from '../../../../../../core/domain/rate-prompt';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import {
   filterScans,
@@ -66,6 +67,8 @@ export class ScanListStore {
   private readonly shownSort = signal<ScanSort>(LATEST_READ_FIRST);
   private readonly shownPage = signal<ScanPage>(FIRST_PAGE);
   private readonly covers = signal<ReadonlyMap<string, CoverTile>>(new Map());
+  private readonly ratingRequest = signal<RatingRequest>('not-due');
+  readonly isAskingForRating = computed(() => this.ratingRequest() === 'asked');
   private readonly matchingScans = computed(() =>
     sortScans(
       filterScans(this.library() ?? [], this.shownFilters()),
@@ -153,6 +156,14 @@ export class ScanListStore {
           ]),
         ]),
     );
+  }
+
+  showRatingRequest(request: RatingRequest): void {
+    this.ratingRequest.set(request);
+  }
+
+  closeRatePrompt(): void {
+    this.ratingRequest.set('not-due');
   }
 
   filter(change: Partial<ScanFilters>): void {

@@ -83,6 +83,34 @@ describe('ScanRowsComponent', () => {
     expect(newChapter).toHaveAttribute('target', '_blank');
   });
 
+  it('should tell that the reader opened a new chapter when its link is clicked', async () => {
+    const newChapterOpened = jest.fn();
+    await renderRows(
+      {
+        ...SHOWN_SCANS,
+        rows: [
+          {
+            ...SOLO_LEVELING,
+            watch: {
+              kind: 'new',
+              chapter: 39,
+              url: 'https://asuracomic.net/series/solo-leveling/chapter/39',
+            },
+          },
+        ],
+      },
+      { newChapterOpened },
+    );
+
+    await userEvent.click(
+      within(rowOf('Solo Leveling')).getByRole('link', {
+        name: 'New · Ch. 39',
+      }),
+    );
+
+    expect(newChapterOpened).toHaveBeenCalled();
+  });
+
   it('should say when the website of a scan cannot be checked for new chapters', async () => {
     await renderRows({
       ...SHOWN_SCANS,

@@ -1,0 +1,20 @@
+<ds-banner
+  icon="grade"
+  heading="Enjoying Scan Tracker?"
+  message="A rating on the Chrome Web Store helps other readers find it."
+>
+  <button
+    mat-flat-button
+    type="button"
+    class="rate"
+    (click)="answered.emit('rate')"
+  >
+    Rate it
+  </button>
+  <button mat-button type="button" (click)="answered.emit('not-now')">
+    Not now
+  </button>
+  <button mat-button type="button" (click)="answered.emit('never')">
+    Don't ask again
+  </button>
+</ds-banner>

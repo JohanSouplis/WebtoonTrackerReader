@@ -479,6 +479,60 @@ test.describe('new chapters', () => {
   });
 });
 
+test.describe('rate prompt', () => {
+  function ratePrompt(page: Page): Locator {
+    return page.getByRole('region', { name: 'Enjoying Scan Tracker?' });
+  }
+
+  async function openServedReaderLibrary(page: Page) {
+    await page.goto('/?rate-prompt-due');
+    await expect(library(page).getByRole('listitem')).toHaveCount(10);
+    await expect(ratePrompt(page)).toBeVisible();
+  }
+
+  test('rate prompt asks a served reader and rate it opens the reviews', async ({
+    page,
+  }) => {
+    await openServedReaderLibrary(page);
+    await pin(page, 'rate-01-prompt');
+    await ratePrompt(page).getByRole('button', { name: 'Rate it' }).click();
+    await expect
+      .poll(() => events.some((e) => e.includes('open reviews mocked')))
+      .toBe(true);
+    await expect(ratePrompt(page)).toBeHidden();
+  });
+
+  test('rate prompt not now hides it for the rest of the visit', async ({
+    page,
+  }) => {
+    await openServedReaderLibrary(page);
+    await ratePrompt(page).getByRole('button', { name: 'Not now' }).click();
+    await expect(ratePrompt(page)).toBeHidden();
+    await pin(page, 'rate-02-after-not-now');
+    await goToAddWebsite(page);
+    await page.getByRole('button', { name: 'Library' }).click();
+    await expect(library(page).getByRole('listitem')).toHaveCount(10);
+    await expect(ratePrompt(page)).toBeHidden();
+    expect(events.some((e) => e.includes('open reviews mocked'))).toBe(false);
+  });
+
+  test('rate the extension stays in the informations menu', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    await expect(ratePrompt(page)).toBeHidden();
+    await page.getByRole('button', { name: 'Informations' }).click();
+    await expect(
+      page.getByRole('menuitem', { name: 'Rate the extension' }),
+    ).toBeVisible();
+    await pin(page, 'rate-03-informations-menu');
+    await page.getByRole('menuitem', { name: 'Rate the extension' }).click();
+    await expect
+      .poll(() => events.some((e) => e.includes('open reviews mocked')))
+      .toBe(true);
+  });
+});
+
 test.describe('add website', () => {
   test('propose a website', async ({ page }) => {
     await openLibrary(page);

@@ -58,6 +58,7 @@ export class ScanRowsComponent {
   readonly rated = output<ScanRating>();
   readonly pageTurned = output<ScanPage>();
   readonly filtersCleared = output<void>();
+  readonly newChapterOpened = output<void>();
   protected readonly ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   protected readonly pageSizes = [5, 10, 20, 50, 100];
 }

@@ -1,3 +1,6 @@
+@if (store.isAskingForRating()) {
+<app-rate-prompt (answered)="answerRatePrompt($event)" />
+}
 <app-scan-filters
   [filters]="store.filters()"
   (filtersChanged)="store.filter($event)"
@@ -19,6 +22,7 @@
   (deleted)="delete($event)"
   (favoriteToggled)="toggleFavorite($event)"
   (rated)="rate($event)"
+  (newChapterOpened)="recordNewChapterOpened()"
   (pageTurned)="store.turnPage($event)"
   (filtersCleared)="store.clearFilters()"
 />
