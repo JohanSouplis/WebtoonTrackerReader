@@ -294,9 +294,10 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   même texte ne nomme aucun autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
   compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
-  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Aucun
-  segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se comparent segment par
-  segment.
+  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident, et
+  sauf dans un nom de série du titre que la page reprend en lien (`Transmigrating into a Cultivation Novel to
+  Form a Harem`). Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
+  comparent segment par segment.
 - **Le chapitre est celui que la page affiche.** Il vient d'une `ChapterMention` du titre de l'onglet, de
   `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
   `Глава 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`. Après un mot de chapitre vient un séparateur, un
