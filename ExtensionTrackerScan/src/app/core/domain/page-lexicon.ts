@@ -162,6 +162,7 @@ export const ARTICLE_WORDS = [
   'theories',
   'leaks',
   'delayed',
+  'price guide',
 ];
 
 export const NON_READING_PATHS = ['course'];

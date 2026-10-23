@@ -35,7 +35,7 @@ const NUMBER = '(\\d+(?:[.,]\\d+)?)';
 
 const MENTION = new RegExp(
   [
-    `(?<![\\p{L}\\d])(?:${byLength(CHAPTER_WORDS).join('|')})\\.?\\s*(?:رقم\\s*)?[-:]?\\s*${NUMBER}(?!\\d)`,
+    `(?<![\\p{L}\\d])(?:${byLength(CHAPTER_WORDS).join('|')})\\.?\\s*(?:رقم\\s*)?[-:#]?\\s*${NUMBER}(?!\\d)`,
     `第\\s*${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}]`,
     `(?<![\\p{L}\\d+])${NUMBER}\\s*[${CHAPTER_SUFFIXES.join('')}](?!\\p{L})`,
   ].join('|'),
