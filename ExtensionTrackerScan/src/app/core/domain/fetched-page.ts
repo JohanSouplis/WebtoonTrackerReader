@@ -90,9 +90,6 @@ const chapterIn = (text: string, pattern: RegExp): number | undefined => {
   return Number.isNaN(value) || value >= HIGHEST_CHAPTER ? undefined : value;
 };
 
-export const chapterMentionedIn = (text: string): number | undefined =>
-  chapterIn(text, TEXT_CHAPTER);
-
 export const answerOf = (page: FetchedPage): PageAnswer => {
   if (page.kind === 'unreachable') {
     return 'unreachable';
@@ -237,7 +234,10 @@ export const chaptersInFeed = (
 ): ListedChapter[] =>
   [...page.text.matchAll(/<(item|entry)\b[^>]*>([\s\S]*?)<\/\1>/gi)].flatMap(
     ([, , item]) => {
-      const chapter = chapterMentionedIn(plainText(tagText(item, 'title')));
+      const chapter = chapterIn(
+        plainText(tagText(item, 'title')),
+        TEXT_CHAPTER,
+      );
       const link =
         tagText(item, 'link') ||
         /<link\b[^>]*href=["']([^"']*)["']/i.exec(item)?.[1] ||

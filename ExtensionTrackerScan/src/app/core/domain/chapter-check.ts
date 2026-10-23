@@ -244,7 +244,7 @@ const sameUrl = (url: string, other: string): boolean =>
   url.replace(/\/+$/, '').toLowerCase() ===
   other.replace(/\/+$/, '').toLowerCase();
 
-export const chapterUrlWith = (
+const chapterUrlWith = (
   url: string,
   chapter: number,
   replacement: number,

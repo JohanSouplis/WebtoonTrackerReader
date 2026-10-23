@@ -7,7 +7,7 @@ import {
 import { HostProfile, HostProfiles } from '../domain/chapter-watch';
 import { HostProfileRepository } from '../ports/host-profile-repository.port';
 
-export const HOST_KEY_PREFIX = 'host:';
+const HOST_KEY_PREFIX = 'host:';
 
 const keyOf = (site: string): string => `${HOST_KEY_PREFIX}${site}`;
 

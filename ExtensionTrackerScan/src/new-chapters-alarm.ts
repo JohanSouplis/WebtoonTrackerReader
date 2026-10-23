@@ -2,7 +2,7 @@ import { LIBRARY_NOTIFICATION } from './app/core/gateways/chrome-new-chapter-ale
 import { CheckNewChaptersUseCase } from './app/core/use-cases/check-new-chapters.use-case';
 import { ShowNewChapterCountUseCase } from './app/core/use-cases/show-new-chapter-count.use-case';
 
-export const CHECK_NEW_CHAPTERS_ALARM = 'check-new-chapters';
+const CHECK_NEW_CHAPTERS_ALARM = 'check-new-chapters';
 
 const CHECK_PERIOD_MINUTES = 30;
 

@@ -8,7 +8,7 @@ import { UNSUPPORTED_REASONS } from '../domain/chapter-check';
 import { ScanTitle } from '../domain/scan-title';
 import { ChapterWatchRepository } from '../ports/chapter-watch-repository.port';
 
-export const WATCH_KEY_PREFIX = 'watch:';
+const WATCH_KEY_PREFIX = 'watch:';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;

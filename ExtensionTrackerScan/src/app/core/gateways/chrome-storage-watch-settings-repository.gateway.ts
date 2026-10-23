@@ -5,7 +5,7 @@ import {
 } from '../domain/chapter-watch';
 import { WatchSettingsRepository } from '../ports/watch-settings-repository.port';
 
-export const WATCH_SETTINGS_KEY = 'watch-settings';
+const WATCH_SETTINGS_KEY = 'watch-settings';
 
 export class ChromeStorageWatchSettingsRepository implements WatchSettingsRepository {
   async load(): Promise<WatchSettings> {
