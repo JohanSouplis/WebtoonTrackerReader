@@ -6,6 +6,7 @@ import { PageSignalsMessage, StructuredDataNode } from './page-signals-message';
 const BREADCRUMB = 'nav[aria-label*="breadcrumb" i], [class*="breadcrumb" i]';
 const BREADCRUMB_LINK = `${BREADCRUMB}, [itemtype*="BreadcrumbList"]`;
 const META_IMAGES = ['og:image', 'twitter:image', 'twitter:image:src'];
+const MAX_HEADINGS = 20;
 const MAX_IMAGES = 10;
 const MAX_LINKS = 50;
 
@@ -119,6 +120,12 @@ export const readPageSignals = (
     canonicalUrl: page.querySelector<HTMLLinkElement>('link[rel="canonical"]')
       ?.href,
     heading: textOf('h1'),
+    headings: Array.from(
+      page.querySelectorAll<HTMLElement>('h1, h2, h3'),
+      (heading) => heading.innerText,
+    )
+      .filter((text) => text.trim() !== '')
+      .slice(0, MAX_HEADINGS),
     breadcrumb: textOf(BREADCRUMB),
     structuredData: Array.from(
       page.querySelectorAll('script[type="application/ld+json"]'),

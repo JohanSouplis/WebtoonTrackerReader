@@ -21,6 +21,7 @@ export type PageSignalsMessage = {
   readonly ogSiteName?: string;
   readonly canonicalUrl?: string;
   readonly heading?: string;
+  readonly headings?: readonly string[];
   readonly breadcrumb?: string;
   readonly structuredData: readonly StructuredDataNode[];
   readonly selectedOptions?: readonly string[];
@@ -168,6 +169,9 @@ export const parsePageSignals = (message: unknown): PageSignals | undefined => {
     ogSiteName: textOf(message['ogSiteName']),
     canonicalUrl: textOf(message['canonicalUrl']),
     heading: textOf(message['heading']),
+    headings: listOf(message['headings']).flatMap(
+      (heading) => textOf(heading) ?? [],
+    ),
     breadcrumb: textOf(message['breadcrumb']),
     structuredData: listOf(message['structuredData']).flatMap(
       structuredDataItemOf(url),

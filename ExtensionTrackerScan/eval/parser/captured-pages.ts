@@ -167,6 +167,7 @@ export const messagesOf = (capture: Capture): PageSignalsMessage[] =>
               ogSiteName: capture.ogSiteName ?? undefined,
               canonicalUrl: capture.canonical ?? undefined,
               heading: firstOf(capture.h1),
+              headings: capture.headings,
               breadcrumb: firstOf(capture.breadcrumbText),
               structuredData: (capture.jsonLd ?? []).map(
                 ({ type, name, headline, position }) => ({

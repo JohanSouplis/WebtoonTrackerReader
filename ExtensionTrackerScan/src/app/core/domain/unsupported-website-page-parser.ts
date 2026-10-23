@@ -134,6 +134,7 @@ const websiteOf = (page: PageSignals): Website => ({
   label: folded(hostnameOf(page.url).split('.')[0]),
   names: [
     page.ogSiteName,
+    ...(page.ogSiteName ?? '').split(TITLE_SEPARATOR),
     ...(page.structuredData ?? [])
       .filter(isWebsiteNode)
       .map(({ name }) => name),
@@ -180,6 +181,7 @@ const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
   [
     isOgIndependent(page) ? page.ogTitle : undefined,
     page.heading,
+    ...(page.headings ?? []),
     page.breadcrumb,
     ...structuredTexts(page),
     ...(page.selectedOptions ?? []),
@@ -342,6 +344,7 @@ const textWitnesses = (page: PageSignals, displaying: string): string[] =>
   [
     isOgIndependent(page) ? page.ogTitle : undefined,
     page.heading,
+    ...(page.headings ?? []),
     page.breadcrumb,
     ...structuredTexts(page),
   ].flatMap((text) => (text && text !== displaying ? [folded(text)] : []));

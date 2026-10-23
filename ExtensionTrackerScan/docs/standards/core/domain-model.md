@@ -301,18 +301,22 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   (`episode_no=653` pour l'épisode 235) ou un identifiant collé (`chapter-58.826511`).
 - **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un
   numéro affiché. Pour un texte d'en-tête (titre de l'onglet, `og:title` s'il diffère du titre, `h1`), un autre
-  élément de la page confirme aussi : `h1`, fil d'Ariane, JSON-LD, option sélectionnée. Un numéro affiché par le
-  seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si l'onglet annonce un autre chapitre que
-  la page, le chapitre confirmé gagne.
+  élément de la page confirme aussi : `h1`, titres de section (`h1` à `h3`), fil d'Ariane, JSON-LD, option
+  sélectionnée. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
+  l'onglet annonce un autre chapitre que la page, le chapitre confirmé gagne.
 - **Le titre est confirmé.** Dans l'ordre : le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le
   texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`
   ou un mot de liaison), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
-  dans un autre signal (URL, `h1`, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet, confirmé de même, quand
-  le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
+  dans un autre signal (URL, `h1`, titres de section, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet,
+  confirmé de même, quand le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
   (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`), s'il figure dans un texte de la page
-  (`h1`, fil d'Ariane, JSON-LD, `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une
-  partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`). À défaut, un texte d'en-tête d'un seul tenant qui précède la mention
-  (`Titre Chapter 12 - Site`) est le titre.
+  (`h1`, titres de section, fil d'Ariane, JSON-LD, `og:title`) : l'URL ne confirme pas un segment, son slug ne
+  garde souvent qu'une partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`). À défaut, un
+  texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`) est le titre.
+- **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans extension
+  (`natsu` pour `natsu.one`), son `og:site_name`, le début de celui-ci avant un slogan
+  (`マグコミ｜マッグガーデン発のWEBマンガサイト`) ou le nom d'un nœud JSON-LD `WebSite`. Seul devant la mention, il
+  reste le titre d'un site nommé d'après sa série (`One Piece - Manga Kapitel 1196` sur `onepiece.tube`).
 
 L'import de l'historique ne connaît que le titre et l'URL : la même règle s'applique, avec l'URL pour seul second
 signal. Le content script envoie en plus les `PageSignals`, qui confirment les pages à l'URL opaque
