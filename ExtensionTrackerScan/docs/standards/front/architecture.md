@@ -48,11 +48,12 @@ src/app/angular/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
       service/  scan-row.vm.ts · scan-list-view.vm.ts · scan-filters.rules.ts · scan-sort.rules.ts
-                cover-backfill.port.ts
+                cover-backfill.port.ts · notification-permission.port.ts
       gateways/ chrome-runtime-cover-backfill.gateway.ts · in-memory-cover-backfill.gateway.ts
+                chrome-notification-permission.gateway.ts · in-memory-notification-permission.gateway.ts
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
-        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/
+        organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/
     add-website-pattern/             onglet « Add website », route 'add_website_pattern'
       add-website-pattern.providers.ts
       ui/

@@ -54,28 +54,40 @@ src/
   page-signals-reader.ts   lit les PageSignals d'un Document, pour le content script et le document offscreen
   page-signals-message.ts  frontière : réduit le message du content script en PageSignals
   cover-backfill-message.ts frontière : la demande de la popup « cherche les couvertures de ces scans »
+  new-chapters-alarm.ts    l'alarme de la veille des chapitres, et l'ouverture d'une notification cliquée
   app/core/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · series-key.ts · chapter.ts · rating.ts
                            reading.ts · parsed-page.ts · page-title-parser.ts · website-patterns.ts
                            unsupported-website-page-parser.ts · page-lexicon.ts
                            cover.ts · cover-search.ts · series-page.ts · site.ts
+                           chapter-watch.ts · chapter-check.ts · fetched-page.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · toggle-favorite.use-case.ts · rate-scan.use-case.ts
                            propose-website.use-case.ts · record-cover.use-case.ts
-                           backfill-covers.use-case.ts          (chacun avec son .spec.ts à côté)
+                           backfill-covers.use-case.ts · check-new-chapters.use-case.ts
+                           show-new-chapter-count.use-case.ts · change-check-interval.use-case.ts
+                                                                (chacun avec son .spec.ts à côté)
     ports/                 scan-repository.port.ts · browser-history.port.ts · clock.port.ts
                            crash-reporter.port.ts · website-proposal.port.ts
                            cover-repository.port.ts · cover-image.port.ts · page-reader.port.ts
+                           chapter-watch-repository.port.ts · host-profile-repository.port.ts
+                           watch-settings-repository.port.ts · web-page.port.ts · timer.port.ts
+                           new-chapter-alerts.port.ts
     gateways/              chrome-storage-scan-repository.gateway.ts · chrome-browser-history.gateway.ts
                            system-clock.gateway.ts · discord-crash-reporter.gateway.ts
                            discord-website-proposal.gateway.ts · chrome-storage-cover-repository.gateway.ts
                            chrome-cover-image.gateway.ts · chrome-offscreen-page-reader.gateway.ts
+                           chrome-storage-chapter-watch-repository.gateway.ts (veille, sites, fréquence)
+                           fetch-web-page.gateway.ts · system-timer.gateway.ts
+                           chrome-new-chapter-alerts.gateway.ts (pastille et notifications)
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
                            fixed-clock.gateway.ts · in-memory-crash-reporter.gateway.ts
                            in-memory-website-proposal.gateway.ts · dev-scans.ts
                            in-memory-cover-repository.gateway.ts · dev-covers.ts
                            in-memory-web.gateway.ts            (pages et images, pour les deux ports)
+                           in-memory-chapter-watch-repository.gateway.ts · in-memory-web-pages.gateway.ts
+                           in-memory-new-chapter-alerts.gateway.ts · dev-watches.ts
 ```
 
 Un dossier n'existe que s'il a du contenu. Le sous-dossier `src/` actuel (`core/src/domain`) disparaît avec la
@@ -126,6 +138,12 @@ des titres de la page (`mayNameTheSeries`), un lien s'il reste sur le site et po
 Les doublons partent, puis 10 images et 50 liens au plus restent, ceux du fil d'Ariane d'abord. Le corpus de
 couvertures passe par la même réduction.
 
+Une alarme (`chrome.alarms`, toutes les 30 minutes) lance la passe de la veille des chapitres
+(`CheckNewChaptersUseCase`). `new-chapters-alarm.ts` crée l'alarme si elle n'existe pas : la recréer à chaque
+réveil du service worker la repousserait sans fin. Une passe en cours n'en lance pas une seconde. Chaque
+changement de la clé `scans` (une lecture, un favori, une suppression) recompte la pastille
+(`ShowNewChapterCountUseCase`).
+
 La popup ne télécharge aucune image. Elle demande au service worker de chercher les couvertures des lignes
 affichées sans couverture (`cover-backfill-message.ts`), et relit leurs couvertures à chaque couverture
 enregistrée (`chrome.storage.onChanged` sur les clés `cover:`, le temps de la recherche) : elles apparaissent une à
@@ -140,6 +158,8 @@ scan qu'elle supprime.
   du domaine. Le domaine ne se défend jamais contre une donnée sale.
 - **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey>`, hors de la clé `scans` : un
   enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
+  La veille des chapitres suit la même règle : `watch:<SeriesKey>` pour un `ChapterWatch`, `host:<site>` pour un
+  `HostProfile`, `watch-settings` pour la fréquence.
 - **Le format stocké dans `chrome.storage.local` est un contrat public.** Les utilisateurs de la version
   publiée doivent relire leurs données après une mise à jour. Un changement de format ajoute la lecture de
   l'ancien format dans le gateway, il ne casse jamais les données existantes.

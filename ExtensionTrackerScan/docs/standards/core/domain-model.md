@@ -107,6 +107,73 @@ bannière) coûte plus cher que pas d'image : **dans le doute, le monogramme res
 - Supprimer un scan supprime la couverture de sa série (`DeleteScanUseCase`). Aucun autre scan ne la partage : la
   bibliothèque ne garde qu'un scan par `SeriesKey`, `restore()` et `recordReading()` fusionnent les autres.
 
+## Les nouveaux chapitres d'un favori
+
+L'extension vérifie, dans le navigateur du lecteur et sans serveur, si un chapitre plus récent que le dernier lu
+est paru pour chaque favori. Une fausse alerte coûte plus cher qu'une alerte manquée : **un chapitre n'est
+« nouveau » que si la page lue montre un numéro strictement supérieur au dernier chapitre lu, sur le même site.**
+Les numéros ne se comparent qu'entre pages d'un même site : un autre site numérote autrement.
+
+- `ChapterWatch` (`chapter-watch.ts`) est l'état connu de la veille d'un favori, sur le site de sa dernière
+  lecture : `up-to-date` (le plus haut chapitre vu, la date), `new` (le chapitre, son adresse si connue, la date de
+  la découverte), `unsupported` (la raison, la date) ou `failing` (depuis quand, le nombre d'essais, le prochain
+  essai, le dernier état connu). Une série sans état n'a jamais été vérifiée. Un état d'un autre site que la
+  dernière lecture ne compte pas.
+- Le statut affiché (`watchStatusOf`) vaut `new` si le scan est un favori et si le chapitre trouvé dépasse le
+  chapitre lu. Lire ce chapitre efface donc l'alerte sans rien écrire. Un scan qui n'est plus favori n'est plus
+  vérifié ni signalé.
+- `ChapterCheck` (`chapter-check.ts`) est la machine à états d'une vérification. Elle dit l'adresse à lire, le
+  use-case la lit par un port, jusqu'à une issue : `answered` (le plus haut chapitre et la stratégie), `unsupported`,
+  `blocked` ou `unreachable`. Les pages se lisent par expressions régulières : le service worker n'a pas de DOM.
+- **Les stratégies**, dans l'ordre du registre `STRATEGIES` ; la première qui répond gagne :
+  1. `feed` : le flux RSS de la série. WEBTOON publie `/rss?title_no=<n>`, WordPress (Themesia, MangaReader)
+     `/category/<slug de la page de la série>/feed/`. Un élément ne compte que si son lien désigne la série
+     (`title_no`, slug). Le flux d'une série Madara (`/manga/<slug>/feed/`) ne liste aucun chapitre.
+  2. `series-page` : la page de la série (`seriesUrl`). Ses liens de chapitre de la même série, sous l'adresse de
+     la page ou portant son slug, donnent le plus haut chapitre. La liste compte si elle a au moins 3 chapitres et
+     atteint le chapitre lu ; sinon la dernière page d'une liste paginée se lit une fois. Une liste qui donne le
+     même numéro à deux adresses (une nouvelle numérotation par volume) ne compte pas.
+  3. `next-chapter-url` : l'adresse du chapitre lu, avec le numéro suivant. Un site qui affiche n'importe quel
+     numéro (`mangakatana`, `demonicscans`...) mentirait : avant de croire une réponse positive, l'extension lit une
+     fois le chapitre lu plus 4000 (`far-chapter`). Avant de croire une réponse négative, elle vérifie une fois que
+     la page du chapitre lu affiche son numéro (`current-chapter`) : un site qui remplit ses pages en JavaScript ne
+     l'affiche pas.
+  Le lien « suivant » d'une page de chapitre ne sert pas : rempli en JavaScript ou périmé, il se trompe.
+- **Ce qu'on apprend d'un site** (`HostProfile`, une entrée par site) : les leçons des stratégies (`feed`
+  présent ou absent, liste de chapitres présente ou non, numéro lointain refusé ou renvoyé, chapitre lu affiché ou
+  non), chacune avec sa date, valables 7 jours. Une leçon « ça marche » encore valable ne cède pas à un échec
+  isolé. Le site garde aussi sa pause en cours.
+- Une décimale compte (`16.2` puis `17`). Le numéro est celui que la page affiche, jamais un index d'URL
+  (`episode_no` de WEBTOON).
+- Hors périmètre : les sites qui ne s'affichent qu'en JavaScript (MangaDex, Weeb Central, Kakao...), les défis
+  JavaScript de Cloudflare, les API tierces. L'API de MangaDex demande de passer par un proxy aux applications qui
+  l'appellent depuis un navigateur : sans serveur, l'extension ne l'appelle pas. MangaUpdates et Comick suivent
+  d'autres numérotations que le site du lecteur.
+
+**La cadence** (`planChapterChecks`) :
+
+- Une alarme réveille le service worker toutes les 30 minutes. Un favori est dû quand sa dernière vérification
+  date de l'intervalle choisi (`1h`, `6h` par défaut, `24h`, dans `WatchSettings`) ; un favori `unsupported` se
+  revérifie après 7 jours ; un favori `failing` réessaie après 15 minutes, puis le double, jusqu'à l'intervalle.
+- Une passe vérifie 50 favoris au plus, les plus en retard d'abord. Les sites se vérifient en parallèle, mais
+  une seule requête à la fois par site, à 3 secondes d'écart au moins, plus 0 à 2 secondes au hasard.
+- Un site qui répond 403, 429, 503 ou une page de vérification anti-robot arrête sa file et se met en pause une
+  heure, puis le double à chaque refus, jusqu'à 24 heures.
+- Chaque vérification enregistre son état dès sa fin : une passe interrompue (le service worker s'arrête)
+  reprend à la passe suivante, sans refaire les favoris déjà vérifiés. Relancer une passe ne refait rien qui ne
+  soit dû.
+
+**Les alertes** :
+
+- La pastille de l'icône compte les favoris au statut `new`, avec ou sans notifications.
+- Une notification n'annonce qu'un chapitre découvert par cette passe, jamais un chapitre déjà annoncé. Une
+  passe qui trouve plusieurs chapitres les groupe dans une seule notification. Un clic ouvre le chapitre s'il est
+  seul, sinon la bibliothèque.
+- Les notifications sont une permission optionnelle, demandée quand le lecteur les active. Sans elle, la ligne
+  du scan et la pastille montrent toujours les nouveaux chapitres.
+- Supprimer un scan supprime son `ChapterWatch` (`DeleteScanUseCase`).
+- Toute modification d'une stratégie se mesure avec `npm run eval:new-chapters` ([`testing.md`](testing.md)).
+
 ## Tell-Don't-Ask
 
 Un use-case dit à l'agrégat quoi faire. Il ne lit pas son état pour décider à sa place.

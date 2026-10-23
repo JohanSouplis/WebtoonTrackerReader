@@ -91,6 +91,16 @@ leur série, avec les images candidates, leur taille mesurée et l'image attendu
 planche contact. Une image fausse (une page du chapitre, un logo, une bannière) est le pire résultat, avant la
 couverture manquée : la spec garde zéro image fausse. Une nouvelle règle de sélection s'y mesure.
 
+## Les nouveaux chapitres se mesurent sur des réponses réelles
+
+`npm run eval:new-chapters` rejoue `eval/new-chapters/responses.json` : pour des séries réelles, le chapitre lu,
+l'adresse de la page de la série, les réponses enregistrées des sites (page de la série, chapitre suivant, chapitre
+lointain, chapitre lu, flux) réduites aux fragments que les règles lisent, et la vérité : un chapitre plus récent
+existe ou non, établie par une autre lecture que celle mesurée (`eval/new-chapters/README.md`). Il affiche, par
+stratégie et par site, les réponses, les réponses justes et les **faux nouveaux chapitres**. Un faux nouveau
+chapitre est le pire résultat, avant l'alerte manquée : l'eval en garde zéro. Lance-le avant et après toute
+modification d'une stratégie et cite les deux résultats dans la PR.
+
 ## L'identité d'une série se mesure sur un corpus
 
 `npm run eval:identity` rejoue un corpus étiqueté de paires de titres (`eval/identity/`) : un scan suivi, puis

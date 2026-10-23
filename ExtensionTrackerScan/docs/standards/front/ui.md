@@ -30,6 +30,7 @@ Exemples tirés de l'extension :
 | `relative-date` | atom | Affiche « 3 mo ago » depuis une date et `now`, et pose `matTooltip` avec la date exacte. |
 | `search-field` | molecule | Icône, `input` de recherche et bouton d'effacement assemblés. Champ contrôlé par `value`, émet le texte saisi. Sert aux deux onglets. |
 | `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), émet suppression, favori, note, page. |
+| `new-chapter-settings` | organism | Un bouton qui annonce la fréquence et ouvre un menu : fréquence (`1h`, `6h`, `24h`) et notifications. Émet le choix, la page l'applique. |
 | `scan-filters` | organism | Champ de recherche et bascules « Favorites only », « Rated only ». Émet un `ScanFilters`. |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 

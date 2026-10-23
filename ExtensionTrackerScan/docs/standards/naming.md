@@ -39,6 +39,11 @@ pas un synonyme.
 | `Thumbnail` | La vignette WebP d'une couverture, en data URL, stockée par l'extension | `coverUrl`, `imageData` |
 | `CoverCandidate` | Une image d'une page qui pourrait être la couverture, avec le `Referer` à envoyer | `imageCandidate`, `pic` |
 | `CoverSearch` | La recherche de la couverture d'une série, étape par étape | `coverFinder`, `coverLookup` |
+| `ChapterWatch` | L'état connu de la veille des chapitres d'un favori : `up-to-date`, `new`, `unsupported` ou `failing` | `subscription`, `tracker`, `notification` pour ce sens |
+| `ChapterCheck` | Une vérification des chapitres parus d'un favori, étape par étape | `poll`, `scrape`, `crawl` |
+| `NewChapter` | Un chapitre paru après le dernier lu, sur le même site | `update`, `release` |
+| `HostProfile` | Ce que l'extension a appris d'un site pour vérifier ses chapitres, et sa pause en cours | `siteConfig`, `hostInfo` |
+| `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckInterval`) | `preferences`, `options` |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.
 
