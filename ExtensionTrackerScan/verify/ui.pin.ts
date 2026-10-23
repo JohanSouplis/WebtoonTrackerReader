@@ -61,8 +61,18 @@ async function expectSortedBy(page: Page, name: string) {
   ).toHaveAttribute('aria-pressed', 'true');
 }
 
+function titleLinks(page: Page): Locator {
+  return library(page)
+    .getByRole('link')
+    .filter({ hasNotText: /^New · Ch\./ });
+}
+
 async function expectShownTitles(page: Page, titles: string[]) {
-  await expect(library(page).getByRole('link')).toHaveText(titles);
+  await expect(titleLinks(page)).toHaveText(titles);
+}
+
+function settingsButton(page: Page): Locator {
+  return page.getByRole('button', { name: /^New chapter checks/ });
 }
 
 async function openLibrary(page: Page) {
@@ -360,7 +370,7 @@ test.describe('scan list', () => {
       .click();
     await expect(row(page, 'Local')).toHaveCount(0);
     await expectSortedBy(page, 'Title (ascending)');
-    await expect(library(page).getByRole('link').first()).toHaveText(
+    await expect(titleLinks(page).first()).toHaveText(
       "A Dragonslayer's Peerless Regression",
     );
     await pin(page, 'scan-delete-06-after-title-sort');
@@ -402,6 +412,68 @@ test.describe('scan list', () => {
     events.push(`popup: ${tab.url()}`);
     await tab.close();
     await pin(page, 'scan-title-02-after-open');
+  });
+});
+
+test.describe('new chapters', () => {
+  test('favorites show their new chapter and sort first', async ({ page }) => {
+    await openLibrary(page);
+    await expect(
+      row(page, 'The Executioner').getByRole('link', { name: 'New · Ch. 47' }),
+    ).toHaveAttribute(
+      'href',
+      'https://asuracomic.net/series/the-executioner-472e692a/chapter/47',
+    );
+    await expect(row(page, 'Dungeon Odyssey')).toContainText('New · Ch. 119.5');
+    await expect(row(page, 'Duke Pendragon')).toContainText(
+      "Can't check this site",
+    );
+    await expect(row(page, 'I Obtained a Mythic Item')).not.toContainText(
+      'New',
+    );
+    await pin(page, 'new-01-chips');
+    await sortButton(page, 'New').click();
+    await expectSortedBy(page, 'New (descending)');
+    await expect(titleLinks(page).first()).toHaveText('The Executioner');
+    await expect(titleLinks(page).nth(1)).toHaveText('Dungeon Odyssey');
+    await pin(page, 'new-02-new-first');
+  });
+
+  test('new chapter checks interval and notifications', async ({ page }) => {
+    await openLibrary(page);
+    await expect(settingsButton(page)).toHaveAccessibleName(
+      'New chapter checks: Every 6h',
+    );
+    await settingsButton(page).click();
+    await expect(
+      page.getByRole('menuitemradio', { name: 'Every 6 hours' }),
+    ).toHaveAttribute('aria-checked', 'true');
+    await pin(page, 'new-03-settings-menu');
+    await page.getByRole('menuitemradio', { name: 'Once a day' }).click();
+    await expect(settingsButton(page)).toHaveAccessibleName(
+      'New chapter checks: Daily',
+    );
+    await settingsButton(page).click();
+    await page
+      .getByRole('menuitemcheckbox', { name: 'Desktop notifications' })
+      .click();
+    await settingsButton(page).click();
+    await expect(
+      page.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
+    ).toHaveAttribute('aria-checked', 'true');
+    await pin(page, 'new-04-notifications-on');
+  });
+
+  test('clicking a new chapter opens it in a new tab', async ({ page }) => {
+    await openLibrary(page);
+    const popup = page.waitForEvent('popup');
+    await row(page, 'The Executioner')
+      .getByRole('link', { name: 'New · Ch. 47' })
+      .click();
+    const tab = await popup;
+    await tab.waitForLoadState();
+    events.push(`popup: ${tab.url()}`);
+    await tab.close();
   });
 });
 

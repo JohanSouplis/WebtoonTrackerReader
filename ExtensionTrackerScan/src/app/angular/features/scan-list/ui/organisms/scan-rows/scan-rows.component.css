@@ -103,6 +103,28 @@ li:hover {
   color: var(--app-faint);
 }
 
+.new-chapter {
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--app-accent);
+  color: var(--app-accent-ink);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: box-shadow 0.15s;
+}
+
+.new-chapter:hover {
+  box-shadow: 0 0 0 2px var(--app-accent-line);
+}
+
+.unchecked {
+  color: var(--app-faint);
+  font-style: italic;
+  white-space: nowrap;
+}
+
 .actions {
   display: flex;
   align-items: center;

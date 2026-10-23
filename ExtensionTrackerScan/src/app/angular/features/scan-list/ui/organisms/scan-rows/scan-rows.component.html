@@ -21,10 +21,27 @@
             </a>
             <div class="meta">
               <span class="chapter">Ch. {{ row.chapter }}</span>
+              @if (row.watch.kind === "new") {
+                <a
+                  class="new-chapter"
+                  [href]="row.watch.url"
+                  target="_blank"
+                  rel="noopener"
+                  >New · Ch. {{ row.watch.chapter }}</a
+                >
+              }
               <span class="dot"></span>
               <ds-relative-date [date]="row.readAt" [now]="now()" />
               <span class="dot"></span>
               <span class="website">{{ row.website }}</span>
+              @if (row.watch.kind === "unsupported") {
+                <span class="dot"></span>
+                <span
+                  class="unchecked"
+                  matTooltip="New chapters on this site can't be checked from your browser"
+                  >Can't check this site</span
+                >
+              }
             </div>
           </div>
           <div class="actions">

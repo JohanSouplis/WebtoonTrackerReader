@@ -1,0 +1,2 @@
+console.log: Angular is running in development mode.
+popup: https://asuracomic.net/series/the-executioner-472e692a/chapter/47

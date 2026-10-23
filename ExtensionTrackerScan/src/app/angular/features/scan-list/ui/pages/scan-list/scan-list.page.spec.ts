@@ -8,17 +8,23 @@ import { FixedClock } from '../../../../../../core/gateways/in-memory/fixed-cloc
 import { InMemoryChapterWatchRepository } from '../../../../../../core/gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemoryWatchSettingsRepository } from '../../../../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
+import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import {
+  CHAPTER_WATCH_REPOSITORY,
   CLOCK,
   COVER_BACKFILL,
   COVER_REPOSITORY,
+  NOTIFICATION_PERMISSION,
   SCAN_REPOSITORY,
+  WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
 import { InMemoryCoverBackfill } from '../../../gateways/in-memory-cover-backfill.gateway';
+import { InMemoryNotificationPermission } from '../../../gateways/in-memory-notification-permission.gateway';
 import { CoverBackfillPort } from '../../../service/cover-backfill.port';
 import { ScanListPage } from './scan-list.page';
 
@@ -93,6 +99,85 @@ describe('ScanListPage', () => {
     expect(
       await within(await rowOf('Solo Leveling')).findByRole('presentation'),
     ).toHaveAttribute('src', THUMBNAIL.dataUrl);
+  });
+
+  it('should show the new chapter of a favorite and link it', async () => {
+    await renderPage(
+      new InMemoryScanRepository([
+        aScan({
+          title: 'Solo Leveling',
+          chapter: 100,
+          url: 'https://scans.org/solo-leveling/chapter-100',
+          isFavorite: true,
+        }),
+      ]),
+      {
+        watchRepository: new InMemoryChapterWatchRepository({
+          'Solo Leveling': {
+            kind: 'new',
+            site: 'scans.org',
+            latest: 101,
+            url: 'https://scans.org/solo-leveling/chapter-101',
+            foundAt: new Date('2025-03-10T10:00:00Z'),
+            checkedAt: new Date('2025-03-10T10:00:00Z'),
+          },
+        }),
+      },
+    );
+
+    expect(
+      within(await rowOf('Solo Leveling')).getByRole('link', {
+        name: 'New · Ch. 101',
+      }),
+    ).toHaveAttribute('href', 'https://scans.org/solo-leveling/chapter-101');
+  });
+
+  it('should check favorites once a day when the reader chooses it', async () => {
+    const settingsRepository = new InMemoryWatchSettingsRepository();
+    await renderPage(
+      new InMemoryScanRepository([aScan({ title: 'Solo Leveling' })]),
+      { settingsRepository },
+    );
+
+    await userEvent.click(
+      await screen.findByRole('button', {
+        name: 'New chapter checks: Every 6h',
+      }),
+    );
+    await userEvent.click(
+      screen.getByRole('menuitemradio', { name: 'Once a day' }),
+    );
+
+    expect(
+      await screen.findByRole('button', { name: 'New chapter checks: Daily' }),
+    ).toBeInTheDocument();
+    expect(await settingsRepository.load()).toEqual({ checkEvery: '24h' });
+  });
+
+  it('should turn desktop notifications on only when the browser grants them', async () => {
+    const notificationPermission = new InMemoryNotificationPermission(
+      false,
+      false,
+    );
+    await renderPage(
+      new InMemoryScanRepository([aScan({ title: 'Solo Leveling' })]),
+      { notificationPermission },
+    );
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: /New chapter checks/ }),
+    );
+    await userEvent.click(
+      screen.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: /New chapter checks/ }),
+    );
+
+    expect(
+      screen.getByRole('menuitemcheckbox', { name: 'Desktop notifications' }),
+    ).toHaveAttribute('aria-checked', 'false');
+    expect(await notificationPermission.isGranted()).toBe(false);
   });
 
   it('should show a scan under Favorites only and save it when its star is clicked', async () => {
@@ -212,9 +297,15 @@ const renderPage = (
   {
     coverRepository = new InMemoryCoverRepository(),
     coverBackfill = new InMemoryCoverBackfill(),
+    watchRepository = new InMemoryChapterWatchRepository(),
+    settingsRepository = new InMemoryWatchSettingsRepository(),
+    notificationPermission = new InMemoryNotificationPermission(),
   }: {
     coverRepository?: InMemoryCoverRepository;
     coverBackfill?: CoverBackfillPort;
+    watchRepository?: InMemoryChapterWatchRepository;
+    settingsRepository?: InMemoryWatchSettingsRepository;
+    notificationPermission?: InMemoryNotificationPermission;
   } = {},
 ) =>
   render(ScanListPage, {
@@ -223,13 +314,20 @@ const renderPage = (
       { provide: SCAN_REPOSITORY, useValue: scanRepository },
       { provide: COVER_REPOSITORY, useValue: coverRepository },
       { provide: COVER_BACKFILL, useValue: coverBackfill },
+      { provide: CHAPTER_WATCH_REPOSITORY, useValue: watchRepository },
+      { provide: WATCH_SETTINGS_REPOSITORY, useValue: settingsRepository },
+      { provide: NOTIFICATION_PERMISSION, useValue: notificationPermission },
       { provide: CLOCK, useValue: new FixedClock() },
+      {
+        provide: ChangeCheckIntervalUseCase,
+        useValue: new ChangeCheckIntervalUseCase(settingsRepository),
+      },
       {
         provide: DeleteScanUseCase,
         useValue: new DeleteScanUseCase(
           scanRepository,
           coverRepository,
-          new InMemoryChapterWatchRepository(),
+          watchRepository,
         ),
       },
       {

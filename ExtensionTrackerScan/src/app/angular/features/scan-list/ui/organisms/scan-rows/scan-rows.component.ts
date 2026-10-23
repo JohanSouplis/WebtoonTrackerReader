@@ -8,6 +8,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CoverComponent } from '../../../../../design-system/atoms/cover/cover.component';
 import { MonogramComponent } from '../../../../../design-system/atoms/monogram/monogram.component';
 import { RelativeDateComponent } from '../../../../../design-system/atoms/relative-date/relative-date.component';
@@ -24,6 +25,7 @@ import { ScanRating } from './scan-rows.types';
     MatIconModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatTooltipModule,
     MonogramComponent,
     RelativeDateComponent,
     StarToggleComponent,

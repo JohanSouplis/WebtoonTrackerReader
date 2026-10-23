@@ -1,4 +1,7 @@
-<span class="count">{{ count() }} series</span>
+<div class="summary">
+  <span class="count">{{ count() }} series</span>
+  <ng-content />
+</div>
 <div class="sorts" role="group" aria-label="Sort by">
   @for (option of options(); track option.key) {
     <button

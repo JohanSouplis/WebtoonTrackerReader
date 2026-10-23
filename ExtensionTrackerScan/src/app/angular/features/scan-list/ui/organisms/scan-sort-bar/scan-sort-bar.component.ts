@@ -13,6 +13,7 @@ import {
 } from '../../../service/scan-sort.rules';
 
 const SORT_LABELS: readonly { key: ScanSortKey; label: string }[] = [
+  { key: 'newChapter', label: 'New' },
   { key: 'readAt', label: 'Last read' },
   { key: 'title', label: 'Title' },
   { key: 'chapter', label: 'Chapter' },

@@ -9,7 +9,9 @@
   - button "Favorites only"
   - button "Rated only"
   - text: 1 series
+  - 'button "New chapter checks: Every 6h"': Every 6h
   - group "Sort by":
+    - button "New"
     - button "Last read (descending)" [pressed]
     - button "Title"
     - button "Chapter"

@@ -82,7 +82,6 @@ describe('ChromeStorageChapterWatchRepository', () => {
   );
 });
 
-
 const UP_TO_DATE: ChapterWatch = {
   kind: 'up-to-date',
   site: 'scans.org',

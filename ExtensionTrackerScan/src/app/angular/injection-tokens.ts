@@ -3,7 +3,9 @@ import { ChapterWatchRepository } from '../core/ports/chapter-watch-repository.p
 import { ClockPort } from '../core/ports/clock.port';
 import { CoverRepository } from '../core/ports/cover-repository.port';
 import { ScanRepository } from '../core/ports/scan-repository.port';
+import { WatchSettingsRepository } from '../core/ports/watch-settings-repository.port';
 import { CoverBackfillPort } from './features/scan-list/service/cover-backfill.port';
+import { NotificationPermissionPort } from './features/scan-list/service/notification-permission.port';
 import { FullPageNavigatorPort } from './shell/service/full-page-navigator.port';
 
 export const FULL_PAGE_NAVIGATOR = new InjectionToken<FullPageNavigatorPort>(
@@ -26,3 +28,9 @@ export const COVER_BACKFILL = new InjectionToken<CoverBackfillPort>(
 
 export const CHAPTER_WATCH_REPOSITORY =
   new InjectionToken<ChapterWatchRepository>('ChapterWatchRepository');
+
+export const WATCH_SETTINGS_REPOSITORY =
+  new InjectionToken<WatchSettingsRepository>('WatchSettingsRepository');
+
+export const NOTIFICATION_PERMISSION =
+  new InjectionToken<NotificationPermissionPort>('NotificationPermissionPort');

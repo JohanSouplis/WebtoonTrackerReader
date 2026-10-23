@@ -1,0 +1,35 @@
+<button
+  type="button"
+  class="trigger"
+  [matMenuTriggerFor]="menu"
+  attr.aria-label="New chapter checks: {{ summary() }}"
+>
+  <mat-icon [class.is-filled]="settings().areNotificationsOn"
+    >notifications</mat-icon
+  >
+  {{ summary() }}
+</button>
+<mat-menu #menu="matMenu" class="new-chapter-settings-panel">
+  <p class="heading">Check favorites for new chapters</p>
+  @for (option of intervals(); track option.interval) {
+    <button
+      mat-menu-item
+      role="menuitemradio"
+      [attr.aria-checked]="option.isChosen"
+      (click)="intervalChosen.emit(option.interval)"
+    >
+      <mat-icon>{{ option.isChosen ? "check" : "" }}</mat-icon>
+      {{ option.name }}
+    </button>
+  }
+  <div class="separator"></div>
+  <button
+    mat-menu-item
+    role="menuitemcheckbox"
+    [attr.aria-checked]="settings().areNotificationsOn"
+    (click)="notificationsToggled.emit(!settings().areNotificationsOn)"
+  >
+    <mat-icon>{{ settings().areNotificationsOn ? "check" : "" }}</mat-icon>
+    Desktop notifications
+  </button>
+</mat-menu>

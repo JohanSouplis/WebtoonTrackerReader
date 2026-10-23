@@ -8,7 +8,9 @@
   - button "Favorites only"
   - button "Rated only"
   - text: 20 series
+  - 'button "New chapter checks: Every 6h"': Every 6h
   - group "Sort by":
+    - button "New"
     - button "Last read"
     - button "Title (descending)" [pressed]
     - button "Chapter"
@@ -73,6 +75,8 @@
       - link "The Executioner":
         - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/46
       - text: Ch. 46
+      - link "New · Ch. 47":
+        - /url: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
       - time: 4 mo ago
       - text: asuracomic.net
       - combobox "Rating for The Executioner": "7"
@@ -163,6 +167,8 @@
       - link "Dungeon Odyssey":
         - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
       - text: Ch. 118
+      - link "New · Ch. 119.5":
+        - /url: https://asuracomic.net/series/dungeon-odyssey-b688584e/chapter/118
       - time: 6 mo ago
       - text: asuracomic.net
       - combobox "Rating for Dungeon Odyssey": "10"
@@ -173,7 +179,7 @@
         - /url: https://asuracomic.net/series/duke-pendragon-353743ee/chapter/120
       - text: Ch. 120
       - time: 8 mo ago
-      - text: asuracomic.net
+      - text: asuracomic.net Can't check this site
       - combobox "Rating for Duke Pendragon": –
       - button "Favorite Duke Pendragon" [pressed]
       - button "Delete Duke Pendragon"

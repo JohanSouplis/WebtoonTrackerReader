@@ -6,7 +6,13 @@
   [sort]="store.sort()"
   [count]="store.count()"
   (sorted)="store.sortBy($event)"
-/>
+>
+  <app-new-chapter-settings
+    [settings]="store.settings()"
+    (intervalChosen)="chooseInterval($event)"
+    (notificationsToggled)="toggleNotifications($event)"
+  />
+</app-scan-sort-bar>
 <app-scan-rows
   [view]="store.view()"
   [now]="now"

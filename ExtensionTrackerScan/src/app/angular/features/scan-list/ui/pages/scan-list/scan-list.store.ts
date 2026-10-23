@@ -1,4 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
+import {
+  ChapterWatches,
+  watchStatusOf,
+} from '../../../../../../core/domain/chapter-watch';
 import { Covers } from '../../../../../../core/domain/cover';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import {
@@ -13,6 +17,10 @@ import {
   ScanPage,
   toCoverTile,
 } from '../../../service/scan-list-view.vm';
+import {
+  DEFAULT_NEW_CHAPTER_SETTINGS,
+  NewChapterSettings,
+} from '../../../service/new-chapter-settings.vm';
 import { ScanRow, toScanRow } from '../../../service/scan-row.vm';
 import {
   LATEST_READ_FIRST,
@@ -42,7 +50,18 @@ const sameTitles = (
 
 @Injectable()
 export class ScanListStore {
-  private readonly library = signal<readonly ScanRow[] | undefined>(undefined);
+  private readonly snapshots = signal<readonly ScanSnapshot[] | undefined>(
+    undefined,
+  );
+  private readonly watches = signal<ChapterWatches>(new Map());
+  private readonly library = computed(() =>
+    this.snapshots()?.map((snapshot) =>
+      toScanRow(snapshot, watchStatusOf(snapshot, this.watches())),
+    ),
+  );
+  private readonly shownSettings = signal<NewChapterSettings>(
+    DEFAULT_NEW_CHAPTER_SETTINGS,
+  );
   private readonly shownFilters = signal<ScanFilters>(NO_FILTERS);
   private readonly shownSort = signal<ScanSort>(LATEST_READ_FIRST);
   private readonly shownPage = signal<ScanPage>(FIRST_PAGE);
@@ -55,6 +74,7 @@ export class ScanListStore {
   );
   readonly filters = this.shownFilters.asReadonly();
   readonly sort = this.shownSort.asReadonly();
+  readonly settings = this.shownSettings.asReadonly();
   readonly count = computed(() => this.matchingScans().length);
   private readonly rowsView = computed((): RowsView => {
     const library = this.library();
@@ -111,7 +131,15 @@ export class ScanListStore {
   });
 
   showLibrary(snapshots: readonly ScanSnapshot[]): void {
-    this.library.set(snapshots.map(toScanRow));
+    this.snapshots.set(snapshots);
+  }
+
+  showWatches(watches: ChapterWatches): void {
+    this.watches.set(watches);
+  }
+
+  showSettings(change: Partial<NewChapterSettings>): void {
+    this.shownSettings.update((settings) => ({ ...settings, ...change }));
   }
 
   showCovers(titles: readonly string[], covers: Covers): void {

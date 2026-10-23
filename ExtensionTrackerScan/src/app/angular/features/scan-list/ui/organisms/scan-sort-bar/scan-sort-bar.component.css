@@ -5,6 +5,12 @@
   margin: 18px 2px 8px;
 }
 
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .count {
   color: var(--app-faint);
   font-size: 12px;

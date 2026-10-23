@@ -1,3 +1,4 @@
+import { WatchStatus } from '../../../../core/domain/chapter-watch';
 import { ScanSnapshot } from '../../../../core/domain/scan-library';
 
 export type ScanRow = {
@@ -8,6 +9,7 @@ export type ScanRow = {
   readonly readAt: Date;
   readonly isFavorite: boolean;
   readonly rating?: number;
+  readonly watch: WatchStatus;
 };
 
 const websiteOf = (url: string): string => {
@@ -18,7 +20,10 @@ const websiteOf = (url: string): string => {
   }
 };
 
-export const toScanRow = ({ rating, ...scan }: ScanSnapshot): ScanRow => {
-  const row = { ...scan, website: websiteOf(scan.url) };
+export const toScanRow = (
+  { rating, ...scan }: ScanSnapshot,
+  watch: WatchStatus,
+): ScanRow => {
+  const row = { ...scan, website: websiteOf(scan.url), watch };
   return rating === undefined ? row : { ...row, rating };
 };

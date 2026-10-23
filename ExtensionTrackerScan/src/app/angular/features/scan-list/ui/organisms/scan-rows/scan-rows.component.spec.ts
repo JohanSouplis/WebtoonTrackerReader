@@ -58,6 +58,43 @@ describe('ScanRowsComponent', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('should link the new chapter of a scan beside its last read chapter', async () => {
+    await renderRows({
+      ...SHOWN_SCANS,
+      rows: [
+        {
+          ...SOLO_LEVELING,
+          watch: {
+            kind: 'new',
+            chapter: 39,
+            url: 'https://asuracomic.net/series/solo-leveling/chapter/39',
+          },
+        },
+      ],
+    });
+
+    const newChapter = within(rowOf('Solo Leveling')).getByRole('link', {
+      name: 'New · Ch. 39',
+    });
+    expect(newChapter).toHaveAttribute(
+      'href',
+      'https://asuracomic.net/series/solo-leveling/chapter/39',
+    );
+    expect(newChapter).toHaveAttribute('target', '_blank');
+  });
+
+  it('should say when the website of a scan cannot be checked for new chapters', async () => {
+    await renderRows({
+      ...SHOWN_SCANS,
+      rows: [{ ...SOLO_LEVELING, watch: { kind: 'unsupported' } }],
+    });
+
+    expect(rowOf('Solo Leveling')).toHaveTextContent("Can't check this site");
+    expect(
+      within(rowOf('Solo Leveling')).queryByRole('link', { name: /^New/ }),
+    ).not.toBeInTheDocument();
+  });
+
   it('should ask to delete the scan when its delete button is clicked', async () => {
     const deleted = jest.fn();
     await renderRows(SHOWN_SCANS, { deleted });

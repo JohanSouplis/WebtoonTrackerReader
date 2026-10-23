@@ -28,6 +28,29 @@ describe('sortScans', () => {
     ).toEqual(['duke Pendragon', 'Absolute Sword Sense', 'Solo Leveling']);
   });
 
+  it('should put scans with a new chapter first, then the latest read, when sorting by New', () => {
+    expect(
+      titles(
+        sortScans(
+          [
+            ...SCANS,
+            aRow({
+              title: 'Nano Machine',
+              readAt: new Date('2023-01-01T00:00:00Z'),
+              watch: { kind: 'new', chapter: 12, url: 'https://scans.org/12' },
+            }),
+          ],
+          { key: 'newChapter', direction: 'desc' },
+        ),
+      ),
+    ).toEqual([
+      'Nano Machine',
+      'duke Pendragon',
+      'Solo Leveling',
+      'Absolute Sword Sense',
+    ]);
+  });
+
   it('should put favorites first when sorting favorites descending', () => {
     expect(
       titles(sortScans(SCANS, { key: 'favorite', direction: 'desc' })),

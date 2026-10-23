@@ -1,6 +1,7 @@
 import { ScanRow } from './scan-row.vm';
 
 export type ScanSortKey =
+  | 'newChapter'
   | 'readAt'
   | 'title'
   | 'chapter'
@@ -25,6 +26,12 @@ const byNumber =
     value(left) - value(right);
 
 const SORT_RULES: Record<ScanSortKey, SortRule> = {
+  newChapter: {
+    firstDirection: 'desc',
+    compare: (left, right) =>
+      byNumber((scan) => Number(scan.watch.kind === 'new'))(left, right) ||
+      byNumber((scan) => scan.readAt.getTime())(left, right),
+  },
   readAt: {
     firstDirection: 'desc',
     compare: byNumber((scan) => scan.readAt.getTime()),
