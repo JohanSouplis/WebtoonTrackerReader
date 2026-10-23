@@ -16,6 +16,7 @@ export const CHAPTER_WORDS = [
   'فصل',
   'chap',
   'cap',
+  'issue',
   'ch',
   'ep',
 ];

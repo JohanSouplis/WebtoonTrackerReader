@@ -189,6 +189,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['only its page text names comics', { pageTitle: 'Top Tier Providence Chapter 222', url: 'https://rizzfables.com/chapter/r2311170-top-tier-providence-chapter-222', ogSiteName: 'Rizz Fables', breadcrumb: 'Rizz Fables » Top Tier Providence » Top Tier Providence Chapter 222', text: 'Home Series Bookmarks Top Tier Providence Chapter 222 All chapters are in Top Tier Providence Read the latest manga Top Tier Providence Chapter 222 at Rizz Fables' }, 'Top Tier Providence', 222],
     ['its page text shows the chapter right before the name of the series', { pageTitle: 'Читать онлайн Палач. Глава 77', url: 'https://mangahub.ru/read/967415', heading: 'Палач', text: 'MANGAHUB Открой свою мангу Меню Тайтлы Том 1. Глава 77 Палач / Ripper Перевод выполнен Anlige Project' }, 'Палач.', 77],
     ['its host names another medium next to comics', { pageTitle: 'Ch.258 | D.Gray-Man | TAM', url: 'https://tuttoanimemanga.net/read/dgray-man/it/ch/258', ogTitle: 'Ch.258 | Dgray Man | TAM', ogSiteName: 'TAM' }, 'D.Gray-Man', 258],
+    ['its tab title numbers a comic issue that its structured data names', { pageTitle: 'Read Knull (2026) #1 (of 5) Comics | Marvel | Comics & Manga Online Free on GlobalComix', url: 'https://globalcomix.com/c/knull-2026-/r/9bd7041f-d8aa-43ef-beff-6d14fc186775', heading: 'Knull (2026) #1 (of 5)', structuredData: [{ type: 'ComicIssue', name: 'Issue 1' }] }, 'Knull (2026)', 1],
   ])(
     'should record the reading its page signals agree on when %s',
     async (_, message, title, chapter) => {
