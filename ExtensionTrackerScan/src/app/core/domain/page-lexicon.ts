@@ -155,7 +155,7 @@ export const TITLE_STOP_WORDS = [
 export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»】」]\s*|\s+::\s+/;
 
 export const TITLE_NOISE: readonly RegExp[] = [
-  /^.*(?:^|[-|–:]\s*)read\s+/i,
+  /^.*(?:^|[-|–:]\s*)(?:free\s+)?read(?:ing)?\s+/i,
   /^.*مترجم للعربي\s*/,
   /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon):?\s+)+/iu,
   /^(?:その\d+)?[\s\]】」)]+/,
