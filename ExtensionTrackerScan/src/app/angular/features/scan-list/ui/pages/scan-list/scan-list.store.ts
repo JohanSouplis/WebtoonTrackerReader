@@ -33,6 +33,11 @@ import {
 
 const FIRST_PAGE: ScanPage = { index: 0, size: 10 };
 
+type LibraryLoad =
+  | { readonly kind: 'loading' }
+  | { readonly kind: 'failed' }
+  | { readonly kind: 'loaded'; readonly snapshots: readonly ScanSnapshot[] };
+
 type RowsView =
   | Exclude<ScanListView, { kind: 'scans' }>
   | {
@@ -51,12 +56,14 @@ const sameTitles = (
 
 @Injectable()
 export class ScanListStore {
-  private readonly snapshots = signal<readonly ScanSnapshot[] | undefined>(
-    undefined,
-  );
+  private readonly load = signal<LibraryLoad>({ kind: 'loading' });
+  private readonly snapshots = computed(() => {
+    const load = this.load();
+    return load.kind === 'loaded' ? load.snapshots : [];
+  });
   private readonly watches = signal<ChapterWatches>(new Map());
   private readonly library = computed(() =>
-    this.snapshots()?.map((snapshot) =>
+    this.snapshots().map((snapshot) =>
       toScanRow(snapshot, watchStatusOf(snapshot, this.watches())),
     ),
   );
@@ -69,7 +76,7 @@ export class ScanListStore {
   private readonly covers = signal<ReadonlyMap<string, CoverTile>>(new Map());
   private readonly matchingScans = computed(() =>
     sortScans(
-      filterScans(this.library() ?? [], this.shownFilters()),
+      filterScans(this.library(), this.shownFilters()),
       this.shownSort(),
     ),
   );
@@ -78,14 +85,19 @@ export class ScanListStore {
   readonly settings = this.shownSettings.asReadonly();
   readonly count = computed(() => this.matchingScans().length);
   readonly libraryTitles = computed(() =>
-    (this.snapshots() ?? []).map(({ title }) => ScanTitle.of(title)),
+    this.snapshots().map(({ title }) => ScanTitle.of(title)),
+  );
+  readonly hasLibraryTools = computed(
+    () =>
+      this.load().kind === 'loading' ||
+      (this.load().kind === 'loaded' && this.snapshots().length > 0),
   );
   private readonly rowsView = computed((): RowsView => {
-    const library = this.library();
-    if (library === undefined) {
-      return { kind: 'loading' };
+    const load = this.load();
+    if (load.kind !== 'loaded') {
+      return load;
     }
-    if (library.length === 0) {
+    if (load.snapshots.length === 0) {
       return { kind: 'empty-library' };
     }
     const scans = this.matchingScans();
@@ -135,12 +147,27 @@ export class ScanListStore {
   });
 
   showLibrary(snapshots: readonly ScanSnapshot[]): void {
-    this.snapshots.set(snapshots);
+    this.load.set({ kind: 'loaded', snapshots });
+  }
+
+  showLoading(): void {
+    this.load.set({ kind: 'loading' });
+  }
+
+  showLoadFailure(): void {
+    this.load.set({ kind: 'failed' });
   }
 
   hide(title: string): void {
-    this.snapshots.update((snapshots) =>
-      snapshots?.filter((snapshot) => snapshot.title !== title),
+    this.load.update((load) =>
+      load.kind === 'loaded'
+        ? {
+            kind: 'loaded',
+            snapshots: load.snapshots.filter(
+              (snapshot) => snapshot.title !== title,
+            ),
+          }
+        : load,
     );
   }
 

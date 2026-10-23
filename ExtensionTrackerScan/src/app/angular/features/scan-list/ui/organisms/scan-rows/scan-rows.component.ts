@@ -62,6 +62,8 @@ export class ScanRowsComponent {
   readonly ratingCleared = output<ScanRow>();
   readonly pageTurned = output<ScanPage>();
   readonly filtersCleared = output<void>();
+  readonly retried = output<void>();
+  protected readonly skeletonRows = [0, 1, 2, 3, 4];
   protected readonly ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   protected readonly pageSizes = [5, 10, 20, 50, 100];
   private readonly list = viewChild<ElementRef<HTMLElement>>('list');

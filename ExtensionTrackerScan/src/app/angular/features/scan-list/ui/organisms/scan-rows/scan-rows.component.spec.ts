@@ -245,12 +245,37 @@ describe('ScanRowsComponent', () => {
     ).toBeInTheDocument();
   });
 
-  it('should explain how scans appear when the library is empty', async () => {
+  it('should explain that series are added by themselves and link the supported sites when the library is empty', async () => {
     await renderRows({ kind: 'empty-library' });
 
     expect(
-      screen.getByRole('heading', { name: 'No reads yet' }),
-    ).toBeInTheDocument();
+      screen.getByRole('region', { name: 'No series yet' }),
+    ).toHaveTextContent(
+      'It reads your browser history every hour and every chapter page you open.',
+    );
+    expect(
+      screen.getByRole('link', { name: 'See supported sites' }),
+    ).toHaveAttribute('href', '#/add_website_pattern');
+  });
+
+  it('should show a busy placeholder list while the library loads', async () => {
+    await renderRows({ kind: 'loading' });
+
+    expect(
+      screen.getByRole('list', { name: 'Loading your library' }),
+    ).toHaveAttribute('aria-busy', 'true');
+  });
+
+  it('should alert and offer to retry when the library cannot be loaded', async () => {
+    const retried = jest.fn();
+    await renderRows({ kind: 'failed' }, { retried });
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      "Couldn't load your library",
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+    expect(retried).toHaveBeenCalled();
   });
 });
 

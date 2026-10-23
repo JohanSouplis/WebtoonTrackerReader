@@ -88,9 +88,7 @@ export class ScanListPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.showLibrary().catch((error: unknown) =>
-      console.error('Error retrieving all data:', error),
-    );
+    void this.loadLibrary();
     this.showSettings().catch((error: unknown) =>
       console.error('Error retrieving the new chapter settings:', error),
     );
@@ -185,7 +183,7 @@ export class ScanListPage implements OnInit {
         'Dismiss',
         { duration: 5000 },
       );
-      await this.showLibrary();
+      await this.loadLibrary();
     }
   }
 
@@ -210,6 +208,16 @@ export class ScanListPage implements OnInit {
       titles,
       await this.coverRepository.find(titles.map(ScanTitle.of)),
     );
+  }
+
+  protected async loadLibrary(): Promise<void> {
+    this.store.showLoading();
+    try {
+      await this.showLibrary();
+    } catch (error: unknown) {
+      console.error('Error retrieving the library:', error);
+      this.store.showLoadFailure();
+    }
   }
 
   private async showLibrary(): Promise<void> {

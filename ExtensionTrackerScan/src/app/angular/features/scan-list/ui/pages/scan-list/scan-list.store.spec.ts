@@ -10,12 +10,25 @@ describe('ScanListStore', () => {
     expect(new ScanListStore().view()).toEqual({ kind: 'loading' });
   });
 
-  it('should say the library is empty when it holds no scan', () => {
+  it('should say the library is empty and hide its tools when it holds no scan', () => {
     const store = new ScanListStore();
 
     store.showLibrary([]);
 
     expect(store.view()).toEqual({ kind: 'empty-library' });
+    expect(store.hasLibraryTools()).toBe(false);
+  });
+
+  it('should say the load failed and hide the tools until the library loads again', () => {
+    const store = new ScanListStore();
+
+    store.showLoadFailure();
+    expect(store.view()).toEqual({ kind: 'failed' });
+    expect(store.hasLibraryTools()).toBe(false);
+    store.showLoading();
+
+    expect(store.view()).toEqual({ kind: 'loading' });
+    expect(store.hasLibraryTools()).toBe(true);
   });
 
   it('should show the ten latest reads on the first page', () => {

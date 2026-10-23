@@ -18,6 +18,9 @@ possède.
 - Il est fourni dans les `providers` de la page. `providedIn: 'root'` est réservé à un état partagé entre
   features, et il n'en existe aucun aujourd'hui.
 - Une donnée dérivée est un `computed`, jamais un champ recalculé à la main.
+- Un chargement qui peut échouer est une union (`loading`, `failed`, `loaded`), pas un `undefined` doublé d'un
+  booléen d'erreur : l'écran affiche chaque issue, et les outils (filtres, tri) se masquent quand il n'y a rien
+  à filtrer.
 
 ```ts
 // ❌ état éparpillé en champs mutables, filtre recalculé à la main

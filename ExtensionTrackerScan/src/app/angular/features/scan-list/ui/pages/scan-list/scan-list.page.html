@@ -1,3 +1,4 @@
+@if (store.hasLibraryTools()) {
 <app-scan-filters
   [filters]="store.filters()"
   (filtersChanged)="store.filter($event)"
@@ -13,6 +14,7 @@
     (notificationsToggled)="toggleNotifications($event)"
   />
 </app-scan-sort-bar>
+}
 <app-scan-rows
   [view]="store.view()"
   [now]="now"
@@ -22,4 +24,5 @@
   (ratingCleared)="clearRating($event)"
   (pageTurned)="store.turnPage($event)"
   (filtersCleared)="store.clearFilters()"
+  (retried)="loadLibrary()"
 />

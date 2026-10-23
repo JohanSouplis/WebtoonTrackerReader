@@ -15,6 +15,7 @@ export type ShownScan = ScanRow & { readonly cover: CoverTile };
 
 export type ScanListView =
   | { readonly kind: 'loading' }
+  | { readonly kind: 'failed' }
   | { readonly kind: 'empty-library' }
   | { readonly kind: 'no-match'; readonly searchedTitle: string }
   | {

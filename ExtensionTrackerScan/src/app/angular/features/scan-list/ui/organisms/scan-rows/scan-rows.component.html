@@ -143,10 +143,32 @@
     </section>
   }
   @case ("empty-library") {
-    <section class="empty">
+    <section class="empty" aria-labelledby="empty-library-heading">
       <mat-icon>auto_stories</mat-icon>
-      <h2>No reads yet</h2>
-      <p>Read a chapter on a supported website and it shows up here.</p>
+      <h2 id="empty-library-heading">No series yet</h2>
+      <p>
+        Read a chapter on a supported site and Scan Tracker adds the series by
+        itself. It reads your browser history every hour and every chapter page
+        you open.
+      </p>
+      <a class="clear" href="#/add_website_pattern">See supported sites</a>
+    </section>
+  }
+  @case ("loading") {
+    <ul class="skeleton" aria-label="Loading your library" aria-busy="true">
+      @for (row of skeletonRows; track row) {
+        <li><span class="pending-cover"></span><span class="bar"></span></li>
+      }
+    </ul>
+  }
+  @case ("failed") {
+    <section class="empty" role="alert">
+      <mat-icon>error</mat-icon>
+      <h2>Couldn't load your library</h2>
+      <p>Your series are safe. Try loading them again.</p>
+      <button type="button" class="clear" (click)="retried.emit()">
+        Retry
+      </button>
     </section>
   }
 }

@@ -318,6 +318,44 @@ describe('ScanListPage', () => {
     ]);
   });
 
+  it('should load the library again when Retry is clicked after a failed load', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Solo Leveling' }),
+    ]);
+    const load = jest
+      .spyOn(scanRepository, 'load')
+      .mockRejectedValueOnce(new Error('storage unavailable'));
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    await renderPage(scanRepository);
+
+    expect(
+      await screen.findByText("Couldn't load your library"),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('searchbox', { name: 'Filter by title' }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+    expect(
+      await screen.findByRole('link', { name: 'Solo Leveling' }),
+    ).toBeInTheDocument();
+    expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it('should hide the filters, the sort and the checks when the library is empty', async () => {
+    await renderPage(new InMemoryScanRepository([]));
+
+    expect(
+      await screen.findByRole('heading', { name: 'No series yet' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('searchbox', { name: 'Filter by title' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('group', { name: 'Sort by' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('should tell the reader and refresh the list when the scan was already removed elsewhere', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),

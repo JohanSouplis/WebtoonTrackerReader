@@ -1,0 +1,11 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Request a site"
+- button "About"
+- main:
+  - region "No series yet":
+    - heading "No series yet" [level=2]
+    - paragraph: Read a chapter on a supported site and Scan Tracker adds the series by itself. It reads your browser history every hour and every chapter page you open.
+    - link "See supported sites":
+      - /url: "#/add_website_pattern"
