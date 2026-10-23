@@ -298,6 +298,10 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   sauf dans un nom de série du titre que la page reprend en lien (`Transmigrating into a Cultivation Novel to
   Form a Harem`). Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
   comparent segment par segment.
+- **La page est une lecture, pas un article sur elle.** Un mot d'article (`Review`, `Spoilers`, `Discussion`,
+  `Forums`, `News`) dans le titre de l'onglet, `og:title`, `og:site_name`, le `h1` ou le fil d'Ariane désigne une
+  critique, un fil de forum ou une actualité : la page est ignorée, même quand son site parle de manga
+  (`Lookism Chapter 500: The fight we waited for — Manhwa Review Blog`, `Home > News > One Piece Chapter 1166`).
 - **Le chapitre est celui que la page affiche.** Il vient d'une `ChapterMention` du titre de l'onglet, de
   `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
   `Глава 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`. Après un mot de chapitre vient un séparateur, un

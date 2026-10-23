@@ -141,6 +141,17 @@ export const OTHER_MEDIA_WORDS = [
   'video',
 ];
 
+export const ARTICLE_WORDS = [
+  'review',
+  'reviews',
+  'spoiler',
+  'spoilers',
+  'discussion',
+  'forum',
+  'forums',
+  'news',
+];
+
 export const NON_READING_PATHS = ['course'];
 
 export const TITLE_STOP_WORDS = [

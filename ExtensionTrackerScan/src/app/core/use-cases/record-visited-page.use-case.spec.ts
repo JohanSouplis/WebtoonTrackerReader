@@ -157,6 +157,8 @@ describe('RecordVisitedPageUseCase', () => {
     ['a tutorial whose title is missing from its url', 'Chapter 7 - Manga Studio Tutorial: Inking | Clip Studio Tips', 'https://tips.clip-studio.com/en-us/articles/chapter-7'],
     ['a page of a list whose url repeats the page number', 'Manhwa List - Page 12 - ManhwaClan', 'https://manhwaclan.com/manga/page/12/'],
     ['a volume whose url repeats the volume number', 'Berserk Vol. 3 - Manga Reader', 'https://mangareader.example/manga/berserk/3'],
+    ['a review of a chapter', 'Lookism Chapter 500: The fight we waited for — Manhwa Review Blog', 'https://manhwareviews.blog/lookism-chapter-500/'],
+    ['a forum thread about a chapter', 'Futari Bus - Ch. 50 - Throwing the Curveball | MangaDex Forums', 'https://forums.mangadex.org/threads/futari-bus-ch-50-throwing-the-curveball.2755728/'],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
     async (_, pageTitle, url) => {
@@ -220,6 +222,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a chapter of a website whose page text names novels next to manga', { pageTitle: 'The Primal Hunter Chapter 3', url: 'https://fictionsite.example/fiction/the-primal-hunter/chapter-3', text: 'Home Manga Novels Rankings The Primal Hunter Chapter 3 Previous Next' }],
     ['a list whose selected page number the url repeats', { pageTitle: 'Latest Updates - Manga Corner', url: 'https://mangacorner.example/latest/2/', ogTitle: 'Latest Updates', selectedOptions: ['2'] }],
     ['a chapter whose tab title names the website, not the series, after the chapter', { pageTitle: 'Chapter 12 - Mangaku', url: 'https://mangaku.io/manga/the-tower-keeper/chapter-12/', structuredData: [{ type: 'ListItem', name: 'Mangaku', position: 1 }, { type: 'ListItem', name: 'Chapter 12', position: 2 }] }],
+    ['a news article whose breadcrumb files it under news', { pageTitle: "Waiting to Read One Piece Chapter 1166? Here's Why You Will Be Disappointed This Week | Beebom", url: 'https://beebom.com/one-piece-chapter-1166-delayed-new-release-date/', breadcrumb: "Home > News > Waiting to Read One Piece Chapter 1166? Here's Why You Will Be Disappointed This Week", text: 'Is One Piece Manga On a Break This Week? One Piece Chapter 1166 New Release Date' }],
     ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',

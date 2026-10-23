@@ -1,5 +1,6 @@
 import { Chapter } from './chapter';
 import {
+  ARTICLE_WORDS,
   CHAPTER_SUFFIXES,
   CHAPTER_WORDS,
   NON_READING_PATHS,
@@ -331,9 +332,19 @@ const mentionsOtherMedia = ({
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
+const isArticle = (page: PageSignals): boolean =>
+  wordsOf([
+    page.pageTitle,
+    page.ogTitle,
+    page.ogSiteName,
+    page.heading,
+    page.breadcrumb,
+  ]).some((word) => ARTICLE_WORDS.includes(word));
+
 const isReadingPage = (page: PageSignals): boolean =>
   mentionsReading(page) &&
   !mentionsOtherMedia(page) &&
+  !isArticle(page) &&
   !pathSegments(page.url).some((segment) =>
     NON_READING_PATHS.includes(segment.toLowerCase()),
   );
