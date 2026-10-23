@@ -169,6 +169,7 @@ export const messagesOf = (capture: Capture): PageSignalsMessage[] =>
               heading: firstOf(capture.h1),
               headings: capture.headings,
               breadcrumb: firstOf(capture.breadcrumbText),
+              text: capture.bodyText,
               structuredData: (capture.jsonLd ?? []).map(
                 ({ type, name, headline, position }) => ({
                   type,

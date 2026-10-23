@@ -308,7 +308,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
 - **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un
   numéro affiché. Pour un texte d'en-tête (titre de l'onglet, `og:title` s'il diffère du titre, `h1`), un autre
   élément de la page confirme aussi : `h1`, titres de section (`h1` à `h3`), fil d'Ariane, JSON-LD, option
-  sélectionnée. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
+  sélectionnée, ou le début du texte visible s'il n'affiche que ce numéro, ou ce numéro et ses voisins (liens
+  vers le chapitre précédent et le suivant) : une liste de chapitres ne confirme rien. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
   l'onglet annonce un autre chapitre que la page, le chapitre confirmé gagne.
 - **Le titre est confirmé.** Le premier candidat qui tient, dans l'ordre :
   1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;

@@ -32,6 +32,7 @@ export type PageSignals = VisitedPage & {
   readonly heading?: string;
   readonly headings?: readonly string[];
   readonly breadcrumb?: string;
+  readonly text?: string;
   readonly structuredData?: readonly StructuredDataItem[];
   readonly selectedOptions?: readonly string[];
   readonly metaImages?: readonly string[];

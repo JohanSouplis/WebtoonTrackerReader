@@ -23,6 +23,7 @@ export type PageSignalsMessage = {
   readonly heading?: string;
   readonly headings?: readonly string[];
   readonly breadcrumb?: string;
+  readonly text?: string;
   readonly structuredData: readonly StructuredDataNode[];
   readonly selectedOptions?: readonly string[];
   readonly metaImages?: readonly string[];
@@ -173,6 +174,7 @@ export const parsePageSignals = (message: unknown): PageSignals | undefined => {
       (heading) => textOf(heading) ?? [],
     ),
     breadcrumb: textOf(message['breadcrumb']),
+    text: textOf(message['text']),
     structuredData: listOf(message['structuredData']).flatMap(
       structuredDataItemOf(url),
     ),

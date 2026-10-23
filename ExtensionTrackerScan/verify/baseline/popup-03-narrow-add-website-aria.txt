@@ -14,7 +14,7 @@
     - text: Use the address of a page where you
     - emphasis: read
     - text: "a chapter, not the series list. Sites missing from the list below may still work: most reading sites are recognized automatically."
-  - heading "Verified websites 151" [level=2]
+  - heading "Verified websites 156" [level=2]
   - searchbox "Filter by website or address"
   - paragraph: These were checked on a real chapter page. Most other reading sites are recognized automatically, so they may still work.
   - list "Verified websites":
@@ -23,13 +23,13 @@
     - listitem: 3asq.online
     - listitem: a.zazaza.me
     - listitem: akazascans.org
+    - listitem: allskreen.com
     - listitem: arenascan.com
     - listitem: arvenscans.net
     - listitem: asmotoon.com
     - listitem: asurascans.com
-    - listitem: athreascans.com
   - group:
-    - text: 1–10 of 151
+    - text: 1–10 of 156
     - button "First page" [disabled]
     - button "Previous page" [disabled]
     - button "Next page"

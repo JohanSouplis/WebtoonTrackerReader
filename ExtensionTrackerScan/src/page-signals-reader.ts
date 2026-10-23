@@ -7,6 +7,7 @@ const BREADCRUMB = 'nav[aria-label*="breadcrumb" i], [class*="breadcrumb" i]';
 const BREADCRUMB_LINK = `${BREADCRUMB}, [itemtype*="BreadcrumbList"]`;
 const META_IMAGES = ['og:image', 'twitter:image', 'twitter:image:src'];
 const MAX_HEADINGS = 20;
+const MAX_TEXT_LENGTH = 1500;
 const MAX_IMAGES = 10;
 const MAX_LINKS = 50;
 
@@ -127,6 +128,7 @@ export const readPageSignals = (
       .filter((text) => text.trim() !== '')
       .slice(0, MAX_HEADINGS),
     breadcrumb: textOf(BREADCRUMB),
+    text: page.body?.innerText.replace(/\s+/g, ' ').slice(0, MAX_TEXT_LENGTH),
     structuredData: Array.from(
       page.querySelectorAll('script[type="application/ld+json"]'),
       (script) => structuredDataNodesIn(parsedJson(script.textContent ?? '')),

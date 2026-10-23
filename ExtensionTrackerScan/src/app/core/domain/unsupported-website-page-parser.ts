@@ -227,12 +227,23 @@ const chapterWitnesses = (page: PageSignals, displaying: string): string[] =>
     ...(page.selectedOptions ?? []),
   ].flatMap((text) => (text && text !== displaying ? [text] : []));
 
+const textConfirms = (text: string, chapter: Chapter): boolean => {
+  const shown = new Set(
+    chapterMentionsIn(text).map((mention) => mention.chapter.value),
+  );
+  return (
+    shown.has(chapter.value) &&
+    [...shown].every((value) => Math.abs(value - chapter.value) <= 1)
+  );
+};
+
 const isChapterConfirmed = (
   page: PageSignals,
   display: ChapterDisplay,
   chapter: Chapter,
 ): boolean =>
   urlChapters(page.url).includes(chapter.value) ||
+  (display.isHeadline && textConfirms(page.text ?? '', chapter)) ||
   (display.isHeadline &&
     (chapterWitnesses(page, display.text).some((text) =>
       displays(text, chapter),
