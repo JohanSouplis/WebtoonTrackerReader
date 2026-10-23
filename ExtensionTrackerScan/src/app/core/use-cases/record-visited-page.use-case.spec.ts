@@ -123,6 +123,10 @@ describe('RecordVisitedPageUseCase', () => {
     ['Berserk Chapter 375 - MangaKatana', 'https://mangakatana.com/manga/berserk.1234/c375', 'Berserk', 375],
     ['Lookism Ep 412 - WebtoonScan', 'https://www.webtoonscan.com/read?series=lookism&ep=412', 'Lookism', 412],
     ['Eleceed Ch. 300 | ReadM', 'https://readm.today/manga/eleceed/300/all-pages', 'Eleceed', 300],
+    ['Scan One Piece 1196', 'https://lelscans.net/scan-one-piece/1196', 'One Piece', 1196],
+    ['Free Reading Solo Leveling Chapter 5 - WebComics', 'https://www.webcomicsapp.com/en/action/solo-leveling/5/6a5757bd62661d6f', 'Solo Leveling', 5],
+    ['Sonic The Hedgehog #88 - ChaosTrad', 'https://chaostrad.fr/comics/sonic-idw/88', 'Sonic The Hedgehog', 88],
+    ["Frieren - Beyond Journey's End - Chapter 147 - English", 'https://www.frierenmangafree.com/manga/frieren-beyond-journeys-end-chapter-147/', "Frieren - Beyond Journey's End", 147],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
@@ -152,6 +156,11 @@ describe('RecordVisitedPageUseCase', () => {
     ['a discussion of a chapter', '[DISC] Solo Leveling - Chapter 110 : r/manga', 'https://www.reddit.com/r/manga/comments/xyz789/disc_solo_leveling_chapter_110/'],
     ['a lesson of an online course', 'Chapter 3 - Introduction to Manga Drawing | Udemy', 'https://www.udemy.com/course/manga-drawing/learn/lecture/chapter-3'],
     ['a tutorial whose title is missing from its url', 'Chapter 7 - Manga Studio Tutorial: Inking | Clip Studio Tips', 'https://tips.clip-studio.com/en-us/articles/chapter-7'],
+    ['a page of a list whose url repeats the page number', 'Manhwa List - Page 12 - ManhwaClan', 'https://manhwaclan.com/manga/page/12/'],
+    ['a volume whose url repeats the volume number', 'Berserk Vol. 3 - Manga Reader', 'https://mangareader.example/manga/berserk/3'],
+    ['a review of a chapter', 'Lookism Chapter 500: The fight we waited for — Manhwa Review Blog', 'https://manhwareviews.blog/lookism-chapter-500/'],
+    ['a chapter whose two names before the chapter only the series and chapter parts of its url repeat together', 'The strongest player - The Necromancer Family’s Young Heir - Chapter 33 - Mangaowl', 'https://mangaowl.io/read-1/the-strongest-player/the-necromancer-familys-young-heir-chapter-33/'],
+    ['a forum thread about a chapter', 'Futari Bus - Ch. 50 - Throwing the Curveball | MangaDex Forums', 'https://forums.mangadex.org/threads/futari-bus-ch-50-throwing-the-curveball.2755728/'],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
     async (_, pageTitle, url) => {
@@ -174,6 +183,20 @@ describe('RecordVisitedPageUseCase', () => {
     ['its tab title announces the next chapter', { pageTitle: 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de Chap 3: Creativity Wall and Memories Next Chap 4', url: 'https://www.zinmanga.net/manga/otto-no-yuigon-ga-doujinshi-kake-datta-mono-de/chapter-3' }, 'Otto no Yuigon ga "Doujinshi Kake" Datta Mono de', 3],
     ['its url glues a post id to the chapter number', { pageTitle: "Baca I Became a Human's Daughter Chapter 58 Bahasa Indonesia - Kiryuu ID", url: 'https://v7.kiryuu.to/manga/i-became-a-humans-daughter/chapter-58.826511/' }, "I Became a Human's Daughter", 58],
     ['its tab title has no chapter but its breadcrumb and selected chapter have', { pageTitle: 'Lire Mariage Toxine Scan FR - Mangas Origines', url: 'https://mangas-origines.fr/oeuvre/marriage-toxin/chapitre-183/', ogTitle: 'Mariage Toxine Scan FR - Lire le manga sur Mangas Origines', breadcrumb: 'Accueil Catalogue Mariage Toxine Chapitre 183', selectedOptions: ['Chapitre 183', '1/18'] }, 'Mariage Toxine', 183],
+    ['its tab title joins several names of the series and its heading shows one of them', { pageTitle: 'Чтение Манга Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393 - ZazaZa', url: 'https://a.zazaza.me/chernyi_klever__A5327/vol38/393', heading: 'Манга Чёрный Клевер 38 - 393' }, 'Чёрный Клевер', 393],
+    ['its url is an opaque id and a section heading repeats the chapter while another names the series', { pageTitle: '金華の百年 - 枝屋初 / 第1話 | マグコミ', url: 'https://magcomi.com/episode/12207421984222612497', ogTitle: '金華の百年 - 枝屋初 / 第1話 | マグコミ', ogSiteName: 'マグコミ｜マッグガーデン発のWEBマンガサイト', heading: 'マグコミ – Mag Garden Comic Online', headings: ['マグコミ – Mag Garden Comic Online', 'NEW 無料配信中のおすすめ作品', '第1話', '金華の百年', 'マグコミ'] }, '金華の百年', 1],
+    ['its tab title is the tagline of the website and a heading repeats the series of its url', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', heading: 'Capítulo 95', headings: ['Lista de Capítulos', 'Capítulo 95', 'Reportar um problema', 'O Caçador de Destinos Rank F'] }, 'O Caçador de Destinos Rank F', 95],
+    ['its tab title puts the chapter in brackets before the series and its author', { pageTitle: '[第12話] 魔王の休日 - 山田太郎 | マンガサイト', url: 'https://manga.example/episode/90210', ogSiteName: 'マンガサイト', headings: ['マンガサイト', '[第12話] 魔王の休日', '魔王の休日', '山田太郎'] }, '魔王の休日', 12],
+    ['only the navigation of the website names comics', { pageTitle: 'Ch.183 | Marriage Toxin | Blue Solo', url: 'https://bluesolo.org/read/marriage-toxin/fr/ch/183', ogSiteName: 'Blue Solo', links: [{ href: 'https://bluesolo.org/', text: 'Blue Solo' }, { href: 'https://bluesolo.org/mangas', text: 'Tous les mangas' }] }, 'Marriage Toxin', 183],
+    ['its tab title puts the chapter first, then the series and its author', { pageTitle: '第1話 / 押しかけギャルの中村さん - おりはらさちこ | webアクション', url: 'https://comic-action.com/episode/316112896824970475', ogSiteName: 'webアクション｜双葉社発のマンガサイト', heading: '第1話', headings: ['知りたい世界。webアクション', '第1話', '押しかけギャルの中村さん'] }, '押しかけギャルの中村さん', 1],
+    ['its url is an opaque id and its page text shows the chapter between links to its neighbors', { pageTitle: 'The Beauty Within Mii - Chapter 18 :: XCOMIC.ME', url: 'https://xcomic.me/chapter/glxm6ye', headings: ['The Beauty Within Mii'], text: 'xComic Browse The Beauty Within Mii Chapter 18: My Fault Chapter 17 Chapter 19 All Pages One Page' }, 'The Beauty Within Mii', 18],
+    ['its tab title starts with the number of the page being read', { pageTitle: 'Pagina 1 :: Four Knights of Apocalypse - Mokushiroku no Yonkishi :: Capitolo 257 :: Manga Reader', url: 'https://reader.example/read/four-knights-of-apocalypse-mokushiroku-no-yonkishi/it/0/257/page/1', headings: ['Four Knights of Apocalypse - Mokushiroku no Yonkishi'] }, 'Four Knights of Apocalypse - Mokushiroku no Yonkishi', 257],
+    ['only its page text names comics', { pageTitle: 'Top Tier Providence Chapter 222', url: 'https://rizzfables.com/chapter/r2311170-top-tier-providence-chapter-222', ogSiteName: 'Rizz Fables', breadcrumb: 'Rizz Fables » Top Tier Providence » Top Tier Providence Chapter 222', text: 'Home Series Bookmarks Top Tier Providence Chapter 222 All chapters are in Top Tier Providence Read the latest manga Top Tier Providence Chapter 222 at Rizz Fables' }, 'Top Tier Providence', 222],
+    ['its page text shows the chapter right before the name of the series', { pageTitle: 'Читать онлайн Палач. Глава 77', url: 'https://mangahub.ru/read/967415', heading: 'Палач', text: 'MANGAHUB Открой свою мангу Меню Тайтлы Том 1. Глава 77 Палач / Ripper Перевод выполнен Anlige Project' }, 'Палач.', 77],
+    ['its host names another medium next to comics', { pageTitle: 'Ch.258 | D.Gray-Man | TAM', url: 'https://tuttoanimemanga.net/read/dgray-man/it/ch/258', ogTitle: 'Ch.258 | Dgray Man | TAM', ogSiteName: 'TAM' }, 'D.Gray-Man', 258],
+    ['its page shows large images next to long paragraphs', { pageTitle: 'Manga Text Chapter - Vol. 1 - Chapter 1 - Madara Demo', url: 'https://live.mangabooth.com/manga/manga-text-chapter/vol-1/chapter-1_1/', structuredData: [{ type: 'Book', name: 'Manga Text Chapter' }], largeImageCount: 12, longParagraphCount: 10 }, 'Manga Text Chapter', 1],
+    ['its tab title numbers a comic issue that its structured data names', { pageTitle: 'Read Knull (2026) #1 (of 5) Comics | Marvel | Comics & Manga Online Free on GlobalComix', url: 'https://globalcomix.com/c/knull-2026-/r/9bd7041f-d8aa-43ef-beff-6d14fc186775', heading: 'Knull (2026) #1 (of 5)', structuredData: [{ type: 'ComicIssue', name: 'Issue 1' }] }, 'Knull (2026)', 1],
+    ['a chapter word opens a segment of its tab title and the chapter name follows the number', { pageTitle: 'Shangri-La Frontier | CHAPTER 1 WHAT DO YOU PLAY GAMES FOR? / K MANGA - You can read the latest chapter on the Kodansha official comic site for free!', url: 'https://kmanga.kodansha.com/title/10011/episode/317222', heading: 'Shangri-La Frontier - CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?', headings: ["Kodansha's official manga website", 'Shangri-La Frontier - CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?', 'Shangri-La Frontier'] }, 'Shangri-La Frontier', 1],
   ])(
     'should record the reading its page signals agree on when %s',
     async (_, message, title, chapter) => {
@@ -194,6 +217,18 @@ describe('RecordVisitedPageUseCase', () => {
     ['a novel chapter of a scan website', { pageTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition] | DivaScans', url: 'https://divascans.org/series/novel/crazy-doctor-19-uncensored-edition/chapter/19', ogTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition]', structuredData: [{ type: 'ListItem', name: 'Crazy Doctor [19+ Uncensored Edition]' }, { type: 'ListItem', name: 'Chapter 19' }] }],
     ['a chapter whose tab title is the tagline of the website', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', ogTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', heading: 'Capítulo 95' }],
     ['a chapter whose series is named only in its url', { pageTitle: '99 | Team-X', url: 'https://olympustaff.com/series/the-academys-sashimi-sword-master/99', heading: '99', selectedOptions: ['فصل رقم : 99'] }],
+    ['a chapter whose only link to a series names part of the series of its url', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader', links: [{ href: 'https://scanreader.net/mangas/the-abyssal/', text: 'The Abyssal' }] }],
+    ['a chapter whose tab title, og:title and heading all show the name of the chapter, not of the series', { pageTitle: 'Swimsuits | Team-X', url: 'https://teamx.example/series/my-dragon-girlfriend/8', ogTitle: 'Swimsuits', ogSiteName: 'Team-X Manga', heading: 'Swimsuits', selectedOptions: ['Chapter 8'] }],
+    ['a chapter of a website whose navigation names novels next to manga', { pageTitle: 'The Primal Hunter Chapter 3', url: 'https://fictionsite.example/fiction/the-primal-hunter/chapter-3', links: [{ href: 'https://fictionsite.example/manga', text: 'Manga' }, { href: 'https://fictionsite.example/novels', text: 'Novels' }] }],
+    ['a chapter whose tab title names the website of its subdomain after the chapter', { pageTitle: 'Chapter 12 - Mangaku', url: 'https://a.mangaku.io/manga/the-tower-keeper/chapter-12/', structuredData: [{ type: 'ListItem', name: 'Mangaku', position: 1 }, { type: 'ListItem', name: 'Chapter 12', position: 2 }] }],
+    ['a series page whose title shows the latest chapter above the list of chapters', { pageTitle: 'Martial Peak - Chapter 3800 - Read Comics', url: 'https://comics.example/series/martial-peak', heading: 'Martial Peak', text: 'Martial Peak Latest: Chapter 3800 - Chapter 3799 - Chapter 3798 - Chapter 3797' }],
+    ['a chapter of a website whose page text names novels next to manga', { pageTitle: 'The Primal Hunter Chapter 3', url: 'https://fictionsite.example/fiction/the-primal-hunter/chapter-3', text: 'Home Manga Novels Rankings The Primal Hunter Chapter 3 Previous Next' }],
+    ['a list whose selected page number the url repeats', { pageTitle: 'Latest Updates - Manga Corner', url: 'https://mangacorner.example/latest/2/', ogTitle: 'Latest Updates', selectedOptions: ['2'] }],
+    ['a chapter whose tab title names the website, not the series, after the chapter', { pageTitle: 'Chapter 12 - Mangaku', url: 'https://mangaku.io/manga/the-tower-keeper/chapter-12/', structuredData: [{ type: 'ListItem', name: 'Mangaku', position: 1 }, { type: 'ListItem', name: 'Chapter 12', position: 2 }] }],
+    ['a news article whose breadcrumb files it under news', { pageTitle: "Waiting to Read One Piece Chapter 1166? Here's Why You Will Be Disappointed This Week | Beebom", url: 'https://beebom.com/one-piece-chapter-1166-delayed-new-release-date/', breadcrumb: "Home > News > Waiting to Read One Piece Chapter 1166? Here's Why You Will Be Disappointed This Week", text: 'Is One Piece Manga On a Break This Week? One Piece Chapter 1166 New Release Date' }],
+    ['the page of a comic issue whose synopsis names the episode', { pageTitle: 'Absolute Batman DC Go! Edition #12 | DC Comics Issue', url: 'https://www.dcuniverseinfinite.com/comics/book/absolute-batman-dc-go-edition-2025-12/1bea6361-4c2b-44ee-8542-b8a9fbe74044', structuredData: [{ type: 'ComicIssue', name: 'Absolute Batman DC Go! Edition (2025-) #12' }], text: 'ALL COMIC SERIES BROWSE COLLECTIONS ABSOLUTE BATMAN DC GO! EDITION #12 SYNOPSIS Episode 12 - Batman and Alfred have formed a tentative alliance' }],
+    ['a light novel chapter of a series the website links to', { pageTitle: 'Solo Leveling Light Novel Chapter 77', url: 'https://ww4.readsololeveling.org/chapter/solo-leveling-ln-chapter-77/', text: 'Read Solo Leveling Manga Online', links: [{ href: 'https://ww4.readsololeveling.org/series/solo-leveling-light-novel/', text: 'Solo Leveling Light Novel' }] }],
+    ['a text chapter, with long paragraphs and no large image', { pageTitle: 'Manga Text Chapter - Vol. 1 - Chapter 1 - Madara Demo', url: 'https://live.mangabooth.com/manga/manga-text-chapter/vol-1/chapter-1_1/', structuredData: [{ type: 'Book', name: 'Manga Text Chapter' }], largeImageCount: 0, longParagraphCount: 10 }],
     ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
@@ -547,6 +582,33 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
   });
+  // prettier-ignore
+  it.each<[string, object, string, number, string]>([
+    ['the tab title shows only the chapter', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader' }, 'The Abyssal seed', 41, 'https://scanreader.net/mangas/the-abyssal-seed/'],
+    ['its url is an opaque id and the tab title names the series before the chapter', { pageTitle: 'Invincible (2015 · Cho-U) — Chapter 39 · Webnex', url: 'https://webnex.cc/read/chapter-mangadex-8160d350-19a9-499c-88a8-c20a1cd7fe8b-643ff11ba99c', heading: 'Chapter 39' }, 'Invincible (2015 · Cho-U)', 39, 'https://webnex.cc/manga/manhwa-invincible-manhwa-db959b80ee3d'],
+    ['the series name holds a number', { pageTitle: 'Page 1 | NANBA MG5 Vol.16 Ch.136', url: 'https://www.furyosociety.com/read/nanba-mg5/fr/16/136/', headings: ['Paramètres'] }, 'NANBA MG5', 136, 'https://www.furyosociety.com/series/nanba-mg5/'],
+  ])(
+    'should read the series from the link to its page when %s',
+    async (_, message, title, chapter, seriesUrl) => {
+      const { recordVisitedPage, scans } = setUp();
+      const page = signalsOf(
+        contentScriptMessage({
+          ...message,
+          links: [
+            { href: seriesUrl, text: title },
+            { href: new URL('/mangas', seriesUrl).href, text: 'Mangas' },
+          ],
+        }),
+      );
+
+      await recordVisitedPage.execute(page);
+
+      expect(await scans()).toEqual([
+        aScan({ title, chapter, url: page.url, readAt: NOW, seriesUrl }),
+      ]);
+    },
+  );
+
   it('should keep the series page the chapter page links to', async () => {
     const { recordVisitedPage, scans } = setUp();
 

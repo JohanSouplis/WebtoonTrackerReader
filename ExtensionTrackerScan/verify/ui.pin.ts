@@ -1,4 +1,5 @@
 import { expect, Locator, Page, test } from '@playwright/test';
+import verifiedWebsites from '../src/app/core/domain/verified-websites.json';
 
 const NOW = new Date('2025-03-10T12:00:00Z');
 const LONG_TITLE_START = 'My School Life Pretending To Be a Worthless Person';
@@ -806,11 +807,14 @@ test.describe('add website', () => {
     await openLibrary(page);
     await goToAddWebsite(page);
     await page.getByRole('button', { name: 'Next page' }).click();
-    await expect(page.getByText('11–20 of 134')).toBeVisible();
+    const count = verifiedWebsites.length;
+    await expect(page.getByText(`11–20 of ${count}`)).toBeVisible();
     await pin(page, 'add-list-01-page-2');
     await page.getByRole('button', { name: 'First page' }).click();
     await page.getByRole('button', { name: 'Last page' }).click();
-    await expect(page.getByText('131–134 of 134')).toBeVisible();
+    await expect(
+      page.getByText(`${count - ((count - 1) % 10)}–${count} of ${count}`),
+    ).toBeVisible();
     await pin(page, 'add-list-02-last-page');
     await page.getByRole('button', { name: 'First page' }).click();
     await page

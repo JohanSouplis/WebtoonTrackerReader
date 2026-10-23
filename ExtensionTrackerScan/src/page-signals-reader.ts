@@ -6,8 +6,12 @@ import { PageSignalsMessage, StructuredDataNode } from './page-signals-message';
 const BREADCRUMB = 'nav[aria-label*="breadcrumb" i], [class*="breadcrumb" i]';
 const BREADCRUMB_LINK = `${BREADCRUMB}, [itemtype*="BreadcrumbList"]`;
 const META_IMAGES = ['og:image', 'twitter:image', 'twitter:image:src'];
+const MAX_HEADINGS = 20;
+const MAX_TEXT_LENGTH = 1500;
 const MAX_IMAGES = 10;
 const MAX_LINKS = 50;
+const LARGE_IMAGE_SIZE = 300;
+const LONG_PARAGRAPH_LENGTH = 200;
 
 const structuredDataNodesIn = (value: unknown): StructuredDataNode[] => {
   if (Array.isArray(value)) {
@@ -106,6 +110,12 @@ export const readPageSignals = (
   const metaContent = (property: string): string | undefined =>
     page.querySelector<HTMLMetaElement>(`meta[property="${property}"]`)
       ?.content;
+  const countOf = (
+    selector: string,
+    isCounted: (element: HTMLElement) => boolean,
+  ): number =>
+    Array.from(page.querySelectorAll<HTMLElement>(selector)).filter(isCounted)
+      .length;
   const attributeOf = (selector: string, attribute: string): string[] =>
     Array.from(
       page.querySelectorAll(selector),
@@ -119,7 +129,14 @@ export const readPageSignals = (
     canonicalUrl: page.querySelector<HTMLLinkElement>('link[rel="canonical"]')
       ?.href,
     heading: textOf('h1'),
+    headings: Array.from(
+      page.querySelectorAll<HTMLElement>('h1, h2, h3'),
+      (heading) => heading.innerText,
+    )
+      .filter((text) => text.trim() !== '')
+      .slice(0, MAX_HEADINGS),
     breadcrumb: textOf(BREADCRUMB),
+    text: page.body?.innerText.replace(/\s+/g, ' ').slice(0, MAX_TEXT_LENGTH),
     structuredData: Array.from(
       page.querySelectorAll('script[type="application/ld+json"]'),
       (script) => structuredDataNodesIn(parsedJson(script.textContent ?? '')),
@@ -153,5 +170,15 @@ export const readPageSignals = (
       text: link.textContent ?? '',
       isBreadcrumb: link.closest(BREADCRUMB_LINK) !== null,
     })),
+    largeImageCount: countOf('img, canvas', (element) => {
+      const { width, height } = element.getBoundingClientRect();
+      return width >= LARGE_IMAGE_SIZE && height >= LARGE_IMAGE_SIZE;
+    }),
+    longParagraphCount: countOf(
+      'p',
+      (paragraph) =>
+        paragraph.innerText.replace(/\s+/g, ' ').trim().length >=
+        LONG_PARAGRAPH_LENGTH,
+    ),
   });
 };

@@ -33,7 +33,7 @@ pas un synonyme.
 | `RemovedScan` | Un scan supprimé, avec sa couverture et sa veille, gardé le temps de l'annulation | `deletedItem`, `trash`, `backup` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
-| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée, images et liens | `pageData`, `metadata`, `message` |
+| `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, titres de section (`h1` à `h3`), début du texte visible, fil d'Ariane, JSON-LD, option sélectionnée, images et liens, nombre de grandes images et de longs paragraphes | `pageData`, `metadata`, `message` |
 | `WebsitePattern` | Le format de titre d'un site, qui permet d'en extraire scan et chapitre | `parser`, `websiteJson` |
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
 | `VerifiedWebsite` | Un site dont `npm run eval:parser` lit exactement une vraie page de chapitre capturée, ou un site vivant du catalogue | `supportedWebsites` pour ce sens |

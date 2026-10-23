@@ -151,6 +151,14 @@ export const WEBSITE_PATTERNS: readonly WebsitePattern[] = [
     ],
   },
   {
+    host: 'leercapitulo.co',
+    formats: [
+      {
+        pageTitle: 't§ Capitulo §c§ | LeerCapitulo',
+      },
+    ],
+  },
+  {
     host: 'battwo.com',
     formats: [
       {

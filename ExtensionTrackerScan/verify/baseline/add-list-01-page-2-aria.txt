@@ -15,22 +15,22 @@
     - text: Use the address of a page where you
     - emphasis: read
     - text: "a chapter, not the series list. Sites missing from the list below may still work: most reading sites are recognized automatically."
-  - heading "Verified websites 134" [level=2]
+  - heading "Verified websites 167" [level=2]
   - searchbox "Filter by website or address"
   - paragraph: These were checked on a real chapter page. Most other reading sites are recognized automatically, so they may still work.
   - list "Verified websites":
+    - listitem: athreascans.com
+    - listitem: azorafly.com
+    - listitem: bacakomik.my
+    - listitem: bluesolo.org
+    - listitem: boruto-france.fr
+    - listitem: chaostrad.fr
+    - listitem: comic-action.com
+    - listitem: comic-gardo.com
     - listitem: comic-walker.com
-    - listitem: comic.naver.com
-    - listitem: comick.dev
-    - listitem: comikey.com
-    - listitem: comix.to
-    - listitem: dassouscan.com
-    - listitem: demonicscans.org
-    - listitem: dongmanmanhua.cn
-    - listitem: drakecomic.net
-    - listitem: dynasty-scans.com
+    - listitem: comic-zenon.com
   - group:
-    - text: 11–20 of 134
+    - text: 11–20 of 167
     - button "First page"
     - button "Previous page"
     - button "Next page"

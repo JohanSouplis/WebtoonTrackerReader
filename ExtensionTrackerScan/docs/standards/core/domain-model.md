@@ -317,27 +317,70 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   entier du titre, de l'URL ou d'un signal de la page, pluriel compris, ou il figure dans le nom d'hôte
   (`asuratoon`, `reaperscans`) : `scandal` ne parle pas de scan. Une marque d'une écriture sans espaces
   (`漫画`, `만화`, `манга`, `مانجا`) compte partout, comme un type JSON-LD de bande dessinée (`ComicSeries`).
+  Pour le content script, le menu du site et le début du texte visible comptent aussi : un mot de lecture dans
+  le texte des liens du site (`Tous les mangas`) ou dans le texte de la page (`Read the latest manga`), si ce
+  même texte ne nomme aucun autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
-  compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée. Aucun
-  segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se comparent segment par
-  segment.
+  compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
+  dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Un
+  nom de série qui contient un autre média ne l'excuse pas : `Solo Leveling Light Novel` est aussi un nom de série
+  que le site reprend en lien. Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
+  comparent segment par segment.
+- **La page est une lecture, pas un article sur elle.** Un mot d'article (`Review`, `Spoilers`, `Discussion`,
+  `Forums`, `News`) dans le titre de l'onglet, `og:title`, `og:site_name`, le `h1` ou le fil d'Ariane désigne une
+  critique, un fil de forum ou une actualité : la page est ignorée, même quand son site parle de manga
+  (`Lookism Chapter 500: The fight we waited for — Manhwa Review Blog`, `Home > News > One Piece Chapter 1166`).
+- **La page montre des planches, pas de la prose.** Pour le content script, une page sans aucune grande image
+  (`img` ou `canvas` d'au moins 300 × 300 px affichés) qui montre au moins trois longs paragraphes (200 caractères
+  et plus) est un chapitre de roman ou un article : elle est ignorée, quel que soit son titre
+  (`Manga Text Chapter - Vol. 1 - Chapter 1` sur une démo de thème de lecteur). L'import de l'historique ne
+  connaît pas ces deux nombres et n'applique pas cette règle.
 - **Le chapitre est celui que la page affiche.** Il vient d'une `ChapterMention` du titre de l'onglet, de
   `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
   `Глава 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`. Après un mot de chapitre vient un séparateur, un
   qualificatif (`VF`, `Online`, `Next`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
-  (`Chapter 11 bankruptcy`). Le numéro de l'URL n'est jamais lu comme chapitre : c'est souvent un index
-  (`episode_no=653` pour l'épisode 235) ou un identifiant collé (`chapter-58.826511`).
+  (`Chapter 11 bankruptcy`), sauf si le mot de chapitre ouvre le texte ou un de ses segments : le nom du
+  chapitre suit alors son numéro (`Shangri-La Frontier | CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?`). Un numéro seul dans un texte d'en-tête (`Scan One Piece 1196`,
+  `Sonic The Hedgehog #88`) est le chapitre si l'URL ou un autre élément de la page
+  (`Issue 1` en JSON-LD pour `Knull (2026) #1 (of 5)`) porte le même numéro, si le texte n'a aucun mot de
+  chapitre et si aucun mot ne le rattache à autre chose (`Page 2`, `Vol. 3`, `Saison 1`, `часть 2`). Le texte
+  visible ne confirme pas un numéro seul : le résumé de la fiche d'un numéro le cite aussi
+  (`Absolute Batman DC Go! Edition #12` et `Episode 12 - Batman and Alfred...`) ; une option sélectionnée réduite à un numéro est une page de liste, pas un chapitre. Le numéro de l'URL n'est jamais lu
+  comme chapitre : c'est souvent un index (`episode_no=653` pour l'épisode 235) ou un identifiant collé
+  (`chapter-58.826511`).
 - **Un second signal confirme le même numéro.** L'URL (`/chapter-12`, `/c12`, `?ep=12`, `/12/`) confirme un
   numéro affiché. Pour un texte d'en-tête (titre de l'onglet, `og:title` s'il diffère du titre, `h1`), un autre
-  élément de la page confirme aussi : `h1`, fil d'Ariane, JSON-LD, option sélectionnée. Un numéro affiché par le
-  seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si l'onglet annonce un autre chapitre que
-  la page, le chapitre confirmé gagne.
-- **Le titre est confirmé.** Dans l'ordre : le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le
-  texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`
-  ou un mot de liaison), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
-  dans un autre signal (URL, `h1`, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet, confirmé de même, quand
-  le chapitre est affiché ailleurs. À défaut, un texte d'en-tête d'un seul tenant qui précède la mention
-  (`Titre Chapter 12 - Site`) est le titre.
+  élément de la page confirme aussi : `h1`, titres de section (`h1` à `h3`), fil d'Ariane, JSON-LD, option
+  sélectionnée, ou le début du texte visible s'il n'affiche que ce numéro, ou ce numéro et ses voisins (liens
+  vers le chapitre précédent et le suivant), quel que soit le mot qui suit (`Глава 77 Палач`) : une liste de
+  chapitres ne confirme rien. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
+  l'onglet annonce un autre chapitre que la page, le chapitre confirmé gagne.
+- **Le titre est confirmé.** Le premier candidat qui tient, dans l'ordre :
+  1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;
+  2. le texte qui entoure la mention (avant elle, ou après elle derrière `|`, un mot de liaison ou le crochet qui
+     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le bruit (`Read`, `Free Reading`, `Lire`, `Vol. 3`,
+     `Scan VF`, `Pagina 1`), s'il figure dans un autre signal (un segment du chemin de l'URL, `h1`, titres de
+     section, fil d'Ariane, JSON-LD, texte d'un lien du site comme le lien vers la page de la série) : deux segments
+     du chemin ne confirment pas ensemble un titre à cheval sur les deux (`/the-strongest-player/` puis
+     `/the-necromancer-familys-young-heir-chapter-33/`) ; le texte entier passe avant le texte sans le
+     nom du site, car un site nommé d'après sa série commence son titre par la série
+     (`Frieren - Beyond Journey's End - Chapter 147` sur `frierenmangafree.com`) ;
+  3. le titre de l'onglet, quand le chapitre est affiché ailleurs, confirmé par un texte qui dit plus que lui : un
+     `og:title` ou un `h1` qui le recopie mot pour mot nomme la page, souvent le chapitre lui-même
+     (`ملابس السباحة. | Team-X`) ;
+  4. un seul des segments qui précèdent la mention ou qui suivent son propre segment
+     (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`, `第1話 / 押しかけギャルの中村さん - おりはらさちこ`), s'il figure dans un texte de la page (`h1`, titres de section, fil d'Ariane, JSON-LD,
+     `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une partie du titre
+     (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ;
+  5. un titre de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors
+     du premier, sans les numéros, les identifiants (`r2311170`) ni les mots de chapitre qui l'entourent
+     (`O Caçador de Destinos Rank F` pour `/comics/o-cacador-de-destinos-rank-f/capitulo/95`, `NANBA MG5` pour
+     `/read/nanba-mg5/fr/16/136`) ;
+  6. à défaut, un texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`).
+- **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans sous-domaine ni extension
+  (`natsu` pour `natsu.one`, `zazaza` pour `a.zazaza.me`), son `og:site_name`, le début de celui-ci avant un slogan
+  (`マグコミ｜マッグガーデン発のWEBマンガサイト`) ou le nom d'un nœud JSON-LD `WebSite`. Seul devant la mention, il
+  reste le titre d'un site nommé d'après sa série (`One Piece - Manga Kapitel 1196` sur `onepiece.tube`).
 
 L'import de l'historique ne connaît que le titre et l'URL : la même règle s'applique, avec l'URL pour seul second
 signal. Le content script envoie en plus les `PageSignals`, qui confirment les pages à l'URL opaque

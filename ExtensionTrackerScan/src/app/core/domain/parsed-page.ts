@@ -30,12 +30,16 @@ export type PageSignals = VisitedPage & {
   readonly ogSiteName?: string;
   readonly canonicalUrl?: string;
   readonly heading?: string;
+  readonly headings?: readonly string[];
   readonly breadcrumb?: string;
+  readonly text?: string;
   readonly structuredData?: readonly StructuredDataItem[];
   readonly selectedOptions?: readonly string[];
   readonly metaImages?: readonly string[];
   readonly images?: readonly PageImage[];
   readonly links?: readonly PageLink[];
+  readonly largeImageCount?: number;
+  readonly longParagraphCount?: number;
 };
 
 export type ParsedPage =

@@ -16,6 +16,7 @@ export const CHAPTER_WORDS = [
   'فصل',
   'chap',
   'cap',
+  'issue',
   'ch',
   'ep',
 ];
@@ -60,6 +61,23 @@ export const QUALIFIERS = [
   'manga',
   'scan',
   'ita',
+];
+
+export const OTHER_NUMBER_WORDS = [
+  'page',
+  'pagina',
+  'página',
+  'seite',
+  'vol',
+  'volume',
+  'tome',
+  'tomo',
+  'том',
+  'часть',
+  'part',
+  'season',
+  'saison',
+  'temporada',
 ];
 
 export const TITLE_CONNECTORS = ['de', 'манги', 'манхвы', 'манхуа', 'من مانجا'];
@@ -123,6 +141,17 @@ export const OTHER_MEDIA_WORDS = [
   'video',
 ];
 
+export const ARTICLE_WORDS = [
+  'review',
+  'reviews',
+  'spoiler',
+  'spoilers',
+  'discussion',
+  'forum',
+  'forums',
+  'news',
+];
+
 export const NON_READING_PATHS = ['course'];
 
 export const TITLE_STOP_WORDS = [
@@ -137,7 +166,7 @@ export const TITLE_STOP_WORDS = [
 export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»】」]\s*|\s+::\s+/;
 
 export const TITLE_NOISE: readonly RegExp[] = [
-  /^.*(?:^|[-|–:]\s*)read\s+/i,
+  /^.*(?:^|[-|–:]\s*)(?:free\s+)?read(?:ing)?\s+/i,
   /^.*مترجم للعربي\s*/,
   /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon):?\s+)+/iu,
   /^(?:その\d+)?[\s\]】」)]+/,
@@ -145,8 +174,9 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /\[official\]|\(official\)/gi,
   /\s+(?:scans?\s+)?(?:fr|vf|vostfr)$/i,
   /^\s*\([^)]*\)/,
+  /^(?:page|pagina|página|seite)\s*\d+(?:\s*\/\s*\d+)?\s*$/iu,
   /\(?\bs\d+\)?\s*$/i,
-  /(?<!\p{L})(?:vol(?:ume)?|том)\.?\s*\d+\.?\s*$/iu,
+  /(?<!\p{L})(?:vol(?:ume)?|том|часть)\.?\s*\d+\.?\s*$/iu,
   /^[\s\-–—|:•·,(]+|[\s\-–—|:•·,(]+$/g,
   /(?:\s+(?:manga|manhwa|manhua|webtoon|comic|online|онлайн|бесплатно)\.?)+$/iu,
 ];

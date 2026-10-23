@@ -15,23 +15,23 @@
     - text: Use the address of a page where you
     - emphasis: read
     - text: "a chapter, not the series list. Sites missing from the list below may still work: most reading sites are recognized automatically."
-  - heading "Verified websites 134" [level=2]
+  - heading "Verified websites 167" [level=2]
   - searchbox "Filter by website or address": manga
   - button "Clear Filter by website or address"
   - paragraph: These were checked on a real chapter page. Most other reading sites are recognized automatically, so they may still work.
   - list "Verified websites":
+    - listitem: 1.selfmanga.live
     - listitem: ezmanga.org
     - listitem: inmanga.com
     - listitem: kakamanga.com
+    - listitem: kmanga.kodansha.com
     - listitem: kunmanga.online
     - listitem: lector-mangas.lat
     - listitem: lelmanga.com
     - listitem: likemanga.ink
     - listitem: lilymanga.net
-    - listitem: manga-corporation.com
-    - listitem: manga-nova.com
   - group:
-    - text: 1–10 of 42
+    - text: 1–10 of 47
     - button "First page" [disabled]
     - button "Previous page" [disabled]
     - button "Next page"

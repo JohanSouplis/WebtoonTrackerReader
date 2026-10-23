@@ -17,6 +17,7 @@ import {
   CAPTURED_PAGES,
   CapturedPage,
   Expected,
+  HELD_OUT_PAGES,
   messagesOf,
 } from './captured-pages';
 import { parsePageSignals } from '../../src/page-signals-message';
@@ -30,6 +31,12 @@ import {
   recordedFromMessage,
 } from './recorded';
 import { verifiedWebsites } from './verified-websites';
+import { isFeasible } from './feasible';
+import {
+  ADVERSARIAL_BLIND_PAGES,
+  ADVERSARIAL_TUNE_PAGES,
+  AdversarialPage,
+} from './adversarial-pages';
 
 type Outcome =
   | { readonly kind: 'exact' }
@@ -356,6 +363,121 @@ for (const { host } of WEBSITE_PATTERNS) {
       .join(' | '),
   );
 }
+
+const reportClimb = (
+  name: string,
+  pages: readonly CapturedPage[],
+  listsPages: boolean,
+): void => {
+  console.log(`\n### ${name}`);
+  const chapterPages = pages.filter(
+    ({ expected }) => expected.kind === 'reading',
+  );
+  const feasible = chapterPages.filter(isFeasible);
+  for (const mode of INPUT_MODES) {
+    const outcomeOf = (page: CapturedPage): CapturedOutcome =>
+      capturedOutcomeOf(page.expected, mode.record(page));
+    const count = (
+      subset: readonly CapturedPage[],
+      outcome: CapturedOutcome,
+    ): number => subset.filter((page) => outcomeOf(page) === outcome).length;
+    const exact = count(feasible, 'exact');
+    console.log(
+      `${mode.name}: feasible ${feasible.length} of ${chapterPages.length} chapter pages: exact ${exact} (${percent(exact, feasible.length)}), missed ${count(feasible, 'missed')}; all chapter pages: exact ${count(chapterPages, 'exact')}, wrong ${count(chapterPages, 'wrong')}, missed ${count(chapterPages, 'missed')}; other pages ${pages.length - chapterPages.length}: recorded ${count(pages, 'false-positive')}`,
+    );
+  }
+  if (!listsPages) {
+    return;
+  }
+  for (const page of chapterPages.filter((page) => !isFeasible(page))) {
+    console.log(
+      `  INFEASIBLE ${expectedText(page.expected)} <- ${page.capture.titleSettled} | ${page.capture.finalUrl}`,
+    );
+  }
+};
+
+console.log(
+  '\n## climb metric: content script exact on feasible chapter pages',
+);
+reportClimb('train (all real pages)', CAPTURED_PAGES, true);
+reportClimb(
+  'held-out (fresh pages of the same hosts, never listed page by page)',
+  HELD_OUT_PAGES,
+  false,
+);
+
+const OTHER_MEDIA_IN_URL =
+  /anime|cartoon|novel|podcast|wiki|reddit|youtube|watch|video/gi;
+
+const neutralUrlOf = (url: string): string =>
+  url.replace(OTHER_MEDIA_IN_URL, 'news');
+
+const withNeutralUrl = (message: unknown): unknown =>
+  typeof message === 'object' && message !== null
+    ? Object.fromEntries(
+        Object.entries(message).map(([key, value]) => [
+          key,
+          (key === 'url' || key === 'canonicalUrl') && typeof value === 'string'
+            ? neutralUrlOf(value)
+            : value,
+        ]),
+      )
+    : message;
+
+const reportAdversarial = (
+  name: string,
+  pages: readonly AdversarialPage[],
+  listsPages: boolean,
+): void => {
+  console.log(`\n### ${name}`);
+  const outcomes = pages.map((page) => {
+    const recorded = page.messages.flatMap(recordedFromMessage);
+    return {
+      page,
+      recorded,
+      outcome: capturedOutcomeOf(page.expected, recorded),
+    };
+  });
+  const count = (outcome: CapturedOutcome): number =>
+    outcomes.filter((entry) => entry.outcome === outcome).length;
+  const chapterPageCount = pages.filter(
+    ({ expected }) => expected.kind === 'reading',
+  ).length;
+  const exposed = pages.filter(
+    (page) =>
+      page.expected.kind === 'other' &&
+      neutralUrlOf(page.url) !== page.url &&
+      page.messages.map(withNeutralUrl).flatMap(recordedFromMessage).length > 0,
+  );
+  console.log(
+    `content script (page signals): chapter pages ${chapterPageCount}: exact ${count('exact')}, wrong ${count('wrong')}, missed ${count('missed')}; other pages ${pages.length - chapterPageCount}: recorded ${count('false-positive')}; other pages recorded once the other medium leaves their URL ${exposed.length}`,
+  );
+  if (!listsPages) {
+    return;
+  }
+  for (const { page, recorded, outcome } of outcomes) {
+    if (outcome !== 'exact' && outcome !== 'ignored') {
+      console.log(
+        `  ${outcome.toUpperCase()} [${page.category}] ${recorded.map(describe).join(', ')} expected ${expectedText(page.expected)} | ${page.url}`,
+      );
+    }
+  }
+  for (const page of exposed) {
+    console.log(
+      `  EXPOSED [${page.category}] ${page.messages.map(withNeutralUrl).flatMap(recordedFromMessage).map(describe).join(', ')} | ${page.url}`,
+    );
+  }
+};
+
+console.log(
+  '\n## adversarial pages captured on hosts absent from every other capture file',
+);
+reportAdversarial('adversarial-tune', ADVERSARIAL_TUNE_PAGES, true);
+reportAdversarial(
+  'adversarial-blind (never listed page by page)',
+  ADVERSARIAL_BLIND_PAGES,
+  false,
+);
 
 const verified = verifiedWebsites();
 console.log('\n## verified websites shown on the Add website screen');
