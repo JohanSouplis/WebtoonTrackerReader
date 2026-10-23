@@ -1,5 +1,6 @@
 import adversarialBlind from './captures/adversarial-blind.json';
 import adversarialTune from './captures/adversarial-tune.json';
+import sealed1 from './captures/sealed-1.json';
 import { Expected } from './captured-pages';
 
 type AdversarialCapture = {
@@ -42,3 +43,7 @@ export const ADVERSARIAL_TUNE_PAGES: readonly AdversarialPage[] =
 
 export const ADVERSARIAL_BLIND_PAGES: readonly AdversarialPage[] =
   adversarialPagesOf(adversarialBlind.pages);
+
+export const SEALED_1_PAGES: readonly AdversarialPage[] = adversarialPagesOf(
+  sealed1.pages,
+);
