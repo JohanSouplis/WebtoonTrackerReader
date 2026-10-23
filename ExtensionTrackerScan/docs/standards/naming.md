@@ -44,6 +44,7 @@ pas un synonyme.
 | `ChapterCheck` | Une vérification des chapitres parus d'un favori, étape par étape | `poll`, `scrape`, `crawl` |
 | `NewChapter` | Un chapitre paru après le dernier lu, sur le même site | `update`, `release` |
 | `HostProfile` | Ce que l'extension a appris d'un site pour vérifier ses chapitres, et sa pause en cours | `siteConfig`, `hostInfo` |
+| `ReportSettings` | Le choix du lecteur d'envoyer ou non au développeur les pages qu'un site supporté n'a pas permis de lire (`sendsParseReports`, oui par défaut) | `telemetry`, `consent`, `privacy` pour ce sens |
 | `WatchSettings` | La fréquence de vérification choisie par le lecteur (`CheckInterval`) | `preferences`, `options` |
 
 Un terme manquant s'ajoute ici d'abord, puis dans le code.
@@ -57,7 +58,7 @@ un diff, sans le chemin.
 |---|---|---|
 | `core/domain/` | aucun, le nom métier | `scan-library.ts`, `chapter.ts`, `page-title-parser.ts` |
 | `core/use-cases/` | `.use-case.ts` | `record-visited-page.use-case.ts` |
-| ports (core et Angular) | `.port.ts` | `scan-repository.port.ts`, `full-page-navigator.port.ts` |
+| ports (core et Angular) | `.port.ts` | `scan-repository.port.ts`, `notification-permission.port.ts` |
 | gateways (core et Angular) | `.gateway.ts`, préfixé par la technologie | `chrome-storage-scan-repository.gateway.ts`, `in-memory-scan-repository.gateway.ts` |
 | racine de feature | `.providers.ts` | `scan-list.providers.ts` |
 | Angular `service/` | `.vm.ts`, `.rules.ts` | `scan-row.vm.ts`, `scan-filters.rules.ts` |

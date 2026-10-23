@@ -33,13 +33,22 @@ describe('NavBarComponent', () => {
     );
   });
 
-  it('should ask for the full page when Informations is clicked', async () => {
-    const fullPageRequested = jest.fn();
-    await renderNavBar('', { fullPageRequested });
+  it('should go to the about page when About is clicked', async () => {
+    const navigated = jest.fn();
+    await renderNavBar('', { navigated });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Informations' }));
+    await userEvent.click(screen.getByRole('button', { name: 'About' }));
 
-    expect(fullPageRequested).toHaveBeenCalled();
+    expect(navigated).toHaveBeenCalledWith('about');
+  });
+
+  it('should mark About as the current page on the about path', async () => {
+    await renderNavBar('about');
+
+    expect(screen.getByRole('button', { name: 'About' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 });
 

@@ -1,7 +1,7 @@
 - navigation "Main":
   - button "Library"
   - button "Add website"
-- button "Informations"
+- button "About"
 - main:
   - heading "Propose a website" [level=2]
   - paragraph: Reading somewhere we don't track yet? Send it for the next update.

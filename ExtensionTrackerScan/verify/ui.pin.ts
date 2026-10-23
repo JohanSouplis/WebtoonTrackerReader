@@ -128,15 +128,28 @@ test.describe('navbar', () => {
     await pin(page, 'nav-03-back-to-library');
   });
 
-  test('navbar informations opens full page through the navigator port', async ({
+  test('about explains tracking and turns parse reports off', async ({
     page,
   }) => {
     await openLibrary(page);
-    await page.getByRole('button', { name: 'Informations' }).click();
-    await expect
-      .poll(() => events.some((e) => e.includes('open page mocked')))
-      .toBe(true);
-    await pin(page, 'nav-04-after-informations');
+    await page.getByRole('button', { name: 'About' }).click();
+    await expect(page).toHaveURL(/#\/about$/);
+    await expect(page.getByRole('button', { name: 'About' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await expect(
+      page.getByRole('heading', { name: 'What gets tracked' }),
+    ).toBeVisible();
+    await pin(page, 'nav-04-about');
+    const reports = page.getByRole('switch', {
+      name: 'Send anonymous parse reports',
+    });
+    await expect(reports).toBeChecked();
+    await reports.click();
+    await expect(reports).not.toBeChecked();
+    await page.getByText('Scan Tracker · version').scrollIntoViewIfNeeded();
+    await pin(page, 'nav-05-about-reports-off');
   });
 
   test('deep link to add website route highlights its tab', async ({
@@ -152,7 +165,7 @@ test.describe('navbar', () => {
     await expect(
       page.getByRole('button', { name: 'Library' }),
     ).not.toHaveAttribute('aria-current');
-    await pin(page, 'nav-05-deep-link-add-website');
+    await pin(page, 'nav-06-deep-link-add-website');
   });
 });
 

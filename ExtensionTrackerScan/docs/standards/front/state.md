@@ -64,8 +64,8 @@ async deleteScan(title: string): Promise<void> {
 
 ## Ports propres à Angular
 
-- Un port propre à Angular est une interface de `service/*.port.ts`, sans import Angular. Aujourd'hui, trois
-  en ont besoin : `FullPageNavigatorPort`, qui ouvre `news.html` dans un onglet, `NotificationPermissionPort`,
+- Un port propre à Angular est une interface de `service/*.port.ts`, sans import Angular. Aujourd'hui, deux
+  en ont besoin : `NotificationPermissionPort`,
   qui demande ou rend la permission des notifications (elle seule dit si les notifications sont actives : aucun
   réglage ne la double), et `CoverBackfillPort`, qui
   demande au service worker de chercher les couvertures des lignes affichées sans couverture. Le use-case

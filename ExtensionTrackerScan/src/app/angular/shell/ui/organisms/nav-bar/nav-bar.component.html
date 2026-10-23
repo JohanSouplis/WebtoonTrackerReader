@@ -16,10 +16,11 @@
 </nav>
 <button
   type="button"
-  class="informations"
-  aria-label="Informations"
-  matTooltip="Informations"
-  (click)="fullPageRequested.emit()"
+  class="about"
+  aria-label="About"
+  matTooltip="About"
+  [attr.aria-current]="isAboutSelected() ? 'page' : null"
+  (click)="navigated.emit(aboutPath)"
 >
   <mat-icon>info</mat-icon>
 </button>

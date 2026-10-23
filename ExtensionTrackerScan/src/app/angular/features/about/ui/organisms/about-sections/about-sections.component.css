@@ -1,0 +1,73 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: var(--app-surface);
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+h2 mat-icon.mat-icon {
+  font-size: 20px;
+  color: var(--app-accent);
+}
+
+p {
+  color: var(--app-muted);
+  line-height: 1.55;
+}
+
+mat-slide-toggle {
+  --mat-switch-label-text-color: var(--app-text);
+  --mat-switch-label-text-font: inherit;
+  --mat-switch-label-text-weight: 600;
+  --mat-switch-label-text-size: 14px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links a {
+  color: var(--app-accent);
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.version {
+  color: var(--app-muted);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  section {
+    padding: 16px;
+  }
+}

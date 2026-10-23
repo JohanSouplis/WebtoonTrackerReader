@@ -32,8 +32,8 @@ ou reconnaître un site appartiennent au core : le front en affiche le résultat
 **Règle de dépendance** : `ui → service`, `ui → core`, `gateways → service`. `service/` ne dépend que du
 core. `ui/` n'importe jamais `gateways/`, ni `core/gateways/`.
 
-Un port propre à Angular n'existe que pour une action qui ne touche aucune donnée métier : ouvrir la page
-complète dans un onglet. Toute écriture métier est un use-case du core
+Un port propre à Angular n'existe que pour une action qui ne touche aucune donnée métier : demander la
+permission des notifications. Toute écriture métier est un use-case du core
 ([`../core/use-case.md`](../core/use-case.md)).
 
 ## Arborescence
@@ -43,9 +43,6 @@ src/app/angular/
   app.config.ts · app.routes.ts
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
-    shell.providers.ts
-    service/   full-page-navigator.port.ts
-    gateways/  chrome-full-page-navigator.gateway.ts · in-memory-full-page-navigator.gateway.ts
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
@@ -66,6 +63,11 @@ src/app/angular/
       ui/
         pages/      add-website-pattern/
         organisms/  website-proposal-form/ · verified-websites/
+    about/                           bouton « About » (i), route 'about'
+      about.providers.ts
+      ui/
+        pages/      about/           about.page.ts · .html · about.store.ts
+        organisms/  about-sections/
   shared/ui/                         organisms et templates partagés par 2 features ou plus
 ```
 

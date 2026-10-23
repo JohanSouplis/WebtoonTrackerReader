@@ -1,0 +1,51 @@
+<section aria-labelledby="about-tracking">
+  <h2 id="about-tracking"><mat-icon>history</mat-icon>What gets tracked</h2>
+  <p>
+    Scan Tracker remembers the last chapter you read of each series. It reads
+    your browser history every hour and every chapter page you open, so there is
+    nothing to add by hand: read a chapter on a supported site and the series
+    shows up in your library.
+  </p>
+  <p>
+    Removing a series deletes it from your library. Reading it again adds it
+    back.
+  </p>
+</section>
+
+<section aria-labelledby="about-new-chapters">
+  <h2 id="about-new-chapters">
+    <mat-icon>notifications</mat-icon>New chapters
+  </h2>
+  <p>
+    Favorite series are checked for new chapters from your browser, without any
+    server, as often as you choose in the library. A new chapter shows on its
+    row and as a count on the toolbar icon. Desktop alerts are optional.
+  </p>
+</section>
+
+<section aria-labelledby="about-privacy">
+  <h2 id="about-privacy"><mat-icon>shield</mat-icon>Privacy</h2>
+  <p>
+    Your library stays in your browser. When a page of a supported site can't be
+    read, the extension sends that page's address and title to the developer so
+    the site can be fixed. Nothing else about you is sent.
+  </p>
+  <mat-slide-toggle
+    [checked]="sendsParseReports()"
+    (change)="parseReportsToggled.emit($event.checked)"
+    >Send anonymous parse reports</mat-slide-toggle
+  >
+</section>
+
+<section aria-labelledby="about-feedback">
+  <h2 id="about-feedback"><mat-icon>forum</mat-icon>Feedback</h2>
+  <ul class="links">
+    <li>
+      <a [href]="issuesUrl" target="_blank" rel="noopener"
+        >Report a problem or ask a question on GitHub</a
+      >
+    </li>
+  </ul>
+</section>
+
+<p class="version">Scan Tracker · version {{ version() }}</p>

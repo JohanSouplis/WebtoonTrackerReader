@@ -1,0 +1,25 @@
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Add website"
+- button "About"
+- main:
+  - region "What gets tracked":
+    - heading "What gets tracked" [level=2]
+    - paragraph: "Scan Tracker remembers the last chapter you read of each series. It reads your browser history every hour and every chapter page you open, so there is nothing to add by hand: read a chapter on a supported site and the series shows up in your library."
+    - paragraph: Removing a series deletes it from your library. Reading it again adds it back.
+  - region "New chapters":
+    - heading "New chapters" [level=2]
+    - paragraph: Favorite series are checked for new chapters from your browser, without any server, as often as you choose in the library. A new chapter shows on its row and as a count on the toolbar icon. Desktop alerts are optional.
+  - region "Privacy":
+    - heading "Privacy" [level=2]
+    - paragraph: Your library stays in your browser. When a page of a supported site can't be read, the extension sends that page's address and title to the developer so the site can be fixed. Nothing else about you is sent.
+    - switch "Send anonymous parse reports"
+    - text: Send anonymous parse reports
+  - region "Feedback":
+    - heading "Feedback" [level=2]
+    - list:
+      - listitem:
+        - link "Report a problem or ask a question on GitHub":
+          - /url: https://github.com/JohanSouplis/WebtoonTrackerReader/issues
+  - paragraph: Scan Tracker · version 1.2.1

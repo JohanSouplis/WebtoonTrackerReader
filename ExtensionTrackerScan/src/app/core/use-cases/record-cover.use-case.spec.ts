@@ -5,6 +5,7 @@ import { ScanTitle } from '../domain/scan-title';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
+import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
 import {
   ImageSize,
@@ -248,6 +249,7 @@ const setUp = ({
   const recordVisitedPage = new RecordVisitedPageUseCase(
     scanRepository,
     new InMemoryCrashReporter(),
+    new InMemoryReportSettingsRepository(),
     clock,
   );
   const recordCover = new RecordCoverUseCase(

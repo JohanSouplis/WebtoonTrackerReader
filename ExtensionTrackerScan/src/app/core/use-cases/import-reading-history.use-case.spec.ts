@@ -1,6 +1,7 @@
 import { ScanSnapshot } from '../domain/scan-library';
 import { InMemoryBrowserHistory } from '../gateways/in-memory/in-memory-browser-history.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
+import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
 import { HistoryVisit } from '../ports/browser-history.port';
 import { ImportReadingHistoryUseCase } from './import-reading-history.use-case';
@@ -89,6 +90,24 @@ describe('ImportReadingHistoryUseCase', () => {
     expect(crashReporter.reportedPages).toEqual([unparsed.page]);
     expect(await scans()).toEqual([]);
   });
+
+  it('should report no history page when the reader turned parse reports off', async () => {
+    const { importReadingHistory, crashReporter } = setUp(
+      [
+        visit(
+          'Lore Olympus | WEBTOON',
+          'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
+          LATER,
+        ),
+      ],
+      [],
+      new InMemoryReportSettingsRepository({ sendsParseReports: false }),
+    );
+
+    await importReadingHistory.execute();
+
+    expect(crashReporter.reportedPages).toEqual([]);
+  });
 });
 
 const EARLIER = new Date('2025-03-01T10:00:00Z');
@@ -104,7 +123,11 @@ const visit = (pageTitle: string, url: string, readAt: Date): HistoryVisit => ({
   readAt,
 });
 
-const setUp = (visits: HistoryVisit[], followed: ScanSnapshot[] = []) => {
+const setUp = (
+  visits: HistoryVisit[],
+  followed: ScanSnapshot[] = [],
+  reportSettings = new InMemoryReportSettingsRepository(),
+) => {
   const scanRepository = new InMemoryScanRepository(followed);
   const crashReporter = new InMemoryCrashReporter();
   return {
@@ -114,6 +137,7 @@ const setUp = (visits: HistoryVisit[], followed: ScanSnapshot[] = []) => {
       new InMemoryBrowserHistory(visits),
       scanRepository,
       crashReporter,
+      reportSettings,
     ),
   };
 };

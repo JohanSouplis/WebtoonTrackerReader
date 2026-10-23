@@ -32,6 +32,7 @@ Exemples tirés de l'extension :
 | `scan-rows` | organism | Affiche un `ScanListView` (lignes paginées ou état vide), avec le lien du nouveau chapitre d'un favori ou l'indication d'un site impossible à vérifier, émet suppression, favori, note, page. Après une suppression, il pose le focus sur le titre voisin et ignore un second clic de suppression pendant 300 ms : la ligne suivante glisse sous le pointeur. |
 | `new-chapter-settings` | organism | Un bouton qui annonce la fréquence et ouvre un menu : fréquence (`1h`, `6h`, `24h`) et notifications. Émet le choix, la page l'applique. |
 | `scan-filters` | organism | Champ de recherche et bascules « Favorites only », « Rated only ». Émet un `ScanFilters`. |
+| `about-sections` | organism | Ce que l'extension suit et comment, la veille des chapitres, la confidentialité avec l'interrupteur des rapports, le contact et la version. Émet le choix des rapports. |
 | `scan-list` | page | Routée sur `''`, injecte le store et les use-cases. |
 
 ## Atoms et molecules sont le design-system, et rien d'autre

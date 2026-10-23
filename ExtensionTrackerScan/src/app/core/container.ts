@@ -7,6 +7,7 @@ import { ChromeOffscreenPageReader } from './gateways/chrome-offscreen-page-read
 import { ChromeStorageChapterWatchRepository } from './gateways/chrome-storage-chapter-watch-repository.gateway';
 import { ChromeStorageCoverRepository } from './gateways/chrome-storage-cover-repository.gateway';
 import { ChromeStorageHostProfileRepository } from './gateways/chrome-storage-host-profile-repository.gateway';
+import { ChromeStorageReportSettingsRepository } from './gateways/chrome-storage-report-settings-repository.gateway';
 import { ChromeStorageScanRepository } from './gateways/chrome-storage-scan-repository.gateway';
 import { ChromeStorageWatchSettingsRepository } from './gateways/chrome-storage-watch-settings-repository.gateway';
 import { DiscordCrashReporter } from './gateways/discord-crash-reporter.gateway';
@@ -28,6 +29,7 @@ container
       new RecordVisitedPageUseCase(
         new ChromeStorageScanRepository(),
         new DiscordCrashReporter(),
+        new ChromeStorageReportSettingsRepository(),
         new SystemClock(),
       ),
   );
@@ -39,6 +41,7 @@ container
         new ChromeBrowserHistory(),
         new ChromeStorageScanRepository(),
         new DiscordCrashReporter(),
+        new ChromeStorageReportSettingsRepository(),
       ),
   );
 container

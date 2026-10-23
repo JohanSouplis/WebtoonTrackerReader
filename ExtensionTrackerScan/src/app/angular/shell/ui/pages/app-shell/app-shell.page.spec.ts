@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { FULL_PAGE_NAVIGATOR } from '../../../../injection-tokens';
 import { AppShellPage } from './app-shell.page';
 
 @Component({ template: '<h1>Library page</h1>' })
@@ -9,6 +8,9 @@ class LibraryStubPage {}
 
 @Component({ template: '<h1>Add website page</h1>' })
 class AddWebsiteStubPage {}
+
+@Component({ template: '<h1>About page</h1>' })
+class AboutStubPage {}
 
 describe('AppShellPage', () => {
   it('should mark Add website as the current page when the popup opens on its route', async () => {
@@ -37,22 +39,27 @@ describe('AppShellPage', () => {
     );
   });
 
-  it('should open the full page when Informations is clicked', async () => {
-    const openFullPage = jest.fn();
-    await renderShell('', openFullPage);
+  it('should show the about page and mark it current when About is clicked', async () => {
+    await renderShell('');
 
-    await userEvent.click(screen.getByRole('button', { name: 'Informations' }));
+    await userEvent.click(screen.getByRole('button', { name: 'About' }));
 
-    expect(openFullPage).toHaveBeenCalled();
+    expect(
+      await screen.findByRole('heading', { name: 'About page' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'About' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 });
 
-const renderShell = (initialRoute: string, openFullPage = jest.fn()) =>
+const renderShell = (initialRoute: string) =>
   render(AppShellPage, {
     routes: [
       { path: '', component: LibraryStubPage },
       { path: 'add_website_pattern', component: AddWebsiteStubPage },
+      { path: 'about', component: AboutStubPage },
     ],
     initialRoute,
-    providers: [{ provide: FULL_PAGE_NAVIGATOR, useValue: { openFullPage } }],
   });

@@ -13,6 +13,8 @@ const TABS = [
   { path: 'add_website_pattern', label: 'Add website', icon: 'add_link' },
 ] as const;
 
+const ABOUT_PATH = 'about';
+
 @Component({
   selector: 'app-nav-bar',
   imports: [MatIconModule, MatTooltipModule],
@@ -23,7 +25,10 @@ const TABS = [
 export class NavBarComponent {
   readonly selectedPath = input.required<string>();
   readonly navigated = output<string>();
-  readonly fullPageRequested = output<void>();
+  protected readonly aboutPath = ABOUT_PATH;
+  protected readonly isAboutSelected = computed(
+    () => this.selectedPath() === ABOUT_PATH,
+  );
   protected readonly tabs = computed(() =>
     TABS.map((tab) => ({
       ...tab,

@@ -2,6 +2,7 @@ import { parsePageSignals } from '../../../page-signals-message';
 import { ScanSnapshot } from '../domain/scan-library';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
+import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
 import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
 import { aScan } from './scans.fixture';
@@ -55,6 +56,20 @@ describe('RecordVisitedPageUseCase', () => {
       expect(crashReporter.reportedPages).toEqual([{ pageTitle, url }]);
     },
   );
+
+  it('should report no page when the reader turned parse reports off', async () => {
+    const { recordVisitedPage, crashReporter } = setUp(
+      [],
+      new InMemoryReportSettingsRepository({ sendsParseReports: false }),
+    );
+
+    await recordVisitedPage.execute({
+      pageTitle: 'Lore Olympus | WEBTOON',
+      url: 'https://www.webtoons.com/en/romance/lore-olympus/list?title_no=1320',
+    });
+
+    expect(crashReporter.reportedPages).toEqual([]);
+  });
 
   it.each([
     [
@@ -618,7 +633,10 @@ const signalsOf = (message: unknown) => {
   return signals;
 };
 
-const setUp = (followed: ScanSnapshot[] = []) => {
+const setUp = (
+  followed: ScanSnapshot[] = [],
+  reportSettings = new InMemoryReportSettingsRepository(),
+) => {
   const scanRepository = new InMemoryScanRepository(followed);
   const crashReporter = new InMemoryCrashReporter();
   return {
@@ -627,6 +645,7 @@ const setUp = (followed: ScanSnapshot[] = []) => {
     recordVisitedPage: new RecordVisitedPageUseCase(
       scanRepository,
       crashReporter,
+      reportSettings,
       new FixedClock(NOW),
     ),
   };

@@ -2,7 +2,7 @@
 - navigation "Main":
   - button "Library"
   - button "Add website"
-- button "Informations"
+- button "About"
 - main:
   - searchbox "Filter by title": zzzz
   - button "Clear Filter by title"

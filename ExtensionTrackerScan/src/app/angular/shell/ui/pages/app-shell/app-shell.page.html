@@ -1,8 +1,4 @@
-<app-nav-bar
-  [selectedPath]="selectedPath()"
-  (navigated)="select($event)"
-  (fullPageRequested)="openFullPage()"
-/>
+<app-nav-bar [selectedPath]="selectedPath()" (navigated)="select($event)" />
 <main>
   <router-outlet />
 </main>

@@ -75,7 +75,7 @@ nav button[aria-current="page"] mat-icon {
   color: var(--app-accent);
 }
 
-.informations {
+.about {
   width: 38px;
   height: 38px;
   display: grid;
@@ -91,9 +91,14 @@ nav button[aria-current="page"] mat-icon {
     background 0.15s;
 }
 
-.informations:hover {
+.about:hover {
   color: var(--app-text);
   background: var(--app-surface-2);
+}
+
+.about[aria-current="page"] {
+  color: var(--app-accent);
+  background: var(--app-surface-3);
 }
 
 @media (max-width: 560px) {

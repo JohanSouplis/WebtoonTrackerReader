@@ -61,20 +61,21 @@ src/
                            reading.ts · parsed-page.ts · page-title-parser.ts · website-patterns.ts
                            unsupported-website-page-parser.ts · page-lexicon.ts
                            cover.ts · cover-search.ts · series-page.ts · site.ts
-                           chapter-watch.ts · chapter-check.ts · fetched-page.ts
+                           chapter-watch.ts · chapter-check.ts · fetched-page.ts · report-settings.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · restore-scan.use-case.ts
                            toggle-favorite.use-case.ts · rate-scan.use-case.ts
                            propose-website.use-case.ts · record-cover.use-case.ts
                            backfill-covers.use-case.ts · check-new-chapters.use-case.ts
                            show-new-chapter-count.use-case.ts · change-check-interval.use-case.ts
+                           change-parse-reports.use-case.ts
                                                                 (chacun avec son .spec.ts à côté)
     ports/                 scan-repository.port.ts · browser-history.port.ts · clock.port.ts
                            crash-reporter.port.ts · website-proposal.port.ts
                            cover-repository.port.ts · cover-image.port.ts · page-reader.port.ts
                            chapter-watch-repository.port.ts · host-profile-repository.port.ts
                            watch-settings-repository.port.ts · web-page.port.ts · timer.port.ts
-                           new-chapter-alerts.port.ts
+                           new-chapter-alerts.port.ts · report-settings-repository.port.ts
     gateways/              chrome-storage-scan-repository.gateway.ts · chrome-browser-history.gateway.ts
                            system-clock.gateway.ts · discord-crash-reporter.gateway.ts
                            discord-website-proposal.gateway.ts · chrome-storage-cover-repository.gateway.ts
@@ -84,6 +85,7 @@ src/
                            chrome-storage-watch-settings-repository.gateway.ts
                            fetch-web-page.gateway.ts · system-timer.gateway.ts
                            chrome-new-chapter-alerts.gateway.ts (pastille et notifications)
+                           chrome-storage-report-settings-repository.gateway.ts
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
                            fixed-clock.gateway.ts · in-memory-crash-reporter.gateway.ts
                            in-memory-website-proposal.gateway.ts · dev-scans.ts
@@ -93,6 +95,7 @@ src/
                            in-memory-host-profile-repository.gateway.ts
                            in-memory-watch-settings-repository.gateway.ts
                            in-memory-new-chapter-alerts.gateway.ts · dev-watches.ts
+                           in-memory-report-settings-repository.gateway.ts
 ```
 
 Un dossier n'existe que s'il a du contenu. Le sous-dossier `src/` actuel (`core/src/domain`) disparaît avec la
@@ -164,7 +167,7 @@ scan qu'elle supprime.
 - **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey>`, hors de la clé `scans` : un
   enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
   La veille des chapitres suit la même règle : `watch:<SeriesKey>` pour un `ChapterWatch`, `host:<site>` pour un
-  `HostProfile`, `watch-settings` pour la fréquence.
+  `HostProfile`, `watch-settings` pour la fréquence, `report-settings` pour le choix des rapports.
 - **Le format stocké dans `chrome.storage.local` est un contrat public.** Les utilisateurs de la version
   publiée doivent relire leurs données après une mise à jour. Un changement de format ajoute la lecture de
   l'ancien format dans le gateway, il ne casse jamais les données existantes.

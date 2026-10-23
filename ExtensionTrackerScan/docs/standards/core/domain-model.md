@@ -249,7 +249,9 @@ déjà décidé.
 - Le catalogue est typé (`readonly WebsitePattern[]`), sans `any`. Les formats d'un site forment un tableau,
   pas un objet indexé par `'1'`, `'2'`, `'3'`.
 - Le catalogue garde la priorité. Une page d'un site supporté qui ne suit aucun format est signalée, jamais
-  confiée à l'analyse générique.
+  confiée à l'analyse générique. Le signalement envoie l'adresse et le titre de la page au développeur : il
+  n'a lieu que si le lecteur garde les rapports (`ReportSettings`, activés par défaut, désactivables dans
+  l'écran About).
 - Ajouter un site, c'est ajouter une entrée au catalogue et une ligne au tableau de cas de la spec
   ([`testing.md`](testing.md)).
 - Un site n'entre ou ne reste au catalogue que si ses formats battent l'analyse générique sur
