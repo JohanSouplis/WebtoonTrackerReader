@@ -187,7 +187,7 @@ export const TITLE_NOISE: readonly RegExp[] = [
   /^.*مترجم للعربي\s*/,
   /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon|مانجا|مانها|مانهوا):?\s+)+/iu,
   /^(?:その\d+)?[\s\]】」)]+/,
-  /\s*\((?:manga|manhwa|manhua|webtoon|comic)\)\s*$/i,
+  /\s*\(\s*(?:manga|manhwa|manhua|webtoon|comic|raw|mtl|makine)\s*\)\s*$/i,
   /\[official\]|\(official\)/gi,
   /\s+(?:scans?\s+)?(?:fr|vf|vostfr)$/i,
   /^\s*\([^)]*\)/,

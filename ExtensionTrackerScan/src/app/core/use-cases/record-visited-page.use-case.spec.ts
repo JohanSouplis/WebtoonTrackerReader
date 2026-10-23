@@ -136,6 +136,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['مانجا Black Clover الفصل 392 مترجم | مانجا اون لاين', 'https://onma.top/manga/black-clover/392', 'Black Clover', 392],
     ['Read Wedding Blues - Chapter 6.5 | KaliScans', 'https://kaliscans.org/series/wedding-blues/6-5', 'Wedding Blues', 6.5],
     ['One-Punch Man: One-Punch Man, Chapter 228 - Mangaddict — Read Manga Online Free | Updated Daily', 'https://www.mangaddict.com/en/one-punch-man/one-punch-man-chapter-228.html', 'One-Punch Man', 228],
+    ['Lookism ( Makine) Bölüm 630 manga oku - Nabicix | Manga Oku, Webtoon Oku, Çizgi Roman Platformu', 'https://www.nabicix.com/lookism-makine-bolum-630/', 'Lookism', 630],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {

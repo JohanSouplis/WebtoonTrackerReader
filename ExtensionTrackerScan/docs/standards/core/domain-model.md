@@ -406,7 +406,7 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;
   2. le texte qui entoure la mention (avant elle, ou après elle derrière `|`, un mot de liaison ou le crochet qui
      la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le bruit (`Read`, `Free Reading`, `Lire`, `مانجا`, `Vol. 3`,
-     `Scan VF`, `Pagina 1`, `Том: 2.`, la série répétée de `One-Punch Man: One-Punch Man`), s'il figure dans un autre signal (un segment du chemin de l'URL, `h1`, titres de
+     `Scan VF`, `Pagina 1`, `Том: 2.`, la traduction entre parenthèses de `Lookism ( Makine)`, la série répétée de `One-Punch Man: One-Punch Man`), s'il figure dans un autre signal (un segment du chemin de l'URL, `h1`, titres de
      section, fil d'Ariane, JSON-LD, texte d'un lien du site comme le lien vers la page de la série) : deux segments
      du chemin ne confirment pas ensemble un titre à cheval sur les deux (`/the-strongest-player/` puis
      `/the-necromancer-familys-young-heir-chapter-33/`) ; le texte entier passe avant le texte sans le
