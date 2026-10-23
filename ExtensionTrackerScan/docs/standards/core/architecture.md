@@ -78,7 +78,9 @@ src/
                            system-clock.gateway.ts · discord-crash-reporter.gateway.ts
                            discord-website-proposal.gateway.ts · chrome-storage-cover-repository.gateway.ts
                            chrome-cover-image.gateway.ts · chrome-offscreen-page-reader.gateway.ts
-                           chrome-storage-chapter-watch-repository.gateway.ts (veille, sites, fréquence)
+                           chrome-storage-chapter-watch-repository.gateway.ts
+                           chrome-storage-host-profile-repository.gateway.ts
+                           chrome-storage-watch-settings-repository.gateway.ts
                            fetch-web-page.gateway.ts · system-timer.gateway.ts
                            chrome-new-chapter-alerts.gateway.ts (pastille et notifications)
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
@@ -87,6 +89,8 @@ src/
                            in-memory-cover-repository.gateway.ts · dev-covers.ts
                            in-memory-web.gateway.ts            (pages et images, pour les deux ports)
                            in-memory-chapter-watch-repository.gateway.ts · in-memory-web-pages.gateway.ts
+                           in-memory-host-profile-repository.gateway.ts
+                           in-memory-watch-settings-repository.gateway.ts
                            in-memory-new-chapter-alerts.gateway.ts · dev-watches.ts
 ```
 

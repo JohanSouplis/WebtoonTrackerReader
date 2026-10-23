@@ -1,9 +1,12 @@
 import { container } from './app/core/container';
 import { BackfillCoversUseCase } from './app/core/use-cases/backfill-covers.use-case';
+import { CheckNewChaptersUseCase } from './app/core/use-cases/check-new-chapters.use-case';
 import { ImportReadingHistoryUseCase } from './app/core/use-cases/import-reading-history.use-case';
 import { RecordCoverUseCase } from './app/core/use-cases/record-cover.use-case';
 import { RecordVisitedPageUseCase } from './app/core/use-cases/record-visited-page.use-case';
+import { ShowNewChapterCountUseCase } from './app/core/use-cases/show-new-chapter-count.use-case';
 import { parseCoverBackfillMessage } from './cover-backfill-message';
+import { watchNewChapters } from './new-chapters-alarm';
 import { parsePageSignals } from './page-signals-message';
 
 const IMPORT_INTERVAL_MS = 3600000;
@@ -37,3 +40,7 @@ chrome.runtime.onMessage.addListener(
 
 importHistory();
 setInterval(importHistory, IMPORT_INTERVAL_MS);
+watchNewChapters(
+  container.get(CheckNewChaptersUseCase),
+  container.get(ShowNewChapterCountUseCase),
+);

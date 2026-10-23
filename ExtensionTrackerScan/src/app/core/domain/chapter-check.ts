@@ -16,17 +16,24 @@ import { siteOf } from './site';
 
 export type StrategyKind = 'feed' | 'series-page' | 'next-chapter-url';
 
-export type UnsupportedReason =
-  | 'no-series-page'
-  | 'no-chapter-list'
-  | 'echoes-any-chapter'
-  | 'script-only';
+export const UNSUPPORTED_REASONS = [
+  'no-series-page',
+  'no-chapter-list',
+  'echoes-any-chapter',
+  'script-only',
+] as const;
+
+export type UnsupportedReason = (typeof UNSUPPORTED_REASONS)[number];
+
+export const LESSON_VALUES = {
+  feed: ['works', 'absent'],
+  'series-page': ['works', 'no-chapter-list'],
+  'far-chapter': ['refused', 'echoed'],
+  'current-chapter': ['shown', 'hidden'],
+} as const;
 
 type LessonValues = {
-  readonly feed: 'works' | 'absent';
-  readonly 'series-page': 'works' | 'no-chapter-list';
-  readonly 'far-chapter': 'refused' | 'echoed';
-  readonly 'current-chapter': 'shown' | 'hidden';
+  readonly [L in keyof typeof LESSON_VALUES]: (typeof LESSON_VALUES)[L][number];
 };
 
 export type Lesson = keyof LessonValues;
@@ -380,7 +387,7 @@ const STRATEGIES: readonly Strategy[] = [
   },
 ];
 
-type Learned<V> = { readonly value: V; readonly learnedAt: Date };
+export type Learned<V> = { readonly value: V; readonly learnedAt: Date };
 
 const valueIfCurrent = <V>(
   learned: Learned<V> | undefined,

@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { ChapterWatchRepository } from '../core/ports/chapter-watch-repository.port';
 import { ClockPort } from '../core/ports/clock.port';
 import { CoverRepository } from '../core/ports/cover-repository.port';
 import { ScanRepository } from '../core/ports/scan-repository.port';
@@ -22,3 +23,6 @@ export const COVER_REPOSITORY = new InjectionToken<CoverRepository>(
 export const COVER_BACKFILL = new InjectionToken<CoverBackfillPort>(
   'CoverBackfillPort',
 );
+
+export const CHAPTER_WATCH_REPOSITORY =
+  new InjectionToken<ChapterWatchRepository>('ChapterWatchRepository');

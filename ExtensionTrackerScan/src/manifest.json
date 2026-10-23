@@ -8,8 +8,10 @@
     "unlimitedStorage",
     "storage",
     "declarativeNetRequestWithHostAccess",
-    "offscreen"
+    "offscreen",
+    "alarms"
   ],
+  "optional_permissions": ["notifications"],
   "background": {
     "service_worker": "background.js",
     "type": "module"

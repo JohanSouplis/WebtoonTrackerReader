@@ -1,11 +1,13 @@
 import { inject, Provider } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+import { ChromeStorageChapterWatchRepository } from '../../../core/gateways/chrome-storage-chapter-watch-repository.gateway';
 import { ChromeStorageCoverRepository } from '../../../core/gateways/chrome-storage-cover-repository.gateway';
 import { ChromeStorageScanRepository } from '../../../core/gateways/chrome-storage-scan-repository.gateway';
 import { ConsoleScanRepository } from '../../../core/gateways/console-scan-repository.gateway';
 import { SystemClock } from '../../../core/gateways/system-clock.gateway';
 import { DEV_COVERS } from '../../../core/gateways/in-memory/dev-covers';
 import { DEV_SCANS } from '../../../core/gateways/in-memory/dev-scans';
+import { InMemoryChapterWatchRepository } from '../../../core/gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { ScanRepository } from '../../../core/ports/scan-repository.port';
@@ -13,6 +15,7 @@ import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case'
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
 import {
+  CHAPTER_WATCH_REPOSITORY,
   CLOCK,
   COVER_BACKFILL,
   COVER_REPOSITORY,
@@ -46,6 +49,13 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
         : new InMemoryCoverRepository(DEV_COVERS),
   },
   {
+    provide: CHAPTER_WATCH_REPOSITORY,
+    useFactory: () =>
+      environment.production
+        ? new ChromeStorageChapterWatchRepository()
+        : new InMemoryChapterWatchRepository(),
+  },
+  {
     provide: COVER_BACKFILL,
     useFactory: () =>
       environment.production
@@ -58,6 +68,7 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
       new DeleteScanUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is deleted'),
         inject(COVER_REPOSITORY),
+        inject(CHAPTER_WATCH_REPOSITORY),
       ),
   },
   {

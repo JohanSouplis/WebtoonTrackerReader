@@ -5,6 +5,7 @@ import { Cover, Thumbnail } from '../../../../../../core/domain/cover';
 import { ScanLibrary } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { FixedClock } from '../../../../../../core/gateways/in-memory/fixed-clock.gateway';
+import { InMemoryChapterWatchRepository } from '../../../../../../core/gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
@@ -225,7 +226,11 @@ const renderPage = (
       { provide: CLOCK, useValue: new FixedClock() },
       {
         provide: DeleteScanUseCase,
-        useValue: new DeleteScanUseCase(scanRepository, coverRepository),
+        useValue: new DeleteScanUseCase(
+          scanRepository,
+          coverRepository,
+          new InMemoryChapterWatchRepository(),
+        ),
       },
       {
         provide: ToggleFavoriteUseCase,
