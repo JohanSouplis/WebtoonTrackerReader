@@ -471,6 +471,7 @@ test.describe('scan list', () => {
     await expect(
       page.getByText('Renamed to “Local Development”'),
     ).toBeVisible();
+    await expectAnnounced(page, 'Renamed to “Local Development”');
     await pin(page, 'scan-correct-03-renamed');
   });
 
