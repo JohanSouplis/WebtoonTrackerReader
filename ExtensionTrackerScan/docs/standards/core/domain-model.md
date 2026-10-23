@@ -385,7 +385,7 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   `og:title`, du `h1`, du fil d'Ariane ou d'une option sélectionnée : `Chapter 12`, `Capítulo 12`,
   `Глава 12`, `Розділ 12`, `Bölüm 12`, `الفصل 12`, `第12話`, `12화`, `Capítulo #12`. Une lettre accentuée se lit composée, même si la page l'écrit
   en deux caractères (`i` suivi de l'accent aigu dans `Capítulo`). Après un mot de chapitre vient un séparateur, un
-  qualificatif (`VF`, `Online`, `Next`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
+  qualificatif (`VF`, `Online`, `Next`, `مترجم`) ou un mot de liaison (`de`, `манги`), jamais un mot de phrase
   (`Chapter 11 bankruptcy`), sauf si le mot de chapitre ouvre le texte ou un de ses segments : le nom du
   chapitre suit alors son numéro (`Shangri-La Frontier | CHAPTER 1 WHAT DO YOU PLAY GAMES FOR?`). Un numéro seul dans un texte d'en-tête (`Scan One Piece 1196`,
   `Sonic The Hedgehog #88`) est le chapitre si l'URL ou un autre élément de la page
@@ -405,7 +405,7 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
 - **Le titre est confirmé.** Le premier candidat qui tient, dans l'ordre :
   1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;
   2. le texte qui entoure la mention (avant elle, ou après elle derrière `|`, un mot de liaison ou le crochet qui
-     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le bruit (`Read`, `Free Reading`, `Lire`, `Vol. 3`,
+     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le bruit (`Read`, `Free Reading`, `Lire`, `مانجا`, `Vol. 3`,
      `Scan VF`, `Pagina 1`, `Том: 2.`), s'il figure dans un autre signal (un segment du chemin de l'URL, `h1`, titres de
      section, fil d'Ariane, JSON-LD, texte d'un lien du site comme le lien vers la page de la série) : deux segments
      du chemin ne confirment pas ensemble un titre à cheval sur les deux (`/the-strongest-player/` puis

@@ -133,6 +133,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Тільки я можу воскресати - Розділ 34 - Mangarama', 'https://mangarama.com.ua/manga/tilky-ya-mozhu-voskresaty/chapter-34/', 'Тільки я можу воскресати', 34],
     ['Теневой раб — глава 14 читать онлайн | WaManga', 'https://wamanga.ru/manhwa/tenevoy-rab/glava-14', 'Теневой раб', 14],
     ['Solo Leveling - Vol: 2. Chapter: 56 - Manga Reader', 'https://mangareader.example/solo-leveling/chapter-56', 'Solo Leveling', 56],
+    ['مانجا Black Clover الفصل 392 مترجم | مانجا اون لاين', 'https://onma.top/manga/black-clover/392', 'Black Clover', 392],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {

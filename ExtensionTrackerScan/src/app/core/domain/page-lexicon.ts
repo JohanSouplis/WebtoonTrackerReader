@@ -64,6 +64,7 @@ export const QUALIFIERS = [
   'manga',
   'scan',
   'ita',
+  'مترجم',
 ];
 
 export const OTHER_NUMBER_WORDS = [
@@ -184,7 +185,7 @@ export const TITLE_SEPARATOR = /\s+[-–—|•·»/]\s+|\s*[|｜»】」]\s*|\s
 export const TITLE_NOISE: readonly RegExp[] = [
   /^.*(?:^|[-|–:]\s*)(?:free\s+)?read(?:ing)?\s+/i,
   /^.*مترجم للعربي\s*/,
-  /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon):?\s+)+/iu,
+  /^(?:(?:lire|le|leer|ler|baca|komik|читать|чтение|онлайн|scan|manga|манга|manhwa|manhua|webtoon|مانجا|مانها|مانهوا):?\s+)+/iu,
   /^(?:その\d+)?[\s\]】」)]+/,
   /\s*\((?:manga|manhwa|manhua|webtoon|comic)\)\s*$/i,
   /\[official\]|\(official\)/gi,
