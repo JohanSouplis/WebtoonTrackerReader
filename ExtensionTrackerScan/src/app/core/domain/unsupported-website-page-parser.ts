@@ -160,9 +160,18 @@ const structuredTexts = (page: PageSignals): string[] =>
       [name, headline].flatMap((text) => text ?? []),
     );
 
+const registeredNameOf = (hostname: string): string => {
+  const labels = hostname.split('.').slice(0, -1);
+  const name =
+    labels.length > 1 && labels[labels.length - 1].length <= 3
+      ? labels.slice(0, -1)
+      : labels;
+  return name[name.length - 1] ?? hostname;
+};
+
 const websiteOf = (page: PageSignals): Website => ({
   host: hostOf(page.url),
-  label: folded(hostnameOf(page.url).split('.')[0]),
+  label: folded(registeredNameOf(hostnameOf(page.url))),
   names: [
     page.ogSiteName,
     ...(page.ogSiteName ?? '').split(TITLE_SEPARATOR),

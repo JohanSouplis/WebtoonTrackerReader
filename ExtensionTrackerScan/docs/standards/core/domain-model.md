@@ -327,8 +327,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
      (`O Caçador de Destinos Rank F` pour `/comics/o-cacador-de-destinos-rank-f/capitulo/95`, `NANBA MG5` pour
      `/read/nanba-mg5/fr/16/136`) ;
   6. à défaut, un texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`).
-- **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans extension
-  (`natsu` pour `natsu.one`), son `og:site_name`, le début de celui-ci avant un slogan
+- **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans sous-domaine ni extension
+  (`natsu` pour `natsu.one`, `zazaza` pour `a.zazaza.me`), son `og:site_name`, le début de celui-ci avant un slogan
   (`マグコミ｜マッグガーデン発のWEBマンガサイト`) ou le nom d'un nœud JSON-LD `WebSite`. Seul devant la mention, il
   reste le titre d'un site nommé d'après sa série (`One Piece - Manga Kapitel 1196` sur `onepiece.tube`).
 
