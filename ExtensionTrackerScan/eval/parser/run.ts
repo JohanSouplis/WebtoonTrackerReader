@@ -17,6 +17,7 @@ import {
   CAPTURED_PAGES,
   CapturedPage,
   Expected,
+  HELD_OUT_PAGES,
   messagesOf,
 } from './captured-pages';
 import { parsePageSignals } from '../../src/page-signals-message';
@@ -394,6 +395,11 @@ console.log(
   '\n## climb metric: content script exact on feasible chapter pages',
 );
 reportClimb('train (all real pages)', CAPTURED_PAGES, true);
+reportClimb(
+  'held-out (fresh pages of the same hosts, never listed page by page)',
+  HELD_OUT_PAGES,
+  false,
+);
 
 const verified = verifiedWebsites();
 console.log('\n## verified websites shown on the Add website screen');
