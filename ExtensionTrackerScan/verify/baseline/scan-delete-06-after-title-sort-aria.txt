@@ -117,3 +117,5 @@
     - button "Previous page" [disabled]
     - button "Next page"
     - button "Last page"
+- text: Removed “Local”
+- button "Undo"

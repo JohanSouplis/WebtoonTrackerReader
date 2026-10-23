@@ -25,6 +25,7 @@ pas un synonyme.
 | `readAt` | La date de la dernière lecture | `whenWasItRead`, `wasRead`, `dateReading` |
 | `Favorite` | Un scan marqué par le lecteur | `fav`, `isFavorited` |
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
+| `RemovedScan` | Un scan supprimé, avec sa couverture et sa veille, gardé le temps de l'annulation | `deletedItem`, `trash`, `backup` |
 | `VisitedPage` | Le titre et l'URL d'une page vue dans le navigateur | `message`, `page` sans type |
 | `pageTitle` | Le contenu de `<title>` d'une page visitée | `titleWebpage`, `titleWepPage` |
 | `PageSignals` | Une `VisitedPage` et ce que le content script lit en plus sur la page : `og:title`, `h1`, fil d'Ariane, JSON-LD, option sélectionnée, images et liens | `pageData`, `metadata`, `message` |

@@ -5,6 +5,7 @@ import {
 } from '../../../../../../core/domain/chapter-watch';
 import { Covers } from '../../../../../../core/domain/cover';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
+import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import {
   filterScans,
   NO_FILTERS,
@@ -76,6 +77,9 @@ export class ScanListStore {
   readonly sort = this.shownSort.asReadonly();
   readonly settings = this.shownSettings.asReadonly();
   readonly count = computed(() => this.matchingScans().length);
+  readonly libraryTitles = computed(() =>
+    (this.snapshots() ?? []).map(({ title }) => ScanTitle.of(title)),
+  );
   private readonly rowsView = computed((): RowsView => {
     const library = this.library();
     if (library === undefined) {
@@ -132,6 +136,12 @@ export class ScanListStore {
 
   showLibrary(snapshots: readonly ScanSnapshot[]): void {
     this.snapshots.set(snapshots);
+  }
+
+  hide(title: string): void {
+    this.snapshots.update((snapshots) =>
+      snapshots?.filter((snapshot) => snapshot.title !== title),
+    );
   }
 
   showWatches(watches: ChapterWatches): void {

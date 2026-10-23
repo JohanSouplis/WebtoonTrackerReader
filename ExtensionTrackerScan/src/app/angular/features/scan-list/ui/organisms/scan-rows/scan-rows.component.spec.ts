@@ -106,6 +106,39 @@ describe('ScanRowsComponent', () => {
     expect(deleted).toHaveBeenCalledWith(SOLO_LEVELING);
   });
 
+  it('should delete once when the delete button is double-clicked, since the next row slides under the pointer', async () => {
+    const deleted = jest.fn();
+    await renderRows(SHOWN_SCANS, { deleted });
+
+    await userEvent.dblClick(
+      screen.getByRole('button', { name: 'Delete Solo Leveling' }),
+    );
+
+    expect(deleted).toHaveBeenCalledTimes(1);
+  });
+
+  it('should move the focus to the next title when a scan is deleted', async () => {
+    await renderRows(SHOWN_SCANS);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Delete Solo Leveling' }),
+    );
+
+    expect(
+      screen.getByRole('link', { name: 'Omniscient Reader' }),
+    ).toHaveFocus();
+  });
+
+  it('should move the focus to the previous title when the last scan is deleted', async () => {
+    await renderRows(SHOWN_SCANS);
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Delete Omniscient Reader' }),
+    );
+
+    expect(screen.getByRole('link', { name: 'Solo Leveling' })).toHaveFocus();
+  });
+
   it('should ask to toggle the favorite when the star of a scan is clicked', async () => {
     const favoriteToggled = jest.fn();
     await renderRows(SHOWN_SCANS, { favoriteToggled });

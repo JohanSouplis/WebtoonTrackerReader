@@ -17,6 +17,7 @@ import { ScanRepository } from '../../../core/ports/scan-repository.port';
 import { ChangeCheckIntervalUseCase } from '../../../core/use-cases/change-check-interval.use-case';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
+import { RestoreScanUseCase } from '../../../core/use-cases/restore-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
@@ -94,6 +95,15 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
     useFactory: () =>
       new DeleteScanUseCase(
         announcingSaves(inject(SCAN_REPOSITORY), 'scan is deleted'),
+        inject(COVER_REPOSITORY),
+        inject(CHAPTER_WATCH_REPOSITORY),
+      ),
+  },
+  {
+    provide: RestoreScanUseCase,
+    useFactory: () =>
+      new RestoreScanUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'scan is restored'),
         inject(COVER_REPOSITORY),
         inject(CHAPTER_WATCH_REPOSITORY),
       ),

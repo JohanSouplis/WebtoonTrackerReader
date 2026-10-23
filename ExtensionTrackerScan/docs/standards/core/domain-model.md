@@ -35,7 +35,14 @@ comparaison) est un Value Object.
 - un scan garde l'adresse de la page de sa série (`seriesUrl`) que la lecture la plus récente a lue ; une
   lecture sans cette adresse (l'import de l'historique) garde l'adresse connue si elle vient du même site,
   l'oublie sinon ;
-- noter, mettre en favori ou supprimer un scan absent échoue par une erreur du domaine.
+- noter, mettre en favori ou supprimer un scan absent échoue par une erreur du domaine ;
+- un scan supprimé peut revenir (`reinstate`) : il reprend sa lecture, son favori et sa note, et se fusionne
+  comme au chargement si la même série a été relue entre-temps.
+
+`DeleteScanUseCase` rend la bibliothèque et le scan retiré (`RemovedScan` : le scan, sa couverture et son
+`ChapterWatch` s'ils existent). `RestoreScanUseCase` le remet en place, couverture et veille comprises : c'est
+l'annulation d'une suppression. La couverture remise ne remplace pas une couverture trouvée entre-temps
+(`settleCover`).
 
 Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enregistre par `snapshot()`.
 

@@ -320,6 +320,36 @@ test.describe('scan list', () => {
     await pin(page, 'scan-delete-02-local-removed');
   });
 
+  test('undo brings a deleted row back', async ({ page }) => {
+    await openLibrary(page);
+    await row(page, 'Local')
+      .getByRole('button', { name: 'Delete Local' })
+      .click();
+    await expect(row(page, 'Local')).toHaveCount(0);
+    await expect(page.getByText('Removed “Local”')).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Omniscient Reader’s Viewpoint' }),
+    ).toBeFocused();
+    await pin(page, 'scan-delete-07-undo-offered');
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await expect(row(page, 'Local')).toHaveCount(1);
+    await expect(page.getByText('20 series')).toBeVisible();
+    await expect(
+      row(page, 'Local').getByRole('button', { name: 'Favorite Local' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    await pin(page, 'scan-delete-08-undone');
+  });
+
+  test('double click on delete removes a single row', async ({ page }) => {
+    await openLibrary(page);
+    await row(page, 'Local')
+      .getByRole('button', { name: 'Delete Local' })
+      .dblclick();
+    await expect(row(page, 'Local')).toHaveCount(0);
+    await expect(page.getByText('19 series')).toBeVisible();
+    await expect(row(page, 'Omniscient Reader’s Viewpoint')).toHaveCount(1);
+  });
+
   test('delete is reachable from the keyboard', async ({ page }) => {
     await openLibrary(page);
     await row(page, 'Local')

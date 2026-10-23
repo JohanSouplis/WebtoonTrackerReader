@@ -2,8 +2,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   input,
   output,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -17,6 +20,8 @@ import { TruncatedTextComponent } from '../../../../../design-system/atoms/trunc
 import { ScanListView, ScanPage } from '../../../service/scan-list-view.vm';
 import { ScanRow } from '../../../service/scan-row.vm';
 import { ScanRating } from './scan-rows.types';
+
+const SHIFTED_ROW_GUARD_MS = 300;
 
 @Component({
   selector: 'app-scan-rows',
@@ -60,4 +65,19 @@ export class ScanRowsComponent {
   readonly filtersCleared = output<void>();
   protected readonly ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   protected readonly pageSizes = [5, 10, 20, 50, 100];
+  private readonly list = viewChild<ElementRef<HTMLElement>>('list');
+  private readonly titleLinks =
+    viewChildren<ElementRef<HTMLElement>>('titleLink');
+  private lastDeleteAt = -Infinity;
+
+  protected delete(row: ScanRow, index: number, click: MouseEvent): void {
+    if (click.timeStamp - this.lastDeleteAt < SHIFTED_ROW_GUARD_MS) {
+      return;
+    }
+    this.lastDeleteAt = click.timeStamp;
+    const links = this.titleLinks();
+    const neighbor = links[index + 1] ?? links[index - 1];
+    (neighbor ?? this.list())?.nativeElement.focus();
+    this.deleted.emit(row);
+  }
 }

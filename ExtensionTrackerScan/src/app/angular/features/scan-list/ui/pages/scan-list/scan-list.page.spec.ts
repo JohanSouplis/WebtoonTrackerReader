@@ -12,6 +12,7 @@ import { InMemoryWatchSettingsRepository } from '../../../../../../core/gateways
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
+import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import {
@@ -240,6 +241,33 @@ describe('ScanListPage', () => {
     ]);
   });
 
+  it('should bring a deleted scan back with its favorite when Undo is clicked', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Solo Leveling', isFavorite: true }),
+      aScan({ title: 'Omniscient Reader' }),
+    ]);
+    await renderPage(scanRepository);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Delete Solo Leveling' }),
+    );
+    expect(
+      await screen.findByText('Removed “Solo Leveling”'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Solo Leveling' }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(await screen.findByRole('button', { name: 'Undo' }));
+
+    expect(
+      await screen.findByRole('link', { name: 'Solo Leveling' }),
+    ).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({ title: 'Omniscient Reader' }),
+      aScan({ title: 'Solo Leveling', isFavorite: true }),
+    ]);
+  });
+
   it('should tell the reader and refresh the list when the scan was already removed elsewhere', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),
@@ -257,7 +285,7 @@ describe('ScanListPage', () => {
 
     expect(
       await screen.findByText(
-        'This scan is no longer in your library. The list is up to date.',
+        'This series is no longer in your library. The list is up to date.',
       ),
     ).toBeInTheDocument();
     expect(
@@ -325,6 +353,14 @@ const renderPage = (
       {
         provide: DeleteScanUseCase,
         useValue: new DeleteScanUseCase(
+          scanRepository,
+          coverRepository,
+          watchRepository,
+        ),
+      },
+      {
+        provide: RestoreScanUseCase,
+        useValue: new RestoreScanUseCase(
           scanRepository,
           coverRepository,
           watchRepository,

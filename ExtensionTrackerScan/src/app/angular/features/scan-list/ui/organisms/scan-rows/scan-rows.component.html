@@ -1,7 +1,7 @@
 @let shown = view();
 @switch (shown.kind) {
   @case ("scans") {
-    <ul aria-label="Library">
+    <ul aria-label="Library" tabindex="-1" #list>
       @for (row of shown.rows; track row.title; let index = $index) {
         <li [style.--index]="index" @row>
           @switch (row.cover.kind) {
@@ -16,7 +16,13 @@
             }
           }
           <div class="body">
-            <a class="title" [href]="row.url" target="_blank" rel="noopener">
+            <a
+              class="title"
+              [href]="row.url"
+              target="_blank"
+              rel="noopener"
+              #titleLink
+            >
               <ds-truncated-text [text]="row.title" [maxLength]="55" />
             </a>
             <div class="meta">
@@ -74,7 +80,7 @@
               type="button"
               class="delete"
               attr.aria-label="Delete {{ row.title }}"
-              (click)="deleted.emit(row)"
+              (click)="delete(row, index, $event)"
             >
               <mat-icon>delete</mat-icon>
             </button>

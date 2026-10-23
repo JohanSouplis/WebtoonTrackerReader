@@ -16,13 +16,13 @@ describe('DeleteScanUseCase', () => {
       kept,
     ]);
 
-    const scans = await new DeleteScanUseCase(
+    const { library } = await new DeleteScanUseCase(
       scanRepository,
       new InMemoryCoverRepository(),
       new InMemoryChapterWatchRepository(),
     ).execute(ScanTitle.of("Mount Hua Sect's Genius Phantom Swordsman"));
 
-    expect(scans).toEqual([kept]);
+    expect(library).toEqual([kept]);
     expect((await scanRepository.load()).snapshot()).toEqual([kept]);
   });
 
@@ -70,6 +70,22 @@ describe('DeleteScanUseCase', () => {
         ScanTitle.of('Nano Machine'),
       ]),
     ).toEqual(new Map([['Nano Machine', UP_TO_DATE]]));
+  });
+
+  it('should hand back the removed scan with its cover and watch so it can be restored', async () => {
+    const removed = aScan({ title: 'Solo Leveling', isFavorite: true });
+
+    const removal = await new DeleteScanUseCase(
+      new InMemoryScanRepository([removed]),
+      new InMemoryCoverRepository({ 'Solo Leveling': MISSING }),
+      new InMemoryChapterWatchRepository({ 'Solo Leveling': UP_TO_DATE }),
+    ).execute(ScanTitle.of('solo leveling'));
+
+    expect(removal.removed).toEqual({
+      scan: removed,
+      cover: MISSING,
+      watch: UP_TO_DATE,
+    });
   });
 
   it('should fail with ScanNotFound and keep every scan and cover when no scan has the title', async () => {

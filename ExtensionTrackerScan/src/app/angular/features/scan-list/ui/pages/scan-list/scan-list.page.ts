@@ -15,8 +15,12 @@ import {
 } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
-import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
+import {
+  DeleteScanUseCase,
+  RemovedScan,
+} from '../../../../../../core/use-cases/delete-scan.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
+import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import {
   CHAPTER_WATCH_REPOSITORY,
@@ -34,6 +38,8 @@ import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component
 import { ScanRating } from '../../organisms/scan-rows/scan-rows.types';
 import { ScanSortBarComponent } from '../../organisms/scan-sort-bar/scan-sort-bar.component';
 import { ScanListStore } from './scan-list.store';
+
+const UNDO_DURATION_MS = 6000;
 
 @Component({
   selector: 'app-scan-list',
@@ -56,6 +62,7 @@ export class ScanListPage implements OnInit {
   private readonly notificationPermission = inject(NOTIFICATION_PERMISSION);
   private readonly changeCheckInterval = inject(ChangeCheckIntervalUseCase);
   private readonly deleteScan = inject(DeleteScanUseCase);
+  private readonly restoreScan = inject(RestoreScanUseCase);
   private readonly toggleFavoriteScan = inject(ToggleFavoriteUseCase);
   private readonly rateScan = inject(RateScanUseCase);
   private readonly snackBar = inject(MatSnackBar);
@@ -98,7 +105,14 @@ export class ScanListPage implements OnInit {
   }
 
   protected delete(scan: ScanRow): Promise<void> {
-    return this.update(() => this.deleteScan.execute(ScanTitle.of(scan.title)));
+    this.store.hide(scan.title);
+    return this.update(async () => {
+      const { library, removed } = await this.deleteScan.execute(
+        ScanTitle.of(scan.title),
+      );
+      this.offerUndo(removed);
+      return library;
+    });
   }
 
   protected toggleFavorite(scan: ScanRow): Promise<void> {
@@ -113,15 +127,32 @@ export class ScanListPage implements OnInit {
     );
   }
 
+  private offerUndo(removed: RemovedScan): void {
+    this.snackBar
+      .open(`Removed “${removed.scan.title}”`, 'Undo', {
+        duration: UNDO_DURATION_MS,
+      })
+      .onAction()
+      .subscribe(() => {
+        this.restore(removed).catch((error: unknown) =>
+          console.error('Error restoring the scan:', error),
+        );
+      });
+  }
+
+  private async restore(removed: RemovedScan): Promise<void> {
+    await this.update(() => this.restoreScan.execute(removed));
+    await this.showWatches();
+  }
+
   private async update(command: () => Promise<ScanSnapshot[]>): Promise<void> {
     try {
       this.store.showLibrary(await command());
     } catch (error: unknown) {
-      if (!(error instanceof ScanNotFound)) {
-        throw error;
-      }
       this.snackBar.open(
-        'This scan is no longer in your library. The list is up to date.',
+        error instanceof ScanNotFound
+          ? 'This series is no longer in your library. The list is up to date.'
+          : "Couldn't save your change. Please try again.",
         'Dismiss',
         { duration: 5000 },
       );
@@ -153,12 +184,13 @@ export class ScanListPage implements OnInit {
   }
 
   private async showLibrary(): Promise<void> {
-    const snapshots = (await this.scanRepository.load()).snapshot();
-    this.store.showLibrary(snapshots);
+    this.store.showLibrary((await this.scanRepository.load()).snapshot());
+    await this.showWatches();
+  }
+
+  private async showWatches(): Promise<void> {
     this.store.showWatches(
-      await this.watchRepository.find(
-        snapshots.map(({ title }) => ScanTitle.of(title)),
-      ),
+      await this.watchRepository.find(this.store.libraryTitles()),
     );
   }
 

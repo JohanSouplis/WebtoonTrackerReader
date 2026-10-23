@@ -35,26 +35,40 @@ type TrackedScan = {
   rating?: Rating;
 };
 
+const trackedScanOf = (snapshot: ScanSnapshot): TrackedScan => ({
+  reading: {
+    title: ScanTitle.of(snapshot.title),
+    chapter: Chapter.of(snapshot.chapter),
+    url: snapshot.url,
+    readAt: snapshot.readAt,
+    seriesUrl: snapshot.seriesUrl,
+  },
+  isFavorite: snapshot.isFavorite,
+  rating:
+    snapshot.rating === undefined ? undefined : Rating.of(snapshot.rating),
+});
+
+const snapshotOf = ({
+  reading,
+  isFavorite,
+  rating,
+}: TrackedScan): ScanSnapshot => ({
+  title: reading.title.value,
+  chapter: reading.chapter.value,
+  url: reading.url,
+  readAt: reading.readAt,
+  isFavorite,
+  rating: rating?.value,
+  seriesUrl: reading.seriesUrl,
+});
+
 export class ScanLibrary {
   private constructor(private scans: TrackedScan[]) {}
 
   static restore(snapshots: readonly ScanSnapshot[]): ScanLibrary {
     const library = new ScanLibrary([]);
     for (const snapshot of snapshots) {
-      library.mergeSameSeriesKey({
-        reading: {
-          title: ScanTitle.of(snapshot.title),
-          chapter: Chapter.of(snapshot.chapter),
-          url: snapshot.url,
-          readAt: snapshot.readAt,
-          seriesUrl: snapshot.seriesUrl,
-        },
-        isFavorite: snapshot.isFavorite,
-        rating:
-          snapshot.rating === undefined
-            ? undefined
-            : Rating.of(snapshot.rating),
-      });
+      library.reinstate(snapshot);
     }
     return library;
   }
@@ -74,6 +88,20 @@ export class ScanLibrary {
       seriesUrl:
         reading.seriesUrl ?? seriesUrlOnSameSite(scan.reading, reading),
     };
+  }
+
+  reinstate(snapshot: ScanSnapshot): void {
+    const scan = trackedScanOf(snapshot);
+    const twin = this.findSeriesKey(scan.reading.title.seriesKey);
+    if (!twin) {
+      this.scans.push(scan);
+      return;
+    }
+    const [latest, earliest] =
+      scan.reading.readAt > twin.reading.readAt ? [scan, twin] : [twin, scan];
+    twin.reading = latest.reading;
+    twin.isFavorite = twin.isFavorite || scan.isFavorite;
+    twin.rating = latest.rating ?? earliest.rating;
   }
 
   remove(title: ScanTitle): void {
@@ -99,29 +127,12 @@ export class ScanLibrary {
     return this.findSeries(title.seriesKey)?.reading.title;
   }
 
-  snapshot(): ScanSnapshot[] {
-    return this.scans.map(({ reading, isFavorite, rating }) => ({
-      title: reading.title.value,
-      chapter: reading.chapter.value,
-      url: reading.url,
-      readAt: reading.readAt,
-      isFavorite,
-      rating: rating?.value,
-      seriesUrl: reading.seriesUrl,
-    }));
+  snapshotOf(title: ScanTitle): ScanSnapshot {
+    return snapshotOf(this.get(title));
   }
 
-  private mergeSameSeriesKey(scan: TrackedScan): void {
-    const twin = this.findSeriesKey(scan.reading.title.seriesKey);
-    if (!twin) {
-      this.scans.push(scan);
-      return;
-    }
-    const [latest, earliest] =
-      scan.reading.readAt > twin.reading.readAt ? [scan, twin] : [twin, scan];
-    twin.reading = latest.reading;
-    twin.isFavorite = twin.isFavorite || scan.isFavorite;
-    twin.rating = latest.rating ?? earliest.rating;
+  snapshot(): ScanSnapshot[] {
+    return this.scans.map(snapshotOf);
   }
 
   private findSeriesKey(key: SeriesKey): TrackedScan | undefined {

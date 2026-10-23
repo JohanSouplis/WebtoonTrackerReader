@@ -63,7 +63,8 @@ src/
                            cover.ts · cover-search.ts · series-page.ts · site.ts
                            chapter-watch.ts · chapter-check.ts · fetched-page.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
-                           delete-scan.use-case.ts · toggle-favorite.use-case.ts · rate-scan.use-case.ts
+                           delete-scan.use-case.ts · restore-scan.use-case.ts
+                           toggle-favorite.use-case.ts · rate-scan.use-case.ts
                            propose-website.use-case.ts · record-cover.use-case.ts
                            backfill-covers.use-case.ts · check-new-chapters.use-case.ts
                            show-new-chapter-count.use-case.ts · change-check-interval.use-case.ts

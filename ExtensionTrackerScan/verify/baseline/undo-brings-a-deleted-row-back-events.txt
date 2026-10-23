@@ -1,0 +1,3 @@
+console.log: Angular is running in development mode.
+console.log: scan is deleted
+console.log: scan is restored
