@@ -139,6 +139,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Lookism ( Makine) Bölüm 630 manga oku - Nabicix | Manga Oku, Webtoon Oku, Çizgi Roman Platformu', 'https://www.nabicix.com/lookism-makine-bolum-630/', 'Lookism', 630],
     ['Touhou Sangetsusei. Touhou Sangetsusei Chapter 18 - Manga Reader', 'https://mangareader.example/touhou-sangetsusei/chapter-18', 'Touhou Sangetsusei', 18],
     ['Hunter × Hunter Chapter 391 - Manga Reader', 'https://mangareader.example/hunter-x-hunter/chapter-391', 'Hunter × Hunter', 391],
+    ['Ch.258 | D.Gray-Man | TAM', 'https://tuttoanimemanga.net/read/dgray-man/it/ch/258', 'D.Gray-Man', 258],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {

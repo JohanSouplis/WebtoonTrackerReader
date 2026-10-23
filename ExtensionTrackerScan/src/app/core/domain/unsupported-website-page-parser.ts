@@ -471,7 +471,7 @@ const afterCandidates = (after: string, website: Website): string[] => {
   return [
     ...(connected ? titleSpan(connected[1], isWebsiteAtEnd) : []),
     ...(nextTitles.length > 0
-      ? nextTitles
+      ? [...nextTitles, ...titleSpan(pieces[0], () => false)]
       : titleSpan(titleAfterMention(mentionPiece), isWebsiteAtEnd)),
   ].filter((candidate) => !isExactWebsiteName(candidate, website));
 };
