@@ -11,14 +11,14 @@ describe('AboutPage', () => {
     await renderPage(settingsRepository);
 
     await userEvent.click(
-      screen.getByRole('switch', { name: 'Send anonymous parse reports' }),
+      screen.getByRole('switch', { name: 'Send anonymous diagnostics' }),
     );
 
     expect(await settingsRepository.load()).toEqual({
       sendsParseReports: false,
     });
     expect(
-      screen.getByRole('switch', { name: 'Send anonymous parse reports' }),
+      screen.getByRole('switch', { name: 'Send anonymous diagnostics' }),
     ).not.toBeChecked();
   });
 
@@ -29,7 +29,7 @@ describe('AboutPage', () => {
 
     expect(
       await screen.findByRole('switch', {
-        name: 'Send anonymous parse reports',
+        name: 'Send anonymous diagnostics',
         checked: false,
       }),
     ).toBeInTheDocument();

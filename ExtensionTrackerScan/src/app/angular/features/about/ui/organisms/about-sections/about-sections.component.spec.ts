@@ -13,11 +13,18 @@ describe('AboutSectionsComponent', () => {
     );
   });
 
-  it('should say which page details are sent to the developer', async () => {
+  it('should say which page details and diagnostics are sent to the developer', async () => {
     await renderSections();
 
-    expect(screen.getByRole('region', { name: 'Privacy' })).toHaveTextContent(
-      "sends that page's address and title to the developer",
+    const privacy = screen.getByRole('region', { name: 'Privacy' });
+    expect(privacy).toHaveTextContent(
+      "the address and title of a page of a supported site it can't read",
+    );
+    expect(privacy).toHaveTextContent(
+      'its type and a short code, never its text',
+    );
+    expect(privacy).toHaveTextContent(
+      'diagnostics carry no page address and no series title',
     );
   });
 
@@ -26,7 +33,7 @@ describe('AboutSectionsComponent', () => {
     await renderSections({ parseReportsToggled });
 
     await userEvent.click(
-      screen.getByRole('switch', { name: 'Send anonymous parse reports' }),
+      screen.getByRole('switch', { name: 'Send anonymous diagnostics' }),
     );
 
     expect(parseReportsToggled).toHaveBeenCalledWith(false);
