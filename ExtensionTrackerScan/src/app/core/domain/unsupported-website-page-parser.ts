@@ -232,8 +232,15 @@ const isChapterConfirmed = (
         (option) => Number(option) === chapter.value,
       )));
 
+const wordsOf = (texts: readonly (string | undefined)[]): string[] =>
+  texts
+    .flatMap((text) => text ?? [])
+    .join(' ')
+    .toLowerCase()
+    .split(/\P{L}+/u);
+
 const textWords = (page: PageSignals): string[] =>
-  [
+  wordsOf([
     page.pageTitle,
     decoded(page.url),
     page.ogTitle,
@@ -241,27 +248,35 @@ const textWords = (page: PageSignals): string[] =>
     page.heading,
     page.breadcrumb,
     ...structuredTexts(page),
-  ]
-    .flatMap((text) => text ?? [])
-    .join(' ')
-    .toLowerCase()
-    .split(/\P{L}+/u);
+  ]);
 
-const mentionsReading = (page: PageSignals): boolean => {
-  const host = hostOf(page.url);
-  const words = textWords(page);
+const namesReading = (words: readonly string[]): boolean => {
   const text = folded(words.join(' '));
   return (
     READING_WORDS.some(
-      (word) =>
-        host.includes(word) ||
-        words.includes(word) ||
-        words.includes(`${word}s`),
-    ) ||
-    READING_MARKS.some((mark) => text.includes(folded(mark))) ||
+      (word) => words.includes(word) || words.includes(`${word}s`),
+    ) || READING_MARKS.some((mark) => text.includes(folded(mark)))
+  );
+};
+
+const navigationNamesReading = ({ links }: PageSignals): boolean => {
+  const texts = (links ?? []).map(({ text }) => text);
+  const navigation = texts.join(' ').toLowerCase();
+  return (
+    namesReading(wordsOf(texts)) &&
+    !OTHER_MEDIA_WORDS.some((word) => navigation.includes(word))
+  );
+};
+
+const mentionsReading = (page: PageSignals): boolean => {
+  const host = hostOf(page.url);
+  return (
+    READING_WORDS.some((word) => host.includes(word)) ||
+    namesReading(textWords(page)) ||
     (page.structuredData ?? []).some(({ types }) =>
       types.some((type) => READING_TYPES.includes(type)),
-    )
+    ) ||
+    navigationNamesReading(page)
   );
 };
 

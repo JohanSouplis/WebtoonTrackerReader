@@ -289,6 +289,8 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   entier du titre, de l'URL ou d'un signal de la page, pluriel compris, ou il figure dans le nom d'hôte
   (`asuratoon`, `reaperscans`) : `scandal` ne parle pas de scan. Une marque d'une écriture sans espaces
   (`漫画`, `만화`, `манга`, `مانجا`) compte partout, comme un type JSON-LD de bande dessinée (`ComicSeries`).
+  Pour le content script, le menu du site compte aussi : un mot de lecture dans le texte de ses liens
+  (`Tous les mangas`), si aucun de ces liens ne nomme un autre média (`Novels`).
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
   compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée. Aucun
   segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se comparent segment par
