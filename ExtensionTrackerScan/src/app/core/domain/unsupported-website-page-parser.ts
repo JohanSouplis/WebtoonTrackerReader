@@ -470,15 +470,19 @@ const titleOf = (
   }
   const witnesses = titleWitnesses(page, display.text);
   const before = beforeCandidates(mention, website);
-  const confirmed = [
-    ...before,
-    ...afterCandidates(mention.after, website),
-    ...(display.text === page.pageTitle
-      ? []
-      : pageTitleCandidates(page, website)),
-  ].find((candidate) =>
-    witnesses.some((witness) => witness.includes(folded(candidate))),
-  );
+  const confirmed =
+    [...before, ...afterCandidates(mention.after, website)].find((candidate) =>
+      witnesses.some((witness) => witness.includes(folded(candidate))),
+    ) ??
+    (display.text === page.pageTitle
+      ? undefined
+      : pageTitleCandidates(page, website).find((candidate) =>
+          witnesses.some(
+            (witness) =>
+              witness.includes(folded(candidate)) &&
+              witness !== folded(candidate),
+          ),
+        ));
   if (confirmed) {
     return confirmed;
   }

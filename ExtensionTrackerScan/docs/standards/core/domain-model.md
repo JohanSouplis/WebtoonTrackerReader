@@ -308,18 +308,22 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   élément de la page confirme aussi : `h1`, titres de section (`h1` à `h3`), fil d'Ariane, JSON-LD, option
   sélectionnée. Un numéro affiché par le seul fil d'Ariane ou la seule option doit être confirmé par l'URL. Si
   l'onglet annonce un autre chapitre que la page, le chapitre confirmé gagne.
-- **Le titre est confirmé.** Dans l'ordre : le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le
-  texte qui affiche le chapitre ; sinon le texte qui entoure la mention (avant elle, ou après elle derrière `|`,
-  un mot de liaison ou le crochet qui la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le nom du site ni le bruit (`Read`, `Lire`, `Vol. 3`, `Scan VF`), s'il figure
-  dans un autre signal (URL, `h1`, titres de section, fil d'Ariane, JSON-LD) ; sinon le titre de l'onglet,
-  confirmé de même, quand le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
-  (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`), s'il figure dans un texte de la page
-  (`h1`, titres de section, fil d'Ariane, JSON-LD, `og:title`) : l'URL ne confirme pas un segment, son slug ne
-  garde souvent qu'une partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ; sinon un titre
-  de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors du premier,
-  sans les numéros ni les mots de chapitre qui l'entourent (`O Caçador de Destinos Rank F` pour
-  `/comics/o-cacador-de-destinos-rank-f/capitulo/95`). À défaut, un texte d'en-tête d'un seul tenant qui précède
-  la mention (`Titre Chapter 12 - Site`) est le titre.
+- **Le titre est confirmé.** Le premier candidat qui tient, dans l'ordre :
+  1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;
+  2. le texte qui entoure la mention (avant elle, ou après elle derrière `|`, un mot de liaison ou le crochet qui
+     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le nom du site ni le bruit (`Read`, `Lire`,
+     `Vol. 3`, `Scan VF`), s'il figure dans un autre signal (URL, `h1`, titres de section, fil d'Ariane, JSON-LD) ;
+  3. le titre de l'onglet, quand le chapitre est affiché ailleurs, confirmé par un texte qui dit plus que lui : un
+     `og:title` ou un `h1` qui le recopie mot pour mot nomme la page, souvent le chapitre lui-même
+     (`ملابس السباحة. | Team-X`) ;
+  4. un seul des segments qui entourent la mention (`Чёрный Клевер - Black Clover - Black Clover онлайн.
+     Глава 393`), s'il figure dans un texte de la page (`h1`, titres de section, fil d'Ariane, JSON-LD,
+     `og:title`) : l'URL ne confirme pas un segment, son slug ne garde souvent qu'une partie du titre
+     (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ;
+  5. un titre de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors
+     du premier, sans les numéros ni les mots de chapitre qui l'entourent (`O Caçador de Destinos Rank F` pour
+     `/comics/o-cacador-de-destinos-rank-f/capitulo/95`) ;
+  6. à défaut, un texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`).
 - **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans extension
   (`natsu` pour `natsu.one`), son `og:site_name`, le début de celui-ci avant un slogan
   (`マグコミ｜マッグガーデン発のWEBマンガサイト`) ou le nom d'un nœud JSON-LD `WebSite`. Seul devant la mention, il
