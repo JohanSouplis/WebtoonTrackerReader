@@ -180,6 +180,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['its tab title has no chapter but its breadcrumb and selected chapter have', { pageTitle: 'Lire Mariage Toxine Scan FR - Mangas Origines', url: 'https://mangas-origines.fr/oeuvre/marriage-toxin/chapitre-183/', ogTitle: 'Mariage Toxine Scan FR - Lire le manga sur Mangas Origines', breadcrumb: 'Accueil Catalogue Mariage Toxine Chapitre 183', selectedOptions: ['Chapitre 183', '1/18'] }, 'Mariage Toxine', 183],
     ['its tab title joins several names of the series and its heading shows one of them', { pageTitle: 'Чтение Манга Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393 - ZazaZa', url: 'https://a.zazaza.me/chernyi_klever__A5327/vol38/393', heading: 'Манга Чёрный Клевер 38 - 393' }, 'Чёрный Клевер', 393],
     ['its url is an opaque id and a section heading repeats the chapter while another names the series', { pageTitle: '金華の百年 - 枝屋初 / 第1話 | マグコミ', url: 'https://magcomi.com/episode/12207421984222612497', ogTitle: '金華の百年 - 枝屋初 / 第1話 | マグコミ', ogSiteName: 'マグコミ｜マッグガーデン発のWEBマンガサイト', heading: 'マグコミ – Mag Garden Comic Online', headings: ['マグコミ – Mag Garden Comic Online', 'NEW 無料配信中のおすすめ作品', '第1話', '金華の百年', 'マグコミ'] }, '金華の百年', 1],
+    ['its tab title is the tagline of the website and a heading repeats the series of its url', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', heading: 'Capítulo 95', headings: ['Lista de Capítulos', 'Capítulo 95', 'Reportar um problema', 'O Caçador de Destinos Rank F'] }, 'O Caçador de Destinos Rank F', 95],
   ])(
     'should record the reading its page signals agree on when %s',
     async (_, message, title, chapter) => {
@@ -200,6 +201,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['a novel chapter of a scan website', { pageTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition] | DivaScans', url: 'https://divascans.org/series/novel/crazy-doctor-19-uncensored-edition/chapter/19', ogTitle: 'Chapter 19: Fan Hearts and True Hearts (2) - Crazy Doctor [19+ Uncensored Edition]', structuredData: [{ type: 'ListItem', name: 'Crazy Doctor [19+ Uncensored Edition]' }, { type: 'ListItem', name: 'Chapter 19' }] }],
     ['a chapter whose tab title is the tagline of the website', { pageTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', url: 'https://new.astratoons.com/comics/o-cacador-de-destinos-rank-f/capitulo/95', ogTitle: 'AstraToons - Leia seus mangás e webtoons favoritos online com a melhor qualidade.', heading: 'Capítulo 95' }],
     ['a chapter whose series is named only in its url', { pageTitle: '99 | Team-X', url: 'https://olympustaff.com/series/the-academys-sashimi-sword-master/99', heading: '99', selectedOptions: ['فصل رقم : 99'] }],
+    ['a chapter whose only link to a series names part of the series of its url', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader', links: [{ href: 'https://scanreader.net/mangas/the-abyssal/', text: 'The Abyssal' }] }],
     ['a list whose selected page number the url repeats', { pageTitle: 'Latest Updates - Manga Corner', url: 'https://mangacorner.example/latest/2/', ogTitle: 'Latest Updates', selectedOptions: ['2'] }],
     ['a chapter whose tab title names the website, not the series, after the chapter', { pageTitle: 'Chapter 12 - Mangaku', url: 'https://mangaku.io/manga/the-tower-keeper/chapter-12/', structuredData: [{ type: 'ListItem', name: 'Mangaku', position: 1 }, { type: 'ListItem', name: 'Chapter 12', position: 2 }] }],
     ['a chapter whose tab title alone shows the chapter number', { pageTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰', url: 'https://webtoon.kakao.com/viewer/%EB%AA%A9%EC%88%A8%EC%9D%84-%EB%8B%A4%ED%95%B4-%EA%BC%AC%EC%85%94%EB%9D%BC-032/347694', ogTitle: '목숨을 다해 꼬셔라 - 31화 | 카카오웹툰' }],
@@ -555,6 +557,34 @@ describe('RecordVisitedPageUseCase', () => {
       }),
     ]);
   });
+  it('should read the series from the link to its page when the tab title shows only the chapter', async () => {
+    const { recordVisitedPage, scans } = setUp();
+    const url = 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/';
+    const seriesUrl = 'https://scanreader.net/mangas/the-abyssal-seed/';
+
+    await recordVisitedPage.execute(
+      signalsOf(
+        contentScriptMessage({
+          pageTitle: 'Chapitre 41',
+          url,
+          ogTitle: 'Chapitre 41',
+          ogSiteName: 'Scan Reader',
+          links: [{ href: seriesUrl, text: 'The Abyssal seed' }],
+        }),
+      ),
+    );
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'The Abyssal seed',
+        chapter: 41,
+        url,
+        readAt: NOW,
+        seriesUrl,
+      }),
+    ]);
+  });
+
   it('should keep the series page the chapter page links to', async () => {
     const { recordVisitedPage, scans } = setUp();
 

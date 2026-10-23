@@ -399,6 +399,47 @@ const segmentCandidates = (
     )
     .flatMap((segment) => titleSpan(segment, () => false));
 
+const isSlugNoise = (token: string): boolean =>
+  /\d/.test(token) || URL_CHAPTER_WORDS.includes(token.toLowerCase());
+
+const slugOf = (segment: string): string => {
+  const tokens = segment.split(/[-_.~+]+/).filter((token) => token !== '');
+  const start = tokens.findIndex((token) => !isSlugNoise(token));
+  const end =
+    tokens.length -
+    [...tokens].reverse().findIndex((token) => !isSlugNoise(token));
+  return start < 0 ? '' : folded(tokens.slice(start, end).join(' '));
+};
+
+const seriesSlugsOf = (page: PageSignals): string[] =>
+  [page.url, page.canonicalUrl]
+    .flatMap((url) => (url ? pathSegments(url).slice(2) : []))
+    .map(slugOf)
+    .filter((slug) => slug !== '');
+
+const namedOnPage = ({ headings, links }: PageSignals): string[] => [
+  ...(headings ?? []),
+  ...(links ?? [])
+    .filter(({ isBreadcrumb }) => isBreadcrumb)
+    .map(({ text }) => text),
+  ...(links ?? [])
+    .filter(({ isBreadcrumb }) => !isBreadcrumb)
+    .map(({ text }) => text),
+];
+
+const titleNamedBySlug = (
+  page: PageSignals,
+  website: Website,
+): string | undefined => {
+  const slugs = seriesSlugsOf(page);
+  return namedOnPage(page)
+    .flatMap((text) => titleSpan(text, () => false))
+    .find(
+      (candidate) =>
+        !isWebsiteName(candidate, website) && slugs.includes(folded(candidate)),
+    );
+};
+
 const pageTitleCandidates = (page: PageSignals, website: Website): string[] =>
   titleSpan(
     page.pageTitle,
@@ -440,6 +481,10 @@ const titleOf = (
   );
   if (confirmedSegment) {
     return confirmedSegment;
+  }
+  const namedBySlug = titleNamedBySlug(page, website);
+  if (namedBySlug) {
+    return namedBySlug;
   }
   return display.isHeadline &&
     segmentsOf(mention.before).length === 1 &&

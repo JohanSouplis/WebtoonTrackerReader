@@ -315,8 +315,11 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
   confirmé de même, quand le chapitre est affiché ailleurs ; sinon un seul des segments qui précèdent la mention
   (`Чёрный Клевер - Black Clover - Black Clover онлайн. Глава 393`), s'il figure dans un texte de la page
   (`h1`, titres de section, fil d'Ariane, JSON-LD, `og:title`) : l'URL ne confirme pas un segment, son slug ne
-  garde souvent qu'une partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`). À défaut, un
-  texte d'en-tête d'un seul tenant qui précède la mention (`Titre Chapter 12 - Site`) est le titre.
+  garde souvent qu'une partie du titre (`cinderella-gray` pour `Uma Musume - Cinderella Gray`) ; sinon un titre
+  de section ou le texte d'un lien du site qui reprend exactement un segment du chemin de l'URL, hors du premier,
+  sans les numéros ni les mots de chapitre qui l'entourent (`O Caçador de Destinos Rank F` pour
+  `/comics/o-cacador-de-destinos-rank-f/capitulo/95`). À défaut, un texte d'en-tête d'un seul tenant qui précède
+  la mention (`Titre Chapter 12 - Site`) est le titre.
 - **Le nom du site n'est pas le titre.** Le nom du site, c'est son nom de domaine sans extension
   (`natsu` pour `natsu.one`), son `og:site_name`, le début de celui-ci avant un slogan
   (`マグコミ｜マッグガーデン発のWEBマンガサイト`) ou le nom d'un nœud JSON-LD `WebSite`. Seul devant la mention, il
