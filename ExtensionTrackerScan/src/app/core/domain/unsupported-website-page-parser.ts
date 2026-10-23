@@ -406,6 +406,7 @@ const textWitnesses = (page: PageSignals, displaying: string): string[] =>
     ...(page.headings ?? []),
     page.breadcrumb,
     ...structuredTexts(page),
+    ...(page.links ?? []).map(({ text }) => text),
   ].flatMap((text) => (text && text !== displaying ? [folded(text)] : []));
 
 const titleWitnesses = (page: PageSignals, displaying: string): string[] => [

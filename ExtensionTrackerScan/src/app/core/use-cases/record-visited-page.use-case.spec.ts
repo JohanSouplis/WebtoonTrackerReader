@@ -566,6 +566,7 @@ describe('RecordVisitedPageUseCase', () => {
   // prettier-ignore
   it.each<[string, object, string, number, string]>([
     ['the tab title shows only the chapter', { pageTitle: 'Chapitre 41', url: 'https://scanreader.net/chapitre/chapitre-41-the-abyssal-seed/', ogTitle: 'Chapitre 41', ogSiteName: 'Scan Reader' }, 'The Abyssal seed', 41, 'https://scanreader.net/mangas/the-abyssal-seed/'],
+    ['its url is an opaque id and the tab title names the series before the chapter', { pageTitle: 'Invincible (2015 · Cho-U) — Chapter 39 · Webnex', url: 'https://webnex.cc/read/chapter-mangadex-8160d350-19a9-499c-88a8-c20a1cd7fe8b-643ff11ba99c', heading: 'Chapter 39' }, 'Invincible (2015 · Cho-U)', 39, 'https://webnex.cc/manga/manhwa-invincible-manhwa-db959b80ee3d'],
     ['the series name holds a number', { pageTitle: 'Page 1 | NANBA MG5 Vol.16 Ch.136', url: 'https://www.furyosociety.com/read/nanba-mg5/fr/16/136/', headings: ['Paramètres'] }, 'NANBA MG5', 136, 'https://www.furyosociety.com/series/nanba-mg5/'],
   ])(
     'should read the series from the link to its page when %s',
