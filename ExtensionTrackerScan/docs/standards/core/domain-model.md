@@ -185,6 +185,51 @@ Les numéros ne se comparent qu'entre pages d'un même site : un autre site num�
 - Supprimer un scan supprime son `ChapterWatch` (`DeleteScanUseCase`).
 - Toute modification d'une stratégie se mesure avec `npm run eval:new-chapters` ([`testing.md`](testing.md)).
 
+## Les diagnostics
+
+Le développeur apprend comment l'extension se comporte chez ses lecteurs sans rien apprendre d'eux. Les
+diagnostics sont anonymes : ni historique de lecture, ni titre de série, ni adresse de page, ni identifiant
+d'installation. Ils ne portent que des sites (le nom d'hôte, jamais le chemin), des compteurs, des natures
+d'erreur, la version de l'extension et la version majeure du navigateur. Ils partent seulement si le lecteur
+garde les rapports (`ReportSettings`, le même interrupteur que le signalement des pages illisibles).
+
+- `TelemetryEvent` (`telemetry.ts`) est un fait observé, en union discriminée : `unhandled-error` (le contexte
+  `service-worker`, `popup`, `content-script` ou `offscreen`, le nom de l'erreur, l'empreinte de son message,
+  le fichier et la ligne du haut de la pile s'ils sont dans un fichier de l'extension), `storage-error` (le
+  contexte et la panne : `quota`, `io` ou `corruption`), `parse-miss` (le site d'une page du catalogue
+  illisible), `chapter-check` (le site, l'état de la veille après la vérification, la stratégie qui a répondu, le
+  statut HTTP d'une vérification en échec), `cover-search` (`found-page`, `found-series-page` ou `missing`) et
+  `proposal-send-failed`.
+- L'empreinte d'un message remplace d'abord ses adresses, ses textes entre guillemets et ses nombres, puis le
+  hache (FNV-1a, 8 caractères hexadécimaux) : deux erreurs qui ne diffèrent que par une adresse ou un titre ont
+  la même empreinte, et le texte de l'erreur ne part jamais.
+- `TelemetryLog` est l'état d'une installation : le décompte du jour (`DayTally`, en UTC), le décompte de la
+  veille en attente de son résumé, le dernier jour résumé et la pause imposée par Discord. Un événement
+  s'ajoute au décompte du jour ; le premier événement ou le premier réveil d'un nouveau jour ferme le décompte de
+  la veille. Un décompte fermé remplace le précédent : un résumé qui n'est pas parti avant la fin du jour
+  suivant est perdu, sans nouvel essai.
+- **Le résumé du jour** (`DailyDigest`) : les compteurs par nature d'événement, les issues et stratégies des
+  vérifications, les statuts HTTP, les 10 sites les plus vérifiés, les 10 sites aux pages les plus souvent
+  illisibles, les couvertures et les 10 erreurs les plus fréquentes. Un jour sans événement n'a pas de résumé.
+  Une alarme horaire l'envoie (`SendDailyDigestUseCase`).
+- **Un résumé part au plus une fois.** Le use-case marque le décompte « en cours d'envoi » avant d'envoyer, puis
+  l'oublie après la réponse. S'il trouve un décompte encore « en cours d'envoi » (le service worker s'est arrêté
+  pendant l'envoi), il le tient pour envoyé : un résumé perdu vaut mieux qu'un résumé en double. Une réponse 429
+  ou un navigateur hors ligne prouvent que rien n'est parti : le décompte redevient en attente.
+- **Une erreur part aussi tout de suite** (`RecordTelemetryUseCase`), une fois par jour et par empreinte
+  (contexte, nom, empreinte du message), 5 au plus par jour. L'empreinte est retenue avant l'envoi : une
+  erreur ne part jamais deux fois le même jour, même si l'envoi échoue.
+- **Discord limite un webhook** (environ 30 messages par minute). Une réponse 429 suspend tout envoi jusqu'à la
+  fin du délai qu'elle donne (`retry_after`) ; rien ne se renvoie en boucle. Une erreur pendant la pause est
+  comptée dans le résumé, pas envoyée.
+- Lecteur qui coupe les rapports : plus rien n'est compté ni envoyé, et le décompte en cours s'efface.
+- Seul le service worker écrit le `TelemetryLog`. La popup, le document offscreen et le content script lui
+  envoient leurs erreurs par message ; il ne retient de ces messages que les erreurs et l'échec d'une demande
+  d'ajout, après en avoir revalidé chaque champ.
+- La destination est un seul port, `TelemetryPort`, qui envoie un rapport et rend son issue (`sent`,
+  `rate-limited`, `offline`, `failed`). Le gateway Discord réutilise le webhook des signalements. Remplacer
+  Discord par un relais ne change que ce gateway.
+
 ## Tell-Don't-Ask
 
 Un use-case dit à l'agrégat quoi faire. Il ne lit pas son état pour décider à sa place.
@@ -259,7 +304,7 @@ déjà décidé.
 - Le catalogue garde la priorité. Une page d'un site supporté qui ne suit aucun format est signalée, jamais
   confiée à l'analyse générique. Le signalement envoie l'adresse et le titre de la page au développeur : il
   n'a lieu que si le lecteur garde les rapports (`ReportSettings`, activés par défaut, désactivables dans
-  l'écran About).
+  l'écran About). Le même choix garde les diagnostics (voir « Les diagnostics »).
 - Ajouter un site, c'est ajouter une entrée au catalogue et une ligne au tableau de cas de la spec
   ([`testing.md`](testing.md)).
 - Un site n'entre ou ne reste au catalogue que si ses formats battent l'analyse générique sur

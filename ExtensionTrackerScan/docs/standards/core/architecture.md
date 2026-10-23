@@ -55,6 +55,9 @@ src/
   page-signals-message.ts  frontière : réduit le message du content script en PageSignals
   cover-backfill-message.ts frontière : la demande de la popup « cherche les couvertures de ces scans »
   new-chapters-alarm.ts    l'alarme de la veille des chapitres, et l'ouverture d'une notification cliquée
+  telemetry-alarm.ts       l'alarme du résumé du jour, et les erreurs non rattrapées du service worker
+  telemetry-message.ts     frontière : réduit le message d'erreur de la popup, de l'offscreen ou du content script
+  thrown-error.ts          frontière : réduit une erreur levée (`unknown`) en nom, message et pile
   app/core/
     container.ts           racine de composition du service worker (seul import d'inversify)
     domain/                scan-library.ts · scan-title.ts · series-key.ts · chapter.ts · rating.ts
@@ -62,13 +65,15 @@ src/
                            unsupported-website-page-parser.ts · page-lexicon.ts
                            cover.ts · cover-search.ts · series-page.ts · site.ts
                            chapter-watch.ts · chapter-check.ts · fetched-page.ts · report-settings.ts
+                           telemetry.ts
     use-cases/             record-visited-page.use-case.ts · import-reading-history.use-case.ts
                            delete-scan.use-case.ts · restore-scan.use-case.ts
                            toggle-favorite.use-case.ts · rate-scan.use-case.ts · clear-rating.use-case.ts
                            propose-website.use-case.ts · record-cover.use-case.ts
                            backfill-covers.use-case.ts · check-new-chapters.use-case.ts
                            show-new-chapter-count.use-case.ts · change-check-interval.use-case.ts
-                           change-parse-reports.use-case.ts
+                           change-parse-reports.use-case.ts · record-telemetry.use-case.ts
+                           send-daily-digest.use-case.ts
                                                                 (chacun avec son .spec.ts à côté)
     ports/                 scan-repository.port.ts · browser-history.port.ts · clock.port.ts
                            crash-reporter.port.ts · website-proposal.port.ts
@@ -76,6 +81,7 @@ src/
                            chapter-watch-repository.port.ts · host-profile-repository.port.ts
                            watch-settings-repository.port.ts · web-page.port.ts · timer.port.ts
                            new-chapter-alerts.port.ts · report-settings-repository.port.ts
+                           telemetry.port.ts · telemetry-recorder.port.ts · telemetry-log-repository.port.ts
     gateways/              chrome-storage-scan-repository.gateway.ts · chrome-browser-history.gateway.ts
                            system-clock.gateway.ts · discord-crash-reporter.gateway.ts
                            discord-website-proposal.gateway.ts · chrome-storage-cover-repository.gateway.ts
@@ -86,6 +92,9 @@ src/
                            fetch-web-page.gateway.ts · system-timer.gateway.ts
                            chrome-new-chapter-alerts.gateway.ts (pastille et notifications)
                            chrome-storage-report-settings-repository.gateway.ts
+                           discord-webhooks.ts (les adresses des webhooks, en un seul endroit)
+                           discord-telemetry.gateway.ts · chrome-storage-telemetry-log.gateway.ts
+                           chrome-runtime-telemetry-recorder.gateway.ts · in-process-telemetry-recorder.gateway.ts
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
                            fixed-clock.gateway.ts · in-memory-crash-reporter.gateway.ts
                            in-memory-website-proposal.gateway.ts · dev-scans.ts
@@ -96,6 +105,8 @@ src/
                            in-memory-watch-settings-repository.gateway.ts
                            in-memory-new-chapter-alerts.gateway.ts · dev-watches.ts
                            in-memory-report-settings-repository.gateway.ts
+                           in-memory-telemetry.gateway.ts · in-memory-telemetry-log.gateway.ts
+                           in-memory-telemetry-recorder.gateway.ts
 ```
 
 Un dossier n'existe que s'il a du contenu. Le sous-dossier `src/` actuel (`core/src/domain`) disparaît avec la
@@ -167,7 +178,8 @@ scan qu'elle supprime.
 - **Les couvertures vivent sous une clé par série**, `cover:<SeriesKey>`, hors de la clé `scans` : un
   enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
   La veille des chapitres suit la même règle : `watch:<SeriesKey>` pour un `ChapterWatch`, `host:<site>` pour un
-  `HostProfile`, `watch-settings` pour la fréquence, `report-settings` pour le choix des rapports.
+  `HostProfile`, `watch-settings` pour la fréquence, `report-settings` pour le choix des rapports,
+  `telemetry` pour le `TelemetryLog`.
 - **Le format stocké dans `chrome.storage.local` est un contrat public.** Les utilisateurs de la version
   publiée doivent relire leurs données après une mise à jour. Un changement de format ajoute la lecture de
   l'ancien format dans le gateway, il ne casse jamais les données existantes.
