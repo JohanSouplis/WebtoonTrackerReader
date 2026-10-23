@@ -150,6 +150,18 @@ export const ARTICLE_WORDS = [
   'forum',
   'forums',
   'news',
+  'release date',
+  'recap',
+  'summary',
+  'preview',
+  'reaction',
+  'analysis',
+  'explained',
+  'predictions',
+  'theory',
+  'theories',
+  'leaks',
+  'delayed',
 ];
 
 export const NON_READING_PATHS = ['course'];

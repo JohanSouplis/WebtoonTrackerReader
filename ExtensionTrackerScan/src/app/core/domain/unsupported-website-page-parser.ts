@@ -320,14 +320,16 @@ const mentionsOtherMedia = ({ pageTitle, url }: PageSignals): boolean => {
   return OTHER_MEDIA_WORDS.some((word) => text.includes(word));
 };
 
-const isArticle = (page: PageSignals): boolean =>
-  wordsOf([
+const isArticle = (page: PageSignals): boolean => {
+  const words = ` ${wordsOf([
     page.pageTitle,
     page.ogTitle,
     page.ogSiteName,
     page.heading,
     page.breadcrumb,
-  ]).some((word) => ARTICLE_WORDS.includes(word));
+  ]).join(' ')} `;
+  return ARTICLE_WORDS.some((word) => words.includes(` ${word} `));
+};
 
 const PROSE_PARAGRAPH_COUNT = 3;
 
