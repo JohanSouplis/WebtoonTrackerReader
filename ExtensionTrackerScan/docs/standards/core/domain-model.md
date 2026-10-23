@@ -369,8 +369,9 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
 - **La page ne parle d'aucun autre média.** Un mot d'un autre média (`anime`, `novel`, `wiki`, `podcast`...)
   compte partout dans le titre ou l'URL, même au milieu d'un mot (`kimcartoon`), et la page est ignorée, sauf
   dans un nom d'hôte qui nomme aussi une lecture (`tuttoanimemanga.net`) : le titre et le chemin décident. Le
-  segment du titre qui nomme le site ne compte pas non plus (`Leitor de Mangás & Novels` sur
-  `leitor.borutoexplorer.com.br`), mais le nom d'hôte, oui. Un
+  segment du titre qui nomme le site et le slogan qui le suit ne comptent pas non plus (`Leitor de Mangás & Novels`
+  sur `leitor.borutoexplorer.com.br`, `Nexcomic – Read Manga, Manhwa, Manhua & Novel in English`), mais le nom
+  d'hôte, oui. Un
   nom de série qui contient un autre média ne l'excuse pas : `Solo Leveling Light Novel` est aussi un nom de série
   que le site reprend en lien. Aucun segment du chemin ne désigne autre chose qu'une lecture (`/course/`) : ces segments se
   comparent segment par segment.

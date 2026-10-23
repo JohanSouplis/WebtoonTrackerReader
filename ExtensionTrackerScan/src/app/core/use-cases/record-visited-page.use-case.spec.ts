@@ -140,6 +140,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Touhou Sangetsusei. Touhou Sangetsusei Chapter 18 - Manga Reader', 'https://mangareader.example/touhou-sangetsusei/chapter-18', 'Touhou Sangetsusei', 18],
     ['Hunter × Hunter Chapter 391 - Manga Reader', 'https://mangareader.example/hunter-x-hunter/chapter-391', 'Hunter × Hunter', 391],
     ['Ch.258 | D.Gray-Man | TAM', 'https://tuttoanimemanga.net/read/dgray-man/it/ch/258', 'D.Gray-Man', 258],
+    ['Solo Leveling Chapter 2 | Nexcomic – Read Manga, Manhwa, Manhua & Novel in English', 'https://nexcomic.com/series/solo-leveling/chapter/chapter-2', 'Solo Leveling', 2],
     ['Naruto: Versão Colorida Oficial - VOLUME 21 - Capítulo 189 - Leitor de Mangás & Novels // uma extensão da Boruto Explorer', 'https://leitor.borutoexplorer.com.br/manga/naruto-versao-colorida-oficial/volume-21/capitulo-189/', 'Naruto: Versão Colorida Oficial', 189],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',

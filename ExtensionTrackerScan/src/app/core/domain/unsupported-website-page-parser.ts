@@ -327,8 +327,12 @@ const mentionsReading = (page: PageSignals): boolean =>
 
 const mentionsOtherMedia = (page: PageSignals): boolean => {
   const website = websiteOf(page);
-  const title = page.pageTitle
-    .split(TITLE_SEPARATOR)
+  const segments = page.pageTitle.split(TITLE_SEPARATOR);
+  const websiteAt = segments.findIndex(
+    (segment, index) => index > 0 && isWebsiteName(segment, website),
+  );
+  const title = segments
+    .slice(0, websiteAt > 0 ? websiteAt : segments.length)
     .filter((segment) => !isWebsiteName(segment, website))
     .join(' ');
   const text =
