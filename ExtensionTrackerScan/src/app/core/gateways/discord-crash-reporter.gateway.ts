@@ -1,8 +1,6 @@
 import { VisitedPage } from '../domain/parsed-page';
 import { CrashReporterPort } from '../ports/crash-reporter.port';
-
-const WEBHOOK_URL =
-  'https://discord.com/api/webhooks/1336426162653757450/wYGF0H04jEF0Z55H7xLhYV7dKrPLlDhXIMCwj0q21vx1Vhj2o8qUBHSt9DbyrsIMQ_ZH';
+import { CRASH_REPORT_WEBHOOK_URL } from './discord-webhooks';
 
 const toMessage = (page: VisitedPage): string =>
   [
@@ -14,7 +12,7 @@ const toMessage = (page: VisitedPage): string =>
 
 const post = async (page: VisitedPage): Promise<void> => {
   try {
-    const response = await fetch(WEBHOOK_URL, {
+    const response = await fetch(CRASH_REPORT_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: toMessage(page) }),
