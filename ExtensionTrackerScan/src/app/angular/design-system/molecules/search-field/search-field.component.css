@@ -12,7 +12,7 @@ label {
   padding: 0 12px;
   border-radius: 12px;
   background: var(--search-field-background, var(--app-surface));
-  border: 1px solid var(--app-line);
+  border: 1px solid var(--app-field-line);
   color: var(--app-muted);
   transition:
     border-color 0.15s,
@@ -45,6 +45,9 @@ input::-webkit-search-cancel-button {
 
 button {
   display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 0;
   border-radius: 6px;

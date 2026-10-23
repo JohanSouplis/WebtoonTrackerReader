@@ -71,6 +71,15 @@ s'écrivent en balises dans le composant qui les affiche.
 - Un composant du design-system qui couvre presque le besoin s'étend, il ne se duplique pas.
 - Le jugement « ce composant ajoute-t-il autre chose que l'enveloppe ? » se tient en revue.
 
+## Couleurs et contraste
+
+Les couleurs viennent des jetons `--app-*` de `src/styles.scss`. Tout texte atteint 4,5:1 sur son fond, toute
+icône ou bordure qui porte un sens 3:1 (WCAG AA). `--app-faint` est le texte le plus pâle admis : il passe
+4,5:1 sur `--app-bg`, `--app-surface` et `--app-surface-2`, pas sur `--app-surface-3`, où le texte prend
+`--app-muted`. Le contour d'un champ de saisie est `--app-field-line`, jamais `--app-line`, qui reste
+décoratif. Un monogramme garde un texte blanc lisible quelle que soit sa teinte, car sa couleur claire est
+en `oklch` à luminosité fixe. Une cible cliquable fait au moins 24 × 24 px.
+
 ## Règles de composant
 
 - **Le template ne contient pas de logique.** Pas d'appel de méthode dans une interpolation ni dans un

@@ -239,7 +239,7 @@ mat-paginator {
   --mat-paginator-touch-target-display: none;
   --mat-paginator-form-field-container-vertical-padding: 4px;
   --mdc-outlined-text-field-container-shape: 8px;
-  --mdc-outlined-text-field-outline-color: var(--app-line-strong);
+  --mdc-outlined-text-field-outline-color: var(--app-field-line);
   --mdc-outlined-text-field-hover-outline-color: var(--app-muted);
   --mat-paginator-enabled-icon-color: var(--app-text);
   --mat-paginator-disabled-icon-color: var(--app-faint);
