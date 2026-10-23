@@ -32,6 +32,8 @@ const displayTexts = (message: PageSignalsMessage): string[] =>
     message.breadcrumb,
     ...structuredTexts(message),
     ...(message.selectedOptions ?? []),
+    ...(message.headings ?? []),
+    message.text,
   ].flatMap((text) => text ?? []);
 
 const titleTexts = (message: PageSignalsMessage): string[] => [
