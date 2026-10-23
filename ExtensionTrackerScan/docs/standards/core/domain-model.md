@@ -323,9 +323,11 @@ plus cher qu'une lecture manquée : dans le doute, la page est ignorée, sans si
 - **Le titre est confirmé.** Le premier candidat qui tient, dans l'ordre :
   1. le nom de série JSON-LD (`ComicSeries`, `Book`...) présent dans le texte qui affiche le chapitre ;
   2. le texte qui entoure la mention (avant elle, ou après elle derrière `|`, un mot de liaison ou le crochet qui
-     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le nom du site ni le bruit (`Read`, `Free Reading`,
-     `Lire`, `Vol. 3`, `Scan VF`, `Pagina 1`), s'il figure dans un autre signal (URL, `h1`, titres de section, fil
-     d'Ariane, JSON-LD, texte d'un lien du site comme le lien vers la page de la série) ;
+     la ferme : `[第287話] ワンパンマン - ＯＮＥ/村田雄介`), sans le bruit (`Read`, `Free Reading`, `Lire`, `Vol. 3`,
+     `Scan VF`, `Pagina 1`), s'il figure dans un autre signal (URL, `h1`, titres de section, fil d'Ariane, JSON-LD,
+     texte d'un lien du site comme le lien vers la page de la série) ; le texte entier passe avant le texte sans le
+     nom du site, car un site nommé d'après sa série commence son titre par la série
+     (`Frieren - Beyond Journey's End - Chapter 147` sur `frierenmangafree.com`) ;
   3. le titre de l'onglet, quand le chapitre est affiché ailleurs, confirmé par un texte qui dit plus que lui : un
      `og:title` ou un `h1` qui le recopie mot pour mot nomme la page, souvent le chapitre lui-même
      (`ملابس السباحة. | Team-X`) ;

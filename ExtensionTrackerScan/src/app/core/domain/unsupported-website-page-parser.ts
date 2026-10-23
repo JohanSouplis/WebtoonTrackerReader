@@ -408,6 +408,7 @@ const beforeCandidates = (
   const isWebsiteAtStart = (segment: string, { isFirst }: SegmentPlace) =>
     isFirst && isWebsiteName(segment, website);
   return [
+    ...titleSpan(mention.before, () => false),
     ...titleSpan(mention.before, isWebsiteAtStart),
     ...titleSpan(
       mention.before,

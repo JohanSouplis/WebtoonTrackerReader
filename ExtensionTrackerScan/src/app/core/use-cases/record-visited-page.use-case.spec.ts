@@ -126,6 +126,7 @@ describe('RecordVisitedPageUseCase', () => {
     ['Scan One Piece 1196', 'https://lelscans.net/scan-one-piece/1196', 'One Piece', 1196],
     ['Free Reading Solo Leveling Chapter 5 - WebComics', 'https://www.webcomicsapp.com/en/action/solo-leveling/5/6a5757bd62661d6f', 'Solo Leveling', 5],
     ['Sonic The Hedgehog #88 - ChaosTrad', 'https://chaostrad.fr/comics/sonic-idw/88', 'Sonic The Hedgehog', 88],
+    ["Frieren - Beyond Journey's End - Chapter 147 - English", 'https://www.frierenmangafree.com/manga/frieren-beyond-journeys-end-chapter-147/', "Frieren - Beyond Journey's End", 147],
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
