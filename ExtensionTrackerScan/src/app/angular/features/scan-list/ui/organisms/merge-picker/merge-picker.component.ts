@@ -34,7 +34,8 @@ export class MergePickerComponent {
       .sort((title, other) => title.localeCompare(other));
   });
 
-  protected pickFirst(): void {
+  protected pickFirst(submit: Event): void {
+    submit.preventDefault();
     const [first] = this.targets();
     if (first !== undefined) {
       this.picked.emit(first);

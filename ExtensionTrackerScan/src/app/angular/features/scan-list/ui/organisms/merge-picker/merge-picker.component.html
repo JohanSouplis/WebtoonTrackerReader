@@ -3,12 +3,13 @@
   The series you pick keeps its title and takes the latest chapter. Readings
   under either title land on it.
 </p>
-<ds-search-field
-  label="Find a series"
-  [value]="query()"
-  (searched)="query.set($event)"
-  (keydown.enter)="pickFirst()"
-/>
+<form (submit)="pickFirst($event)">
+  <ds-search-field
+    label="Find a series"
+    [value]="query()"
+    (searched)="query.set($event)"
+  />
+</form>
 @if (targets().length > 0) {
   <ul aria-label="Series to merge into">
     @for (title of targets(); track title) {
