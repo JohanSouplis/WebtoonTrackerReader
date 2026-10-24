@@ -7,6 +7,7 @@ import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-r
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemorySeriesSuggestionsRepository } from '../gateways/in-memory/in-memory-series-suggestions-repository.gateway';
 import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import {
   ImageSize,
@@ -255,6 +256,7 @@ const setUp = ({
   const telemetry = new InMemoryTelemetryRecorder();
   const recordVisitedPage = new RecordVisitedPageUseCase(
     scanRepository,
+    new InMemorySeriesSuggestionsRepository(),
     new InMemoryCrashReporter(),
     new InMemoryReportSettingsRepository(),
     clock,

@@ -80,6 +80,9 @@ const readingFrom = (
     : undefined;
 };
 
+export const isCatalogPage = (url: string): boolean =>
+  WEBSITE_PATTERNS.some(({ host }) => servesScans(url, host));
+
 export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
   const cleanedPage: VisitedPage = {
     pageTitle: withoutLeadingSpace(page.pageTitle.replace('\n', '')),
