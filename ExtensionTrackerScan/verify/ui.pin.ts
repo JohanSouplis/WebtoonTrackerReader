@@ -32,18 +32,23 @@ test.afterEach(async ({}, testInfo) => {
 });
 
 async function pin(page: Page, name: string) {
+  await expectSnackbarsAnnounced(page);
   await expect.soft(page).toHaveScreenshot(`${name}.png`, { fullPage: true });
   expect
     .soft((await page.locator('body').ariaSnapshot()) + '\n')
     .toMatchSnapshot(`${name}.aria.txt`);
 }
 
-async function expectAnnounced(page: Page, text: string) {
-  await expect
-    .poll(async () =>
-      (await page.locator('body').ariaSnapshot()).includes(text),
-    )
-    .toBe(true);
+async function expectSnackbarsAnnounced(page: Page) {
+  for (const snackbar of await page.locator('mat-snack-bar-container').all()) {
+    const shown = (await snackbar.innerText()).split('\n').filter(Boolean);
+    await expect
+      .poll(async () => {
+        const announced = await snackbar.ariaSnapshot();
+        return shown.filter((line) => !announced.includes(line));
+      })
+      .toEqual([]);
+  }
 }
 
 function library(page: Page): Locator {
@@ -369,7 +374,6 @@ test.describe('scan list', () => {
         "Following “Worthless Regression”. We'll check for new chapters.",
       ),
     ).toBeVisible();
-    await expectAnnounced(page, 'Following “Worthless Regression”');
     await pin(page, 'scan-fav-01-worthless-regression-favorited');
     await toggle(page, 'Following only').click();
     await expect(row(page, 'Worthless Regression')).toHaveCount(1);
@@ -379,6 +383,11 @@ test.describe('scan list', () => {
       .click();
     await expect(row(page, 'Worthless Regression')).toHaveCount(0);
     await expect(page.getByText('11 series')).toBeVisible();
+    await expect(
+      page.getByText(
+        'Stopped checking “Worthless Regression” for new chapters.',
+      ),
+    ).toBeVisible();
     await pin(page, 'scan-fav-03-unfavorited-leaves-favorites-only');
     await expect
       .poll(() => events.filter((e) => e.includes('scan is updated')).length)
@@ -431,7 +440,7 @@ test.describe('scan list', () => {
       .click();
     await expect(row(page, 'Local')).toHaveCount(0);
     await expect(page.getByText('19 series')).toBeVisible();
-    await expectAnnounced(page, 'Undo');
+    await expect(page.getByText('Removed “Local”')).toBeVisible();
     await pin(page, 'scan-delete-02-local-removed');
   });
 
@@ -445,7 +454,6 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('link', { name: 'Omniscient Reader’s Viewpoint' }),
     ).toBeFocused();
-    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-delete-07-undo-offered');
     await page.getByRole('button', { name: 'Undo' }).click();
     await expect(row(page, 'Local')).toHaveCount(1);
@@ -475,7 +483,6 @@ test.describe('scan list', () => {
     await expect(
       page.getByText('Renamed to “Local Development”'),
     ).toBeVisible();
-    await expectAnnounced(page, 'Renamed to “Local Development”');
     await pin(page, 'scan-correct-03-renamed');
   });
 
@@ -523,7 +530,6 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('link', { name: target, exact: true }),
     ).toBeFocused();
-    await expectAnnounced(page, 'Undo');
     await pin(page, 'scan-correct-05-merged');
     await page.getByRole('button', { name: 'Undo' }).click();
     await expect(row(page, source)).toHaveCount(1);
@@ -585,7 +591,9 @@ test.describe('scan list', () => {
     await expect(
       page.getByRole('searchbox', { name: 'Filter by title' }),
     ).toHaveValue('sss');
-    await expectAnnounced(page, 'Undo');
+    await expect(
+      page.getByText('Removed “SSS-Class Suicide Hunter”'),
+    ).toBeVisible();
     await pin(page, 'scan-delete-04-with-title-filter');
   });
 
@@ -601,7 +609,7 @@ test.describe('scan list', () => {
       'aria-pressed',
       'true',
     );
-    await expectAnnounced(page, 'Undo');
+    await expect(page.getByText('Removed “Local”')).toBeVisible();
     await pin(page, 'scan-delete-05-with-favorites-only');
   });
 
@@ -616,7 +624,7 @@ test.describe('scan list', () => {
     await expect(titleLinks(page).first()).toHaveText(
       "A Dragonslayer's Peerless Regression",
     );
-    await expectAnnounced(page, 'Undo');
+    await expect(page.getByText('Removed “Local”')).toBeVisible();
     await pin(page, 'scan-delete-06-after-title-sort');
   });
 
@@ -821,7 +829,6 @@ test.describe('new series to confirm', () => {
     ).toBeFocused();
     await expect(pendingToggle(page)).toContainText('3 new series to confirm');
     await expect(page.getByText('21 series')).toBeVisible();
-    await expectAnnounced(page, 'Added “Doberman” to your library');
     await page.mouse.move(0, 0);
     await expect(page.getByRole('tooltip')).toHaveCount(0);
     await pin(page, 'pending-04-added-corrected');
@@ -851,7 +858,6 @@ test.describe('new series to confirm', () => {
     await expect(
       row(page, 'Solo Leveling: Ragnarok').getByText('Ch. 61', { exact: true }),
     ).toBeVisible();
-    await expectAnnounced(page, 'Merged into “Solo Leveling: Ragnarok”');
     await pin(page, 'pending-05-merged');
   });
 
@@ -913,7 +919,6 @@ test.describe('new series to confirm', () => {
       "Scan Tracker won't suggest new series from manhwareads.com anymore";
     await expect(page.getByText(ignored)).toBeVisible();
     await expect(pendingToggle(page)).toContainText('2 new series to confirm');
-    await expectAnnounced(page, 'Keep suggesting');
     await pin(page, 'pending-06-site-ignored');
     await page.getByRole('button', { name: 'About' }).click();
     const ignoredSites = page.getByRole('list', { name: 'Sites you ignore' });
