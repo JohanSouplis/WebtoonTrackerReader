@@ -330,7 +330,7 @@ clic : **une nouvelle série d'un site dont la reconnaissance n'est pas fiable a
 
 | Seuil | Valeur | Pourquoi |
 |---|---|---|
-| Confirmations sans correction pour faire confiance à un site | 2 | Mesuré par `eval:trust` sur les jeux scellés 1 et 2, jugé sur le 3 |
+| Confirmations sans correction pour faire confiance à un site | 2 | Choix du produit. `eval:trust` (signaux du content script) : sur les jeux 1 et 2, 1 ou 2 font entrer seule la même lecture fausse, venue d'une série suivie ; le jeu 3, jamais réglé, en compte 4 à 1, 1 à 2 et 0 à 3 |
 | Refus pour ignorer un site | 2 | Un refus isolé est une page d'un autre genre ; deux à la suite, un site sans séries |
 | `PendingSeries` par site | 10 | Une page de la liste, pour un site |
 | `PendingSeries` au total | 30 | Trois sites pleins : au-delà, le lecteur ne lit plus les cartes |
