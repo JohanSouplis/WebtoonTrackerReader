@@ -18,13 +18,15 @@ une projection de lecture.
 | Service du domaine | `parseUnsupportedWebsitePage` | Reconnaît une lecture sur un site hors catalogue quand les signaux de la page s'accordent |
 | Catalogue | `WEBSITE_PATTERNS` | Les sites supportés et le format de titre de chacun |
 | Liste générée | `VERIFIED_WEBSITES` | Les sites vérifiés sur une vraie page de chapitre, avec la date de vérification |
+| Agrégat | `SeriesSuggestions` | Les nouvelles séries en attente de confirmation et ce que chaque site a appris (`HostTrust`) |
+| Service du domaine | `readingTrustOf` | Dit si une lecture entre dans la bibliothèque, attend le lecteur ou est ignorée (`ReadingTrust`) |
 
 Préfère un Value Object à un champ primitif. Une notion qui porte une règle (normalisation, intervalle,
 comparaison) est un Value Object.
 
 ## L'agrégat `ScanLibrary`
 
-`ScanLibrary` est l'unique agrégat. Ses invariants :
+`ScanLibrary` est l'agrégat de la bibliothèque. Ses invariants :
 
 - une lecture enrichit le scan de la même série, reconnue par la `SeriesKey` de son titre affiché ou d'un de ses
   alias (voir plus bas) ; le scan garde son titre affiché, la lecture ne le renomme pas ;
@@ -257,7 +259,8 @@ garde les rapports (`ReportSettings`, le même interrupteur que le signalement d
   contexte et la panne : `quota`, `io` ou `corruption`), `parse-miss` (le site d'une page du catalogue
   illisible), `chapter-check` (le site, l'état de la veille après la vérification, la stratégie qui a répondu, le
   statut HTTP d'une vérification en échec), `cover-search` (`found-page`, `found-series-page` ou `missing`) et
-  `proposal-send-failed`.
+  `proposal-send-failed`, `pending-series` (le site d'une nouvelle série à confirmer et son issue : `added`,
+  `added-edited`, `merged` ou `dismissed`, jamais son titre).
 - L'empreinte d'un message remplace d'abord ses adresses, ses textes entre guillemets et ses nombres, puis le
   hache (FNV-1a, 8 caractères hexadécimaux) : deux erreurs qui ne diffèrent que par une adresse ou un titre ont
   la même empreinte, et le texte de l'erreur ne part jamais.
@@ -268,7 +271,8 @@ garde les rapports (`ReportSettings`, le même interrupteur que le signalement d
   suivant est perdu, sans nouvel essai.
 - **Le résumé du jour** (`DailyDigest`) : les compteurs par nature d'événement, les issues et stratégies des
   vérifications, les statuts HTTP, les 10 sites les plus vérifiés, les 10 sites aux pages les plus souvent
-  illisibles, les couvertures et les 10 erreurs les plus fréquentes. Un jour sans événement n'a pas de résumé.
+  illisibles, les couvertures, les issues des nouvelles séries à confirmer et les 10 sites qui en ont le plus, et les
+  10 erreurs les plus fréquentes. Un jour sans événement n'a pas de résumé.
   Une alarme horaire l'envoie (`SendDailyDigestUseCase`).
 - **Un résumé part au plus une fois.** Le use-case marque le décompte « en cours d'envoi » avant d'envoyer, puis
   l'oublie après la réponse. S'il trouve un décompte encore « en cours d'envoi » (le service worker s'est arrêté
@@ -288,6 +292,51 @@ garde les rapports (`ReportSettings`, le même interrupteur que le signalement d
 - La destination est un seul port, `TelemetryPort`, qui envoie un rapport et rend son issue (`sent`,
   `rate-limited`, `offline`, `failed`). Le gateway Discord réutilise le webhook des signalements. Remplacer
   Discord par un relais ne change que ce gateway.
+
+## Les nouvelles séries à confirmer
+
+Sur trois jeux scellés de sites jamais vus, l'analyse générique lit 60 à 75 % des chapitres exactement, et 15 à 20 %
+des pages qu'elle reconnaît sous un titre faux (`Solo Leveling DE`, `Doberman Online Free`, `X (MANGA) - RAW`). Le
+catalogue et les sites vérifiés sont presque parfaits. Une ligne fausse dans la bibliothèque coûte plus cher qu'un
+clic : **une nouvelle série d'un site dont la reconnaissance n'est pas fiable attend la confirmation du lecteur.**
+
+- `readingTrustOf(reading, library, suggestions)` (`reading-trust.ts`) rend la `ReadingTrust` d'une lecture, dans
+  l'ordre : `trusted` si la lecture est celle d'un scan suivi (titre affiché ou alias, comme `recordReading`), si son
+  site est au catalogue, s'il est vérifié (`isVerifiedWebsite`) ou si le lecteur lui fait confiance (`HostTrust`) ;
+  `ignored` si le lecteur a fait ignorer le site ; sinon `needs-confirmation`. Une lecture d'un scan suivi avance
+  toujours sa ligne, sans confirmation.
+- Une lecture `needs-confirmation` devient une `PendingSeries` de `SeriesSuggestions` (`series-suggestions.ts`) :
+  la lecture (titre reconnu, chapitre, adresse, date, page de la série), son site et sa source (`page` ou
+  `history`). Une `PendingSeries` se reconnaît par son site et la `SeriesKey` de son titre (`match()` rend `same`) :
+  une lecture suivante de la même série sur le même site la met à jour (chapitre, adresse, date, titre gardé) au lieu
+  d'en créer une seconde. Une lecture plus ancienne ne change rien.
+- **Pas d'inondation** : l'import de l'historique d'un gros lecteur ne noie pas l'écran. Au-delà des plafonds, les
+  plus anciennes partent ; une lecture suivante les ramène.
+- **Ajouter** (`ConfirmPendingSeriesUseCase`) : la série entre dans la bibliothèque sous le titre reconnu
+  (`as-detected`), sous un titre corrigé (`renamed`, le titre reconnu devient un alias) ou dans un scan suivi
+  (`merged`, le titre reconnu devient un alias de la cible). C'est `ScanLibrary.recordReadingAs()` : un titre corrigé
+  qui désigne un scan suivi le rejoint. Les `PendingSeries` de la même série sur d'autres sites, et toute
+  `PendingSeries` que la bibliothèque reconnaît désormais, entrent avec elle.
+- **Refuser** (`DismissPendingSeriesUseCase`, « Not a series ») : la `PendingSeries` part et son titre ne sera plus
+  proposé pour ce site.
+- **Tout ajouter** (`ConfirmSiteSeriesUseCase`) : chaque `PendingSeries` du site est ajoutée sous son titre reconnu,
+  la plus ancienne d'abord.
+- **Ce qu'un site apprend** (`HostTrust`) : deux séries confirmées à la suite sans correction, et le site devient
+  fiable : ses nouvelles séries entrent seules. Une correction, une fusion ou un refus remet ce compte à zéro.
+  Deux refus à la suite, et le site est ignoré : ses nouvelles séries ne sont plus proposées, sans bruit. Un ajout
+  remet ce compte à zéro. `StopIgnoringSiteUseCase` rend la parole au site (l'écran About liste les sites ignorés).
+- La pastille ne compte que les nouveaux chapitres : une `PendingSeries` n'est pas un scan.
+- Toute modification d'une règle de confiance se mesure avec `npm run eval:trust` ([`testing.md`](testing.md)).
+
+| Seuil | Valeur | Pourquoi |
+|---|---|---|
+| Confirmations sans correction pour faire confiance à un site | 2 | Mesuré par `eval:trust` sur les jeux scellés 1 et 2, jugé sur le 3 |
+| Refus pour ignorer un site | 2 | Un refus isolé est une page d'un autre genre ; deux à la suite, un site sans séries |
+| `PendingSeries` par site | 10 | Une page de la liste, pour un site |
+| `PendingSeries` au total | 30 | Trois sites pleins : au-delà, le lecteur ne lit plus les cartes |
+| Titres refusés retenus par site | 20 | Assez pour ne pas reproposer les pages d'un site, sans grossir le stockage |
+
+Les valeurs vivent dans une seule table du code, `SUGGESTION_LIMITS`.
 
 ## Tell-Don't-Ask
 
@@ -310,7 +359,7 @@ library.recordReading(reading);
 Chaque méthode du domaine est soit une commande, soit une requête, jamais les deux.
 
 - **Commande** : change l'état, retourne `void`. `recordReading`, `remove`, `toggleFavorite`, `rate`,
-  `clearRating`, `rename`, `merge`, `unmerge`.
+  `clearRating`, `rename`, `merge`, `unmerge`, `recordReadingAs`, `suggest`, `confirm`, `dismiss`.
 - **Requête** : retourne une donnée, ne mute rien. `snapshot`, `equals`.
 
 `updateScansWithNewVisitedScan` mute la liste reçue et la retourne : c'est les deux à la fois. Le code neuf ne

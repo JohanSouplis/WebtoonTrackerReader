@@ -40,6 +40,10 @@ pas un synonyme.
 | `SupportedWebsite` | Un site présent dans le catalogue | `availableWebsites` en copie |
 | `VerifiedWebsite` | Un site dont `npm run eval:parser` lit exactement une vraie page de chapitre capturée, ou un site vivant du catalogue | `supportedWebsites` pour ce sens |
 | `UnsupportedWebsite` | Un site absent du catalogue, analysé par des indices génériques | `unknownSite`, `genericSite` |
+| `ReadingTrust` | Le verdict sur une lecture reconnue : `trusted` (elle entre dans la bibliothèque), `needs-confirmation` (elle attend le lecteur) ou `ignored` (son site est ignoré) | `confidence`, `score` |
+| `PendingSeries` | Une nouvelle série reconnue sur un site dont la reconnaissance n'est pas fiable, en attente de la confirmation du lecteur. L'interface dit « new series to confirm » | `suggestion`, `candidate`, `draft` |
+| `SeriesSuggestions` | Toutes les `PendingSeries` et la `HostTrust` de chaque site | `inbox`, `queue` |
+| `HostTrust` | Ce que les choix du lecteur ont appris d'un site sur ses nouvelles séries : confirmées sans correction, refusées, titres refusés | `siteScore`, `reputation` |
 | `ChapterMention` | Le numéro de chapitre qu'un texte de la page annonce, avec le texte qui l'entoure | `marker`, `match` |
 | `WebsiteProposal` | Un site que le lecteur demande d'ajouter, par l'adresse d'une de ses pages de chapitre. L'interface dit « Request a site » | `notification` pour ce sens |
 | `seriesUrl` | L'adresse de la page d'une série, qui liste ses chapitres | `seriesLink`, `mangaUrl` |
