@@ -27,29 +27,29 @@ const toCounts = (value: unknown): Counts =>
       )
     : {};
 
+const toCountsPerHost = (value: unknown): Record<string, Counts> =>
+  isRecord(value)
+    ? Object.fromEntries(
+        Object.entries(value).map(([host, counts]) => [host, toCounts(counts)]),
+      )
+    : {};
+
 const toTally = (value: unknown): DayTally | undefined => {
   if (!isRecord(value)) {
     return undefined;
   }
   const day = toDay(value['day']);
-  const checks = value['checks'];
   const reported = value['reported'];
   return day
     ? {
         day,
         events: toCounts(value['events']),
-        checks: isRecord(checks)
-          ? Object.fromEntries(
-              Object.entries(checks).map(([host, counts]) => [
-                host,
-                toCounts(counts),
-              ]),
-            )
-          : {},
+        checks: toCountsPerHost(value['checks']),
         strategies: toCounts(value['strategies']),
         httpStatuses: toCounts(value['httpStatuses']),
         parseMisses: toCounts(value['parseMisses']),
         covers: toCounts(value['covers']),
+        pendingSeries: toCountsPerHost(value['pendingSeries']),
         errors: toCounts(value['errors']),
         reported: Array.isArray(reported)
           ? reported.filter((item) => typeof item === 'string')

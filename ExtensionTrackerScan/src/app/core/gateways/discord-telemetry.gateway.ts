@@ -82,6 +82,19 @@ const digestFields = (digest: DailyDigest): EmbedField[] => [
   },
   { name: 'Covers', value: inline(digest.covers) },
   {
+    name: 'New series to confirm',
+    value: inline(digest.pendingSeriesOutcomes),
+  },
+  {
+    name: 'New series to confirm per site',
+    value: lines(
+      digest.topPendingSeriesHosts.map(
+        ({ host, total, outcomes }) =>
+          `${host}: ${total} (${inline(outcomes.filter(({ count }) => count > 0))})`,
+      ),
+    ),
+  },
+  {
     name: 'Errors',
     value: lines(digest.topErrors.map(({ key, count }) => `${key}: ${count}`)),
   },

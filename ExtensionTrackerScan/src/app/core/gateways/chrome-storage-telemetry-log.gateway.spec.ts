@@ -14,6 +14,18 @@ describe('ChromeStorageTelemetryLog', () => {
     expect(Object.keys(storage.items)).toEqual(['telemetry']);
   });
 
+  it('should read a day counted before new series to confirm were counted', async () => {
+    useStorage({
+      telemetry: { today: { ...LOG.today, pendingSeries: undefined } },
+    });
+
+    const { log } = await new ChromeStorageTelemetryLog().update((stored) => ({
+      log: stored,
+    }));
+
+    expect(log.today).toEqual({ ...LOG.today, pendingSeries: {} });
+  });
+
   it('should start from an empty log when the stored one is unreadable', async () => {
     useStorage({
       telemetry: {
@@ -61,6 +73,7 @@ const LOG: TelemetryLog = {
     httpStatuses: {},
     parseMisses: {},
     covers: {},
+    pendingSeries: { 'manhwareads.com': { added: 1, dismissed: 2 } },
     errors: { 'popup TypeError 0badc0de': 1 },
     reported: ['popup TypeError 0badc0de'],
   },
@@ -74,6 +87,7 @@ const LOG: TelemetryLog = {
       httpStatuses: {},
       parseMisses: { 'mangapark.org': 1 },
       covers: {},
+      pendingSeries: {},
       errors: {},
       reported: [],
     },
