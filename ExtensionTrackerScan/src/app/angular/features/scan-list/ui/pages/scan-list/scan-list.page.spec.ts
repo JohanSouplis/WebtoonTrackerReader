@@ -5,6 +5,7 @@ import { Cover, Thumbnail } from '../../../../../../core/domain/cover';
 import { RatePrompt } from '../../../../../../core/domain/rate-prompt';
 import { ScanLibrary } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
+import { SeriesSuggestions } from '../../../../../../core/domain/series-suggestions';
 import { FixedClock } from '../../../../../../core/gateways/in-memory/fixed-clock.gateway';
 import { InMemoryChapterWatchRepository } from '../../../../../../core/gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
@@ -608,6 +609,33 @@ describe('ScanListPage', () => {
         aliases: ['Solo Leveling DE'],
       }),
     );
+  });
+
+  it('should tell the reader and refresh the waiting series when the series no longer waits', async () => {
+    const scanRepository = new InMemoryScanRepository();
+    const suggestionsRepository = new InMemorySeriesSuggestionsRepository(
+      waiting([DOBERMAN, VAGABOND]),
+    );
+    await renderPage(scanRepository, { suggestionsRepository });
+    await openPendingSeries('2 new series to confirm');
+    await suggestionsRepository.save(
+      SeriesSuggestions.restore(waiting([VAGABOND])),
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Add Doberman' }));
+
+    expect(
+      await screen.findByText(
+        'This series no longer waits for you. The list is up to date.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: /^1 new series to confirm/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add Doberman' }),
+    ).not.toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([]);
   });
 
   it('should add every waiting series of a site when Add all is clicked', async () => {
