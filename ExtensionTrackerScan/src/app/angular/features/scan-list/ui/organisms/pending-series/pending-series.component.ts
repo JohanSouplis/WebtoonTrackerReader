@@ -21,11 +21,13 @@ import {
 } from '../../../service/pending-series.vm';
 import { PendingSeriesRename } from './pending-series.types';
 
-type FocusRequest = {
-  readonly key: string;
-  readonly index: number;
-  readonly isLeaving: boolean;
-};
+type FocusRequest =
+  | { readonly kind: 'card'; readonly key: string }
+  | {
+      readonly kind: 'after-leaving';
+      readonly key: string;
+      readonly nextKey?: string;
+    };
 
 @Component({
   selector: 'app-pending-series',
@@ -69,21 +71,23 @@ export class PendingSeriesComponent {
         return;
       }
       const cards = this.cards();
-      const shownIndex = cards.findIndex(({ key }) => key === request.key);
-      if (request.isLeaving && shownIndex !== -1) {
+      const indexOf = (shown?: string) =>
+        cards.findIndex(({ key }) => key === shown);
+      if (request.kind === 'after-leaving' && indexOf(request.key) !== -1) {
         return;
       }
-      const buttons = this.addButtons();
-      const index = request.isLeaving ? request.index : shownIndex;
+      const index = indexOf(
+        request.kind === 'card' ? request.key : request.nextKey,
+      );
       (
-        buttons[Math.min(index, buttons.length - 1)] ?? this.toggle()
+        this.addButtons()[Math.max(index, 0)] ?? this.toggle()
       ).nativeElement.focus();
       this.focusRequest.set(undefined);
     });
   }
 
   focusCard(card: PendingSeriesCard): void {
-    this.focusRequest.set({ key: card.key, index: 0, isLeaving: false });
+    this.focusRequest.set({ kind: 'card', key: card.key });
   }
 
   protected switchOpen(): void {
@@ -106,7 +110,11 @@ export class PendingSeriesComponent {
   }
 
   protected addSite({ host, cards }: PendingSeriesGroup): void {
-    this.leave(cards[0]);
+    this.focusRequest.set({
+      kind: 'after-leaving',
+      key: cards[0].key,
+      nextKey: this.cards().find((card) => card.host !== host)?.key,
+    });
     this.siteAdded.emit(host);
   }
 
@@ -126,10 +134,12 @@ export class PendingSeriesComponent {
   }
 
   private leave(card: PendingSeriesCard): void {
+    const cards = this.cards();
+    const index = cards.findIndex(({ key }) => key === card.key);
     this.focusRequest.set({
+      kind: 'after-leaving',
       key: card.key,
-      index: this.cards().findIndex(({ key }) => key === card.key),
-      isLeaving: true,
+      nextKey: (cards[index + 1] ?? cards[index - 1])?.key,
     });
   }
 }

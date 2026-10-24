@@ -759,6 +759,153 @@ test.describe('new chapters', () => {
   });
 });
 
+test.describe('new series to confirm', () => {
+  function pendingToggle(page: Page): Locator {
+    return page.getByRole('button', { name: /new series to confirm/ });
+  }
+
+  async function openPendingSeries(page: Page) {
+    await page.goto('/?pending-series');
+    await expect(library(page).getByRole('listitem')).toHaveCount(10);
+    await expect(pendingToggle(page)).toHaveAttribute('aria-expanded', 'false');
+  }
+
+  test('new series wait above the library and open into cards by site', async ({
+    page,
+  }) => {
+    await openPendingSeries(page);
+    await expect(pendingToggle(page)).toContainText('4 new series to confirm');
+    await expect(
+      page.getByRole('button', { name: 'Add Doberman Online Free' }),
+    ).toHaveCount(0);
+    await pin(page, 'pending-01-collapsed');
+    await pendingToggle(page).click();
+    await expect(pendingToggle(page)).toHaveAttribute('aria-expanded', 'true');
+    await expect(
+      page
+        .getByRole('list', { name: 'New series from manhwareads.com' })
+        .getByRole('link'),
+    ).toHaveText(['Doberman Online Free', 'Divine Spirit Martial Emperor']);
+    await expect(
+      page.getByRole('button', {
+        name: 'Add all 2 series from manhwareads.com',
+      }),
+    ).toBeVisible();
+    await pin(page, 'pending-02-open');
+  });
+
+  test('a corrected title adds the series under that title', async ({
+    page,
+  }) => {
+    await openPendingSeries(page);
+    await pendingToggle(page).click();
+    await page
+      .getByRole('button', { name: 'Edit the title of Doberman Online Free' })
+      .click();
+    const field = page.getByRole('textbox', {
+      name: 'Title to add for Doberman Online Free',
+    });
+    await expect(field).toBeFocused();
+    await pin(page, 'pending-03-editing');
+    await page.keyboard.type('Doberman');
+    await page.keyboard.press('Enter');
+    await expect(
+      page.getByText('Added “Doberman” to your library'),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Add Divine Spirit Martial Emperor' }),
+    ).toBeFocused();
+    await expect(pendingToggle(page)).toContainText('3 new series to confirm');
+    await expect(page.getByText('21 series')).toBeVisible();
+    await expectAnnounced(page, 'Added “Doberman” to your library');
+    await page.mouse.move(0, 0);
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await pin(page, 'pending-04-added-corrected');
+  });
+
+  test('a new series merges into a series of the library', async ({ page }) => {
+    await openPendingSeries(page);
+    await pendingToggle(page).click();
+    await page
+      .getByRole('button', {
+        name: 'Merge Solo Leveling: Ragnarok IT with a series of your library',
+      })
+      .click();
+    const picker = page.getByRole('dialog', {
+      name: 'Merge “Solo Leveling: Ragnarok IT” into…',
+    });
+    await expect(
+      picker.getByRole('searchbox', { name: 'Find a series' }),
+    ).toBeFocused();
+    await page.keyboard.type('ragnarok');
+    await page.keyboard.press('Enter');
+    await expect(picker).toHaveCount(0);
+    await expect(
+      page.getByText('Merged into “Solo Leveling: Ragnarok”'),
+    ).toBeVisible();
+    await expect(page.getByText('20 series')).toBeVisible();
+    await expect(
+      row(page, 'Solo Leveling: Ragnarok').getByText('Ch. 61', { exact: true }),
+    ).toBeVisible();
+    await expectAnnounced(page, 'Merged into “Solo Leveling: Ragnarok”');
+    await pin(page, 'pending-05-merged');
+  });
+
+  test('cards are reachable and answered from the keyboard', async ({
+    page,
+  }) => {
+    await openPendingSeries(page);
+    await pendingToggle(page).focus();
+    await page.keyboard.press('Enter');
+    await expect(pendingToggle(page)).toHaveAttribute('aria-expanded', 'true');
+    const add = page.getByRole('button', { name: 'Add Doberman Online Free' });
+    for (let presses = 0; presses < 6; presses += 1) {
+      if (await add.evaluate((button) => button === document.activeElement)) {
+        break;
+      }
+      await page.keyboard.press('Tab');
+    }
+    await expect(add).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(
+      page.getByRole('button', { name: 'Add Divine Spirit Martial Emperor' }),
+    ).toBeFocused();
+    await expect(page.getByText('21 series')).toBeVisible();
+  });
+
+  test('two series of a site that are not series stop its suggestions until the reader keeps them', async ({
+    page,
+  }) => {
+    await openPendingSeries(page);
+    await pendingToggle(page).click();
+    await page
+      .getByRole('button', { name: 'Not a series: Doberman Online Free' })
+      .click();
+    await page
+      .getByRole('button', {
+        name: 'Not a series: Divine Spirit Martial Emperor',
+      })
+      .click();
+    const ignored =
+      "Scan Tracker won't suggest new series from manhwareads.com anymore";
+    await expect(page.getByText(ignored)).toBeVisible();
+    await expect(pendingToggle(page)).toContainText('2 new series to confirm');
+    await expectAnnounced(page, 'Keep suggesting');
+    await pin(page, 'pending-06-site-ignored');
+    await page.getByRole('button', { name: 'About' }).click();
+    const ignoredSites = page.getByRole('list', { name: 'Sites you ignore' });
+    await expect(ignoredSites.getByRole('listitem')).toHaveCount(2);
+    await ignoredSites.scrollIntoViewIfNeeded();
+    await pin(page, 'pending-07-about-ignored-sites');
+    await page
+      .getByRole('button', { name: 'Stop ignoring manhwareads.com' })
+      .click();
+    await expect(ignoredSites.getByRole('listitem')).toHaveText([
+      /mangathrill\.com/,
+    ]);
+  });
+});
+
 test.describe('rate prompt', () => {
   function ratePrompt(page: Page): Locator {
     return page.getByRole('region', { name: 'Enjoying Scan Tracker?' });

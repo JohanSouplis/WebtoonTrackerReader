@@ -96,7 +96,7 @@ describe('PendingSeriesComponent', () => {
     ).toHaveFocus();
   });
 
-  it('should move the focus to the next card once the card acted on is gone', async () => {
+  it('should move the focus to the card that followed once the card acted on is gone, wherever its site moved', async () => {
     const { rerender } = await renderOpened();
 
     await userEvent.click(
@@ -105,8 +105,8 @@ describe('PendingSeriesComponent', () => {
     await rerender({
       inputs: {
         groups: [
-          { host: 'manhwareads.com', cards: [VAGABOND] },
           { host: 'klz9.com', cards: [RAW] },
+          { host: 'manhwareads.com', cards: [VAGABOND] },
         ],
         now: NOW,
       },
