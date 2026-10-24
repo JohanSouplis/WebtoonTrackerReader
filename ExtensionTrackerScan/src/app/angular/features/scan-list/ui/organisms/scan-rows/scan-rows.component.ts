@@ -131,7 +131,7 @@ export class ScanRowsComponent {
     this.lastDeleteAt = click.timeStamp;
     const links = this.titleLinks();
     const neighbor = links[index + 1] ?? links[index - 1];
-    (neighbor ?? this.list())?.nativeElement.focus();
+    (neighbor ?? this.list())?.nativeElement.focus({ preventScroll: true });
     this.deleted.emit(row);
   }
 }
