@@ -61,10 +61,16 @@ function row(page: Page, title: string): Locator {
     .filter({ has: page.getByRole('link', { name: title, exact: true }) });
 }
 
-function sortButton(page: Page, label: string): Locator {
-  return page
+async function sortBy(
+  page: Page,
+  label: string,
+  direction: 'ascending' | 'descending',
+) {
+  await page
     .getByRole('group', { name: 'Sort by' })
-    .getByRole('button', { name: new RegExp(`^${label}`) });
+    .getByRole('button', { name: new RegExp(`^${label}`) })
+    .click();
+  await expectSortedBy(page, `${label} (${direction})`);
 }
 
 async function expectSortedBy(page: Page, name: string) {
@@ -252,29 +258,21 @@ test.describe('scan list', () => {
   test('sorting by each key', async ({ page }) => {
     await openLibrary(page);
     await showAllRows(page);
-    await sortButton(page, 'Last read').click();
-    await expectSortedBy(page, 'Last read (ascending)');
+    await sortBy(page, 'Last read', 'ascending');
     await pin(page, 'scan-sort-01-last-read-toggled');
-    await sortButton(page, 'Title').click();
-    await expectSortedBy(page, 'Title (ascending)');
+    await sortBy(page, 'Title', 'ascending');
     await pin(page, 'scan-sort-02-title-first-click');
-    await sortButton(page, 'Title').click();
-    await expectSortedBy(page, 'Title (descending)');
+    await sortBy(page, 'Title', 'descending');
     await pin(page, 'scan-sort-03-title-second-click');
-    await sortButton(page, 'Chapter').click();
-    await expectSortedBy(page, 'Chapter (descending)');
+    await sortBy(page, 'Chapter', 'descending');
     await pin(page, 'scan-sort-04-chapter-first-click');
-    await sortButton(page, 'Chapter').click();
-    await expectSortedBy(page, 'Chapter (ascending)');
+    await sortBy(page, 'Chapter', 'ascending');
     await pin(page, 'scan-sort-05-chapter-second-click');
-    await sortButton(page, 'Following').click();
-    await expectSortedBy(page, 'Following (descending)');
+    await sortBy(page, 'Following', 'descending');
     await pin(page, 'scan-sort-06-favorite-first-click');
-    await sortButton(page, 'Rating').click();
-    await expectSortedBy(page, 'Rating (descending)');
+    await sortBy(page, 'Rating', 'descending');
     await pin(page, 'scan-sort-07-rating-first-click');
-    await sortButton(page, 'Rating').click();
-    await expectSortedBy(page, 'Rating (ascending)');
+    await sortBy(page, 'Rating', 'ascending');
     await pin(page, 'scan-sort-08-rating-second-click');
   });
 
@@ -600,6 +598,7 @@ test.describe('scan list', () => {
   test('delete keeps favorites only', async ({ page }) => {
     await openLibrary(page);
     await toggle(page, 'Following only').click();
+    await expect(page.getByText('11 series')).toBeVisible();
     await row(page, 'Local')
       .getByRole('button', { name: 'Delete Local' })
       .click();
@@ -615,7 +614,7 @@ test.describe('scan list', () => {
 
   test('delete keeps the title sort', async ({ page }) => {
     await openLibrary(page);
-    await sortButton(page, 'Title').click();
+    await sortBy(page, 'Title', 'ascending');
     await row(page, 'Local')
       .getByRole('button', { name: 'Delete Local' })
       .click();
@@ -719,8 +718,7 @@ test.describe('new chapters', () => {
       'New',
     );
     await pin(page, 'new-01-chips');
-    await sortButton(page, 'New chapters').click();
-    await expectSortedBy(page, 'New chapters (descending)');
+    await sortBy(page, 'New chapters', 'descending');
     await expect(titleLinks(page).first()).toHaveText('The Executioner');
     await expect(titleLinks(page).nth(1)).toHaveText('Dungeon Odyssey');
     await pin(page, 'new-02-new-first');
