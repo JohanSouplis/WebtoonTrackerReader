@@ -442,6 +442,28 @@ test.describe('scan list', () => {
     await pin(page, 'scan-delete-02-local-removed');
   });
 
+  test('deleting the last row in view keeps the rows in place', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    const last = row(page, 'Dungeon Odyssey');
+    await last.evaluate((item) => item.scrollIntoView({ block: 'end' }));
+    const above = page.getByRole('link', {
+      name: 'I Obtained a Mythic Item',
+      exact: true,
+    });
+    const before = await above.boundingBox();
+    await last.getByRole('button', { name: 'Delete Dungeon Odyssey' }).click();
+    await expect(last).toHaveCount(0);
+    await expect(
+      page.getByRole('link', {
+        name: "A Dragonslayer's Peerless Regression",
+        exact: true,
+      }),
+    ).toBeFocused();
+    expect(await above.boundingBox()).toEqual(before);
+  });
+
   test('undo brings a deleted row back', async ({ page }) => {
     await openLibrary(page);
     await row(page, 'Local')
