@@ -131,6 +131,9 @@ const standingFrom = (trust: HostTrust | undefined): HostStanding => {
 const newestFirst = (a: PendingSeries, b: PendingSeries): number =>
   b.reading.readAt.getTime() - a.reading.readAt.getTime();
 
+const oldestFirst = (a: PendingSeries, b: PendingSeries): number =>
+  newestFirst(b, a);
+
 const withinLimits = (pending: readonly PendingSeries[]): PendingSeries[] => {
   const perHost = new Map<string, number>();
   return [...pending]
@@ -141,6 +144,20 @@ const withinLimits = (pending: readonly PendingSeries[]): PendingSeries[] => {
       return count <= SUGGESTION_LIMITS.pendingPerHost;
     })
     .slice(0, SUGGESTION_LIMITS.pendingInTotal);
+};
+
+const titleOf = (
+  detected: ScanTitle,
+  confirmation: SeriesConfirmation,
+): ScanTitle => {
+  switch (confirmation.kind) {
+    case 'as-detected':
+      return detected;
+    case 'renamed':
+      return confirmation.title;
+    case 'merged':
+      return confirmation.into;
+  }
 };
 
 export class SeriesSuggestions {
@@ -214,7 +231,7 @@ export class SeriesSuggestions {
   confirmAllFrom(host: string, library: ScanLibrary): void {
     const refs = this.pending
       .filter((pending) => pending.host === host)
-      .sort((a, b) => -newestFirst(a, b))
+      .sort(oldestFirst)
       .map(({ reading }) => ({ title: reading.title, host }));
     for (const ref of refs) {
       if (this.find(ref)) {
@@ -283,20 +300,6 @@ export class SeriesSuggestions {
     return pending;
   }
 }
-
-const titleOf = (
-  detected: ScanTitle,
-  confirmation: SeriesConfirmation,
-): ScanTitle => {
-  switch (confirmation.kind) {
-    case 'as-detected':
-      return detected;
-    case 'renamed':
-      return confirmation.title;
-    case 'merged':
-      return confirmation.into;
-  }
-};
 
 export const EMPTY_SERIES_SUGGESTIONS: SeriesSuggestionsSnapshot = {
   pending: [],
