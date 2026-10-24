@@ -44,6 +44,23 @@ describe('MergePickerComponent', () => {
     expect(picked).toHaveBeenCalledWith('Lookism');
   });
 
+  it('should merge once and press nothing else when Enter picks a series and focus moves on', async () => {
+    const next = document.body.appendChild(document.createElement('button'));
+    const pressed = jest.fn();
+    next.addEventListener('click', pressed);
+    const picked = jest.fn(() => next.focus());
+    await renderPicker({ picked });
+
+    await userEvent.type(
+      screen.getByRole('searchbox', { name: 'Find a series' }),
+      'o{Enter}',
+    );
+    next.remove();
+
+    expect(picked).toHaveBeenCalledTimes(1);
+    expect(pressed).not.toHaveBeenCalled();
+  });
+
   it('should say so and merge nothing on Enter when no series matches', async () => {
     const picked = jest.fn();
     await renderPicker({ picked });
