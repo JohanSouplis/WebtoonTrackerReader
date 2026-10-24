@@ -114,6 +114,18 @@ par tranche, les fusions, les fusions manquées et les **fausses fusions**. Une 
 d'une autre série : toute modification de l'identité d'une série garde zéro fausse fusion hors homonymes. Lance-le
 avant et après et cite les deux résultats dans la PR.
 
+## La confiance dans une lecture se mesure sur les jeux scellés
+
+`npm run eval:trust` rejoue les pages capturées du corpus (`eval/parser/captures/`), et les jeux scellés passés en
+argument (`npm run eval:trust -- /chemin/sealed.json ...`), par les vrais `RecordVisitedPageUseCase` (tous les
+signaux) et `ImportReadingHistoryUseCase` (titre et URL), avec une bibliothèque vide. Il affiche, jeu par jeu : les
+lectures entrées exactes, les lectures entrées **fausses**, les pages qui ne sont pas des chapitres entrées, les
+`PendingSeries` exactes, fausses (le lecteur corrige le titre) ou qui ne sont pas des chapitres (le lecteur les
+refuse), et les chapitres manqués. Il simule ensuite un lecteur qui confirme, corrige ou refuse chaque proposition
+d'un site dans l'ordre, et compte ce que la confiance apprise fait entrer seule. Une lecture entrée fausse ou une page
+entrée qui n'est pas un chapitre est le pire résultat : l'eval en garde zéro sans confiance apprise. Une règle de
+confiance se règle sur les jeux 1 et 2 ; le jeu 3 juge, sans réglage.
+
 ## Ce qu'on ne teste pas seul
 
 - L'agrégat, les Value Objects et `PageTitleParser` se testent par les use-cases qui les appellent. Une

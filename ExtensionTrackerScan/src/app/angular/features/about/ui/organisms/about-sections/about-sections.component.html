@@ -10,6 +10,30 @@
     Removing a series deletes it from your library. Reading it again adds it
     back.
   </p>
+  <p>
+    On a site it can't read for sure, a new series waits at the top of your
+    library until you add it, correct its title or say it isn't a series. Once
+    you add three series of a site as they are, its next ones come in by
+    themselves. Say twice in a row that a site's pages aren't series, and Scan
+    Tracker stops suggesting them.
+  </p>
+  @if (ignoredSites().length > 0) {
+    <h3 id="about-ignored-sites">Sites you ignore</h3>
+    <ul class="ignored-sites" aria-labelledby="about-ignored-sites">
+      @for (host of ignoredSites(); track host) {
+        <li>
+          <span>{{ host }}</span>
+          <button
+            type="button"
+            attr.aria-label="Stop ignoring {{ host }}"
+            (click)="stopIgnoringRequested.emit(host)"
+          >
+            Stop ignoring
+          </button>
+        </li>
+      }
+    </ul>
+  }
 </section>
 
 <section aria-labelledby="about-new-chapters">
@@ -38,7 +62,8 @@
     <li>
       once a day, counts: the names of the sites it checked for new chapters and
       how each check ended, the sites whose pages it couldn't read, the covers
-      it found or missed, and its errors;
+      it found or missed, how you answered new series to confirm on each site,
+      and its errors;
     </li>
     <li>
       an error the first time it happens in a day, five a day at most: where it

@@ -44,7 +44,8 @@ src/app/angular/
   app.config.ts · app.routes.ts
   injection-tokens.ts                les InjectionToken des ports (SCAN_REPOSITORY, COVER_REPOSITORY...)
   shell/
-    shell.providers.ts               la demande de note, le recorder des diagnostics et l'ErrorHandler de l'application
+    shell.providers.ts               la demande de note, les nouvelles séries à confirmer (la bibliothèque et About),
+                                     le recorder des diagnostics et l'ErrorHandler de l'application
     service/                         store-listing.port.ts
     gateways/                        chrome-store-listing.gateway.ts · in-memory-store-listing.gateway.ts
                                      telemetry-error-handler.gateway.ts (une erreur de la popup devient un diagnostic)
@@ -57,13 +58,14 @@ src/app/angular/
     scan-list/                       onglet « Library », route ''
       scan-list.providers.ts
       service/  scan-row.vm.ts · scan-list-view.vm.ts · scan-filters.rules.ts · scan-sort.rules.ts
+                pending-series.vm.ts
                 cover-backfill.port.ts · notification-permission.port.ts
       gateways/ chrome-runtime-cover-backfill.gateway.ts · in-memory-cover-backfill.gateway.ts
                 chrome-notification-permission.gateway.ts · in-memory-notification-permission.gateway.ts
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
         organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/ · rate-prompt/
-                    merge-picker/
+                    merge-picker/ · pending-series/
     add-website-pattern/             onglet « Request a site », route 'add_website_pattern'
       add-website-pattern.providers.ts
       service/  site-request.rules.ts

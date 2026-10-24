@@ -71,6 +71,17 @@ const aliasesOf = (
     [],
   );
 
+const advance = (scan: TrackedScan, reading: Reading): void => {
+  if (scan.reading.readAt > reading.readAt) {
+    return;
+  }
+  scan.reading = {
+    ...reading,
+    title: scan.reading.title,
+    seriesUrl: reading.seriesUrl ?? seriesUrlOnSameSite(scan.reading, reading),
+  };
+};
+
 const trackedScanOf = (snapshot: ScanSnapshot): TrackedScan => {
   const title = ScanTitle.of(snapshot.title);
   return {
@@ -122,15 +133,25 @@ export class ScanLibrary {
       this.scans.push({ reading, aliases: [], isFavorite: false });
       return;
     }
-    if (scan.reading.readAt > reading.readAt) {
+    advance(scan, reading);
+  }
+
+  recordReadingAs(reading: Reading, title: ScanTitle): void {
+    const scan = this.findSeries(title.seriesKey);
+    const owner = this.scans.find((tracked) =>
+      isTitleOf(tracked, reading.title.seriesKey),
+    );
+    const aliases = owner && owner !== scan ? [] : [reading.title];
+    if (!scan) {
+      this.scans.push({
+        reading: { ...reading, title },
+        aliases: aliasesOf(title, aliases),
+        isFavorite: false,
+      });
       return;
     }
-    scan.reading = {
-      ...reading,
-      title: scan.reading.title,
-      seriesUrl:
-        reading.seriesUrl ?? seriesUrlOnSameSite(scan.reading, reading),
-    };
+    scan.aliases = aliasesOf(scan.reading.title, [...scan.aliases, ...aliases]);
+    advance(scan, reading);
   }
 
   reinstate(snapshot: ScanSnapshot): void {

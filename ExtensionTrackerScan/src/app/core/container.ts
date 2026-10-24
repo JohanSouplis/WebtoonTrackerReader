@@ -10,6 +10,7 @@ import { ChromeStorageHostProfileRepository } from './gateways/chrome-storage-ho
 import { ChromeStorageRatePromptRepository } from './gateways/chrome-storage-rate-prompt-repository.gateway';
 import { ChromeStorageReportSettingsRepository } from './gateways/chrome-storage-report-settings-repository.gateway';
 import { ChromeStorageScanRepository } from './gateways/chrome-storage-scan-repository.gateway';
+import { ChromeStorageSeriesSuggestionsRepository } from './gateways/chrome-storage-series-suggestions-repository.gateway';
 import { ChromeStorageTelemetryLog } from './gateways/chrome-storage-telemetry-log.gateway';
 import { ChromeStorageWatchSettingsRepository } from './gateways/chrome-storage-watch-settings-repository.gateway';
 import { DiscordCrashReporter } from './gateways/discord-crash-reporter.gateway';
@@ -61,6 +62,7 @@ container
     () =>
       new RecordVisitedPageUseCase(
         new ChromeStorageScanRepository(),
+        new ChromeStorageSeriesSuggestionsRepository(),
         new DiscordCrashReporter(),
         new ChromeStorageReportSettingsRepository(),
         new SystemClock(),
@@ -74,6 +76,7 @@ container
       new ImportReadingHistoryUseCase(
         new ChromeBrowserHistory(),
         new ChromeStorageScanRepository(),
+        new ChromeStorageSeriesSuggestionsRepository(),
         new DiscordCrashReporter(),
         new ChromeStorageReportSettingsRepository(),
         telemetryRecorder(),

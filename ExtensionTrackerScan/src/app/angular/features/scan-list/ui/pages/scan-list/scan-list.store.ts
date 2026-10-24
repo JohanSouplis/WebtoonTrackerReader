@@ -7,6 +7,8 @@ import { Covers } from '../../../../../../core/domain/cover';
 import { RatingRequest } from '../../../../../../core/domain/rate-prompt';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
+import { PendingSeriesSnapshot } from '../../../../../../core/domain/series-suggestions';
+import { toPendingSeriesGroups } from '../../../service/pending-series.vm';
 import {
   filterScans,
   NO_FILTERS,
@@ -76,6 +78,11 @@ export class ScanListStore {
   private readonly shownPage = signal<ScanPage>(FIRST_PAGE);
   private readonly covers = signal<ReadonlyMap<string, CoverTile>>(new Map());
   private readonly ratingRequest = signal<RatingRequest>('not-due');
+  private readonly pending = signal<readonly PendingSeriesSnapshot[]>([]);
+  readonly pendingGroups = computed(() =>
+    toPendingSeriesGroups(this.pending()),
+  );
+  readonly hasPendingSeries = computed(() => this.pending().length > 0);
   readonly isAskingForRating = computed(() => this.ratingRequest() === 'asked');
   private readonly matchingScans = computed(() =>
     sortScans(
@@ -100,7 +107,9 @@ export class ScanListStore {
       return load;
     }
     if (load.snapshots.length === 0) {
-      return { kind: 'empty-library' };
+      return this.hasPendingSeries()
+        ? { kind: 'awaiting-first-series' }
+        : { kind: 'empty-library' };
     }
     const scans = this.matchingScans();
     if (scans.length === 0) {
@@ -171,6 +180,10 @@ export class ScanListStore {
           }
         : load,
     );
+  }
+
+  showPending(pending: readonly PendingSeriesSnapshot[]): void {
+    this.pending.set(pending);
   }
 
   showWatches(watches: ChapterWatches): void {

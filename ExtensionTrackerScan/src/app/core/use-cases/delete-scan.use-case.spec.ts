@@ -5,6 +5,7 @@ import { ScanTitle } from '../domain/scan-title';
 import { InMemoryChapterWatchRepository } from '../gateways/in-memory/in-memory-chapter-watch-repository.gateway';
 import { InMemoryCoverRepository } from '../gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemorySeriesSuggestionsRepository } from '../gateways/in-memory/in-memory-series-suggestions-repository.gateway';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
@@ -47,6 +48,7 @@ describe('DeleteScanUseCase', () => {
 
     await new RecordVisitedPageUseCase(
       scanRepository,
+      new InMemorySeriesSuggestionsRepository(),
       new InMemoryCrashReporter(),
       new InMemoryReportSettingsRepository(),
       new FixedClock(NOW),

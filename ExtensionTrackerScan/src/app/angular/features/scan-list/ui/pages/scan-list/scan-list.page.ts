@@ -22,19 +22,28 @@ import {
 } from '../../../../../../core/domain/scan-library';
 import { MergedScans } from '../../../../../../core/domain/scan-merge';
 import { ScanTitle } from '../../../../../../core/domain/scan-title';
+import {
+  PendingSeriesNotFound,
+  PendingSeriesRef,
+  SeriesConfirmation,
+} from '../../../../../../core/domain/series-suggestions';
 import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
 import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
+import { ConfirmPendingSeriesUseCase } from '../../../../../../core/use-cases/confirm-pending-series.use-case';
+import { ConfirmSiteSeriesUseCase } from '../../../../../../core/use-cases/confirm-site-series.use-case';
 import {
   DeleteScanUseCase,
   RemovedScan,
 } from '../../../../../../core/use-cases/delete-scan.use-case';
+import { DismissPendingSeriesUseCase } from '../../../../../../core/use-cases/dismiss-pending-series.use-case';
 import { MergeScansUseCase } from '../../../../../../core/use-cases/merge-scans.use-case';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
 import { RenameScanUseCase } from '../../../../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
+import { StopIgnoringSiteUseCase } from '../../../../../../core/use-cases/stop-ignoring-site.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import { UnmergeScansUseCase } from '../../../../../../core/use-cases/unmerge-scans.use-case';
 import {
@@ -44,15 +53,19 @@ import {
   COVER_REPOSITORY,
   NOTIFICATION_PERMISSION,
   SCAN_REPOSITORY,
+  SERIES_SUGGESTIONS_REPOSITORY,
   STORE_LISTING,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
+import { PendingSeriesCard } from '../../../service/pending-series.vm';
 import { ScanRow } from '../../../service/scan-row.vm';
 import {
   MERGE_PICKER_HEADING_ID,
   MergePickerComponent,
 } from '../../organisms/merge-picker/merge-picker.component';
 import { NewChapterSettingsComponent } from '../../organisms/new-chapter-settings/new-chapter-settings.component';
+import { PendingSeriesComponent } from '../../organisms/pending-series/pending-series.component';
+import { PendingSeriesRename } from '../../organisms/pending-series/pending-series.types';
 import { RatePromptComponent } from '../../organisms/rate-prompt/rate-prompt.component';
 import { ScanFiltersComponent } from '../../organisms/scan-filters/scan-filters.component';
 import { ScanRowsComponent } from '../../organisms/scan-rows/scan-rows.component';
@@ -65,6 +78,14 @@ import { ScanListStore } from './scan-list.store';
 
 const UNDO_DURATION_MS = 6000;
 
+const pendingRefOf = ({
+  title,
+  host,
+}: PendingSeriesCard): PendingSeriesRef => ({
+  title: ScanTitle.of(title),
+  host,
+});
+
 const FEEDBACK_DURATION_MS = 3000;
 
 const REFUSED_ALERTS_DURATION_MS = 12000;
@@ -74,6 +95,7 @@ const REFUSED_ALERTS_DURATION_MS = 12000;
   imports: [
     MergePickerComponent,
     NewChapterSettingsComponent,
+    PendingSeriesComponent,
     RatePromptComponent,
     ScanFiltersComponent,
     ScanSortBarComponent,
@@ -89,6 +111,13 @@ export class ScanListPage implements OnInit {
   private readonly coverRepository = inject(COVER_REPOSITORY);
   private readonly coverBackfill = inject(COVER_BACKFILL);
   private readonly watchRepository = inject(CHAPTER_WATCH_REPOSITORY);
+  private readonly suggestionsRepository = inject(
+    SERIES_SUGGESTIONS_REPOSITORY,
+  );
+  private readonly confirmPendingSeries = inject(ConfirmPendingSeriesUseCase);
+  private readonly confirmSiteSeries = inject(ConfirmSiteSeriesUseCase);
+  private readonly dismissPendingSeries = inject(DismissPendingSeriesUseCase);
+  private readonly stopIgnoringSite = inject(StopIgnoringSiteUseCase);
   private readonly settingsRepository = inject(WATCH_SETTINGS_REPOSITORY);
   private readonly notificationPermission = inject(NOTIFICATION_PERMISSION);
   private readonly changeCheckInterval = inject(ChangeCheckIntervalUseCase);
@@ -110,6 +139,7 @@ export class ScanListPage implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly injector = inject(Injector);
   private readonly rows = viewChild.required(ScanRowsComponent);
+  private readonly pendingSeries = viewChild(PendingSeriesComponent);
   private readonly mergePicker =
     viewChild.required<TemplateRef<unknown>>('mergePicker');
   protected readonly store = inject(ScanListStore);
@@ -128,6 +158,9 @@ export class ScanListPage implements OnInit {
 
   ngOnInit(): void {
     void this.loadLibrary();
+    this.showPending().catch((error: unknown) =>
+      console.error('Error retrieving the new series to confirm:', error),
+    );
     this.showSettings().catch((error: unknown) =>
       console.error('Error retrieving the new chapter settings:', error),
     );
@@ -236,25 +269,147 @@ export class ScanListPage implements OnInit {
     await this.showWatches();
   }
 
-  protected openMergePicker(scan: ScanRow): void {
-    this.dialog
-      .open<unknown, string, string>(this.mergePicker(), {
-        data: scan.title,
-        ariaLabelledBy: MERGE_PICKER_HEADING_ID,
-        restoreFocus: false,
-        width: '440px',
-        maxWidth: 'calc(100vw - 32px)',
-      })
-      .afterClosed()
-      .subscribe((target) => {
-        if (target === undefined) {
-          this.rows().focusTitle(scan.title);
-          return;
-        }
-        this.merge(scan.title, target).catch((error: unknown) =>
-          console.error('Error merging the scans:', error),
-        );
+  protected async openMergePicker(scan: ScanRow): Promise<void> {
+    const target = await this.pickMergeTarget(scan.title);
+    if (target === undefined) {
+      this.rows().focusTitle(scan.title);
+      return;
+    }
+    await this.merge(scan.title, target);
+  }
+
+  protected addSeries(card: PendingSeriesCard): Promise<void> {
+    return this.confirm(
+      card,
+      { kind: 'as-detected' },
+      `Added “${card.title}” to your library`,
+    );
+  }
+
+  protected addSeriesAs({ card, title }: PendingSeriesRename): Promise<void> {
+    return this.confirm(
+      card,
+      { kind: 'renamed', title: ScanTitle.of(title) },
+      `Added “${title}” to your library`,
+    );
+  }
+
+  protected async mergeSeries(card: PendingSeriesCard): Promise<void> {
+    const target = await this.pickMergeTarget(card.title);
+    if (target === undefined) {
+      this.pendingSeries()?.focusCard(card);
+      return;
+    }
+    await this.confirm(
+      card,
+      { kind: 'merged', into: ScanTitle.of(target) },
+      `Merged into “${target}”`,
+    );
+  }
+
+  protected async addSiteSeries(host: string): Promise<void> {
+    const count =
+      this.store.pendingGroups().find((group) => group.host === host)?.cards
+        .length ?? 0;
+    try {
+      const { library, pending } = await this.confirmSiteSeries.execute(host);
+      this.store.showLibrary(library);
+      this.store.showPending(pending);
+    } catch (error: unknown) {
+      await this.showPendingFailure(error);
+      return;
+    }
+    this.snackBar.open(`Added ${count} series from ${host}`, undefined, {
+      duration: FEEDBACK_DURATION_MS,
+    });
+    this.focusLibraryWhenNoSeriesWaits();
+  }
+
+  protected async dismissSeries(card: PendingSeriesCard): Promise<void> {
+    try {
+      const { pending, isSiteIgnored } =
+        await this.dismissPendingSeries.execute(pendingRefOf(card));
+      this.store.showPending(pending);
+      if (isSiteIgnored) {
+        this.offerToKeepSuggesting(card.host);
+      }
+    } catch (error: unknown) {
+      await this.showPendingFailure(error);
+      return;
+    }
+    this.focusLibraryWhenNoSeriesWaits();
+  }
+
+  private async confirm(
+    card: PendingSeriesCard,
+    confirmation: SeriesConfirmation,
+    feedback: string,
+  ): Promise<void> {
+    try {
+      const { library, pending } = await this.confirmPendingSeries.execute(
+        pendingRefOf(card),
+        confirmation,
+      );
+      this.store.showLibrary(library);
+      this.store.showPending(pending);
+    } catch (error: unknown) {
+      await this.showPendingFailure(error);
+      return;
+    }
+    this.snackBar.open(feedback, undefined, {
+      duration: FEEDBACK_DURATION_MS,
+    });
+    this.focusLibraryWhenNoSeriesWaits();
+  }
+
+  private focusLibraryWhenNoSeriesWaits(): void {
+    if (!this.store.hasPendingSeries()) {
+      afterNextRender(() => this.rows().focus(), { injector: this.injector });
+    }
+  }
+
+  private offerToKeepSuggesting(host: string): void {
+    this.snackBar
+      .open(
+        `Scan Tracker won't suggest new series from ${host} anymore`,
+        'Keep suggesting',
+        { duration: UNDO_DURATION_MS },
+      )
+      .onAction()
+      .subscribe(() => {
+        this.stopIgnoringSite
+          .execute(host)
+          .catch((error: unknown) =>
+            console.error('Error suggesting the site again:', error),
+          );
       });
+  }
+
+  private async showPendingFailure(error: unknown): Promise<void> {
+    this.snackBar.open(
+      error instanceof PendingSeriesNotFound
+        ? 'This series no longer waits for you. The list is up to date.'
+        : "Couldn't save your change. Please try again.",
+      'Dismiss',
+      { duration: 5000 },
+    );
+    await this.showPending();
+    await this.loadLibrary();
+  }
+
+  private pickMergeTarget(source: string): Promise<string | undefined> {
+    return new Promise((resolve) => {
+      this.dialog
+        .open<unknown, string, string>(this.mergePicker(), {
+          data: source,
+          ariaLabelledBy: MERGE_PICKER_HEADING_ID,
+          restoreFocus: false,
+          width: '440px',
+          maxWidth: 'calc(100vw - 32px)',
+        })
+        .afterClosed()
+        .subscribe(resolve);
+    });
   }
 
   private async merge(source: string, target: string): Promise<void> {
@@ -375,6 +530,12 @@ export class ScanListPage implements OnInit {
       console.error('Error retrieving the library:', error);
       this.store.showLoadFailure();
     }
+  }
+
+  private async showPending(): Promise<void> {
+    this.store.showPending(
+      (await this.suggestionsRepository.load()).snapshot().pending,
+    );
   }
 
   private async showLibrary(): Promise<void> {

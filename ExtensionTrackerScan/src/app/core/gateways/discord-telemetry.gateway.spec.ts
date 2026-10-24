@@ -27,7 +27,7 @@ describe('DiscordTelemetry', () => {
             {
               name: 'Events',
               value:
-                'unhandled-error 1 · storage-error 0 · parse-miss 2 · chapter-check 3 · cover-search 1 · proposal-send-failed 0',
+                'unhandled-error 1 · storage-error 0 · parse-miss 2 · chapter-check 3 · cover-search 1 · proposal-send-failed 0 · pending-series 3',
             },
             {
               name: 'Chapter checks',
@@ -47,6 +47,14 @@ describe('DiscordTelemetry', () => {
             {
               name: 'Covers',
               value: 'found-page 1 · found-series-page 0 · missing 0',
+            },
+            {
+              name: 'New series to confirm',
+              value: 'added 1 · added-edited 0 · merged 0 · dismissed 2',
+            },
+            {
+              name: 'New series to confirm per site',
+              value: 'manhwareads.com: 3 (added 1 · dismissed 2)',
             },
             {
               name: 'Errors',
@@ -217,6 +225,7 @@ const DIGEST: DailyDigest = {
     { key: 'chapter-check', count: 3 },
     { key: 'cover-search', count: 1 },
     { key: 'proposal-send-failed', count: 0 },
+    { key: 'pending-series', count: 3 },
   ],
   checkOutcomes: [
     { key: 'new', count: 1 },
@@ -257,6 +266,24 @@ const DIGEST: DailyDigest = {
     { key: 'found-page', count: 1 },
     { key: 'found-series-page', count: 0 },
     { key: 'missing', count: 0 },
+  ],
+  pendingSeriesOutcomes: [
+    { key: 'added', count: 1 },
+    { key: 'added-edited', count: 0 },
+    { key: 'merged', count: 0 },
+    { key: 'dismissed', count: 2 },
+  ],
+  topPendingSeriesHosts: [
+    {
+      host: 'manhwareads.com',
+      total: 3,
+      outcomes: [
+        { key: 'added', count: 1 },
+        { key: 'added-edited', count: 0 },
+        { key: 'merged', count: 0 },
+        { key: 'dismissed', count: 2 },
+      ],
+    },
   ],
   topErrors: [{ key: 'service-worker TypeError 0badc0de', count: 1 }],
 };

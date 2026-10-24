@@ -3,6 +3,7 @@ import { ChapterWatch } from './chapter-watch';
 import { Cover } from './cover';
 import { FetchedPage } from './fetched-page';
 import { VisitedPage } from './parsed-page';
+import { PendingSeriesRef, SeriesConfirmation } from './series-suggestions';
 import { siteOf } from './site';
 
 export const ERROR_CONTEXTS = [
@@ -41,6 +42,15 @@ const COVER_SEARCH_OUTCOMES = [
 
 type CoverSearchOutcome = (typeof COVER_SEARCH_OUTCOMES)[number];
 
+export const PENDING_SERIES_OUTCOMES = [
+  'added',
+  'added-edited',
+  'merged',
+  'dismissed',
+] as const;
+
+export type PendingSeriesOutcome = (typeof PENDING_SERIES_OUTCOMES)[number];
+
 export type ErrorEvent =
   | {
       readonly kind: 'unhandled-error';
@@ -66,7 +76,12 @@ export type TelemetryEvent =
       readonly httpStatus?: number;
     }
   | { readonly kind: 'cover-search'; readonly outcome: CoverSearchOutcome }
-  | { readonly kind: 'proposal-send-failed' };
+  | { readonly kind: 'proposal-send-failed' }
+  | {
+      readonly kind: 'pending-series';
+      readonly host: string;
+      readonly outcome: PendingSeriesOutcome;
+    };
 
 type TelemetryEventKind = TelemetryEvent['kind'];
 
@@ -77,6 +92,7 @@ const TELEMETRY_EVENT_KINDS = [
   'chapter-check',
   'cover-search',
   'proposal-send-failed',
+  'pending-series',
 ] as const satisfies readonly TelemetryEventKind[];
 
 export type Counts = Readonly<Record<string, number>>;
@@ -89,6 +105,7 @@ export type DayTally = {
   readonly httpStatuses: Counts;
   readonly parseMisses: Counts;
   readonly covers: Counts;
+  readonly pendingSeries: Readonly<Record<string, Counts>>;
   readonly errors: Counts;
   readonly reported: readonly string[];
 };
@@ -107,7 +124,7 @@ export type TelemetryLog = {
 
 export type Count = { readonly key: string; readonly count: number };
 
-type HostChecks = {
+type HostCounts = {
   readonly host: string;
   readonly total: number;
   readonly outcomes: readonly Count[];
@@ -119,9 +136,11 @@ export type DailyDigest = {
   readonly checkOutcomes: readonly Count[];
   readonly strategies: readonly Count[];
   readonly httpStatuses: readonly Count[];
-  readonly topCheckedHosts: readonly HostChecks[];
+  readonly topCheckedHosts: readonly HostCounts[];
   readonly topParseMissHosts: readonly Count[];
   readonly covers: readonly Count[];
+  readonly pendingSeriesOutcomes: readonly Count[];
+  readonly topPendingSeriesHosts: readonly HostCounts[];
   readonly topErrors: readonly Count[];
 };
 
@@ -157,6 +176,8 @@ const ERROR_NAME = /^[A-Za-z][A-Za-z0-9]{0,39}$/;
 
 const MESSAGE_HASH = /^[0-9a-f]{8}$/;
 
+const HOST = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
+
 const STACK_TOP = /^[\w.-]{1,60}\.js:\d{1,7}:\d{1,7}$/;
 
 const EXTENSION_FRAME =
@@ -171,6 +192,9 @@ const STORAGE_FAILURE_PATTERNS: readonly [StorageFailure, RegExp][] = [
 export const isErrorName = (text: string): boolean => ERROR_NAME.test(text);
 
 export const isMessageHash = (text: string): boolean => MESSAGE_HASH.test(text);
+
+export const isHost = (text: string): boolean =>
+  text.length <= 253 && HOST.test(text);
 
 export const isStackTop = (text: string): boolean => STACK_TOP.test(text);
 
@@ -240,6 +264,20 @@ export const coverSearchEvent = (cover: Cover): TelemetryEvent => ({
   outcome: cover.kind === 'found' ? `found-${cover.from}` : 'missing',
 });
 
+export const pendingSeriesEvent = (
+  { title, host }: PendingSeriesRef,
+  confirmation: SeriesConfirmation,
+): TelemetryEvent => ({
+  kind: 'pending-series',
+  host,
+  outcome:
+    confirmation.kind === 'merged'
+      ? 'merged'
+      : confirmation.kind === 'renamed' && !confirmation.title.equals(title)
+        ? 'added-edited'
+        : 'added',
+});
+
 const fingerprintOf = (event: ErrorEvent): string =>
   event.kind === 'storage-error'
     ? `${event.context} storage ${event.failure}`
@@ -256,6 +294,7 @@ const emptyTally = (day: string): DayTally => ({
   httpStatuses: {},
   parseMisses: {},
   covers: {},
+  pendingSeries: {},
   errors: {},
   reported: [],
 });
@@ -303,6 +342,16 @@ const tallyEvent = (tally: DayTally, event: TelemetryEvent): DayTally => {
       return { ...counted, covers: increment(counted.covers, event.outcome) };
     case 'proposal-send-failed':
       return counted;
+    case 'pending-series': {
+      const host = boundedKey(counted.pendingSeries, event.host);
+      return {
+        ...counted,
+        pendingSeries: {
+          ...counted.pendingSeries,
+          [host]: increment(counted.pendingSeries[host] ?? {}, event.outcome),
+        },
+      };
+    }
   }
 };
 
@@ -426,6 +475,31 @@ const topOf = (counts: Counts): readonly Count[] =>
     .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))
     .slice(0, TOP_COUNT);
 
+const totalsOf = (
+  keys: readonly string[],
+  countsPerHost: Readonly<Record<string, Counts>>,
+): readonly Count[] =>
+  keys.map((key) => ({
+    key,
+    count: Object.values(countsPerHost).reduce(
+      (sum, counts) => sum + (counts[key] ?? 0),
+      0,
+    ),
+  }));
+
+const topHostsOf = (
+  keys: readonly string[],
+  countsPerHost: Readonly<Record<string, Counts>>,
+): readonly HostCounts[] =>
+  Object.entries(countsPerHost)
+    .map(([host, counts]) => ({
+      host,
+      total: sumOf(counts),
+      outcomes: countsOf(keys, counts),
+    }))
+    .sort((a, b) => b.total - a.total || a.host.localeCompare(b.host))
+    .slice(0, TOP_COUNT);
+
 export const digestOf = (tally: DayTally): DailyDigest => {
   const checks = Object.values(tally.checks);
   return {
@@ -447,6 +521,14 @@ export const digestOf = (tally: DayTally): DailyDigest => {
       .slice(0, TOP_COUNT),
     topParseMissHosts: topOf(tally.parseMisses),
     covers: countsOf(COVER_SEARCH_OUTCOMES, tally.covers),
+    pendingSeriesOutcomes: totalsOf(
+      PENDING_SERIES_OUTCOMES,
+      tally.pendingSeries,
+    ),
+    topPendingSeriesHosts: topHostsOf(
+      PENDING_SERIES_OUTCOMES,
+      tally.pendingSeries,
+    ),
     topErrors: topOf(tally.errors),
   };
 };

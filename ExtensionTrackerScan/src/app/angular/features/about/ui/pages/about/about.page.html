@@ -1,6 +1,8 @@
 <app-about-sections
   [version]="version"
   [sendsParseReports]="store.sendsParseReports()"
+  [ignoredSites]="store.ignoredSites()"
+  (stopIgnoringRequested)="stopIgnoringSite($event)"
   (parseReportsToggled)="toggleParseReports($event)"
   (rateRequested)="openReviews()"
 />

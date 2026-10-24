@@ -17,12 +17,16 @@ import { ScanRepository } from '../../../core/ports/scan-repository.port';
 import { AskForRatingUseCase } from '../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../core/use-cases/clear-rating.use-case';
+import { ConfirmPendingSeriesUseCase } from '../../../core/use-cases/confirm-pending-series.use-case';
+import { ConfirmSiteSeriesUseCase } from '../../../core/use-cases/confirm-site-series.use-case';
 import { DeleteScanUseCase } from '../../../core/use-cases/delete-scan.use-case';
+import { DismissPendingSeriesUseCase } from '../../../core/use-cases/dismiss-pending-series.use-case';
 import { MergeScansUseCase } from '../../../core/use-cases/merge-scans.use-case';
 import { RateScanUseCase } from '../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../core/use-cases/record-new-chapter-opened.use-case';
 import { RenameScanUseCase } from '../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../core/use-cases/restore-scan.use-case';
+import { StopIgnoringSiteUseCase } from '../../../core/use-cases/stop-ignoring-site.use-case';
 import { ToggleFavoriteUseCase } from '../../../core/use-cases/toggle-favorite.use-case';
 import { UnmergeScansUseCase } from '../../../core/use-cases/unmerge-scans.use-case';
 import {
@@ -33,6 +37,8 @@ import {
   NOTIFICATION_PERMISSION,
   RATE_PROMPT_REPOSITORY,
   SCAN_REPOSITORY,
+  SERIES_SUGGESTIONS_REPOSITORY,
+  TELEMETRY_RECORDER,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../injection-tokens';
 import { ChromeNotificationPermission } from './gateways/chrome-notification-permission.gateway';
@@ -141,6 +147,37 @@ export const SCAN_LIST_PROVIDERS: Provider[] = [
         inject(COVER_REPOSITORY),
         inject(CHAPTER_WATCH_REPOSITORY),
       ),
+  },
+  {
+    provide: ConfirmPendingSeriesUseCase,
+    useFactory: () =>
+      new ConfirmPendingSeriesUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'series is added'),
+        inject(SERIES_SUGGESTIONS_REPOSITORY),
+        inject(TELEMETRY_RECORDER),
+      ),
+  },
+  {
+    provide: ConfirmSiteSeriesUseCase,
+    useFactory: () =>
+      new ConfirmSiteSeriesUseCase(
+        announcingSaves(inject(SCAN_REPOSITORY), 'series are added'),
+        inject(SERIES_SUGGESTIONS_REPOSITORY),
+        inject(TELEMETRY_RECORDER),
+      ),
+  },
+  {
+    provide: DismissPendingSeriesUseCase,
+    useFactory: () =>
+      new DismissPendingSeriesUseCase(
+        inject(SERIES_SUGGESTIONS_REPOSITORY),
+        inject(TELEMETRY_RECORDER),
+      ),
+  },
+  {
+    provide: StopIgnoringSiteUseCase,
+    useFactory: () =>
+      new StopIgnoringSiteUseCase(inject(SERIES_SUGGESTIONS_REPOSITORY)),
   },
   {
     provide: ToggleFavoriteUseCase,

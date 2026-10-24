@@ -28,6 +28,14 @@ describe('SendDailyDigestUseCase', () => {
       { kind: 'cover-search', outcome: 'found-series-page' },
       { kind: 'cover-search', outcome: 'missing' },
       { kind: 'proposal-send-failed' },
+      { kind: 'pending-series', host: 'manhwareads.com', outcome: 'added' },
+      { kind: 'pending-series', host: 'manhwareads.com', outcome: 'dismissed' },
+      { kind: 'pending-series', host: 'manhwareads.com', outcome: 'dismissed' },
+      {
+        kind: 'pending-series',
+        host: 'zazamanga.com',
+        outcome: 'added-edited',
+      },
       errorEventOf('popup', { name: 'TypeError', message: 'Failed to fetch' }),
       errorEventOf('popup', { name: 'TypeError', message: 'Failed to fetch' }),
       errorEventOf('offscreen', {
@@ -51,6 +59,7 @@ describe('SendDailyDigestUseCase', () => {
           { key: 'chapter-check', count: 5 },
           { key: 'cover-search', count: 3 },
           { key: 'proposal-send-failed', count: 1 },
+          { key: 'pending-series', count: 4 },
         ],
         checkOutcomes: [
           { key: 'new', count: 1 },
@@ -94,6 +103,34 @@ describe('SendDailyDigestUseCase', () => {
           { key: 'found-page', count: 1 },
           { key: 'found-series-page', count: 1 },
           { key: 'missing', count: 1 },
+        ],
+        pendingSeriesOutcomes: [
+          { key: 'added', count: 1 },
+          { key: 'added-edited', count: 1 },
+          { key: 'merged', count: 0 },
+          { key: 'dismissed', count: 2 },
+        ],
+        topPendingSeriesHosts: [
+          {
+            host: 'manhwareads.com',
+            total: 3,
+            outcomes: [
+              { key: 'added', count: 1 },
+              { key: 'added-edited', count: 0 },
+              { key: 'merged', count: 0 },
+              { key: 'dismissed', count: 2 },
+            ],
+          },
+          {
+            host: 'zazamanga.com',
+            total: 1,
+            outcomes: [
+              { key: 'added', count: 0 },
+              { key: 'added-edited', count: 1 },
+              { key: 'merged', count: 0 },
+              { key: 'dismissed', count: 0 },
+            ],
+          },
         ],
         topErrors: [
           {
@@ -229,6 +266,7 @@ describe('SendDailyDigestUseCase', () => {
             httpStatuses: {},
             parseMisses: {},
             covers: {},
+            pendingSeries: {},
             errors: {},
             reported: [],
           },

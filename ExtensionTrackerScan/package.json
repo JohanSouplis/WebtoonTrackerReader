@@ -13,6 +13,7 @@
     "verify:build": "ng build --configuration production && webpack --config webpack.common.js",
     "eval:parser": "esbuild eval/parser/run.ts --bundle --platform=node --log-level=warning | node",
     "eval:identity": "esbuild eval/identity/run.ts --bundle --platform=node --log-level=warning | node",
+    "eval:trust": "esbuild eval/trust/run.ts --bundle --platform=node --log-level=warning | node -",
     "eval:new-chapters": "esbuild eval/new-chapters/run.ts --bundle --platform=node --log-level=warning | node",
     "eval:new-chapters:responses": "esbuild eval/new-chapters/write-responses.ts --bundle --platform=node --external:jsdom --log-level=warning | node - /tmp/newch-sites /tmp/newch-feeds eval/new-chapters/responses.json",
     "sites:verified": "esbuild eval/parser/write-verified-websites.ts --bundle --platform=node --log-level=warning | node"

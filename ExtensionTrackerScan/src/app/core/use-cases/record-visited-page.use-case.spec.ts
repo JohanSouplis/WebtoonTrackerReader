@@ -1,11 +1,25 @@
 import { parsePageSignals } from '../../../page-signals-message';
 import { ScanSnapshot } from '../domain/scan-library';
+import {
+  EMPTY_SERIES_SUGGESTIONS,
+  SeriesSuggestionsSnapshot,
+} from '../domain/series-suggestions';
 import { FixedClock } from '../gateways/in-memory/fixed-clock.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemorySeriesSuggestionsRepository } from '../gateways/in-memory/in-memory-series-suggestions-repository.gateway';
 import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { RecordVisitedPageUseCase } from './record-visited-page.use-case';
+import {
+  hostTrust,
+  pendingSeries,
+  uncertainPage,
+  uncertainUrl,
+  UNCERTAIN_HOST,
+  VERIFIED_SITE_PAGE,
+  waiting,
+} from './pending-series.fixture';
 import { aScan } from './scans.fixture';
 import { SUPPORTED_WEBSITE_PAGES } from './supported-website-pages.fixture';
 
@@ -13,13 +27,11 @@ describe('RecordVisitedPageUseCase', () => {
   it.each(SUPPORTED_WEBSITE_PAGES)(
     'should record the scan read when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
-      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const { recordVisitedPage, detected, crashReporter } = setUp();
 
       await recordVisitedPage.execute({ pageTitle, url });
 
-      expect(await scans()).toEqual([
-        aScan({ title, chapter, url, readAt: NOW }),
-      ]);
+      expect(await detected()).toEqual([{ title, chapter }]);
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
@@ -146,11 +158,11 @@ describe('RecordVisitedPageUseCase', () => {
   ])(
     'should record the scan read on a website outside the catalog when the page title is "%s"',
     async (pageTitle, url, title, chapter) => {
-      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const { recordVisitedPage, detected, crashReporter } = setUp();
 
       await recordVisitedPage.execute({ pageTitle, url });
 
-      expect(await scans()).toEqual([aScan({ title, chapter, url, readAt: NOW })]);
+      expect(await detected()).toEqual([{ title, chapter }]);
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
@@ -182,11 +194,11 @@ describe('RecordVisitedPageUseCase', () => {
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
     async (_, pageTitle, url) => {
-      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const { recordVisitedPage, detected, crashReporter } = setUp();
 
       await recordVisitedPage.execute({ pageTitle, url });
 
-      expect(await scans()).toEqual([]);
+      expect(await detected()).toEqual([]);
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
@@ -221,14 +233,11 @@ describe('RecordVisitedPageUseCase', () => {
   ])(
     'should record the reading its page signals agree on when %s',
     async (_, message, title, chapter) => {
-      const { recordVisitedPage, scans, crashReporter } = setUp();
-      const page = signalsOf(contentScriptMessage(message));
+      const { recordVisitedPage, detected, crashReporter } = setUp();
 
-      await recordVisitedPage.execute(page);
+      await recordVisitedPage.execute(signalsOf(contentScriptMessage(message)));
 
-      expect(await scans()).toEqual([
-        aScan({ title, chapter, url: page.url, readAt: NOW }),
-      ]);
+      expect(await detected()).toEqual([{ title, chapter }]);
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
@@ -257,11 +266,11 @@ describe('RecordVisitedPageUseCase', () => {
   ])(
     'should ignore the page of a website outside the catalog without reporting it when it is %s',
     async (_, message) => {
-      const { recordVisitedPage, scans, crashReporter } = setUp();
+      const { recordVisitedPage, detected, crashReporter } = setUp();
 
       await recordVisitedPage.execute(signalsOf(contentScriptMessage(message)));
 
-      expect(await scans()).toEqual([]);
+      expect(await detected()).toEqual([]);
       expect(crashReporter.reportedPages).toEqual([]);
     },
   );
@@ -317,6 +326,143 @@ describe('RecordVisitedPageUseCase', () => {
         readAt: NOW,
       }),
     ]);
+  });
+
+  it('should add a new series to the library when its site is verified', async () => {
+    const { recordVisitedPage, scans, pending } = setUp();
+
+    await recordVisitedPage.execute(VERIFIED_SITE_PAGE);
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'Nano Machine',
+        chapter: 190,
+        url: VERIFIED_SITE_PAGE.url,
+        readAt: NOW,
+      }),
+    ]);
+    expect(await pending()).toEqual([]);
+  });
+
+  it('should wait for the reader before adding a new series of a site whose recognition is not trusted', async () => {
+    const { recordVisitedPage, scans, pending } = setUp();
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect(await scans()).toEqual([]);
+    expect(await pending()).toEqual([
+      {
+        title: 'Solo Leveling',
+        chapter: 56,
+        url: uncertainUrl('solo-leveling', 56),
+        host: UNCERTAIN_HOST,
+        seenAt: NOW,
+        source: 'page',
+      },
+    ]);
+  });
+
+  it('should advance a followed series without confirmation when it is read on a site whose recognition is not trusted', async () => {
+    const { recordVisitedPage, scans, pending } = setUp([
+      aScan({ title: 'Solo Leveling', chapter: 12 }),
+    ]);
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'Solo Leveling',
+        chapter: 56,
+        url: uncertainUrl('solo-leveling', 56),
+        readAt: NOW,
+      }),
+    ]);
+    expect(await pending()).toEqual([]);
+  });
+
+  it('should update the waiting series when a later chapter of it is read on the same site', async () => {
+    const { recordVisitedPage, pending } = setUp(
+      [],
+      undefined,
+      waiting([pendingSeries({ title: 'Solo Leveling', chapter: 55 })]),
+    );
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect(await pending()).toEqual([
+      pendingSeries({
+        title: 'Solo Leveling',
+        chapter: 56,
+        url: uncertainUrl('solo-leveling', 56),
+        seenAt: NOW,
+      }),
+    ]);
+  });
+
+  it('should keep the waiting series when an older chapter of it is read again', async () => {
+    const later = pendingSeries({
+      title: 'Solo Leveling',
+      chapter: 57,
+      seenAt: new Date('2025-02-01T00:00:00Z'),
+    });
+    const { recordVisitedPage, pending } = setUp(
+      [],
+      undefined,
+      waiting([later]),
+    );
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect(await pending()).toEqual([later]);
+  });
+
+  it('should add a new series to the library when the reader has come to trust its site', async () => {
+    const { recordVisitedPage, scans, pending } = setUp([], undefined, {
+      pending: [],
+      hosts: [hostTrust({ confirmedInARow: 3 })],
+    });
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'Solo Leveling',
+        chapter: 56,
+        url: uncertainUrl('solo-leveling', 56),
+        readAt: NOW,
+      }),
+    ]);
+    expect(await pending()).toEqual([]);
+  });
+
+  it.each`
+    case                                                  | trust
+    ${'the reader had the site ignored'}                  | ${hostTrust({ dismissedInARow: 2 })}
+    ${'the reader said this title is not a series there'} | ${hostTrust({ dismissedInARow: 1, dismissedTitles: ['solo leveling'] })}
+  `(
+    'should neither add nor suggest a new series when $case',
+    async ({ trust }) => {
+      const { recordVisitedPage, detected } = setUp([], undefined, {
+        pending: [],
+        hosts: [trust],
+      });
+
+      await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+      expect(await detected()).toEqual([]);
+    },
+  );
+
+  it('should still advance a followed series on a site the reader had ignored', async () => {
+    const { recordVisitedPage, scans } = setUp(
+      [aScan({ title: 'Solo Leveling', chapter: 12 })],
+      undefined,
+      { pending: [], hosts: [hostTrust({ dismissedInARow: 2 })] },
+    );
+
+    await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));
+
+    expect((await scans()).map(({ chapter }) => chapter)).toEqual([56]);
   });
 
   it('should add the scan after the scans already followed when its title is new', async () => {
@@ -786,16 +932,30 @@ const signalsOf = (message: unknown) => {
 const setUp = (
   followed: ScanSnapshot[] = [],
   reportSettings = new InMemoryReportSettingsRepository(),
+  suggestionsSnapshot: SeriesSuggestionsSnapshot = EMPTY_SERIES_SUGGESTIONS,
 ) => {
   const scanRepository = new InMemoryScanRepository(followed);
+  const suggestionsRepository = new InMemorySeriesSuggestionsRepository(
+    suggestionsSnapshot,
+  );
   const crashReporter = new InMemoryCrashReporter();
   const telemetry = new InMemoryTelemetryRecorder();
+  const scans = async () => (await scanRepository.load()).snapshot();
+  const pending = async () =>
+    (await suggestionsRepository.load()).snapshot().pending;
   return {
     crashReporter,
     telemetry,
-    scans: async () => (await scanRepository.load()).snapshot(),
+    scans,
+    pending,
+    detected: async () =>
+      [...(await scans()), ...(await pending())].map(({ title, chapter }) => ({
+        title,
+        chapter,
+      })),
     recordVisitedPage: new RecordVisitedPageUseCase(
       scanRepository,
+      suggestionsRepository,
       crashReporter,
       reportSettings,
       new FixedClock(NOW),

@@ -3,9 +3,11 @@ import { InMemoryBrowserHistory } from '../gateways/in-memory/in-memory-browser-
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemorySeriesSuggestionsRepository } from '../gateways/in-memory/in-memory-series-suggestions-repository.gateway';
 import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { HistoryVisit } from '../ports/browser-history.port';
 import { ImportReadingHistoryUseCase } from './import-reading-history.use-case';
+import { pendingSeries, uncertainPage } from './pending-series.fixture';
 import { aScan } from './scans.fixture';
 
 describe('ImportReadingHistoryUseCase', () => {
@@ -39,20 +41,91 @@ describe('ImportReadingHistoryUseCase', () => {
 
   it('should keep the latest chapter when an older visit of the same scan comes later in the history', async () => {
     const { importReadingHistory, scans } = setUp([
-      visit('Overgeared Chapter 266 - Manganato', MANGANATO_URL, LATER),
-      visit('Overgeared Chapter 265 - Manganato', MANGANATO_URL, EARLIER),
+      visit('Nano Machine - Chapter 190 - Flame Comics', FLAME_URL, LATER),
+      visit(
+        'Nano Machine - Chapter 189 - Flame Comics',
+        'https://flamecomics.xyz/nano-machine-chapter-189/',
+        EARLIER,
+      ),
     ]);
 
     await importReadingHistory.execute();
 
     expect(await scans()).toEqual([
       aScan({
-        title: 'Overgeared',
-        chapter: 266,
-        url: MANGANATO_URL,
+        title: 'Nano Machine',
+        chapter: 190,
+        url: FLAME_URL,
         readAt: LATER,
       }),
     ]);
+  });
+
+  it('should suggest once, at its latest chapter, a new series the history shows on a site whose recognition is not trusted', async () => {
+    const { importReadingHistory, scans, pending } = setUp([
+      historyVisit('Solo Leveling', 56, LATER),
+      historyVisit('Solo Leveling', 55, EARLIER),
+    ]);
+
+    await importReadingHistory.execute();
+
+    expect(await scans()).toEqual([]);
+    expect(await pending()).toEqual([
+      pendingSeries({
+        title: 'Solo Leveling',
+        chapter: 56,
+        seenAt: LATER,
+        source: 'history',
+      }),
+    ]);
+  });
+
+  it('should keep the ten newest new series of a site when the history shows more of them', async () => {
+    const { importReadingHistory, pending } = setUp(
+      Array.from({ length: 12 }, (_, index) =>
+        historyVisit(
+          `Series ${index + 1}`,
+          1,
+          new Date(Date.UTC(2025, 0, index + 1)),
+        ),
+      ),
+    );
+
+    await importReadingHistory.execute();
+
+    expect((await pending()).map(({ title }) => title)).toEqual(
+      Array.from({ length: 10 }, (_, index) => `Series ${12 - index}`),
+    );
+  });
+
+  it('should keep the newest series of each site, and the newest in all, when the history holds more than the reader can review', async () => {
+    const hosts = ['a.example', 'b.example', 'c.example', 'd.example'];
+    const visits = hosts.flatMap((host, siteIndex) =>
+      Array.from({ length: 12 }, (_, index) =>
+        historyVisit(
+          `Series ${String.fromCharCode(65 + index)}`,
+          1,
+          new Date(Date.UTC(2025, 0, 1 + index, siteIndex)),
+          host,
+        ),
+      ),
+    );
+    const { importReadingHistory, pending } = setUp(visits);
+
+    await importReadingHistory.execute();
+
+    const kept = await pending();
+    expect(kept).toHaveLength(30);
+    expect(
+      hosts.map((host) => kept.filter((series) => series.host === host).length),
+    ).toEqual([7, 7, 8, 8]);
+    expect(
+      kept.filter(({ host }) => host === 'd.example').map(({ title }) => title),
+    ).toEqual(
+      ['L', 'K', 'J', 'I', 'H', 'G', 'F', 'E'].map(
+        (letter) => `Series ${letter}`,
+      ),
+    );
   });
 
   it('should record the scans read in the history on websites outside the catalog', async () => {
@@ -122,6 +195,13 @@ const FLAME_SERIES_URL = 'https://flamecomics.xyz/series/nano-machine/';
 const MANTA_URL =
   'https://manta.net/en/series/the-hidden-muse/episodes/episode-3?episodeId=117732';
 
+const historyVisit = (
+  title: string,
+  chapter: number,
+  readAt: Date,
+  host?: string,
+): HistoryVisit => ({ page: uncertainPage(title, chapter, host), readAt });
+
 const visit = (pageTitle: string, url: string, readAt: Date): HistoryVisit => ({
   page: { pageTitle, url },
   readAt,
@@ -133,15 +213,19 @@ const setUp = (
   reportSettings = new InMemoryReportSettingsRepository(),
 ) => {
   const scanRepository = new InMemoryScanRepository(followed);
+  const suggestionsRepository = new InMemorySeriesSuggestionsRepository();
   const crashReporter = new InMemoryCrashReporter();
   const telemetry = new InMemoryTelemetryRecorder();
   return {
     crashReporter,
     telemetry,
     scans: async () => (await scanRepository.load()).snapshot(),
+    pending: async () =>
+      (await suggestionsRepository.load()).snapshot().pending,
     importReadingHistory: new ImportReadingHistoryUseCase(
       new InMemoryBrowserHistory(visits),
       scanRepository,
+      suggestionsRepository,
       crashReporter,
       reportSettings,
       telemetry,

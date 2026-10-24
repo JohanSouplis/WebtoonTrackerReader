@@ -77,6 +77,47 @@ mat-slide-toggle {
   text-decoration: underline;
 }
 
+h3 {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ignored-sites {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ignored-sites li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 6px 6px 12px;
+  border-radius: 10px;
+  background: var(--app-surface-2);
+}
+
+.ignored-sites button {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--app-accent-line);
+  border-radius: 9px;
+  background: none;
+  color: var(--app-accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ignored-sites button:hover {
+  background: var(--app-accent-soft);
+}
+
 .version {
   color: var(--app-muted);
   font-size: 12.5px;

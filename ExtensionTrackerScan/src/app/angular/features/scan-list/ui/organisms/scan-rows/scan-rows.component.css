@@ -295,6 +295,13 @@ mat-paginator {
   animation: rise 0.28s var(--app-ease-out) both;
 }
 
+.first-series {
+  flex: none;
+  padding: 16px 24px;
+  color: var(--app-muted);
+  text-align: center;
+}
+
 .empty mat-icon.mat-icon {
   margin-bottom: 4px;
   font-size: 40px;

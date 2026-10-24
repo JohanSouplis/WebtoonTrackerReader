@@ -184,6 +184,12 @@
       <a class="clear" href="#/add_website_pattern">See supported sites</a>
     </section>
   }
+  @case ("awaiting-first-series") {
+    <p class="first-series">
+      Add the series above to start your library. Series read on supported sites
+      come in by themselves.
+    </p>
+  }
   @case ("loading") {
     <ul class="skeleton" aria-label="Loading your library" aria-busy="true">
       @for (row of skeletonRows; track row) {

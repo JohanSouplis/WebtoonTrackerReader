@@ -2,7 +2,9 @@ import {
   ERROR_CONTEXTS,
   isErrorName,
   isMessageHash,
+  isHost,
   isStackTop,
+  PENDING_SERIES_OUTCOMES,
   STORAGE_FAILURES,
   TelemetryEvent,
 } from './app/core/domain/telemetry';
@@ -42,6 +44,15 @@ const toEvent = (
     }
     case 'proposal-send-failed':
       return { kind: 'proposal-send-failed' };
+    case 'pending-series': {
+      const { host } = event;
+      const outcome = PENDING_SERIES_OUTCOMES.find(
+        (known) => known === event['outcome'],
+      );
+      return typeof host === 'string' && isHost(host) && outcome
+        ? { kind: 'pending-series', host, outcome }
+        : undefined;
+    }
     default:
       return undefined;
   }

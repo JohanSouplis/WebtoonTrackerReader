@@ -9,6 +9,7 @@
     - heading "What gets tracked" [level=2]
     - paragraph: "Scan Tracker remembers the last chapter you read of each series. It reads your browser history every hour and every chapter page you open, so there is nothing to add by hand: read a chapter on a supported site and the series shows up in your library."
     - paragraph: Removing a series deletes it from your library. Reading it again adds it back.
+    - paragraph: On a site it can't read for sure, a new series waits at the top of your library until you add it, correct its title or say it isn't a series. Once you add three series of a site as they are, its next ones come in by themselves. Say twice in a row that a site's pages aren't series, and Scan Tracker stops suggesting them.
   - region "New chapters":
     - heading "New chapters" [level=2]
     - paragraph: Follow a series with its bell and Scan Tracker checks it for new chapters from your browser, without any server, as often as you choose in the library. A new chapter shows on its row and as a count on the toolbar icon. Desktop alerts are optional.
@@ -17,7 +18,7 @@
     - paragraph: "Your library stays in your browser. With diagnostics on, the extension sends the developer:"
     - list:
       - listitem: the address and title of a page of a supported site it can't read, so the site can be fixed;
-      - listitem: "once a day, counts: the names of the sites it checked for new chapters and how each check ended, the sites whose pages it couldn't read, the covers it found or missed, and its errors;"
+      - listitem: "once a day, counts: the names of the sites it checked for new chapters and how each check ended, the sites whose pages it couldn't read, the covers it found or missed, how you answered new series to confirm on each site, and its errors;"
       - listitem: "an error the first time it happens in a day, five a day at most: where it happened, its type and a short code, never its text;"
       - listitem: with each message, the extension version and the browser version.
     - paragraph: Except for the unreadable pages above, diagnostics carry no page address and no series title, and none of them identifies your browser. A site you request is sent to the developer too. Nothing else about you is sent.

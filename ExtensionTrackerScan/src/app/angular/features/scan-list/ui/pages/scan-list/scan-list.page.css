@@ -5,9 +5,14 @@
   flex-direction: column;
 }
 
+app-pending-series,
 app-scan-filters,
 app-scan-sort-bar {
   flex: none;
+}
+
+app-pending-series {
+  margin-bottom: 12px;
 }
 
 app-scan-rows {
