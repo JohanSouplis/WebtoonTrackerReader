@@ -107,7 +107,9 @@ export class ScanListStore {
       return load;
     }
     if (load.snapshots.length === 0) {
-      return { kind: 'empty-library' };
+      return this.hasPendingSeries()
+        ? { kind: 'awaiting-first-series' }
+        : { kind: 'empty-library' };
     }
     const scans = this.matchingScans();
     if (scans.length === 0) {

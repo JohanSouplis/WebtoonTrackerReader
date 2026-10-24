@@ -90,6 +90,18 @@ async function openLibrary(page: Page) {
   await expectSortedBy(page, 'Last read (descending)');
 }
 
+async function deleteEveryRow(page: Page) {
+  await showAllRows(page);
+  for (let left = 20; left > 0; left -= 1) {
+    await library(page)
+      .getByRole('button', { name: /^Delete / })
+      .first()
+      .click();
+    await expect(library(page).getByRole('listitem')).toHaveCount(left - 1);
+    await page.waitForTimeout(350);
+  }
+}
+
 async function setPageSize(page: Page, size: string) {
   await page.getByRole('combobox', { name: /Rows per page$/ }).click();
   await page.getByRole('option', { name: size, exact: true }).click();
@@ -305,15 +317,7 @@ test.describe('scan list', () => {
     page,
   }) => {
     await openLibrary(page);
-    await showAllRows(page);
-    for (let left = 20; left > 0; left -= 1) {
-      await library(page)
-        .getByRole('button', { name: /^Delete / })
-        .first()
-        .click();
-      await expect(library(page).getByRole('listitem')).toHaveCount(left - 1);
-      await page.waitForTimeout(350);
-    }
+    await deleteEveryRow(page);
     await expect(
       page.getByRole('heading', { name: 'No series yet' }),
     ).toBeVisible();
@@ -871,6 +875,25 @@ test.describe('new series to confirm', () => {
       page.getByRole('button', { name: 'Add Divine Spirit Martial Emperor' }),
     ).toBeFocused();
     await expect(page.getByText('21 series')).toBeVisible();
+  });
+
+  test('an empty library points at the new series waiting above it', async ({
+    page,
+  }) => {
+    await openPendingSeries(page);
+    await deleteEveryRow(page);
+    await expect(
+      page.getByText(
+        'Add the series above to start your library. Series read on supported sites come in by themselves.',
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'No series yet' }),
+    ).toHaveCount(0);
+    await page.mouse.move(0, 0);
+    await expect(page.getByText(/Removed “/)).toBeHidden({ timeout: 8000 });
+    await pendingToggle(page).click();
+    await pin(page, 'pending-08-empty-library');
   });
 
   test('two series of a site that are not series stop its suggestions until the reader keeps them', async ({

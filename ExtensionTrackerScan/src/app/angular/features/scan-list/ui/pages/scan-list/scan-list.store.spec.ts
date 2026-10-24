@@ -24,6 +24,16 @@ describe('ScanListStore', () => {
     expect(store.hasLibraryTools()).toBe(false);
   });
 
+  it('should point an empty library at the series waiting for the reader', () => {
+    const store = new ScanListStore();
+
+    store.showLibrary([]);
+    store.showPending([pendingSeries({ title: 'Doberman' })]);
+
+    expect(store.view()).toEqual({ kind: 'awaiting-first-series' });
+    expect(store.hasLibraryTools()).toBe(false);
+  });
+
   it('should say the load failed and hide the tools until the library loads again', () => {
     const store = new ScanListStore();
 

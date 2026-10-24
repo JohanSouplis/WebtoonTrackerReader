@@ -752,6 +752,31 @@ describe('ScanListPage', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('should point an empty library at the series waiting above it, and say it is empty once none waits', async () => {
+    await renderPage(new InMemoryScanRepository([]), {
+      suggestionsRepository: new InMemorySeriesSuggestionsRepository(
+        waiting([DOBERMAN]),
+      ),
+    });
+
+    expect(
+      await screen.findByText(
+        'Add the series above to start your library. Series read on supported sites come in by themselves.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'No series yet' }),
+    ).not.toBeInTheDocument();
+    await openPendingSeries('1 new series to confirm');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Not a series: Doberman' }),
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: 'No series yet' }),
+    ).toBeInTheDocument();
+  });
+
   it('should tell the reader and refresh the list when the scan was already removed elsewhere', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Solo Leveling' }),

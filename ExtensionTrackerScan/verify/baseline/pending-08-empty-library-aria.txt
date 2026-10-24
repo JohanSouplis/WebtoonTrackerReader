@@ -1,0 +1,55 @@
+- button "Skip to content"
+- text: Scan Tracker
+- navigation "Main":
+  - button "Library"
+  - button "Request a site"
+- button "About"
+- main:
+  - button "4 new series to confirm Found on sites Scan Tracker can't read for sure" [expanded]
+  - region "manhwareads.com":
+    - heading "manhwareads.com" [level=3]
+    - button "Add all 2 series from manhwareads.com": Add all 2
+    - list "New series from manhwareads.com":
+      - listitem:
+        - link "Doberman Online Free":
+          - /url: https://manhwareads.com/manga/doberman/doberman-chapter-88/
+        - button "Edit the title of Doberman Online Free"
+        - text: Ch. 88 read
+        - time: today
+        - button "Add Doberman Online Free": Add
+        - 'button "Not a series: Doberman Online Free"': Not a series
+        - button "Merge Doberman Online Free with a series of your library"
+      - listitem:
+        - link "Divine Spirit Martial Emperor":
+          - /url: https://manhwareads.com/manga/divine-spirit-martial-emperor/ch-430/
+        - button "Edit the title of Divine Spirit Martial Emperor"
+        - text: Ch. 430 read
+        - time: 2d ago
+        - button "Add Divine Spirit Martial Emperor": Add
+        - 'button "Not a series: Divine Spirit Martial Emperor"': Not a series
+        - button "Merge Divine Spirit Martial Emperor with a series of your library"
+  - region "infinitymanga.com":
+    - heading "infinitymanga.com" [level=3]
+    - list "New series from infinitymanga.com":
+      - listitem:
+        - 'link "Solo Leveling: Ragnarok IT"':
+          - /url: https://www.infinitymanga.com/it/solo-leveling-ragnarok-it/solo-leveling-ragnarok-it-capitolo-61.html
+        - 'button "Edit the title of Solo Leveling: Ragnarok IT"'
+        - text: Ch. 61 read
+        - time: 1d ago
+        - 'button "Add Solo Leveling: Ragnarok IT"': Add
+        - 'button "Not a series: Solo Leveling: Ragnarok IT"': Not a series
+        - 'button "Merge Solo Leveling: Ragnarok IT with a series of your library"'
+  - region "klz9.com":
+    - heading "klz9.com" [level=3]
+    - list "New series from klz9.com":
+      - listitem:
+        - link "Tensei Kizoku Kantei Sukiru de Nariagaru ~ Jakushou Ryouchi o Uketsuidanode, Yuushuuna Jinzai o Fuyashite Itara, Saikyou Ryouchi ni Natteta ~ (MANGA) - RAW":
+          - /url: https://klz9.com/tensei-kizoku-kantei-sukiru-de-nariagaru-manga-raw-chapter-184.html
+        - button "Edit the title of Tensei Kizoku Kantei Sukiru de Nariagaru ~ Jakushou Ryouchi o Uketsuidanode, Yuushuuna Jinzai o Fuyashite Itara, Saikyou Ryouchi ni Natteta ~ (MANGA) - RAW"
+        - text: Ch. 184 read
+        - time: 4d ago
+        - button "Add Tensei Kizoku Kantei Sukiru de Nariagaru ~ Jakushou Ryouchi o Uketsuidanode, Yuushuuna Jinzai o Fuyashite Itara, Saikyou Ryouchi ni Natteta ~ (MANGA) - RAW": Add
+        - 'button "Not a series: Tensei Kizoku Kantei Sukiru de Nariagaru ~ Jakushou Ryouchi o Uketsuidanode, Yuushuuna Jinzai o Fuyashite Itara, Saikyou Ryouchi ni Natteta ~ (MANGA) - RAW"': Not a series
+        - button "Merge Tensei Kizoku Kantei Sukiru de Nariagaru ~ Jakushou Ryouchi o Uketsuidanode, Yuushuuna Jinzai o Fuyashite Itara, Saikyou Ryouchi ni Natteta ~ (MANGA) - RAW with a series of your library"
+  - paragraph: Add the series above to start your library. Series read on supported sites come in by themselves.

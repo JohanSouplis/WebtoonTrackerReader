@@ -17,6 +17,7 @@ export type ScanListView =
   | { readonly kind: 'loading' }
   | { readonly kind: 'failed' }
   | { readonly kind: 'empty-library' }
+  | { readonly kind: 'awaiting-first-series' }
   | { readonly kind: 'no-match'; readonly searchedTitle: string }
   | {
       readonly kind: 'scans';
