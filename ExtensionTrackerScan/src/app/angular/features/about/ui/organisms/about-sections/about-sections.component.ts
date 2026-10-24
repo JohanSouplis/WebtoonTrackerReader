@@ -17,6 +17,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 export class AboutSectionsComponent {
   readonly version = input.required<string>();
   readonly sendsParseReports = input.required<boolean>();
+  readonly ignoredSites = input.required<readonly string[]>();
+  readonly stopIgnoringRequested = output<string>();
   readonly parseReportsToggled = output<boolean>();
   readonly rateRequested = output<void>();
   protected readonly issuesUrl =

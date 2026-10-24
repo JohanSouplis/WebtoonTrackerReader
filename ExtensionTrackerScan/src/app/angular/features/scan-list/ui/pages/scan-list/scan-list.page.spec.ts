@@ -10,18 +10,30 @@ import { InMemoryChapterWatchRepository } from '../../../../../../core/gateways/
 import { InMemoryCoverRepository } from '../../../../../../core/gateways/in-memory/in-memory-cover-repository.gateway';
 import { InMemoryRatePromptRepository } from '../../../../../../core/gateways/in-memory/in-memory-rate-prompt-repository.gateway';
 import { InMemoryScanRepository } from '../../../../../../core/gateways/in-memory/in-memory-scan-repository.gateway';
+import { InMemorySeriesSuggestionsRepository } from '../../../../../../core/gateways/in-memory/in-memory-series-suggestions-repository.gateway';
+import { InMemoryTelemetryRecorder } from '../../../../../../core/gateways/in-memory/in-memory-telemetry-recorder.gateway';
 import { InMemoryWatchSettingsRepository } from '../../../../../../core/gateways/in-memory/in-memory-watch-settings-repository.gateway';
 import { AnswerRatePromptUseCase } from '../../../../../../core/use-cases/answer-rate-prompt.use-case';
 import { AskForRatingUseCase } from '../../../../../../core/use-cases/ask-for-rating.use-case';
 import { ChangeCheckIntervalUseCase } from '../../../../../../core/use-cases/change-check-interval.use-case';
 import { ClearRatingUseCase } from '../../../../../../core/use-cases/clear-rating.use-case';
+import { ConfirmPendingSeriesUseCase } from '../../../../../../core/use-cases/confirm-pending-series.use-case';
+import { ConfirmSiteSeriesUseCase } from '../../../../../../core/use-cases/confirm-site-series.use-case';
 import { DeleteScanUseCase } from '../../../../../../core/use-cases/delete-scan.use-case';
+import { DismissPendingSeriesUseCase } from '../../../../../../core/use-cases/dismiss-pending-series.use-case';
 import { MergeScansUseCase } from '../../../../../../core/use-cases/merge-scans.use-case';
+import {
+  OTHER_UNCERTAIN_HOST,
+  pendingSeries,
+  UNCERTAIN_HOST,
+  waiting,
+} from '../../../../../../core/use-cases/pending-series.fixture';
 import { RateScanUseCase } from '../../../../../../core/use-cases/rate-scan.use-case';
 import { RecordNewChapterOpenedUseCase } from '../../../../../../core/use-cases/record-new-chapter-opened.use-case';
 import { RenameScanUseCase } from '../../../../../../core/use-cases/rename-scan.use-case';
 import { RestoreScanUseCase } from '../../../../../../core/use-cases/restore-scan.use-case';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
+import { StopIgnoringSiteUseCase } from '../../../../../../core/use-cases/stop-ignoring-site.use-case';
 import { ToggleFavoriteUseCase } from '../../../../../../core/use-cases/toggle-favorite.use-case';
 import { UnmergeScansUseCase } from '../../../../../../core/use-cases/unmerge-scans.use-case';
 import {
@@ -31,6 +43,7 @@ import {
   COVER_REPOSITORY,
   NOTIFICATION_PERMISSION,
   SCAN_REPOSITORY,
+  SERIES_SUGGESTIONS_REPOSITORY,
   STORE_LISTING,
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
@@ -495,6 +508,169 @@ describe('ScanListPage', () => {
     ]);
   });
 
+  it('should add a waiting series to the library and move to the next one when Add is clicked', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Eleceed' }),
+    ]);
+    const suggestionsRepository = new InMemorySeriesSuggestionsRepository(
+      waiting([DOBERMAN, VAGABOND]),
+    );
+    await renderPage(scanRepository, { suggestionsRepository });
+
+    await openPendingSeries('2 new series to confirm');
+    await userEvent.click(screen.getByRole('button', { name: 'Add Doberman' }));
+
+    expect(
+      await screen.findByText('Added “Doberman” to your library'),
+    ).toBeInTheDocument();
+    expect(
+      await within(library()).findByRole('link', { name: 'Doberman' }),
+    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Add Vagabond' }),
+      ).toHaveFocus(),
+    );
+    expect(
+      screen.getByRole('button', { name: /^1 new series to confirm/ }),
+    ).toBeInTheDocument();
+    expect((await suggestionsRepository.load()).snapshot().pending).toEqual([
+      VAGABOND,
+    ]);
+  });
+
+  it('should add a waiting series under the title the reader typed', async () => {
+    const scanRepository = new InMemoryScanRepository();
+    await renderPage(scanRepository, {
+      suggestionsRepository: new InMemorySeriesSuggestionsRepository(
+        waiting([DOBERMAN_ONLINE_FREE]),
+      ),
+    });
+
+    await openPendingSeries('1 new series to confirm');
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: 'Edit the title of Doberman Online Free',
+      }),
+    );
+    await userEvent.keyboard('Doberman{Enter}');
+
+    expect(
+      await screen.findByText('Added “Doberman” to your library'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /new series to confirm/ }),
+    ).not.toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()).toEqual([
+      aScan({
+        title: 'Doberman',
+        chapter: 88,
+        url: DOBERMAN_ONLINE_FREE.url,
+        readAt: DOBERMAN_ONLINE_FREE.seenAt,
+        aliases: ['Doberman Online Free'],
+      }),
+    ]);
+  });
+
+  it('should merge a waiting series into the series picked in Merge with', async () => {
+    const scanRepository = new InMemoryScanRepository([
+      aScan({ title: 'Solo Leveling', chapter: 40 }),
+      aScan({ title: 'Eleceed' }),
+    ]);
+    await renderPage(scanRepository, {
+      suggestionsRepository: new InMemorySeriesSuggestionsRepository(
+        waiting([SOLO_LEVELING_DE]),
+      ),
+    });
+
+    await openPendingSeries('1 new series to confirm');
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: 'Merge Solo Leveling DE with a series of your library',
+      }),
+    );
+    const picker = await screen.findByRole('dialog', {
+      name: 'Merge “Solo Leveling DE” into…',
+    });
+    await userEvent.click(
+      within(picker).getByRole('button', { name: 'Solo Leveling' }),
+    );
+
+    expect(
+      await screen.findByText('Merged into “Solo Leveling”'),
+    ).toBeInTheDocument();
+    expect((await scanRepository.load()).snapshot()[0]).toEqual(
+      aScan({
+        title: 'Solo Leveling',
+        chapter: 56,
+        url: SOLO_LEVELING_DE.url,
+        readAt: SOLO_LEVELING_DE.seenAt,
+        aliases: ['Solo Leveling DE'],
+      }),
+    );
+  });
+
+  it('should add every waiting series of a site when Add all is clicked', async () => {
+    const scanRepository = new InMemoryScanRepository();
+    const elsewhere = pendingSeries({
+      title: 'Lookism',
+      host: OTHER_UNCERTAIN_HOST,
+    });
+    await renderPage(scanRepository, {
+      suggestionsRepository: new InMemorySeriesSuggestionsRepository(
+        waiting([DOBERMAN, VAGABOND, elsewhere]),
+      ),
+    });
+
+    await openPendingSeries('3 new series to confirm');
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: `Add all 2 series from ${UNCERTAIN_HOST}`,
+      }),
+    );
+
+    expect(
+      await screen.findByText(`Added 2 series from ${UNCERTAIN_HOST}`),
+    ).toBeInTheDocument();
+    expect(
+      (await scanRepository.load()).snapshot().map(({ title }) => title),
+    ).toEqual(['Vagabond', 'Doberman']);
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Add Lookism' })).toHaveFocus(),
+    );
+  });
+
+  it('should tell the reader a site is now ignored and keep suggesting it on request', async () => {
+    const suggestionsRepository = new InMemorySeriesSuggestionsRepository(
+      waiting([DOBERMAN, VAGABOND]),
+    );
+    await renderPage(
+      new InMemoryScanRepository([aScan({ title: 'Eleceed' })]),
+      {
+        suggestionsRepository,
+      },
+    );
+
+    await openPendingSeries('2 new series to confirm');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Not a series: Doberman' }),
+    );
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Not a series: Vagabond' }),
+    );
+    expect(
+      await screen.findByText(
+        `Scan Tracker won't suggest new series from ${UNCERTAIN_HOST} anymore`,
+      ),
+    ).toBeInTheDocument();
+    await waitFor(() => expect(library()).toHaveFocus());
+    await userEvent.click(screen.getByText('Keep suggesting'));
+
+    await new Promise((resolve) => setTimeout(resolve));
+
+    expect((await suggestionsRepository.load()).ignoredHosts()).toEqual([]);
+  });
+
   it('should leave both scans and focus the title again when the merge is cancelled', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Lookism' }),
@@ -631,6 +807,32 @@ const FOUND: Cover = {
 
 const LATER = new Date('2025-03-01T12:00:00Z');
 
+const DOBERMAN = pendingSeries({ title: 'Doberman', chapter: 88 });
+
+const DOBERMAN_ONLINE_FREE = pendingSeries({
+  title: 'Doberman Online Free',
+  chapter: 88,
+});
+
+const VAGABOND = pendingSeries({
+  title: 'Vagabond',
+  chapter: 12,
+  seenAt: new Date('2024-11-30T10:00:00Z'),
+});
+
+const SOLO_LEVELING_DE = pendingSeries({
+  title: 'Solo Leveling DE',
+  chapter: 56,
+  seenAt: new Date('2025-03-02T10:00:00Z'),
+});
+
+const library = () => screen.getByRole('list', { name: 'Library' });
+
+const openPendingSeries = async (count: string) =>
+  userEvent.click(
+    await screen.findByRole('button', { name: new RegExp(`^${count}`) }),
+  );
+
 const chooseMoreAction = async (title: string, action: string) => {
   await userEvent.click(
     within(await rowOf(title)).getByRole('button', {
@@ -659,7 +861,9 @@ const renderPage = (
     notificationPermission = new InMemoryNotificationPermission(),
     ratePromptRepository = new InMemoryRatePromptRepository(),
     openReviews = jest.fn(),
+    suggestionsRepository = new InMemorySeriesSuggestionsRepository(),
   }: {
+    suggestionsRepository?: InMemorySeriesSuggestionsRepository;
     coverRepository?: InMemoryCoverRepository;
     coverBackfill?: CoverBackfillPort;
     watchRepository?: InMemoryChapterWatchRepository;
@@ -736,6 +940,37 @@ const renderPage = (
         useValue: new RateScanUseCase(scanRepository),
       },
       { provide: STORE_LISTING, useValue: { openReviews } },
+      {
+        provide: SERIES_SUGGESTIONS_REPOSITORY,
+        useValue: suggestionsRepository,
+      },
+      {
+        provide: ConfirmPendingSeriesUseCase,
+        useValue: new ConfirmPendingSeriesUseCase(
+          scanRepository,
+          suggestionsRepository,
+          new InMemoryTelemetryRecorder(),
+        ),
+      },
+      {
+        provide: ConfirmSiteSeriesUseCase,
+        useValue: new ConfirmSiteSeriesUseCase(
+          scanRepository,
+          suggestionsRepository,
+          new InMemoryTelemetryRecorder(),
+        ),
+      },
+      {
+        provide: DismissPendingSeriesUseCase,
+        useValue: new DismissPendingSeriesUseCase(
+          suggestionsRepository,
+          new InMemoryTelemetryRecorder(),
+        ),
+      },
+      {
+        provide: StopIgnoringSiteUseCase,
+        useValue: new StopIgnoringSiteUseCase(suggestionsRepository),
+      },
       {
         provide: AskForRatingUseCase,
         useValue: new AskForRatingUseCase(

@@ -1,4 +1,14 @@
-@if (store.hasLibraryTools()) {
+@if (store.hasPendingSeries()) {
+<app-pending-series
+  [groups]="store.pendingGroups()"
+  [now]="now"
+  (added)="addSeries($event)"
+  (renamed)="addSeriesAs($event)"
+  (dismissed)="dismissSeries($event)"
+  (mergeRequested)="mergeSeries($event)"
+  (siteAdded)="addSiteSeries($event)"
+/>
+} @if (store.hasLibraryTools()) {
 <app-scan-filters
   [filters]="store.filters()"
   (filtersChanged)="store.filter($event)"

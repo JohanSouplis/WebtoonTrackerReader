@@ -12,6 +12,12 @@ export class AboutStore {
   readonly sendsParseReports = computed(
     () => this.reportSettings().sendsParseReports,
   );
+  private readonly shownIgnoredSites = signal<readonly string[]>([]);
+  readonly ignoredSites = this.shownIgnoredSites.asReadonly();
+
+  showIgnoredSites(hosts: readonly string[]): void {
+    this.shownIgnoredSites.set(hosts);
+  }
 
   showReportSettings(settings: ReportSettings): void {
     this.reportSettings.set(settings);

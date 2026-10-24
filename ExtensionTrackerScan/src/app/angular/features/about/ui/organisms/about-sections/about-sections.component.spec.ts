@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AboutSectionsComponent } from './about-sections.component';
 
@@ -63,6 +63,33 @@ describe('AboutSectionsComponent', () => {
     expect(rateRequested).toHaveBeenCalled();
   });
 
+  it('should list the ignored sites and ask to stop ignoring the one whose button is clicked', async () => {
+    const stopIgnoringRequested = jest.fn();
+    await renderSections(
+      { stopIgnoringRequested },
+      { ignoredSites: ['mangathrill.com', 'spoilers.example'] },
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Stop ignoring spoilers.example' }),
+    );
+
+    expect(
+      within(screen.getByRole('list', { name: 'Sites you ignore' }))
+        .getAllByRole('listitem')
+        .map((item) => item.textContent?.replace('Stop ignoring', '').trim()),
+    ).toEqual(['mangathrill.com', 'spoilers.example']);
+    expect(stopIgnoringRequested).toHaveBeenCalledWith('spoilers.example');
+  });
+
+  it('should not mention ignored sites when the reader ignores none', async () => {
+    await renderSections();
+
+    expect(
+      screen.queryByRole('heading', { name: 'Sites you ignore' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('should show the version of the extension', async () => {
     await renderSections();
 
@@ -72,8 +99,16 @@ describe('AboutSectionsComponent', () => {
   });
 });
 
-const renderSections = (outputs: Record<string, jest.Mock> = {}) =>
+const renderSections = (
+  outputs: Record<string, jest.Mock> = {},
+  inputs: { ignoredSites?: readonly string[] } = {},
+) =>
   render(AboutSectionsComponent, {
-    inputs: { version: '1.2.1', sendsParseReports: true },
+    inputs: {
+      version: '1.2.1',
+      sendsParseReports: true,
+      ignoredSites: [],
+      ...inputs,
+    },
     on: outputs,
   });

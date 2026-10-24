@@ -1,5 +1,10 @@
 import { Cover, Thumbnail } from '../../../../../../core/domain/cover';
 import { ScanSnapshot } from '../../../../../../core/domain/scan-library';
+import {
+  OTHER_UNCERTAIN_HOST,
+  pendingSeries,
+  UNCERTAIN_HOST,
+} from '../../../../../../core/use-cases/pending-series.fixture';
 import { aScan } from '../../../../../../core/use-cases/scans.fixture';
 import { NO_FILTERS } from '../../../service/scan-filters.rules';
 import { ScanListView } from '../../../service/scan-list-view.vm';
@@ -29,6 +34,31 @@ describe('ScanListStore', () => {
 
     expect(store.view()).toEqual({ kind: 'loading' });
     expect(store.hasLibraryTools()).toBe(true);
+  });
+
+  it('should group the series waiting for the reader by site, the site and the series read last first', () => {
+    const store = new ScanListStore();
+
+    store.showPending([
+      pendingSeries({ title: 'A', seenAt: new Date('2025-03-01T00:00:00Z') }),
+      pendingSeries({
+        title: 'B',
+        host: OTHER_UNCERTAIN_HOST,
+        seenAt: new Date('2025-03-03T00:00:00Z'),
+      }),
+      pendingSeries({ title: 'C', seenAt: new Date('2025-03-02T00:00:00Z') }),
+    ]);
+
+    expect(
+      store.pendingGroups().map(({ host, cards }) => ({
+        host,
+        titles: cards.map(({ title }) => title),
+      })),
+    ).toEqual([
+      { host: OTHER_UNCERTAIN_HOST, titles: ['B'] },
+      { host: UNCERTAIN_HOST, titles: ['C', 'A'] },
+    ]);
+    expect(store.hasPendingSeries()).toBe(true);
   });
 
   it('should show the ten latest reads on the first page', () => {

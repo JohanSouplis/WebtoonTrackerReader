@@ -1,0 +1,113 @@
+<section class="pending" [class.is-open]="isOpen()">
+  <button
+    type="button"
+    class="toggle"
+    aria-controls="pending-series-cards"
+    [attr.aria-expanded]="isOpen()"
+    (click)="switchOpen()"
+    #toggle
+  >
+    <mat-icon class="badge">playlist_add</mat-icon>
+    <span class="count">{{ count() }} new series to confirm</span>
+    <span class="hint">Found on sites Scan Tracker can't read for sure</span>
+    <mat-icon class="chevron">expand_more</mat-icon>
+  </button>
+  @if (isOpen()) {
+    <div class="cards" id="pending-series-cards">
+      @for (group of groups(); track group.host) {
+        <section class="site" [attr.aria-labelledby]="'pending-' + group.host">
+          <header>
+            <h3 [id]="'pending-' + group.host">{{ group.host }}</h3>
+            @if (group.cards.length > 1) {
+              <button
+                type="button"
+                class="add-all"
+                attr.aria-label="Add all {{ group.cards.length }} series from {{
+                  group.host
+                }}"
+                (click)="addSite(group)"
+              >
+                Add all {{ group.cards.length }}
+              </button>
+            }
+          </header>
+          <ul attr.aria-label="New series from {{ group.host }}">
+            @for (card of group.cards; track card.key) {
+              <li>
+                <ds-monogram [text]="card.title" />
+                <div class="body">
+                  @if (editingKey() === card.key) {
+                    <ds-inline-edit
+                      label="Title to add for {{ card.title }}"
+                      [value]="card.title"
+                      (saved)="rename(card, $event)"
+                      (cancelled)="stopEditing(card)"
+                    />
+                  } @else {
+                    <div class="heading">
+                      <a
+                        class="title"
+                        [href]="card.url"
+                        target="_blank"
+                        rel="noopener"
+                        [matTooltip]="card.title"
+                        >{{ card.title }}</a
+                      >
+                      <button
+                        type="button"
+                        class="icon edit"
+                        attr.aria-label="Edit the title of {{ card.title }}"
+                        matTooltip="Edit the title, then add"
+                        (click)="startEditing(card)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </div>
+                  }
+                  <div class="meta">
+                    <span class="chapter">Ch. {{ card.chapter }}</span>
+                    <span class="dot"></span>
+                    <span class="seen-at"
+                      >read
+                      <ds-relative-date [date]="card.seenAt" [now]="now()"
+                    /></span>
+                  </div>
+                </div>
+                <div class="actions">
+                  <button
+                    type="button"
+                    class="add"
+                    attr.aria-label="Add {{ card.title }}"
+                    (click)="add(card)"
+                    #addButton
+                  >
+                    <mat-icon>add</mat-icon>Add
+                  </button>
+                  <button
+                    type="button"
+                    class="dismiss"
+                    attr.aria-label="Not a series: {{ card.title }}"
+                    (click)="dismiss(card)"
+                  >
+                    Not a series
+                  </button>
+                  <button
+                    type="button"
+                    class="icon merge"
+                    attr.aria-label="Merge {{
+                      card.title
+                    }} with a series of your library"
+                    matTooltip="Merge with a series of your library"
+                    (click)="merge(card)"
+                  >
+                    <mat-icon>merge</mat-icon>
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+  }
+</section>
