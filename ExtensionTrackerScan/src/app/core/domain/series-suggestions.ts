@@ -6,7 +6,7 @@ import { SeriesKey } from './series-key';
 import { siteOf } from './site';
 
 export const SUGGESTION_LIMITS = {
-  confirmationsToTrust: 2,
+  confirmationsToTrust: 3,
   dismissalsToIgnore: 2,
   pendingPerHost: 10,
   pendingInTotal: 30,

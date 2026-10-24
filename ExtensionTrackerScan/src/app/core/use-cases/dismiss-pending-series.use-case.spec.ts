@@ -83,10 +83,11 @@ describe('DismissPendingSeriesUseCase', () => {
 
   it('should ask again about the new series of a site the reader trusted once one of its series is not a series', async () => {
     const { dismiss, confirm, recordVisitedPage, pending } = setUp(
-      waiting([DOBERMAN, SOLO_LEVELING, RANKING]),
+      waiting([DOBERMAN, SOLO_LEVELING, TOWER_OF_GOD, RANKING]),
     );
     await confirm('Doberman');
     await confirm('Solo Leveling');
+    await confirm('Tower of God');
 
     await dismiss('Weekly Ranking');
     await recordVisitedPage.execute(uncertainPage('Vagabond', 12));
@@ -109,6 +110,8 @@ const NOW = new Date('2025-01-01T09:00:10Z');
 const RANKING = pendingSeries({ title: 'Weekly Ranking', chapter: 1166 });
 
 const DOBERMAN = pendingSeries({ title: 'Doberman', chapter: 88 });
+
+const TOWER_OF_GOD = pendingSeries({ title: 'Tower of God', chapter: 550 });
 
 const SOLO_LEVELING = pendingSeries({
   title: 'Solo Leveling',

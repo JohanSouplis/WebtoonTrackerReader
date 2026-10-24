@@ -23,6 +23,12 @@ describe('ConfirmSiteSeriesUseCase', () => {
 
     expect(await scans()).toEqual([
       aScan({
+        title: 'Tower of God',
+        chapter: 550,
+        url: TOWER_OF_GOD.url,
+        readAt: TOWER_OF_GOD.seenAt,
+      }),
+      aScan({
         title: 'Doberman',
         chapter: 88,
         url: DOBERMAN.url,
@@ -38,6 +44,7 @@ describe('ConfirmSiteSeriesUseCase', () => {
     expect(await pending()).toEqual([ELSEWHERE]);
     expect(result).toEqual({ library: await scans(), pending: [ELSEWHERE] });
     expect(telemetry.recordedEvents).toEqual([
+      { kind: 'pending-series', host: UNCERTAIN_HOST, outcome: 'added' },
       { kind: 'pending-series', host: UNCERTAIN_HOST, outcome: 'added' },
       { kind: 'pending-series', host: UNCERTAIN_HOST, outcome: 'added' },
     ]);
@@ -63,6 +70,12 @@ const SOLO_LEVELING = pendingSeries({
 
 const DOBERMAN = pendingSeries({ title: 'Doberman', chapter: 88 });
 
+const TOWER_OF_GOD = pendingSeries({
+  title: 'Tower of God',
+  chapter: 550,
+  seenAt: new Date('2024-11-30T10:00:00Z'),
+});
+
 const ELSEWHERE = pendingSeries({
   title: 'Vagabond',
   chapter: 3,
@@ -72,7 +85,7 @@ const ELSEWHERE = pendingSeries({
 const setUp = () => {
   const scanRepository = new InMemoryScanRepository();
   const suggestionsRepository = new InMemorySeriesSuggestionsRepository(
-    waiting([SOLO_LEVELING, ELSEWHERE, DOBERMAN]),
+    waiting([SOLO_LEVELING, ELSEWHERE, TOWER_OF_GOD, DOBERMAN]),
   );
   const telemetry = new InMemoryTelemetryRecorder();
   return {

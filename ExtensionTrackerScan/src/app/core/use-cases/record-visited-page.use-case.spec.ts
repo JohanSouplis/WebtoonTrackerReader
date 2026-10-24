@@ -419,7 +419,7 @@ describe('RecordVisitedPageUseCase', () => {
   it('should add a new series to the library when the reader has come to trust its site', async () => {
     const { recordVisitedPage, scans, pending } = setUp([], undefined, {
       pending: [],
-      hosts: [hostTrust({ confirmedInARow: 2 })],
+      hosts: [hostTrust({ confirmedInARow: 3 })],
     });
 
     await recordVisitedPage.execute(uncertainPage('Solo Leveling', 56));

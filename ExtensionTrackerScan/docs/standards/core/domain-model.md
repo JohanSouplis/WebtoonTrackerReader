@@ -321,7 +321,7 @@ clic : **une nouvelle série d'un site dont la reconnaissance n'est pas fiable a
   proposé pour ce site.
 - **Tout ajouter** (`ConfirmSiteSeriesUseCase`) : chaque `PendingSeries` du site est ajoutée sous son titre reconnu,
   la plus ancienne d'abord.
-- **Ce qu'un site apprend** (`HostTrust`) : deux séries confirmées à la suite sans correction, et le site devient
+- **Ce qu'un site apprend** (`HostTrust`) : trois séries confirmées à la suite sans correction, et le site devient
   fiable : ses nouvelles séries entrent seules. Une correction, une fusion ou un refus remet ce compte à zéro.
   Deux refus à la suite, et le site est ignoré : ses nouvelles séries ne sont plus proposées, sans bruit. Un ajout
   remet ce compte à zéro. `StopIgnoringSiteUseCase` rend la parole au site (l'écran About liste les sites ignorés).
@@ -330,7 +330,7 @@ clic : **une nouvelle série d'un site dont la reconnaissance n'est pas fiable a
 
 | Seuil | Valeur | Pourquoi |
 |---|---|---|
-| Confirmations sans correction pour faire confiance à un site | 2 | Choix du produit. `eval:trust` (signaux du content script) : sur les jeux 1 et 2, 1 ou 2 font entrer seule la même lecture fausse, venue d'une série suivie ; le jeu 3, jamais réglé, en compte 4 à 1, 1 à 2 et 0 à 3 |
+| Confirmations sans correction pour faire confiance à un site | 3 | `eval:trust`, un lecteur qui répond à chaque question. Sur le jeu 3, jamais réglé, 1 fait entrer seules 4 lectures fausses, 2 en fait entrer 1 (`Monster IT` sur infinitymanga, après deux pages françaises exactes, par le content script comme par l'historique), 3 aucune. Sur le jeu 2, 1, 2 et 3 font entrer la même lecture fausse (vitruyen1), sur le jeu 1 aucune. 3 coûte 1 à 3 questions de plus par jeu |
 | Refus pour ignorer un site | 2 | Un refus isolé est une page d'un autre genre ; deux à la suite, un site sans séries |
 | `PendingSeries` par site | 10 | Une page de la liste, pour un site |
 | `PendingSeries` au total | 30 | Trois sites pleins : au-delà, le lecteur ne lit plus les cartes |

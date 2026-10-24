@@ -9,7 +9,7 @@
     - heading "What gets tracked" [level=2]
     - paragraph: "Scan Tracker remembers the last chapter you read of each series. It reads your browser history every hour and every chapter page you open, so there is nothing to add by hand: read a chapter on a supported site and the series shows up in your library."
     - paragraph: Removing a series deletes it from your library. Reading it again adds it back.
-    - paragraph: On a site it can't read for sure, a new series waits at the top of your library until you add it, correct its title or say it isn't a series. Once you add two series of a site as they are, its next ones come in by themselves. Say twice in a row that a site's pages aren't series, and Scan Tracker stops suggesting them.
+    - paragraph: On a site it can't read for sure, a new series waits at the top of your library until you add it, correct its title or say it isn't a series. Once you add three series of a site as they are, its next ones come in by themselves. Say twice in a row that a site's pages aren't series, and Scan Tracker stops suggesting them.
     - heading "Sites you ignore" [level=3]
     - list "Sites you ignore":
       - listitem:

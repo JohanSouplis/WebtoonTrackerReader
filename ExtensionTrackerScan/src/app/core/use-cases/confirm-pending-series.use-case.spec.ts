@@ -211,8 +211,27 @@ describe('ConfirmPendingSeriesUseCase', () => {
     expect(await pending()).toEqual([SOLO_LEVELING]);
   });
 
-  it('should add the next new series of a site by itself once the reader added two of its series in a row as they were', async () => {
+  it('should add the next new series of a site by itself once the reader added three of its series in a row as they were', async () => {
     const { confirm, recordVisitedPage, scans, pending } = setUp(
+      waiting([DOBERMAN, SOLO_LEVELING, TOWER_OF_GOD]),
+    );
+    await confirm('Doberman', { kind: 'as-detected' });
+    await confirm('Solo Leveling', { kind: 'as-detected' });
+    await confirm('Tower of God', { kind: 'as-detected' });
+
+    await recordVisitedPage.execute(uncertainPage('Vagabond', 12));
+
+    expect((await scans()).map(({ title }) => title)).toEqual([
+      'Doberman',
+      'Solo Leveling',
+      'Tower of God',
+      'Vagabond',
+    ]);
+    expect(await pending()).toEqual([]);
+  });
+
+  it('should keep asking about the new series of a site when the reader added only two of its series as they were', async () => {
+    const { confirm, recordVisitedPage, pending } = setUp(
       waiting([DOBERMAN, SOLO_LEVELING]),
     );
     await confirm('Doberman', { kind: 'as-detected' });
@@ -220,26 +239,22 @@ describe('ConfirmPendingSeriesUseCase', () => {
 
     await recordVisitedPage.execute(uncertainPage('Vagabond', 12));
 
-    expect((await scans()).map(({ title }) => title)).toEqual([
-      'Doberman',
-      'Solo Leveling',
-      'Vagabond',
-    ]);
-    expect(await pending()).toEqual([]);
+    expect((await pending()).map(({ title }) => title)).toEqual(['Vagabond']);
   });
 
   it.each`
-    case                                          | second
-    ${'needed a corrected title'}                 | ${{ kind: 'renamed', title: ScanTitle.of('Solo Leveling Ragnarok') }}
+    case                                          | third
+    ${'needed a corrected title'}                 | ${{ kind: 'renamed', title: ScanTitle.of('Tower of God Season 3') }}
     ${'belonged to a series the reader followed'} | ${{ kind: 'merged', into: ScanTitle.of('Doberman') }}
   `(
-    'should keep asking about the new series of a site when one of the two series added $case',
-    async ({ second }) => {
+    'should keep asking about the new series of a site when one of the three series added $case',
+    async ({ third }) => {
       const { confirm, recordVisitedPage, pending } = setUp(
-        waiting([DOBERMAN, SOLO_LEVELING]),
+        waiting([DOBERMAN, SOLO_LEVELING, TOWER_OF_GOD]),
       );
       await confirm('Doberman', { kind: 'as-detected' });
-      await confirm('Solo Leveling', second);
+      await confirm('Solo Leveling', { kind: 'as-detected' });
+      await confirm('Tower of God', third);
 
       await recordVisitedPage.execute(uncertainPage('Vagabond', 12));
 
@@ -274,6 +289,8 @@ const SOLO_LEVELING = pendingSeries({
   chapter: 56,
   seenAt: new Date('2024-12-02T10:00:00Z'),
 });
+
+const TOWER_OF_GOD = pendingSeries({ title: 'Tower of God', chapter: 550 });
 
 const SOLO_LEVELING_DE = pendingSeries({
   title: 'Solo Leveling DE',
