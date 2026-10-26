@@ -1,5 +1,10 @@
 import { ScanLibrary, ScanSnapshot } from '../domain/scan-library';
 import { ScanRepository } from '../ports/scan-repository.port';
+import {
+  readingOriginOf,
+  StoredReadingOrigin,
+  storedOriginOf,
+} from './stored-reading-origin';
 
 type StoredScan = {
   readonly title: string;
@@ -10,6 +15,7 @@ type StoredScan = {
   readonly rating?: number;
   readonly seriesUrl?: string;
   readonly aliases?: readonly string[];
+  readonly readOn?: StoredReadingOrigin;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -27,6 +33,7 @@ const toSnapshot = (stored: Record<string, unknown>): ScanSnapshot => ({
   chapter: Number(stored['chapter']),
   url: String(stored['url']),
   readAt: new Date(String(stored['whenWasItRead'])),
+  origin: readingOriginOf(stored['readOn']),
   isFavorite: stored['isFavorite'] === true,
   rating: typeof stored['rating'] === 'number' ? stored['rating'] : undefined,
   seriesUrl:
@@ -45,6 +52,7 @@ const toStored = (snapshot: ScanSnapshot): StoredScan => ({
   rating: snapshot.rating,
   seriesUrl: snapshot.seriesUrl,
   aliases: snapshot.aliases,
+  readOn: storedOriginOf(snapshot.origin),
 });
 
 export class ChromeStorageScanRepository implements ScanRepository {

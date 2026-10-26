@@ -21,7 +21,7 @@ import {
   withoutTitleNoise,
 } from './page-lexicon';
 import { PageSignals, StructuredDataItem } from './parsed-page';
-import { Reading } from './reading';
+import { Reading, ReadingOrigin } from './reading';
 import { ScanTitle } from './scan-title';
 
 type ChapterMention = {
@@ -635,6 +635,7 @@ const titleOf = (
 export const parseUnsupportedWebsitePage = (
   page: PageSignals,
   readAt: Date,
+  origin: ReadingOrigin,
 ): Reading | undefined => {
   if (!isReadingPage(page)) {
     return undefined;
@@ -654,7 +655,7 @@ export const parseUnsupportedWebsitePage = (
     if (mention && isChapterConfirmed(page, display, mention.chapter)) {
       const title = ScanTitle.parse(titleOf(page, display, mention) ?? '');
       return title
-        ? { title, chapter: mention.chapter, url: page.url, readAt }
+        ? { title, chapter: mention.chapter, url: page.url, readAt, origin }
         : undefined;
     }
   }

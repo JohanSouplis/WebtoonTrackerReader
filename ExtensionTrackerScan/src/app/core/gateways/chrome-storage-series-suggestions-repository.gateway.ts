@@ -5,6 +5,7 @@ import {
   SuggestionSource,
 } from '../domain/series-suggestions';
 import { SeriesSuggestionsRepository } from '../ports/series-suggestions-repository.port';
+import { readingOriginOf, storedOriginOf } from './stored-reading-origin';
 
 const SERIES_SUGGESTIONS_KEY = 'series-suggestions';
 
@@ -45,6 +46,7 @@ const toPending = (
           url,
           host,
           seenAt,
+          origin: readingOriginOf(stored['readOn']),
           source,
           ...(typeof seriesUrl === 'string' ? { seriesUrl } : {}),
         },
@@ -86,9 +88,10 @@ export class ChromeStorageSeriesSuggestionsRepository implements SeriesSuggestio
     const { pending, hosts } = suggestions.snapshot();
     await chrome.storage.local.set({
       [SERIES_SUGGESTIONS_KEY]: {
-        pending: pending.map((series) => ({
+        pending: pending.map(({ origin, ...series }) => ({
           ...series,
           seenAt: series.seenAt.toISOString(),
+          readOn: storedOriginOf(origin),
         })),
         hosts,
       },

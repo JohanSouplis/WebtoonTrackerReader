@@ -105,6 +105,7 @@ src/
                            discord-telemetry.gateway.ts · chrome-storage-telemetry-log.gateway.ts
                            chrome-runtime-telemetry-recorder.gateway.ts · in-process-telemetry-recorder.gateway.ts
                            chrome-storage-series-suggestions-repository.gateway.ts
+                           stored-reading-origin.ts (l'origine d'une lecture, dans les deux formats stockés)
       in-memory/           in-memory-scan-repository.gateway.ts · in-memory-browser-history.gateway.ts
                            fixed-clock.gateway.ts · in-memory-crash-reporter.gateway.ts
                            in-memory-website-proposal.gateway.ts · dev-scans.ts

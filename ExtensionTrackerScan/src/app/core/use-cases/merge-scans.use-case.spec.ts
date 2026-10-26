@@ -34,6 +34,7 @@ describe('MergeScansUseCase', () => {
         chapter: 5,
         url: 'new.com',
         readAt: LATER,
+        origin: 'other-device',
         seriesUrl: 'https://new.com/classmate',
       }),
     ]);
@@ -46,6 +47,7 @@ describe('MergeScansUseCase', () => {
         chapter: 5,
         url: 'new.com',
         readAt: LATER,
+        origin: 'other-device',
         seriesUrl: 'https://new.com/classmate',
         aliases: ['Classmate - Capítulo'],
       }),

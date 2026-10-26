@@ -1,5 +1,5 @@
 import { Chapter } from './chapter';
-import { Reading } from './reading';
+import { Reading, ReadingOrigin } from './reading';
 import { ScanLibrary } from './scan-library';
 import { ScanTitle } from './scan-title';
 import { SeriesKey } from './series-key';
@@ -21,6 +21,7 @@ export type PendingSeriesSnapshot = {
   readonly url: string;
   readonly host: string;
   readonly seenAt: Date;
+  readonly origin: ReadingOrigin;
   readonly source: SuggestionSource;
   readonly seriesUrl?: string;
 };
@@ -79,6 +80,7 @@ const pendingOf = (snapshot: PendingSeriesSnapshot): PendingSeries => ({
     chapter: Chapter.of(snapshot.chapter),
     url: snapshot.url,
     readAt: snapshot.seenAt,
+    origin: snapshot.origin,
     seriesUrl: snapshot.seriesUrl,
   },
   host: snapshot.host,
@@ -95,6 +97,7 @@ const pendingSnapshotOf = ({
   url: reading.url,
   host,
   seenAt: reading.readAt,
+  origin: reading.origin,
   source,
   seriesUrl: reading.seriesUrl,
 });

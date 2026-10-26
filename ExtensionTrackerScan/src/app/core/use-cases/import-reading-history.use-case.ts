@@ -24,7 +24,7 @@ export class ImportReadingHistoryUseCase {
     const suggestions = await this.suggestionsRepository.load();
     const { sendsParseReports } = await this.reportSettings.load();
     for (const { page, readAt } of visits) {
-      const parsedPage = parsePage(page, readAt);
+      const parsedPage = parsePage(page, readAt, 'unknown');
       switch (parsedPage.kind) {
         case 'not-a-scan':
           break;

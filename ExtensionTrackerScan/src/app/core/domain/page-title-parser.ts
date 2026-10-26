@@ -1,6 +1,6 @@
 import { Chapter } from './chapter';
 import { PageSignals, ParsedPage, VisitedPage } from './parsed-page';
-import { Reading } from './reading';
+import { Reading, ReadingOrigin } from './reading';
 import { ScanTitle } from './scan-title';
 import { parseUnsupportedWebsitePage } from './unsupported-website-page-parser';
 import { WEBSITE_PATTERNS, WebsitePattern } from './website-patterns';
@@ -67,6 +67,7 @@ const readingFrom = (
   format: WebsitePattern['formats'][number],
   page: VisitedPage,
   readAt: Date,
+  origin: ReadingOrigin,
 ): Reading | undefined => {
   const fromPageTitle = extract(format.pageTitle, page.pageTitle, {
     title: '',
@@ -76,14 +77,18 @@ const readingFrom = (
     : fromPageTitle;
   const scanTitle = ScanTitle.parse(title.replace(' [Official]', '').trim());
   return scanTitle && chapter
-    ? { title: scanTitle, chapter, url: page.url, readAt }
+    ? { title: scanTitle, chapter, url: page.url, readAt, origin }
     : undefined;
 };
 
 export const isCatalogPage = (url: string): boolean =>
   WEBSITE_PATTERNS.some(({ host }) => servesScans(url, host));
 
-export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
+export const parsePage = (
+  page: PageSignals,
+  readAt: Date,
+  origin: ReadingOrigin,
+): ParsedPage => {
   const cleanedPage: VisitedPage = {
     pageTitle: withoutLeadingSpace(page.pageTitle.replace('\n', '')),
     url: page.url,
@@ -95,6 +100,7 @@ export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
     const reading = parseUnsupportedWebsitePage(
       { ...page, pageTitle: cleanedPage.pageTitle },
       readAt,
+      origin,
     );
     return reading ? { kind: 'reading', reading } : { kind: 'not-a-scan' };
   }
@@ -102,7 +108,7 @@ export const parsePage = (page: PageSignals, readAt: Date): ParsedPage => {
     return { kind: 'not-a-scan' };
   }
   for (const format of pattern.formats) {
-    const reading = readingFrom(format, cleanedPage, readAt);
+    const reading = readingFrom(format, cleanedPage, readAt, origin);
     if (reading) {
       return { kind: 'reading', reading };
     }

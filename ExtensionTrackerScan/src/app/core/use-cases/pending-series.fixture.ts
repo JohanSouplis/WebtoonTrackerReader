@@ -39,6 +39,7 @@ export const pendingSeries = (
   url: uncertainUrl(slugOf(series.title), series.chapter ?? 1, series.host),
   host: UNCERTAIN_HOST,
   seenAt: new Date('2024-12-01T10:00:00Z'),
+  origin: 'this-device',
   source: 'page',
   ...series,
 });

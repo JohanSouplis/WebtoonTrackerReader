@@ -182,7 +182,7 @@ const extensionSeriesUrlOf = (page: RecordedPage): string | undefined => {
   if (!signals) {
     return undefined;
   }
-  const parsed = parsePage(signals, new Date());
+  const parsed = parsePage(signals, new Date(), 'unknown');
   return parsed.kind === 'reading'
     ? seriesPageUrlOf(signals, parsed.reading.title)
     : undefined;

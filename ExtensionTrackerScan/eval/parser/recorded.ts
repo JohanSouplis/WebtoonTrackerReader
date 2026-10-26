@@ -20,7 +20,7 @@ export const recordedFrom = (reading?: Reading): Recorded | undefined =>
   reading && { title: reading.title.value, chapter: reading.chapter.value };
 
 export const recordedBy = (page: PageSignals): Recorded | undefined => {
-  const parsed = parsePage(page, READ_AT);
+  const parsed = parsePage(page, READ_AT, 'unknown');
   return recordedFrom(parsed.kind === 'reading' ? parsed.reading : undefined);
 };
 

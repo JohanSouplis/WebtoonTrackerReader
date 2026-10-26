@@ -21,7 +21,7 @@ export class RecordVisitedPageUseCase {
   ) {}
 
   async execute(page: PageSignals): Promise<void> {
-    const parsedPage = parsePage(page, this.clock.now());
+    const parsedPage = parsePage(page, this.clock.now(), 'this-device');
     switch (parsedPage.kind) {
       case 'not-a-scan':
         return;

@@ -48,6 +48,21 @@ describe('ConfirmPendingSeriesUseCase', () => {
     ]);
   });
 
+  it('should keep the device the series was read on when the reader adds it', async () => {
+    const readOnPhone = pendingSeries({
+      title: 'Doberman',
+      chapter: 88,
+      origin: 'other-device',
+    });
+    const { confirm, scans } = setUp(waiting([readOnPhone]));
+
+    await confirm('Doberman', { kind: 'as-detected' });
+
+    expect(await scans()).toMatchObject([
+      { title: 'Doberman', origin: 'other-device' },
+    ]);
+  });
+
   it('should add the series under the corrected title and keep the title the site showed as an alias', async () => {
     const { confirm, scans, telemetry } = setUp(
       waiting([DOBERMAN_ONLINE_FREE]),

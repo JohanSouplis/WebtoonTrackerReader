@@ -357,6 +357,7 @@ describe('RecordVisitedPageUseCase', () => {
         url: uncertainUrl('solo-leveling', 56),
         host: UNCERTAIN_HOST,
         seenAt: NOW,
+        origin: 'this-device',
         source: 'page',
       },
     ]);

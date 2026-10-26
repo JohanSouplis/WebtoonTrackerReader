@@ -22,7 +22,7 @@ export class RecordCoverUseCase {
 
   async execute(page: PageSignals): Promise<void> {
     const now = this.clock.now();
-    const parsedPage = parsePage(page, now);
+    const parsedPage = parsePage(page, now, 'this-device');
     if (parsedPage.kind !== 'reading') {
       return;
     }

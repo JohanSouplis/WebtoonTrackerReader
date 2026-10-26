@@ -29,12 +29,14 @@ describe('ImportReadingHistoryUseCase', () => {
         chapter: 266,
         url: MANGANATO_URL,
         readAt: LATER,
+        origin: 'unknown',
       }),
       aScan({
         title: 'The Hidden Muse',
         chapter: 3,
         url: MANTA_URL,
         readAt: EARLIER,
+        origin: 'unknown',
       }),
     ]);
   });
@@ -57,6 +59,7 @@ describe('ImportReadingHistoryUseCase', () => {
         chapter: 190,
         url: FLAME_URL,
         readAt: LATER,
+        origin: 'unknown',
       }),
     ]);
   });
@@ -75,6 +78,7 @@ describe('ImportReadingHistoryUseCase', () => {
         title: 'Solo Leveling',
         chapter: 56,
         seenAt: LATER,
+        origin: 'unknown',
         source: 'history',
       }),
     ]);
@@ -142,6 +146,7 @@ describe('ImportReadingHistoryUseCase', () => {
         chapter: 190,
         url: FLAME_URL,
         readAt: LATER,
+        origin: 'unknown',
       }),
     ]);
     expect(crashReporter.reportedPages).toEqual([]);

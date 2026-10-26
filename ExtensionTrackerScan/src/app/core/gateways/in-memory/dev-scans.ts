@@ -8,6 +8,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Fri Jan 24 2025 18:02:54 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
   },
   {
@@ -17,6 +18,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Tue Jan 21 2024 12:30:15 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 9,
   },
@@ -27,6 +29,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Sat Jul 13 2024 09:45:30 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
   },
   {
@@ -36,6 +39,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Mon Jan 29 2024 15:02:10 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 10,
   },
@@ -46,6 +50,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Tue Jun 18 2024 16:30:20 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 8,
   },
@@ -56,6 +61,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Sun Aug 05 2024 17:15:05 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 6,
   },
@@ -66,6 +72,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Fri Nov 22 2024 14:50:00 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 7,
   },
@@ -76,6 +83,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Thu May 09 2024 18:05:45 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 9,
   },
@@ -86,6 +94,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Sun Mar 17 2024 11:25:55 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
   },
   {
@@ -95,6 +104,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Tue Apr 02 2024 13:00:40 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 10,
   },
@@ -105,6 +115,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Thu Feb 20 2024 08:30:25 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
   },
   {
@@ -114,6 +125,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Mon Jun 25 2024 19:00:35 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 6,
   },
@@ -124,6 +136,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Fri Jul 19 2024 10:40:00 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
   },
   {
@@ -133,6 +146,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Wed Sep 03 2024 11:10:15 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 10,
   },
@@ -143,6 +157,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Wed Aug 14 2024 07:25:05 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 5,
   },
@@ -153,6 +168,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Thu Oct 10 2024 15:20:00 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 9,
   },
@@ -163,6 +179,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Tue Nov 04 2024 09:35:10 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 7,
   },
@@ -173,6 +190,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Mon Mar 12 2024 17:50:30 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 8,
   },
@@ -184,6 +202,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Sat Jun 01 2024 14:05:10 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: false,
     rating: 6,
   },
@@ -194,6 +213,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Sun Dec 01 2024 19:15:25 GMT+0100 (Central European Standard Time)',
     ),
+    origin: 'this-device',
     isFavorite: true,
     rating: 9,
   },

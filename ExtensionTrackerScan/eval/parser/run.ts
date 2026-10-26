@@ -143,7 +143,8 @@ const slices: Slice[] = [
       }),
     ),
     otherPages: [],
-    record: (page) => recordedFrom(parseUnsupportedWebsitePage(page, READ_AT)),
+    record: (page) =>
+      recordedFrom(parseUnsupportedWebsitePage(page, READ_AT, 'unknown')),
   },
   {
     name: 'unsupported websites, chapter pages',
@@ -309,7 +310,7 @@ const comparisonText = (
 const recordedByGenericParser = (message: unknown): Recorded[] => {
   const page = parsePageSignals(message);
   const recorded =
-    page && recordedFrom(parseUnsupportedWebsitePage(page, READ_AT));
+    page && recordedFrom(parseUnsupportedWebsitePage(page, READ_AT, 'unknown'));
   return recorded ? [recorded] : [];
 };
 

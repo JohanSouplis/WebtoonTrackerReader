@@ -36,6 +36,7 @@ describe('ChromeStorageScanRepository', () => {
         chapter: 489.1,
         url: 'url.com',
         readAt: new Date(STORED_DATE).getTime(),
+        origin: 'unknown',
         isFavorite: true,
         rating: undefined,
       },
@@ -44,6 +45,7 @@ describe('ChromeStorageScanRepository', () => {
         chapter: 12,
         url: 'url2.com',
         readAt: NaN,
+        origin: 'unknown',
         isFavorite: false,
         rating: 9,
       },
@@ -69,6 +71,7 @@ describe('ChromeStorageScanRepository', () => {
           chapter: 489.1,
           url: 'url.com',
           readAt,
+          origin: 'unknown',
           isFavorite: true,
           rating: 7,
         },
@@ -77,6 +80,7 @@ describe('ChromeStorageScanRepository', () => {
           chapter: 12,
           url: 'url2.com',
           readAt: new Date(NaN),
+          origin: 'unknown',
           isFavorite: false,
         },
       ]),
@@ -109,6 +113,7 @@ describe('ChromeStorageScanRepository', () => {
         chapter: 200,
         url: 'url.com',
         readAt: new Date(STORED_DATE),
+        origin: 'unknown',
         isFavorite: false,
         aliases: ['Punch', 'Onepunch'],
       },
@@ -204,6 +209,7 @@ describe('ChromeStorageScanRepository', () => {
           chapter: 12,
           url: 'url2.com',
           readAt: new Date(STORED_DATE),
+          origin: 'unknown',
           isFavorite: false,
           seriesUrl,
         },
@@ -212,6 +218,52 @@ describe('ChromeStorageScanRepository', () => {
 
     expect((await repository.load()).snapshot()).toMatchObject([
       { title: 'Solo Leveling', seriesUrl },
+    ]);
+  });
+
+  it('should keep a reading made on another device through a save and a load', async () => {
+    const storage = useStorage({});
+    const repository = new ChromeStorageScanRepository();
+
+    await repository.save(
+      ScanLibrary.restore([
+        {
+          title: 'Solo Leveling',
+          chapter: 12,
+          url: 'url2.com',
+          readAt: new Date(STORED_DATE),
+          origin: 'other-device',
+          isFavorite: false,
+        },
+      ]),
+    );
+
+    expect(storage.items['scans']).toMatchObject([
+      { title: 'Solo Leveling', readOn: 'other-device' },
+    ]);
+    expect((await repository.load()).snapshot()).toMatchObject([
+      { title: 'Solo Leveling', origin: 'other-device' },
+    ]);
+  });
+
+  it('should read an unknown origin when the stored device is not one it knows', async () => {
+    useStorage({
+      scans: [
+        {
+          title: 'Solo Leveling',
+          chapter: '12',
+          url: 'url2.com',
+          whenWasItRead: STORED_DATE,
+          isFavorite: false,
+          readOn: 'tablet',
+        },
+      ],
+    });
+
+    const library = await new ChromeStorageScanRepository().load();
+
+    expect(library.snapshot()).toMatchObject([
+      { title: 'Solo Leveling', origin: 'unknown' },
     ]);
   });
 });

@@ -23,6 +23,29 @@ describe('ChromeStorageSeriesSuggestionsRepository', () => {
     ).toEqual({ pending: [], hosts: [] });
   });
 
+  it('should store where the series was read and read it back', async () => {
+    const storage = useStorage({});
+
+    await new ChromeStorageSeriesSuggestionsRepository().save(
+      SeriesSuggestions.restore(SAVED),
+    );
+
+    expect(storage.items['series-suggestions']).toMatchObject({
+      pending: [{ title: 'Solo Leveling', readOn: 'other-device' }],
+    });
+  });
+
+  it('should read an unknown origin for a series stored before the origin was kept', async () => {
+    useStorage({
+      'series-suggestions': { pending: [STORED_SERIES], hosts: [] },
+    });
+
+    expect(
+      (await new ChromeStorageSeriesSuggestionsRepository().load()).snapshot()
+        .pending,
+    ).toMatchObject([{ title: 'Solo Leveling', origin: 'unknown' }]);
+  });
+
   it('should leave out what it cannot read and keep the rest', async () => {
     useStorage({
       'series-suggestions': {
@@ -44,7 +67,13 @@ describe('ChromeStorageSeriesSuggestionsRepository', () => {
     expect(
       (await new ChromeStorageSeriesSuggestionsRepository().load()).snapshot(),
     ).toEqual({
-      pending: [{ ...STORED_SERIES, seenAt: new Date(STORED_SERIES.seenAt) }],
+      pending: [
+        {
+          ...STORED_SERIES,
+          seenAt: new Date(STORED_SERIES.seenAt),
+          origin: 'unknown',
+        },
+      ],
       hosts: [
         {
           host: 'b.example',
@@ -74,6 +103,7 @@ const SAVED: SeriesSuggestionsSnapshot = {
       url: 'https://a.example/solo-leveling/chapter-56-5',
       host: 'a.example',
       seenAt: new Date('2025-03-10T12:00:00Z'),
+      origin: 'other-device',
       source: 'history',
       seriesUrl: 'https://a.example/solo-leveling/',
     },

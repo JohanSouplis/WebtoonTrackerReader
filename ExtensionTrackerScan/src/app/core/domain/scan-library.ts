@@ -1,6 +1,6 @@
 import { Chapter } from './chapter';
 import { Rating } from './rating';
-import { Reading } from './reading';
+import { Reading, ReadingOrigin } from './reading';
 import { ScanTitle } from './scan-title';
 import { SeriesKey } from './series-key';
 import { siteOf } from './site';
@@ -10,6 +10,7 @@ export type ScanSnapshot = {
   readonly chapter: number;
   readonly url: string;
   readonly readAt: Date;
+  readonly origin: ReadingOrigin;
   readonly isFavorite: boolean;
   readonly rating?: number;
   readonly seriesUrl?: string;
@@ -90,6 +91,7 @@ const trackedScanOf = (snapshot: ScanSnapshot): TrackedScan => {
       chapter: Chapter.of(snapshot.chapter),
       url: snapshot.url,
       readAt: snapshot.readAt,
+      origin: snapshot.origin,
       seriesUrl: snapshot.seriesUrl,
     },
     aliases: aliasesOf(title, (snapshot.aliases ?? []).map(ScanTitle.of)),
@@ -109,6 +111,7 @@ const snapshotOf = ({
   chapter: reading.chapter.value,
   url: reading.url,
   readAt: reading.readAt,
+  origin: reading.origin,
   isFavorite,
   rating: rating?.value,
   seriesUrl: reading.seriesUrl,
