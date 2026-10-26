@@ -3,7 +3,7 @@
   "name": "Tracker Reader Manga Webtoon Manhwa",
   "short_name": "Scan Tracker",
   "description": "Keep track of where you stop to read your manhwa, webtoon or manga",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "permissions": [
     "history",
     "unlimitedStorage",
