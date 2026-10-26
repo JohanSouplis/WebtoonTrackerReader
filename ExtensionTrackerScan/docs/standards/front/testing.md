@@ -39,6 +39,8 @@ installés. La première spec de composant les ajoute.
   assertion sur une classe CSS ou un sélecteur de structure, `fireEvent`.
 - **Atom** : la spec cible sa logique propre. `relative-date` affiche « 3 mo ago » depuis une date et `now`, et
   la date exacte dans l'infobulle.
+  Un atom qui dessine une image (`qr-code`) n'a pas de rôle pour ses formes : sa spec lit le dessin dans le SVG
+  rendu, seule exception à l'interdit des sélecteurs de structure.
 - **Molecule** : la spec décrit ce qu'elle affiche à partir de ses inputs et ce qu'elle émet quand
   l'utilisateur agit. Ses interactions se testent ici une fois, pas dans chaque organism.
 - **Organism** : enfants réels, le ViewModel en input. On assert l'affichage et les `output()` émis.
