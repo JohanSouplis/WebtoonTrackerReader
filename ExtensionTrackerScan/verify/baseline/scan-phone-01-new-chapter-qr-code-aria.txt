@@ -1,0 +1,7 @@
+- dialog "Continue on phone":
+  - heading "Continue on phone" [level=2]
+  - paragraph: The Executioner New · Ch. 47
+  - img "QR code of New · Ch. 47 of The Executioner"
+  - paragraph: Point your phone's camera at the code to open this chapter.
+  - paragraph: https://asuracomic.net/series/the-executioner-472e692a/chapter/47
+  - button "Close"

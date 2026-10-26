@@ -153,6 +153,9 @@
         <button mat-menu-item (click)="mergeRequested.emit(row)">
           <mat-icon>merge</mat-icon>Merge with…
         </button>
+        <button mat-menu-item (click)="handoffRequested.emit(row)">
+          <mat-icon>smartphone</mat-icon>Continue on phone
+        </button>
       </ng-template>
     </mat-menu>
     <ng-content />

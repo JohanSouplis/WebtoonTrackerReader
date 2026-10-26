@@ -699,6 +699,32 @@ describe('ScanListPage', () => {
     expect((await suggestionsRepository.load()).ignoredHosts()).toEqual([]);
   });
 
+  it('should show the last read chapter in a QR code when Continue on phone is chosen, and focus the title again on Close', async () => {
+    const url = 'https://asuracomic.net/series/eleceed/chapter/12';
+    await renderPage(
+      new InMemoryScanRepository([
+        aScan({ title: 'Eleceed', chapter: 12, url }),
+      ]),
+    );
+
+    await chooseMoreAction('Eleceed', 'Continue on phone');
+    const dialog = await screen.findByRole('dialog', {
+      name: 'Continue on phone',
+    });
+
+    expect(
+      within(dialog).getByRole('img', { name: 'QR code of Ch. 12 of Eleceed' }),
+    ).toBeInTheDocument();
+    expect(within(dialog).getByText(url)).toBeInTheDocument();
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: 'Close' }),
+    );
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'Eleceed' })).toHaveFocus(),
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('should leave both scans and focus the title again when the merge is cancelled', async () => {
     const scanRepository = new InMemoryScanRepository([
       aScan({ title: 'Lookism' }),

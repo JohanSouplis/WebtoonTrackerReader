@@ -1,0 +1,14 @@
+<h2 [id]="headingId">Continue on phone</h2>
+<p class="series">
+  <span class="title">{{ handoff().title }}</span>
+  <span class="chapter">{{ handoff().chapterLabel }}</span>
+</p>
+<ds-qr-code
+  [text]="handoff().url"
+  label="QR code of {{ handoff().chapterLabel }} of {{ handoff().title }}"
+/>
+<p class="hint">Point your phone's camera at the code to open this chapter.</p>
+<p class="url">{{ handoff().url }}</p>
+<div class="actions">
+  <button type="button" class="close" (click)="closed.emit()">Close</button>
+</div>

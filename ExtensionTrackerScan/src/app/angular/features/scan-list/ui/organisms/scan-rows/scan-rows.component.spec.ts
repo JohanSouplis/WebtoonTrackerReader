@@ -242,6 +242,18 @@ describe('ScanRowsComponent', () => {
     expect(mergeRequested).toHaveBeenCalledWith(OMNISCIENT_READER);
   });
 
+  it('should ask to continue the scan on the phone when Continue on phone is chosen in its menu', async () => {
+    const handoffRequested = jest.fn();
+    await renderRows(SHOWN_SCANS, { handoffRequested });
+
+    await openMoreActions('Omniscient Reader');
+    await userEvent.click(
+      screen.getByRole('menuitem', { name: 'Continue on phone' }),
+    );
+
+    expect(handoffRequested).toHaveBeenCalledWith(OMNISCIENT_READER);
+  });
+
   it('should ask to toggle the favorite when the bell of a scan is clicked', async () => {
     const favoriteToggled = jest.fn();
     await renderRows(SHOWN_SCANS, { favoriteToggled });

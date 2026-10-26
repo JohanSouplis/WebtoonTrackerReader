@@ -67,6 +67,7 @@ export class ScanRowsComponent {
   readonly ratingCleared = output<ScanRow>();
   readonly renamed = output<ScanRename>();
   readonly mergeRequested = output<ScanRow>();
+  readonly handoffRequested = output<ScanRow>();
   readonly pageTurned = output<ScanPage>();
   readonly filtersCleared = output<void>();
   readonly retried = output<void>();

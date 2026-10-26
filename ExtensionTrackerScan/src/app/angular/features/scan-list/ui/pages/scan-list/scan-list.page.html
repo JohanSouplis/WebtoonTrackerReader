@@ -34,6 +34,7 @@
   (ratingCleared)="clearRating($event)"
   (renamed)="rename($event)"
   (mergeRequested)="openMergePicker($event)"
+  (handoffRequested)="openContinueOnPhone($event)"
   (newChapterOpened)="recordNewChapterOpened()"
   (pageTurned)="store.turnPage($event)"
   (filtersCleared)="store.clearFilters()"
@@ -43,6 +44,9 @@
   <app-rate-prompt (answered)="answerRatePrompt($event)" />
   }
 </app-scan-rows>
+<ng-template #continueOnPhone let-handoff let-dialogRef="dialogRef">
+  <app-continue-on-phone [handoff]="handoff" (closed)="dialogRef.close()" />
+</ng-template>
 <ng-template #mergePicker let-source let-dialogRef="dialogRef">
   <app-merge-picker
     [source]="source"

@@ -557,6 +557,29 @@ test.describe('scan list', () => {
     await pin(page, 'scan-correct-06-merge-undone');
   });
 
+  test('continue on phone shows the new chapter in a QR code and closes back on the title', async ({
+    page,
+  }) => {
+    await openLibrary(page);
+    const title = 'The Executioner';
+    await row(page, title)
+      .getByRole('button', { name: `More actions for ${title}` })
+      .click();
+    await page.getByRole('menuitem', { name: 'Continue on phone' }).click();
+    const handoff = page.getByRole('dialog', { name: 'Continue on phone' });
+    await expect(
+      handoff.getByRole('img', {
+        name: `QR code of New · Ch. 47 of ${title}`,
+      }),
+    ).toBeVisible();
+    await pin(page, 'scan-phone-01-new-chapter-qr-code');
+    await handoff.getByRole('button', { name: 'Close' }).click();
+    await expect(handoff).toHaveCount(0);
+    await expect(
+      page.getByRole('link', { name: title, exact: true }),
+    ).toBeFocused();
+  });
+
   test('double click on delete removes a single row', async ({ page }) => {
     await openLibrary(page);
     await row(page, 'Local')

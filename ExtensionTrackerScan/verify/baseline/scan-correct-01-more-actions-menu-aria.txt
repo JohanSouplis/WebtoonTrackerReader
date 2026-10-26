@@ -136,3 +136,4 @@
 - menu:
   - menuitem "Rename"
   - menuitem "Merge with…"
+  - menuitem "Continue on phone"

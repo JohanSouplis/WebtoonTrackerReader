@@ -58,7 +58,11 @@ import {
   WATCH_SETTINGS_REPOSITORY,
 } from '../../../../../injection-tokens';
 import { PendingSeriesCard } from '../../../service/pending-series.vm';
-import { ScanRow } from '../../../service/scan-row.vm';
+import { PhoneHandoff, ScanRow } from '../../../service/scan-row.vm';
+import {
+  CONTINUE_ON_PHONE_HEADING_ID,
+  ContinueOnPhoneComponent,
+} from '../../organisms/continue-on-phone/continue-on-phone.component';
 import {
   MERGE_PICKER_HEADING_ID,
   MergePickerComponent,
@@ -93,6 +97,7 @@ const REFUSED_ALERTS_DURATION_MS = 12000;
 @Component({
   selector: 'app-scan-list',
   imports: [
+    ContinueOnPhoneComponent,
     MergePickerComponent,
     NewChapterSettingsComponent,
     PendingSeriesComponent,
@@ -142,6 +147,8 @@ export class ScanListPage implements OnInit {
   private readonly pendingSeries = viewChild(PendingSeriesComponent);
   private readonly mergePicker =
     viewChild.required<TemplateRef<unknown>>('mergePicker');
+  private readonly continueOnPhone =
+    viewChild.required<TemplateRef<unknown>>('continueOnPhone');
   protected readonly store = inject(ScanListStore);
   protected readonly now = inject(CLOCK).now();
 
@@ -276,6 +283,19 @@ export class ScanListPage implements OnInit {
       return;
     }
     await this.merge(scan.title, target);
+  }
+
+  protected openContinueOnPhone(scan: ScanRow): void {
+    this.dialog
+      .open<unknown, PhoneHandoff>(this.continueOnPhone(), {
+        data: scan.handoff,
+        ariaLabelledBy: CONTINUE_ON_PHONE_HEADING_ID,
+        restoreFocus: false,
+        width: '360px',
+        maxWidth: 'calc(100vw - 32px)',
+      })
+      .afterClosed()
+      .subscribe(() => this.rows().focusTitle(scan.title));
   }
 
   protected addSeries(card: PendingSeriesCard): Promise<void> {
