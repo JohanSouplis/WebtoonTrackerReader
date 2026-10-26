@@ -104,12 +104,72 @@ describe('ChromeBrowserHistory', () => {
       },
     ]);
   });
+
+  it('should say a visit came from another device when Chrome says that visit is not local', async () => {
+    const { history, clock, recordVisits } = useChrome({});
+    recordVisits(PHONE_CHAPTER.url, [
+      { visitTime: at('09:00'), isLocal: true },
+      { visitTime: at('10:00'), isLocal: false },
+    ]);
+    clock.set(at('11:00'));
+
+    const origin = await history.originOf(visitOf(PHONE_CHAPTER, at('10:00')));
+
+    expect(origin).toBe('other-device');
+  });
+
+  it('should say a visit happened on this device when Chrome says that visit is local', async () => {
+    const { history, clock, recordVisits } = useChrome({});
+    recordVisits(PC_CHAPTER.url, [{ visitTime: at('10:00'), isLocal: true }]);
+    clock.set(at('11:00'));
+
+    const origin = await history.originOf(visitOf(PC_CHAPTER, at('10:00')));
+
+    expect(origin).toBe('this-device');
+  });
+
+  it('should not know where a visit happened when Chrome does not say it', async () => {
+    const { history, clock, recordVisits } = useChrome({});
+    recordVisits(PC_CHAPTER.url, [{ visitTime: at('10:00') }]);
+    clock.set(at('11:00'));
+
+    const origin = await history.originOf(visitOf(PC_CHAPTER, at('10:00')));
+
+    expect(origin).toBe('unknown');
+  });
+
+  it('should not know where a visit happened when Chrome fails to list its visits', async () => {
+    const { history, clock, recordVisits } = useChrome({});
+    recordVisits(PC_CHAPTER.url, new Error('No history access'));
+    clock.set(at('11:00'));
+
+    const origin = await history.originOf(visitOf(PC_CHAPTER, at('10:00')));
+
+    expect(origin).toBe('unknown');
+  });
+
+  it('should not ask Chrome where a visit older than three days happened', async () => {
+    const { history, clock, recordVisits, visitQueries } = useChrome({});
+    recordVisits(PHONE_CHAPTER.url, [
+      { visitTime: at('10:00') - FOUR_DAYS, isLocal: false },
+    ]);
+    clock.set(at('10:00'));
+
+    const origin = await history.originOf(
+      visitOf(PHONE_CHAPTER, at('10:00') - FOUR_DAYS),
+    );
+
+    expect(origin).toBe('unknown');
+    expect(visitQueries).toEqual([]);
+  });
 });
 
 type FakeHistoryItem = Pick<
   chrome.history.HistoryItem,
   'title' | 'url' | 'lastVisitTime'
 >;
+
+type FakeVisit = { readonly visitTime?: number; readonly isLocal?: boolean };
 
 type Page = { readonly title: string; readonly url: string };
 
@@ -143,6 +203,8 @@ const useChrome = (items: Record<string, unknown>) => {
   const storage = new FakeChromeStorage(items);
   const queries: chrome.history.HistoryQuery[] = [];
   const byUrl = new Map<string | undefined, FakeHistoryItem>();
+  const visitsByUrl = new Map<string, FakeVisit[] | Error>();
+  const visitQueries: chrome.history.Url[] = [];
   let now = 0;
   const clock: ClockPort = { now: () => new Date(now) };
   installChrome({
@@ -156,11 +218,20 @@ const useChrome = (items: Record<string, unknown>) => {
             lastVisitTime >= (query.startTime ?? 0),
         );
       },
+      getVisits: async (details: chrome.history.Url) => {
+        visitQueries.push(details);
+        const visits = visitsByUrl.get(details.url) ?? [];
+        if (visits instanceof Error) {
+          throw visits;
+        }
+        return visits;
+      },
     },
   });
   return {
     storage,
     queries,
+    visitQueries,
     history: new ChromeBrowserHistory(clock),
     clock: {
       set: (time: number) => {
@@ -169,6 +240,9 @@ const useChrome = (items: Record<string, unknown>) => {
     },
     sync: (historyItem: FakeHistoryItem) => {
       byUrl.set(historyItem.url ?? historyItem.title, historyItem);
+    },
+    recordVisits: (url: string, visits: FakeVisit[] | Error) => {
+      visitsByUrl.set(url, visits);
     },
   };
 };

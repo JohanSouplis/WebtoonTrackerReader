@@ -1,4 +1,5 @@
 import { VisitedPage } from '../domain/parsed-page';
+import { ReadingOrigin } from '../domain/reading';
 
 export type HistoryVisit = {
   readonly page: VisitedPage;
@@ -7,4 +8,5 @@ export type HistoryVisit = {
 
 export interface BrowserHistoryPort {
   findVisitsNotYetImported(): Promise<HistoryVisit[]>;
+  originOf(visit: HistoryVisit): Promise<ReadingOrigin>;
 }

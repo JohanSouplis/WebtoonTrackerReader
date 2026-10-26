@@ -23,8 +23,8 @@ export class ImportReadingHistoryUseCase {
     const library = await this.scanRepository.load();
     const suggestions = await this.suggestionsRepository.load();
     const { sendsParseReports } = await this.reportSettings.load();
-    for (const { page, readAt } of visits) {
-      const parsedPage = parsePage(page, readAt, 'unknown');
+    for (const visit of visits) {
+      const parsedPage = parsePage(visit.page, visit.readAt, 'unknown');
       switch (parsedPage.kind) {
         case 'not-a-scan':
           break;
@@ -35,7 +35,10 @@ export class ImportReadingHistoryUseCase {
           }
           break;
         case 'reading': {
-          const { reading } = parsedPage;
+          const reading = {
+            ...parsedPage.reading,
+            origin: await this.browserHistory.originOf(visit),
+          };
           switch (readingTrustOf(reading, library, suggestions).kind) {
             case 'trusted':
               library.recordReading(reading);

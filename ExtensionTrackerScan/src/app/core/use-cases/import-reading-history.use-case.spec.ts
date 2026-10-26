@@ -1,11 +1,13 @@
 import { ScanSnapshot } from '../domain/scan-library';
-import { InMemoryBrowserHistory } from '../gateways/in-memory/in-memory-browser-history.gateway';
+import {
+  InMemoryBrowserHistory,
+  SyncedVisit,
+} from '../gateways/in-memory/in-memory-browser-history.gateway';
 import { InMemoryCrashReporter } from '../gateways/in-memory/in-memory-crash-reporter.gateway';
 import { InMemoryReportSettingsRepository } from '../gateways/in-memory/in-memory-report-settings-repository.gateway';
 import { InMemoryScanRepository } from '../gateways/in-memory/in-memory-scan-repository.gateway';
 import { InMemorySeriesSuggestionsRepository } from '../gateways/in-memory/in-memory-series-suggestions-repository.gateway';
 import { InMemoryTelemetryRecorder } from '../gateways/in-memory/in-memory-telemetry-recorder.gateway';
-import { HistoryVisit } from '../ports/browser-history.port';
 import { ImportReadingHistoryUseCase } from './import-reading-history.use-case';
 import { pendingSeries, uncertainPage } from './pending-series.fixture';
 import { aScan } from './scans.fixture';
@@ -38,6 +40,42 @@ describe('ImportReadingHistoryUseCase', () => {
         readAt: EARLIER,
         origin: 'unknown',
       }),
+    ]);
+  });
+
+  it('should mark a scan read on another device when Chrome synced the visit from it', async () => {
+    const { importReadingHistory, scans } = setUp(
+      [
+        {
+          ...visit('Overgeared Chapter 266 - Manganato', MANGANATO_URL, LATER),
+          origin: 'other-device',
+        },
+      ],
+      [aScan({ title: 'Overgeared', chapter: 1 })],
+    );
+
+    await importReadingHistory.execute();
+
+    expect(await scans()).toEqual([
+      aScan({
+        title: 'Overgeared',
+        chapter: 266,
+        url: MANGANATO_URL,
+        readAt: LATER,
+        origin: 'other-device',
+      }),
+    ]);
+  });
+
+  it('should keep the device a new series was read on while it waits for the reader', async () => {
+    const { importReadingHistory, pending } = setUp([
+      { ...historyVisit('Solo Leveling', 56, LATER), origin: 'other-device' },
+    ]);
+
+    await importReadingHistory.execute();
+
+    expect(await pending()).toMatchObject([
+      { title: 'Solo Leveling', origin: 'other-device' },
     ]);
   });
 
@@ -205,15 +243,15 @@ const historyVisit = (
   chapter: number,
   readAt: Date,
   host?: string,
-): HistoryVisit => ({ page: uncertainPage(title, chapter, host), readAt });
+): SyncedVisit => ({ page: uncertainPage(title, chapter, host), readAt });
 
-const visit = (pageTitle: string, url: string, readAt: Date): HistoryVisit => ({
+const visit = (pageTitle: string, url: string, readAt: Date): SyncedVisit => ({
   page: { pageTitle, url },
   readAt,
 });
 
 const setUp = (
-  visits: HistoryVisit[],
+  visits: SyncedVisit[],
   followed: ScanSnapshot[] = [],
   reportSettings = new InMemoryReportSettingsRepository(),
 ) => {

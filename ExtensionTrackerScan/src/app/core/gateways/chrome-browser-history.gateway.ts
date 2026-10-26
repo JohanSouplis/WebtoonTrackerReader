@@ -1,3 +1,4 @@
+import { ReadingOrigin } from '../domain/reading';
 import {
   BrowserHistoryPort,
   HistoryVisit,
@@ -57,10 +58,21 @@ const isDelivered = (ledger: ImportLedger, item: DatedItem): boolean =>
   ledger.delivered.has(keyOf(item)) ||
   item.lastVisitTime < ledger.deliveredBefore;
 
+const toSecond = (time: number): number => Math.floor(time / 1000) * 1000;
+
 const visitOf = ({ title, url, lastVisitTime }: DatedItem): HistoryVisit => ({
   page: { pageTitle: title, url },
-  readAt: new Date(Math.floor(lastVisitTime / 1000) * 1000),
+  readAt: new Date(toSecond(lastVisitTime)),
 });
+
+const originOfVisit = (visit: chrome.history.VisitItem): ReadingOrigin => {
+  // @types/chrome does not declare isLocal, which Chrome 115 added.
+  const isLocal: unknown = 'isLocal' in visit ? visit.isLocal : undefined;
+  if (typeof isLocal !== 'boolean') {
+    return 'unknown';
+  }
+  return isLocal ? 'this-device' : 'other-device';
+};
 
 export class ChromeBrowserHistory implements BrowserHistoryPort {
   constructor(private readonly clock: ClockPort) {}
@@ -91,5 +103,21 @@ export class ChromeBrowserHistory implements BrowserHistoryPort {
     });
     await chrome.storage.local.remove(LEGACY_IMPORT_KEY);
     return items.filter((item) => !isDelivered(ledger, item)).map(visitOf);
+  }
+
+  async originOf({ page, readAt }: HistoryVisit): Promise<ReadingOrigin> {
+    if (readAt.getTime() < this.clock.now().getTime() - SYNC_GRACE_MS) {
+      return 'unknown';
+    }
+    try {
+      const visits = await chrome.history.getVisits({ url: page.url });
+      const visit = visits.find(
+        ({ visitTime }) =>
+          visitTime !== undefined && toSecond(visitTime) === readAt.getTime(),
+      );
+      return visit ? originOfVisit(visit) : 'unknown';
+    } catch {
+      return 'unknown';
+    }
   }
 }
