@@ -52,7 +52,7 @@ src/app/angular/
     ui/pages/app-shell/              app-shell.page.ts · .html · .css   (composant d'amorçage)
     ui/organisms/nav-bar/            nav-bar.component.ts · .html · .css   (barre de navigation)
   design-system/
-    atoms/      bell-toggle/ · monogram/ · cover/ · relative-date/
+    atoms/      bell-toggle/ · monogram/ · cover/ · relative-date/ · qr-code/
     molecules/  search-field/ · banner/ · inline-edit/
   features/
     scan-list/                       onglet « Library », route ''
@@ -65,7 +65,7 @@ src/app/angular/
       ui/
         pages/      scan-list/       scan-list.page.ts · .html · scan-list.store.ts
         organisms/  scan-filters/ · scan-sort-bar/ · scan-rows/ · new-chapter-settings/ · rate-prompt/
-                    merge-picker/ · pending-series/
+                    merge-picker/ · pending-series/ · continue-on-phone/
     add-website-pattern/             onglet « Request a site », route 'add_website_pattern'
       add-website-pattern.providers.ts
       service/  site-request.rules.ts

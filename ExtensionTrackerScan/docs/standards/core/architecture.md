@@ -191,12 +191,22 @@ scan qu'elle supprime.
   enregistrement de la bibliothèque reste petit, et la popup ne lit que les couvertures des lignes affichées.
   La veille des chapitres suit la même règle : `watch:<SeriesKey>` pour un `ChapterWatch`, `host:<site>` pour un
   `HostProfile`, `watch-settings` pour la fréquence, `report-settings` pour le choix des rapports,
-  `telemetry` pour le `TelemetryLog`, `series-suggestions` pour les `SeriesSuggestions`. La demande de note vit sous `rate-prompt`, et le fait « le lecteur a
+  `telemetry` pour le `TelemetryLog`, `series-suggestions` pour les `SeriesSuggestions`, `history-import` pour le registre de
+  l'import de l'historique. La demande de note vit sous `rate-prompt`, et le fait « le lecteur a
   ouvert un nouveau chapitre signalé » sous `new-chapter-opened`, écrit sans rien relire.
 - **Le format stocké dans `chrome.storage.local` est un contrat public.** Les utilisateurs de la version
   publiée doivent relire leurs données après une mise à jour. Un changement de format ajoute la lecture de
   l'ancien format dans le gateway, il ne casse jamais les données existantes.
 - Un gateway ne prend aucune décision métier : pas de `if` métier, pas de règle.
+- **L'import de l'historique reçoit chaque visite une fois** (`BrowserHistoryPort.findVisitsNotYetImported`), y
+  compris une visite que Chrome synchronise depuis un autre appareil après l'import suivant. Une visite est une page
+  à sa date de dernière visite (`url|lastVisitTime`) : une page relue est une nouvelle visite. Le gateway Chrome
+  tient le registre `history-import` : `coveredUntil`, le début du dernier import, pris avant la recherche, et
+  `delivered`, les visites déjà livrées des 3 derniers jours (`SYNC_GRACE`). Il cherche depuis
+  `coveredUntil - SYNC_GRACE` et saute les visites déjà livrées. Sans registre, il reprend l'ancienne clé
+  `dateLastSearch` : les visites antérieures comptent comme livrées, et la clé part après l'écriture du registre.
+  Rejouer une fenêtre par le domaine ne convient pas : la lecture ressusciterait un scan supprimé, la page illisible
+  repartirait au développeur et une série écartée par les plafonds reviendrait.
 - Une erreur de transport (`chrome.runtime.lastError`, `!response.ok`) se traduit dans le gateway. Elle sort
   en rejet de la `Promise` ou en résultat du domaine, jamais en `Response` ou en objet Chrome.
 - Chaque port a une variante in-memory dans `gateways/in-memory/`. Elle sert au mode développement

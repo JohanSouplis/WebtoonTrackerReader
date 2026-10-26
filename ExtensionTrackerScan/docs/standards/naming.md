@@ -30,6 +30,8 @@ pas un synonyme.
 | `Chapter` | Le numéro du dernier chapitre lu, un nombre | un `chapter` en `string` |
 | `Reading` | La lecture d'un chapitre d'un scan à une date | `newScan`, `scanVisited` |
 | `readAt` | La date de la dernière lecture | `whenWasItRead`, `wasRead`, `dateReading` |
+| `ReadingOrigin` | L'appareil d'une lecture : `this-device` (ce navigateur), `other-device` (une visite que Chrome a synchronisée depuis un autre appareil, le téléphone le plus souvent) ou `unknown`. L'interface dit « Read on another device », jamais « phone » : Chrome ne dit pas quel appareil | `device`, `isMobile`, `source` pour ce sens (`source` est la provenance d'une `PendingSeries`) |
+| `PhoneHandoff` | Ce qu'il faut pour reprendre une série sur le téléphone : son titre, le chapitre à lire et son adresse. L'interface dit « Continue on phone » | `share`, `qrData` |
 | `Favorite` | Un scan que le lecteur suit : seuls les favoris sont vérifiés pour de nouveaux chapitres. L'interface dit « Follow » (bouton cloche, « Following only », tri « Following ») ; le code et le stockage gardent `Favorite`. L'étoile est réservée à la note. | `fav`, `isFavorited` |
 | `Rating` | La note de 1 à 10 donnée par le lecteur | `rate`, `score` |
 | `RemovedScan` | Un scan supprimé, avec sa couverture et sa veille, gardé le temps de l'annulation | `deletedItem`, `trash`, `backup` |

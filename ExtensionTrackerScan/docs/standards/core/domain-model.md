@@ -38,6 +38,8 @@ comparaison) est un Value Object.
   lecture sans cette adresse (l'import de l'historique) garde l'adresse connue si elle vient du même site,
   l'oublie sinon ;
 - noter, mettre en favori ou supprimer un scan absent échoue par une erreur du domaine ;
+- une lecture porte son origine (`ReadingOrigin`) ; le scan garde l'origine de la lecture qu'il retient, la plus
+  récente, au chargement comme à une fusion ;
 - un scan supprimé peut revenir (`reinstate`) : il reprend sa lecture, son favori et sa note, et se fusionne
   comme au chargement si la même série a été relue entre-temps.
 
@@ -53,6 +55,19 @@ Le gateway reconstruit l'agrégat par `ScanLibrary.restore(snapshots)` et l'enre
 deux lignes pour une série. Le scan fusionné garde la place du premier, la lecture la plus récente (titre
 compris), tous les autres titres des deux scans en alias, le favori si l'un l'était, et la note de la lecture la
 plus récente, sinon celle de l'autre. Fusionner une bibliothèque déjà fusionnée ne change rien.
+
+## L'origine d'une lecture
+
+Le lecteur lit sur son ordinateur, avec l'extension, et sur son téléphone, avec Chrome sans extension. Chrome
+synchronise l'historique du téléphone : l'import de l'historique en reçoit les visites, parfois des heures après la
+lecture. La ligne du scan dit alors que le dernier chapitre a été lu sur un autre appareil.
+
+- Une page lue par le content script est `this-device`. Une visite de l'historique prend l'origine que Chrome lui
+  donne (`BrowserHistoryPort.originOf`), demandée seulement pour une visite qui donne une lecture.
+- `unknown` : une lecture stockée avant cette règle, une visite de plus de 3 jours au moment de l'import (Chrome
+  n'est pas interrogé : le premier import reste rapide), une visite que Chrome ne qualifie pas.
+- L'origine suit la lecture : le scan prend celle de la lecture qu'il retient, et une `PendingSeries` la garde
+  jusqu'à son ajout.
 
 ## Corriger la bibliothèque
 
@@ -306,7 +321,7 @@ clic : **une nouvelle série d'un site dont la reconnaissance n'est pas fiable a
   `ignored` si le lecteur a fait ignorer le site ; sinon `needs-confirmation`. Une lecture d'un scan suivi avance
   toujours sa ligne, sans confirmation.
 - Une lecture `needs-confirmation` devient une `PendingSeries` de `SeriesSuggestions` (`series-suggestions.ts`) :
-  la lecture (titre reconnu, chapitre, adresse, date, page de la série), son site et sa source (`page` ou
+  la lecture (titre reconnu, chapitre, adresse, date, page de la série, origine), son site et sa source (`page` ou
   `history`). Une `PendingSeries` se reconnaît par son site et la `SeriesKey` de son titre (`match()` rend `same`) :
   une lecture suivante de la même série sur le même site la met à jour (chapitre, adresse, date, titre gardé) au lieu
   d'en créer une seconde. Une lecture plus ancienne ne change rien.

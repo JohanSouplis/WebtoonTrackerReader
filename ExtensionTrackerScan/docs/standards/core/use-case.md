@@ -38,7 +38,7 @@ export class ImportReadingHistoryUseCase {
   ) {}
 
   async execute(): Promise<ScanSnapshot[]> {
-    const visitedPages = await this.browserHistory.findPagesVisitedSinceLastImport();
+    const visitedPages = await this.browserHistory.findVisitsNotYetImported();
     const library = await this.scanRepository.load();
     library.recordReadings(this.pageTitleParser.parseReadings(visitedPages));
     await this.scanRepository.save(library);
