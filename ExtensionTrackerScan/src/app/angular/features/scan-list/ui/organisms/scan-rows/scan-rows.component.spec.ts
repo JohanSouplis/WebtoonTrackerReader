@@ -138,6 +138,24 @@ describe('ScanRowsComponent', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('should mark only the scans last read on another device', async () => {
+    await renderRows({
+      ...SHOWN_SCANS,
+      rows: [{ ...SOLO_LEVELING, readOnOtherDevice: true }, OMNISCIENT_READER],
+    });
+
+    expect(
+      within(rowOf('Solo Leveling')).getByRole('img', {
+        name: 'Read on another device',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(rowOf('Omniscient Reader')).queryByRole('img', {
+        name: 'Read on another device',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
   it('should ask to delete the scan when its delete button is clicked', async () => {
     const deleted = jest.fn();
     await renderRows(SHOWN_SCANS, { deleted });

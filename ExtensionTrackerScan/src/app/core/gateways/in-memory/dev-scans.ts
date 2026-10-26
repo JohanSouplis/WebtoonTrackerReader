@@ -179,7 +179,7 @@ export const DEV_SCANS: ScanSnapshot[] = [
     readAt: new Date(
       'Tue Nov 04 2024 09:35:10 GMT+0100 (Central European Standard Time)',
     ),
-    origin: 'this-device',
+    origin: 'other-device',
     isFavorite: false,
     rating: 7,
   },

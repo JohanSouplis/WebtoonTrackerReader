@@ -10,6 +10,12 @@ export const aRow = (row: Partial<ScanRow>): ScanRow => ({
   isFavorite: false,
   watch: { kind: 'quiet' },
   readingHint: 'Continue reading Ch. 1',
+  readOnOtherDevice: false,
+  handoff: {
+    title: row.title ?? 'Title',
+    chapterLabel: `Ch. ${row.chapter ?? 1}`,
+    url: row.url ?? 'https://asuracomic.net/series/title/chapter/1',
+  },
   ...row,
 });
 

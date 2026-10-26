@@ -51,6 +51,15 @@
                 <span class="read-at"
                   >read <ds-relative-date [date]="row.readAt" [now]="now()"
                 /></span>
+                @if (row.readOnOtherDevice) {
+                  <span
+                    class="other-device"
+                    role="img"
+                    aria-label="Read on another device"
+                    matTooltip="Read on another device"
+                    ><mat-icon>smartphone</mat-icon></span
+                  >
+                }
                 <span class="dot"></span>
                 <span class="website">{{ row.website }}</span>
                 @if (row.watch.kind === "unsupported") {

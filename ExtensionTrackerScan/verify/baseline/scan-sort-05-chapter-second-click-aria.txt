@@ -126,6 +126,7 @@
         - /url: https://asuracomic.net/series/absolute-sword-sense-6617ba0b/chapter/117
       - text: Ch. 117 read
       - time: 4 mo ago
+      - img "Read on another device"
       - text: asuracomic.net
       - 'button "Rating for Absolute Sword Sense: 7/10"'
       - button "Follow Absolute Sword Sense"

@@ -147,6 +147,17 @@ li:hover {
   white-space: nowrap;
 }
 
+.other-device {
+  display: inline-flex;
+  margin-left: -4px;
+  color: var(--app-faint);
+  cursor: help;
+}
+
+.other-device mat-icon.mat-icon {
+  font-size: 14px;
+}
+
 .actions {
   display: flex;
   align-items: center;
