@@ -74,7 +74,7 @@ container
   .toDynamicValue(
     () =>
       new ImportReadingHistoryUseCase(
-        new ChromeBrowserHistory(),
+        new ChromeBrowserHistory(new SystemClock()),
         new ChromeStorageScanRepository(),
         new ChromeStorageSeriesSuggestionsRepository(),
         new DiscordCrashReporter(),

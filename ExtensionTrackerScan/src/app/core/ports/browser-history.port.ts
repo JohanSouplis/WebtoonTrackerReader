@@ -6,5 +6,5 @@ export type HistoryVisit = {
 };
 
 export interface BrowserHistoryPort {
-  findPagesVisitedSinceLastImport(): Promise<HistoryVisit[]>;
+  findVisitsNotYetImported(): Promise<HistoryVisit[]>;
 }

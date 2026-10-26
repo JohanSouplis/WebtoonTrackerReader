@@ -6,7 +6,7 @@ import {
 export class InMemoryBrowserHistory implements BrowserHistoryPort {
   constructor(private visitsSinceLastImport: HistoryVisit[]) {}
 
-  async findPagesVisitedSinceLastImport(): Promise<HistoryVisit[]> {
+  async findVisitsNotYetImported(): Promise<HistoryVisit[]> {
     const visits = this.visitsSinceLastImport;
     this.visitsSinceLastImport = [];
     return visits;

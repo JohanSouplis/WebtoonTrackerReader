@@ -19,7 +19,7 @@ export class ImportReadingHistoryUseCase {
   ) {}
 
   async execute(): Promise<void> {
-    const visits = await this.browserHistory.findPagesVisitedSinceLastImport();
+    const visits = await this.browserHistory.findVisitsNotYetImported();
     const library = await this.scanRepository.load();
     const suggestions = await this.suggestionsRepository.load();
     const { sendsParseReports } = await this.reportSettings.load();
